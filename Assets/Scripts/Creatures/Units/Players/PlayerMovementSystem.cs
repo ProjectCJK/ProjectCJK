@@ -6,18 +6,28 @@ namespace Creatures.Units.Players
     public class PlayerMovementSystem : MonoBehaviour
     {
         [SerializeField] private Joystick _joystick;
-        [SerializeField] private float _moveSpeed = 50f;
+        
+        private PlayerStatSystem _playerStatSystem;
         
         private Rigidbody2D _rigidbody2D;
-
-        private void Awake()
+        
+        private float _movementSpeed;
+        
+        public void RegisterReference(PlayerStatSystem playerStatSystem)
         {
+            _playerStatSystem = playerStatSystem;
+            
             _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+        
+        public void Initialize()
+        {
+            _movementSpeed = _playerStatSystem.MovementSpeed;
         }
 
         private void Update()
         {
-            Vector2 movement = _joystick.direction * _moveSpeed * Time.deltaTime;
+            Vector2 movement = _joystick.direction * (_movementSpeed * Time.deltaTime);
             _rigidbody2D.MovePosition(_rigidbody2D.position + movement);
         }
     }
