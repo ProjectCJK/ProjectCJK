@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 3895704414150782840}
   - component: {fileID: 586943159901927858}
   - component: {fileID: 626413288836213073}
+  - component: {fileID: 2163446385978372777}
   - component: {fileID: 4642301523567995243}
   m_Layer: 10
   m_Name: Player
@@ -120,7 +121,7 @@ Transform:
   - {fileID: 135269449961867710}
   - {fileID: 6618375527621060091}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7238909546100049177
 Rigidbody2D:
@@ -209,7 +210,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1468829735d64208b7cec4b905660a81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _joystick: {fileID: 0}
+--- !u!114 &2163446385978372777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688900296772484889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f05c5725e9c4ce386a19ec4654521b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!210 &4642301523567995243
 SortingGroup:
   m_ObjectHideFlags: 0

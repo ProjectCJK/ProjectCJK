@@ -2,28 +2,25 @@ using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Modules;
-using Units.Buildings.Interfaces;
 using Units.Creatures.Interfaces;
 using Units.Systems.MovementSystems.Abstract;
-using Unity.VisualScripting;
 using UnityEngine;
 using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Systems.MovementSystems.Units
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerMovementSystem : BaseMovementSystem, IReferenceRegisterable<IMovementProperty>, IInitializable
+    public class PlayerMovementSystem : BaseMovementSystem, IReferenceRegisterable<Joystick, IMovementProperty>, IInitializable
     {
-        public event Action<GameObject> OnTrade;
+        public event Action<int?, bool> OnTriggerBuildingInteraction;
         
-        [SerializeField] private Joystick _joystick;
-        
+        private Joystick _joystick;
         private IMovementProperty _movementProperty;
-        private GameObject _currentInteractionTarget;
+        
+        private int? _targetInstanceID;
         private Coroutine _interactionCoroutine;
         
         private Rigidbody2D _rigidbody2D;
-        
         
         private float _movementSpeed => _movementProperty.MovementSpeed;
         private float _waitingTime => _movementProperty.WaitingTime;
@@ -32,8 +29,9 @@ namespace Units.Systems.MovementSystems.Units
 
         #region 초기화
         
-        public void RegisterReference(IMovementProperty movementProperty)
+        public void RegisterReference(Joystick joystick, IMovementProperty movementProperty)
         {
+            _joystick = joystick;
             _movementProperty = movementProperty;
             
             _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -97,17 +95,17 @@ namespace Units.Systems.MovementSystems.Units
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Building"))
+            if (other.gameObject.layer == LayerMask.NameToLayer("InteractionTrade"))
             {
                 _isInTriggerZone = true;
-                _currentInteractionTarget = other.gameObject;
+                _targetInstanceID = other.transform.parent.GetInstanceID();
                 StartInteractionCoroutine();
             }
         }
         
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Building"))
+            if (other.gameObject.layer == LayerMask.NameToLayer("InteractionTrade"))
             {
                 ResetTriggerState();
             }
@@ -124,15 +122,18 @@ namespace Units.Systems.MovementSystems.Units
         {
             if (success && _isInTriggerZone && !_isMoving)
             {
-                OnTrade?.Invoke(_currentInteractionTarget);
+                Debug.Log($"{gameObject.name} Interaction 검증 실행");
+                OnTriggerBuildingInteraction?.Invoke(_targetInstanceID, true);
             }
         }
 
         private void ResetTriggerState()
         {
             _isInTriggerZone = false;
-            _currentInteractionTarget = null;
+            _targetInstanceID = 0;
 
+            OnTriggerBuildingInteraction?.Invoke(_targetInstanceID, false);
+            
             if (_interactionCoroutine != null)
             {
                 StopCoroutine(_interactionCoroutine);

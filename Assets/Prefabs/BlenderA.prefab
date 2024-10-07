@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4378045945174366432}
   - component: {fileID: 2477852735164787974}
   - component: {fileID: 5175526416669231091}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: InteractionCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 6376088038041899212}
   - component: {fileID: 196058989084765387}
   m_Layer: 15
-  m_Name: Building
+  m_Name: BlenderA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,8 +471,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf7c1b11a934f6b95c5854705a04891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSendable: 0
-  isReceivable: 0
+  _materialType: 0
+  _itemType: 0
 --- !u!114 &6376088038041899212
 MonoBehaviour:
   m_ObjectHideFlags: 0

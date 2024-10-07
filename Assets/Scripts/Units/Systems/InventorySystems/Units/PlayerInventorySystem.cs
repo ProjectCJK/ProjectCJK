@@ -1,97 +1,75 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Enums;
 using Interfaces;
-using Units.Buildings.Interfaces;
-using Units.Creatures.Enums;
+using Units.Buildings.Abstract;
 using Units.Creatures.Interfaces;
 using Units.Systems.InventorySystems.Abstract;
 using UnityEngine;
-using EMaterial = Enums.EMaterial;
-using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Systems.InventorySystems.Units
 {
     public class PlayerInventorySystem : BaseInventorySystem, IReferenceRegisterable<IInventoryProperty>, IInitializable
     {
         public int MaxInventorySize => _inventoryProperty.InventorySize;
-        public int CurrentInventorySize => materialInventory.Count + productInventory.Count; 
-        
-        private readonly Dictionary<EMaterial, int> materialInventory = new();
-        private readonly Dictionary<EProduct, int> productInventory = new();
-        
+
+        public int CurrentInventorySize => _inventory.Sum(item => item.Value);
+    
+        private readonly Dictionary<Tuple<EMaterialType, EItemType>, int> _inventory = new();
+    
         private IInventoryProperty _inventoryProperty;
 
         public void RegisterReference(IInventoryProperty inventoryProperty)
         {
             _inventoryProperty = inventoryProperty;
         }
-        
+    
         public void Initialize()
         {
-            materialInventory.Clear();
-            productInventory.Clear();
+            _inventory.Clear();
         }
 
-        public void RegisterTradeTarget(GameObject trade)
-        {
-            Debug.Log("InteractionTarget Registered");
-        }
-
-        public bool ReceiveMaterial(EMaterial material)
-        {
-            if (CanReceive())
-            {
-                Receive(materialInventory, material);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool ReceiveProduct(EProduct product)
-        {
-            if (CanReceive())
-            {
-                Receive(productInventory, product);
-                return true;
-            }
-
-            return false;
-        }
-
-        public void SendMaterial(EMaterial material)
-        {
-            Send(materialInventory, material);
-        }
-
-        public void SendProduct(EProduct product)
-        {
-            Send(productInventory, product);
-        }
-
-        private bool CanReceive() => CurrentInventorySize + 1 <= MaxInventorySize;
+        public bool HasItem(Tuple<EMaterialType, EItemType> InventoryKey) => _inventory.ContainsKey(InventoryKey) && _inventory[InventoryKey] > 0;
         
-        private void Receive<T>(Dictionary<T, int> inventory, T item)
+        public void TransferItem(BaseBuilding building)
         {
-            if (inventory.ContainsKey(item))
+            Tuple<EMaterialType, EItemType> key = building.InventoryKey;
+            
+            Debug.Log($"{gameObject.name}이 {building.gameObject.name}에게 {key.Item1} {key.Item2} 전달 시도");
+        
+            if (_inventory.ContainsKey(key) && _inventory[key] > 0)
             {
-                if (inventory[item] < MaxInventorySize)
+                building.ReceiveItem();
+                _inventory[key]--;
+
+                if (_inventory[key] == 0)
                 {
-                    inventory[item]++;
+                    _inventory.Remove(key);
                 }
             }
-            else
+        }
+
+        public void AddItem(EItemType itemType, EMaterialType materialType, int count = 1)
+        {
+            Tuple<EMaterialType, EItemType> key = Tuple.Create(materialType, itemType);
+            
+            if (!_inventory.TryAdd(key, count))
             {
-                inventory.TryAdd(item, 1);
+                _inventory[key] += count;
             }
         }
-        
-        private void Send<T>(Dictionary<T, int> inventory, T item)
+
+        public bool InventoryIsFull()
         {
-            if (inventory.ContainsKey(item) && inventory[item] > 0)
-            {
-                inventory[item]--;
-            }
+            return CurrentInventorySize >= MaxInventorySize;
+        }
+
+        public int GetItemCount(EItemType itemType, EMaterialType materialType)
+        {
+            Tuple<EMaterialType, EItemType> key = Tuple.Create(materialType, itemType);
+            
+            return _inventory.GetValueOrDefault(key, 0);
         }
     }
 }

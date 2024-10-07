@@ -13,12 +13,11 @@ namespace Externals.Joystick.Scripts.Units
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            Vector2 anchoredPos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 background.parent as RectTransform, // 부모 RectTransform 기준
                 eventData.position,
                 eventData.pressEventCamera, // 사용 중인 카메라
-                out anchoredPos); // 변환된 위치 반환
+                out Vector2 anchoredPos); // 변환된 위치 반환
 
             background.anchoredPosition = anchoredPos;
             background.gameObject.SetActive(true);
