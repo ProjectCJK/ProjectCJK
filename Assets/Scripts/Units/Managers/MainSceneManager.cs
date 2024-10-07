@@ -29,8 +29,8 @@ namespace Units.Managers
 
         public void RegisterReference()
         {
-            _creatureController = new CreatureController();
-            _buildingController = new BuildingController();
+            _creatureController = gameObject.AddComponent<CreatureController>();
+            _buildingController = gameObject.AddComponent<BuildingController>();
         }
 
         private void InitializeReferences()

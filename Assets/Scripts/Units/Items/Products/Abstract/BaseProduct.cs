@@ -1,6 +1,6 @@
-using DefaultNamespace;
+using Units.Items.Abstract;
 
-namespace Units.Products.Abstract
+namespace Units.Items.Products.Abstract
 {
     public abstract class BaseProduct : BaseItem
     {

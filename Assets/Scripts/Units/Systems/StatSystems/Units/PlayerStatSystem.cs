@@ -1,11 +1,12 @@
 using System;
 using ScriptableObjects.Scripts;
 using Units.Creatures.Interfaces;
+using Units.Systems.StatSystems.Abstract;
 
-namespace Units.Creatures.Units.Players
+namespace Units.Systems.StatSystems.Units
 {
     [Serializable]
-    public class PlayerStatSystem : IMovementProperty, IInventoryProperty
+    public class PlayerStatSystem : BaseStatSystem, IMovementProperty, IInventoryProperty
     {
         public float MovementSpeed => _playerStatSo.BaseMovementSpeed;
         public float WaitingTime => _playerStatSo.BaseInteractionStandbySecond;

@@ -1,17 +1,17 @@
 using System;
-using DefaultNamespace;
 using Enums;
 using Interfaces;
 using ScriptableObjects.Scripts;
 using Units.Creatures.Abstract;
+using Units.Systems.InventorySystems.Units;
+using Units.Systems.MovementSystems.Units;
+using Units.Systems.StatSystems.Units;
 using UnityEngine;
 
 namespace Units.Creatures.Units.Players
 {
     public class Player : BaseCreature, IReferenceRegisterable, IReferenceInitializable
     {
-        private event Action<GameObject> OnInteractionTrigger;
-        
         [SerializeField] private PlayerStatSO _playerStatSo;
         
         private PlayerStatSystem _playerStatSystem;
@@ -29,14 +29,13 @@ namespace Units.Creatures.Units.Players
         {
             _playerStatSystem = new PlayerStatSystem(_playerStatSo);
             
-            _playerInventorySystem = new PlayerInventorySystem();
+            _playerInventorySystem = GetComponent<PlayerInventorySystem>();
             _playerInventorySystem.RegisterReference(_playerStatSystem);
             
             _playerMovementSystem = GetComponent<PlayerMovementSystem>();
-            _playerMovementSystem.RegisterReference(_playerStatSystem, OnInteractionTrigger);
+            _playerMovementSystem.RegisterReference(_playerStatSystem);
             
-            _playerMovementSystem.OnInteractionTrigger += _ => Debug.Log("Interaction triggered");
-            _playerMovementSystem.OnInteractionTrigger += GameObject => Debug.Log($"{GameObject.name}");
+            _playerMovementSystem.OnTrade += _playerInventorySystem.RegisterTradeTarget;
         }
 
         public void InitializeReference()

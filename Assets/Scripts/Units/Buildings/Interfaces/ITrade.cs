@@ -1,6 +1,6 @@
 namespace Units.Buildings.Interfaces
 {
-    public interface IInteractionTrade
+    public interface ITrade
     {
         public void RegisterHandleOnSendItem();
         public void RegisterHandleOnReceiveItem();

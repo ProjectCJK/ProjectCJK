@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Units.Creatures.Abstract;
@@ -9,6 +10,8 @@ namespace Units.Creatures.Controllers
 {
     public class CreatureController : MonoBehaviour, IReferenceRegisterable<BaseCreature>, IInitializable
     {
+        public Action<GameObject, bool> OnConnectInteraction;
+        
         private BaseCreature _player;
         private readonly Dictionary<int, BaseCreature> _creatures = new();
         

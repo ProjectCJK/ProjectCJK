@@ -1,6 +1,6 @@
-using Units.Materials.Abstract;
+using Units.Items.Materials.Abstract;
 
-namespace Units.Materials.Units
+namespace Units.Items.Materials.Units
 {
     public class TempMaterial : BaseMaterial
     {

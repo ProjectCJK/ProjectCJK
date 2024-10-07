@@ -1,24 +1,25 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Modules;
 using Units.Buildings.Interfaces;
 using Units.Creatures.Interfaces;
-using Units.Managers;
+using Units.Systems.MovementSystems.Abstract;
 using Unity.VisualScripting;
 using UnityEngine;
 using IInitializable = Interfaces.IInitializable;
 
-namespace Units.Creatures.Units.Players
+namespace Units.Systems.MovementSystems.Units
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerMovementSystem : MonoBehaviour, IReferenceRegisterable<IMovementProperty, Action<GameObject>>, IInitializable
+    public class PlayerMovementSystem : BaseMovementSystem, IReferenceRegisterable<IMovementProperty>, IInitializable
     {
-        public event Action<GameObject> OnInteractionTrigger;
+        public event Action<GameObject> OnTrade;
         
         [SerializeField] private Joystick _joystick;
         
         private IMovementProperty _movementProperty;
-        private GameObject _currentBuilding;
+        private GameObject _currentInteractionTarget;
         private Coroutine _interactionCoroutine;
         
         private Rigidbody2D _rigidbody2D;
@@ -31,13 +32,11 @@ namespace Units.Creatures.Units.Players
 
         #region 초기화
         
-        public void RegisterReference(IMovementProperty movementProperty, Action<GameObject> action)
+        public void RegisterReference(IMovementProperty movementProperty)
         {
             _movementProperty = movementProperty;
             
             _rigidbody2D = GetComponent<Rigidbody2D>();
-
-            OnInteractionTrigger += action;
         }
         
         public void Initialize()
@@ -101,7 +100,7 @@ namespace Units.Creatures.Units.Players
             if (other.gameObject.layer == LayerMask.NameToLayer("Building"))
             {
                 _isInTriggerZone = true;
-                _currentBuilding = other.gameObject;
+                _currentInteractionTarget = other.gameObject;
                 StartInteractionCoroutine();
             }
         }
@@ -125,14 +124,14 @@ namespace Units.Creatures.Units.Players
         {
             if (success && _isInTriggerZone && !_isMoving)
             {
-                OnInteractionTrigger?.Invoke(_currentBuilding);
+                OnTrade?.Invoke(_currentInteractionTarget);
             }
         }
 
         private void ResetTriggerState()
         {
             _isInTriggerZone = false;
-            _currentBuilding = null;
+            _currentInteractionTarget = null;
 
             if (_interactionCoroutine != null)
             {

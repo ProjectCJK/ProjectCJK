@@ -1,6 +1,6 @@
-using Units.Products.Abstract;
+using Units.Items.Products.Abstract;
 
-namespace Units.Products.Units
+namespace Units.Items.Products.Units
 {
     public class TempProduct : BaseProduct
     {

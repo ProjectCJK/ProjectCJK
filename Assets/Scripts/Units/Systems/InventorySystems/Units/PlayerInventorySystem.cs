@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
-using DefaultNamespace;
 using Interfaces;
+using Units.Buildings.Interfaces;
 using Units.Creatures.Enums;
 using Units.Creatures.Interfaces;
-using Unity.VisualScripting;
+using Units.Systems.InventorySystems.Abstract;
+using UnityEngine;
 using EMaterial = Enums.EMaterial;
 using IInitializable = Interfaces.IInitializable;
 
-namespace Units.Creatures.Units.Players
+namespace Units.Systems.InventorySystems.Units
 {
-    public class PlayerInventorySystem : IReferenceRegisterable<IInventoryProperty>, IInitializable
+    public class PlayerInventorySystem : BaseInventorySystem, IReferenceRegisterable<IInventoryProperty>, IInitializable
     {
         public int MaxInventorySize => _inventoryProperty.InventorySize;
         public int CurrentInventorySize => materialInventory.Count + productInventory.Count; 
@@ -29,6 +30,11 @@ namespace Units.Creatures.Units.Players
         {
             materialInventory.Clear();
             productInventory.Clear();
+        }
+
+        public void RegisterTradeTarget(GameObject trade)
+        {
+            Debug.Log("InteractionTarget Registered");
         }
 
         public bool ReceiveMaterial(EMaterial material)

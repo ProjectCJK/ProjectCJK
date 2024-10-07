@@ -1,6 +1,6 @@
-using DefaultNamespace;
+using Units.Items.Abstract;
 
-namespace Units.Materials.Abstract
+namespace Units.Items.Materials.Abstract
 {
     public class BaseMaterial : BaseItem
     {
