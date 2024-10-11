@@ -2,6 +2,7 @@ using System;
 using Enums;
 using Interfaces;
 using Modules;
+using Modules.DataStructures;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using UnityEngine;
@@ -10,7 +11,8 @@ namespace Units.Modules.InventoryModules.Units
 {
     public interface IBuildingInventoryModule : IInventoryModule, IRegisterReference<IInventoryProperty, Tuple<EMaterialType, EItemType>, Tuple<EMaterialType, EItemType>>, IBuildingItemReceiver
     {
-        
+        public void AddItem(Tuple<EMaterialType, EItemType> inputItemKey);
+        public void RemoveItem(Tuple<EMaterialType, EItemType> inputItemKey);
     }
     
     public class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule

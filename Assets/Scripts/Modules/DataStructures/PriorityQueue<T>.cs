@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Modules
+namespace Modules.DataStructures
 {
     public class PriorityQueue<T>
     {

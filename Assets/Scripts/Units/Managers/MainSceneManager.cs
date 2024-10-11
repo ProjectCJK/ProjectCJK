@@ -4,9 +4,12 @@ using Enums;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Modules;
+using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts;
 using Units.Games.Buildings.Controllers;
 using Units.Games.Creatures.Controllers;
+using Units.Games.Items;
+using Units.Games.Items.Controllers;
 using UnityEngine;
 
 namespace Units.Managers
@@ -24,11 +27,15 @@ namespace Units.Managers
         [Header("BuildingSettings")]
         [SerializeField] private List<BuildingStatSO> _buildingStatSo;
         
+        [Header("ItemSettings")]
+        [SerializeField] private ItemStatSO _itemStatSo;
+        
         [Header("LevelSettings")]
         [SerializeField] private LevelDesignSO _levelDesignSo;
 
         private ICreatureController _creatureController;
         private IBuildingController _buildingController;
+        private IItemController _itemController;
         private Joystick _joystick;
 
         private void Awake()

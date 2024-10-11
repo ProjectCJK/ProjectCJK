@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Modules;
+using Modules.DesignPatterns.Singletons;
 using UnityEngine;
 
 namespace Managers

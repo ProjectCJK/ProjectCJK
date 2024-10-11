@@ -34,7 +34,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
         #region 아이템 전송
         
-        protected void RemoveItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void RemoveItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             Inventory[itemKey]--;
 
@@ -53,18 +53,22 @@ namespace Units.Modules.InventoryModules.Abstract
             if (CanReceiveItem()) AddItem(itemKey);
         }
         
-        private void AddItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void AddItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             if (!Inventory.TryAdd(itemKey, 1)) Inventory[itemKey]++;
-            
-            Debug.Log($"{this} 인벤토리 수량 조정 : {itemKey.Item1} {itemKey.Item2} {Inventory[itemKey]}");
+
+            Debug.Log($"{this} Inventory => 종류 {Inventory.Count}개 / 전체 개수 {CurrentInventorySize}");
+
+            Debug.Log(Inventory.TryGetValue(itemKey, out var count)
+                ? $"{this} Inventory[{itemKey}] => {count}"
+                : $"{this} Inventory[{itemKey}] => null");
         }
         
         #endregion
 
         #region 아이템 송/수신 체크
 
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => Inventory.ContainsKey(InventoryKey) && Inventory[InventoryKey] > 0;
+        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => Inventory.TryGetValue(InventoryKey, out _);
         public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
         public bool IsInventoryFull() => CurrentInventorySize >= MaxInventorySize;
 

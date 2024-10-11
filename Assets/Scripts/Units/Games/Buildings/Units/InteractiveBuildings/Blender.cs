@@ -5,6 +5,7 @@ using ScriptableObjects.Scripts;
 using Units.Games.Buildings.Abstract;
 using Units.Games.Buildings.Enums;
 using Units.Games.Buildings.Modules;
+using Units.Modules;
 using Units.Modules.InventoryModules.Units;
 using Units.Modules.StatsModules.Units;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace Units.Games.Buildings.Units.InteractiveBuildings
 
         private IBuildingStatsModule _buildingStatsModule;
         private IBuildingInventoryModule _buildingInventoryModule;
+        private IBuildingProductModule _buildingProductModule;
         private IInteractionTrade _interactionTrade;
 
         public void RegisterReference(BuildingStatSO buildingStatSo)
@@ -36,6 +38,9 @@ namespace Units.Games.Buildings.Units.InteractiveBuildings
             
             _buildingInventoryModule = new BuildingInventoryModule();
             _buildingInventoryModule.RegisterReference(_buildingStatsModule, InputItemKey, OutItemKey);
+            
+            _buildingProductModule = new BuildingProductModule();
+            _buildingProductModule.RegisterReference(_buildingStatsModule, _buildingInventoryModule, InputItemKey, OutItemKey);
             
             _interactionTrade = GetComponentInChildren<InteractionTrade>();
             _interactionTrade.RegisterReference(_buildingInventoryModule);
@@ -52,6 +57,7 @@ namespace Units.Games.Buildings.Units.InteractiveBuildings
             }
             
             _buildingInventoryModule.SendItem();
+            _buildingProductModule.Product();
         }
     }
 }
