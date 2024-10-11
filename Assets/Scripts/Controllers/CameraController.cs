@@ -1,11 +1,10 @@
 using System;
 using Interfaces;
-using Units.Creatures.Units.Players;
 using UnityEngine;
 
 namespace Controllers
 {
-    public class CameraController : MonoBehaviour, IReferenceRegisterable<Transform>
+    public class CameraController : MonoBehaviour, IRegisterReference<Transform>
     {
         [SerializeField] private float smoothTime = 0.3f;
 

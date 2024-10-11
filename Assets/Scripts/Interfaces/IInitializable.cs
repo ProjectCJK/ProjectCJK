@@ -7,7 +7,7 @@ namespace Interfaces
     
     public interface IInitializable<in T>
     {
-        public void Initialize(T instance);
+        public void Initialize(T _inputItemKey);
     }
     
     public interface IInitializable<in T1, in T2>

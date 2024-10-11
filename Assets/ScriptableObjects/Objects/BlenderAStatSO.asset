@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb75ed22eca584de086ebe2a880533b8, type: 3}
-  m_Name: PlayerStatSO
+  m_Script: {fileID: 11500000, guid: 4ee394e0d6934a0b899c2cdb71520e11, type: 3}
+  m_Name: BlenderAStatSO
   m_EditorClassIdentifier: 
-  creatureType: 0
-  BaseMovementSpeed: 5
-  BaseInventorySize: 20
-  BaseInteractionStandbySecond: 1
+  BuildingType: 0
+  MaterialType: 1
+  InputItemType: 2
+  OutputItemType: 3
+  BaseInventorySize: 1000
   BaseSpawnData:
     Position: {x: 0, y: 0, z: 0}
-    Prefab: {fileID: 5688900296772484889, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
+    Prefab: {fileID: 1223123328614928906, guid: 440b683d16ffa4d358fbe5d1bfd03d44, type: 3}
