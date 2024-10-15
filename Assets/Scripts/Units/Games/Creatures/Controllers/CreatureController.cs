@@ -9,7 +9,7 @@ namespace Units.Games.Creatures.Controllers
 {
     public interface ICreatureController : IInitializable
     {
-        public void SpawnPlayer();
+        public void InstantiatePlayer();
         public Transform GetPlayerTransform();
     }
     
@@ -23,14 +23,14 @@ namespace Units.Games.Creatures.Controllers
             _creatureFactory = creatureFactory;
         }
         
+        public void InstantiatePlayer()
+        {
+            _player = _creatureFactory.CreateCreature();
+        }
+        
         public void Initialize()
         {
             _player.Initialize();
-        }
-
-        public void SpawnPlayer()
-        {
-            _player = _creatureFactory.CreateCreature();
         }
 
         public Transform GetPlayerTransform() => _player.transform;

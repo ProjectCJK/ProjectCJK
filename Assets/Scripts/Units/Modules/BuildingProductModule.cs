@@ -1,7 +1,7 @@
 using System;
-using Enums;
 using Interfaces;
 using ScriptableObjects.Scripts;
+using Units.Games.Items.Enums;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units;
@@ -15,24 +15,24 @@ namespace Units.Modules
         public float ProductLeadTime { get; }
     }
     
-    public interface IBuildingProductModule : IRegisterReference<IBuildingStatsModule, IBuildingInventoryModule, Tuple<EMaterialType, EItemType>, Tuple<EMaterialType, EItemType>>, IInitializable
+    public interface IBuildingProductModule : IInitializable
     {
         public void Product();
     }
     
     public class BuildingProductModule : IBuildingProductModule
     {
-        private IBuildingStatsModule _buildingStatsModule;
-        private IBuildingInventoryModule _buildingInventoryModule;
+        private readonly IBuildingStatsModule _buildingStatsModule;
+        private readonly IBuildingInventoryModule _buildingInventoryModule;
         
-        private Tuple<EMaterialType, EItemType> _inputItemKey;
-        private Tuple<EMaterialType, EItemType> _outputItemKey;
+        private readonly Tuple<EMaterialType, EProductType> _inputItemKey;
+        private readonly Tuple<EMaterialType, EProductType> _outputItemKey;
         
         private float _productLeadTime => _buildingStatsModule.ProductLeadTime;
         private float _elapsedTime;
         private bool isProcessing;
-        
-        public void RegisterReference(IBuildingStatsModule buildingStatsModule, IBuildingInventoryModule buildingInventoryModule, Tuple<EMaterialType, EItemType> inputItemKey, Tuple<EMaterialType, EItemType> outputItemKey)
+
+        public BuildingProductModule(IBuildingStatsModule buildingStatsModule, IBuildingInventoryModule buildingInventoryModule, Tuple<EMaterialType, EProductType> inputItemKey, Tuple<EMaterialType, EProductType> outputItemKey)
         {
             _buildingStatsModule = buildingStatsModule;
             _buildingInventoryModule = buildingInventoryModule;

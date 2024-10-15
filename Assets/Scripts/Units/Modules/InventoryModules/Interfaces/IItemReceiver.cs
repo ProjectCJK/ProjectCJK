@@ -1,14 +1,15 @@
 using System;
-using Enums;
+using Units.Games.Items.Enums;
+using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Interfaces
 {
     public interface IItemReceiver
     {
-        public Tuple<EMaterialType, EItemType> InputItemKey { get; }
-        
-        public void ReceiveItem(Tuple<EMaterialType, EItemType> itemKey);
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey);
+        public Transform ReceiverTransform { get; }
+        public Tuple<EMaterialType, EProductType> InputItemKey { get; }
+        public void ReceiveItem(Tuple<EMaterialType, EProductType> itemKey);
+        public bool HasMatchingItem(Tuple<EMaterialType, EProductType> InventoryKey);
         public bool CanReceiveItem();
     }
 }

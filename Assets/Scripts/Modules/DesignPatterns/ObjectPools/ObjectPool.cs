@@ -21,33 +21,69 @@ namespace Modules.DesignPatterns.ObjectPools
         private readonly Func<T> objectFactory;
 
         /// <summary>
-        /// 지정된 초기 크기로 오브젝트 풀을 생성합니다.
+        /// 풀의 최대 크기
+        /// </summary>
+        private readonly int maxSize;
+
+        /// <summary>
+        /// 풀의 크기가 Flexible하면, 최대 크기를 넘어설 수 있습니다.
+        /// </summary>
+        private readonly bool isFlexible;
+
+        /// <summary>
+        /// 지정된 초기 크기와 최대 크기, 유연성 여부로 오브젝트 풀을 생성합니다.
         /// </summary>
         /// <param name="initialSize">초기 풀 크기</param>
+        /// <param name="maxSize">풀의 최대 크기</param>
+        /// <param name="isFlexible">true면 최대 크기를 넘어설 수 있고, false면 최대 크기를 넘지 않습니다.</param>
         /// <param name="objectFactory">오브젝트 팩토리 함수</param>
-        public ObjectPool(int initialSize, Func<T> objectFactory)
+        public ObjectPool(int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory)
         {
             this.objectFactory = objectFactory;
+            this.maxSize = maxSize;
+            this.isFlexible = isFlexible;
 
             // 초기 풀 크기만큼 오브젝트를 생성하여 큐에 추가합니다.
             for (var i = 0; i < initialSize; i++)
             {
                 T obj = objectFactory();
-                obj.OnCreate();  // 객체 생성 시 초기화
+                obj.Create();  // 객체 생성 시 초기화
                 poolQueue.Enqueue(obj);
             }
         }
 
         /// <summary>
         /// 풀에서 오브젝트를 가져옵니다. 
-        /// 오브젝트가 부족하면 팩토리를 통해 새로운 오브젝트를 생성합니다.
+        /// 오브젝트가 부족하면 Flexible 여부에 따라 새로 생성하거나 null을 반환합니다.
         /// </summary>
         /// <returns>풀에서 가져온 오브젝트</returns>
         public T GetObject()
         {
-            T obj = poolQueue.Count > 0 ? poolQueue.Dequeue() : objectFactory();
-            obj.OnGetFromPool();
-            return obj;
+            if (poolQueue.Count > 0)
+            {
+                T obj = poolQueue.Dequeue();
+                obj.GetFromPool();
+                return obj;
+            }
+
+            if (isFlexible || poolQueue.Count < maxSize)
+            {
+                T obj = objectFactory();
+                obj.GetFromPool();
+                return obj;
+            }
+
+            // 풀에 오브젝트가 없고, 유연하지 않다면 null 반환
+            return default;
+        }
+        
+        /// <summary>
+        /// 풀에 있는 모든 객체를 리스트로 반환
+        /// </summary>
+        /// <returns>풀에 있는 모든 객체 리스트</returns>
+        public List<T> GetAllObjects()
+        {
+            return new List<T>(poolQueue);  // Queue를 리스트로 변환하여 반환
         }
 
         /// <summary>
@@ -57,9 +93,17 @@ namespace Modules.DesignPatterns.ObjectPools
         /// <param name="obj">반환할 오브젝트</param>
         public void ReturnObject(T obj)
         {
-            obj.OnReturnToPool();
-            obj.Reset();
-            poolQueue.Enqueue(obj);
+            if (poolQueue.Count < maxSize || isFlexible)
+            {
+                obj.ReturnToPool();
+                obj.Reset();
+                poolQueue.Enqueue(obj);
+            }
+            else
+            {
+                // 최대 크기를 넘어서면 오브젝트를 제거
+                DestroyObject(obj);
+            }
         }
 
         /// <summary>
@@ -70,14 +114,21 @@ namespace Modules.DesignPatterns.ObjectPools
             while (poolQueue.Count > 0)
             {
                 T obj = poolQueue.Dequeue();
-                obj.OnReturnToPool();
+                DestroyObject(obj);
+            }
+        }
 
-                // 오브젝트가 Unity의 GameObject일 경우 비활성화 처리
-                var gameObject = obj as GameObject;
-                if (gameObject is not null)
-                {
-                    UnityEngine.Object.Destroy(gameObject);
-                }
+        /// <summary>
+        /// 오브젝트를 파괴합니다. GameObject인 경우 Destroy 호출.
+        /// </summary>
+        /// <param name="obj">파괴할 오브젝트</param>
+        private void DestroyObject(T obj)
+        {
+            obj.ReturnToPool();
+            var gameObject = obj as GameObject;
+            if (gameObject != null)
+            {
+                UnityEngine.Object.Destroy(gameObject);
             }
         }
     }

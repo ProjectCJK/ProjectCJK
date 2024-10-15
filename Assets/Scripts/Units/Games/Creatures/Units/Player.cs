@@ -1,11 +1,13 @@
 using System;
-using Enums;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using ScriptableObjects.Scripts;
+using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Games.Buildings.Abstract;
 using Units.Games.Creatures.Abstract;
 using Units.Games.Creatures.Enums;
+using Units.Games.Items.Controllers;
+using Units.Games.Items.Enums;
 using Units.Modules.InventoryModules;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units;
@@ -15,7 +17,7 @@ using UnityEngine;
 
 namespace Units.Games.Creatures.Units
 {
-    public interface IPlayer : IRegisterReference<PlayerStatSO, Joystick>, IRegisterEventListener
+    public interface IPlayer : IRegisterReference<PlayerDataSo, Joystick, IItemController>, IRegisterEventListener
     {
         
     }
@@ -24,22 +26,21 @@ namespace Units.Games.Creatures.Units
     {
         public override ECreatureType CreatureType => _playerStatsModule.CreatureType;
         
-        private PlayerStatSO _playerStatSo;
+        private PlayerDataSo _playerDataSo;
         
         private IPlayerStatsModule _playerStatsModule;
         private IPlayerMovementModule _playerMovementModule;
         private IPlayerInventoryModule _playerInventoryModule;
+        private IItemController _itemController;
 
-        public void RegisterReference(PlayerStatSO playerStatSo, Joystick joystick)
+        public void RegisterReference(PlayerDataSo playerDataSo, Joystick joystick, IItemController itemController)
         {
-            _playerStatSo = playerStatSo;
+            _playerDataSo = playerDataSo;
+            _itemController = itemController;
             
-            _playerStatsModule = new PlayerStatsModule(_playerStatSo);
-            _playerInventoryModule = new PlayerInventoryModule();
-            
+            _playerStatsModule = new PlayerStatsModule(_playerDataSo);
+            _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemController, CreatureType);
             _playerMovementModule = GetComponent<PlayerMovementModule>();
-            
-            _playerInventoryModule.RegisterReference(_playerStatsModule, CreatureType);
             _playerMovementModule.RegisterReference(_playerStatsModule, joystick);
         }
         
@@ -58,8 +59,7 @@ namespace Units.Games.Creatures.Units
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                Debug.Log($"{EMaterialType.A} {EItemType.Material} 추가!");
-                _playerInventoryModule.ReceiveItem(new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Material));
+                _playerInventoryModule.ReceiveItem(new Tuple<EMaterialType, EProductType>(EMaterialType.A, EProductType.Material));
             }
             
             _playerInventoryModule.SendItem();

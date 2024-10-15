@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enums;
 using Interfaces;
+using Units.Games.Items.Enums;
 using Units.Modules.InventoryModules.Interfaces;
 using UnityEngine;
 
@@ -23,10 +23,11 @@ namespace Units.Modules.InventoryModules.Abstract
     public abstract class InventoryModule : IInventoryModule
     {
         public abstract int MaxInventorySize { get; }
-        public Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
+        public abstract Transform ReceiverTransform { get; }
+        public Tuple<EMaterialType, EProductType> InputItemKey { get; protected set; }
         public int CurrentInventorySize => Inventory.Sum(item => item.Value);
         
-        protected readonly Dictionary<Tuple<EMaterialType, EItemType>, int> Inventory = new();
+        protected readonly Dictionary<Tuple<EMaterialType, EProductType>, int> Inventory = new();
 
         public abstract void Initialize();
         
@@ -34,7 +35,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
         #region 아이템 전송
         
-        public void RemoveItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void RemoveItem(Tuple<EMaterialType, EProductType> itemKey)
         {
             Inventory[itemKey]--;
 
@@ -48,27 +49,21 @@ namespace Units.Modules.InventoryModules.Abstract
         
         #region 아이템 수신
 
-        public void ReceiveItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void ReceiveItem(Tuple<EMaterialType, EProductType> itemKey)
         {
             if (CanReceiveItem()) AddItem(itemKey);
         }
         
-        public void AddItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void AddItem(Tuple<EMaterialType, EProductType> itemKey)
         {
             if (!Inventory.TryAdd(itemKey, 1)) Inventory[itemKey]++;
-
-            Debug.Log($"{this} Inventory => 종류 {Inventory.Count}개 / 전체 개수 {CurrentInventorySize}");
-
-            Debug.Log(Inventory.TryGetValue(itemKey, out var count)
-                ? $"{this} Inventory[{itemKey}] => {count}"
-                : $"{this} Inventory[{itemKey}] => null");
         }
         
         #endregion
 
         #region 아이템 송/수신 체크
 
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => Inventory.TryGetValue(InventoryKey, out _);
+        public bool HasMatchingItem(Tuple<EMaterialType, EProductType> InventoryKey) => Inventory.TryGetValue(InventoryKey, out _);
         public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
         public bool IsInventoryFull() => CurrentInventorySize >= MaxInventorySize;
 

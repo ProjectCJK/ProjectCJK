@@ -1,6 +1,6 @@
 using System;
-using Enums;
 using Interfaces;
+using Units.Games.Items.Enums;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units;
@@ -18,10 +18,10 @@ namespace Units.Games.Buildings.Modules
     [RequireComponent(typeof(TilemapCollider2D))]
     public class InteractionTrade : MonoBehaviour, IInteractionTrade
     {
-        public Tuple<EMaterialType, EItemType> InputItemKey => _buildingInventoryModule.InputItemKey;
+        public Transform ReceiverTransform => _buildingInventoryModule.ReceiverTransform;
+        public Tuple<EMaterialType, EProductType> InputItemKey => _buildingInventoryModule.InputItemKey;
         
         private IBuildingInventoryModule _buildingInventoryModule;
-        
         
         public void RegisterReference(IBuildingInventoryModule buildingInventoryModule)
         {
@@ -42,12 +42,12 @@ namespace Units.Games.Buildings.Modules
             _buildingInventoryModule.UnRegisterItemReceiver(itemReceiver);
         }
 
-        public void ReceiveItem(Tuple<EMaterialType, EItemType> itemType)
+        public void ReceiveItem(Tuple<EMaterialType, EProductType> itemType)
         {
             _buildingInventoryModule.ReceiveItem(itemType);
         }
 
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey)
+        public bool HasMatchingItem(Tuple<EMaterialType, EProductType> InventoryKey)
         {
             return _buildingInventoryModule.HasMatchingItem(InventoryKey);
         }

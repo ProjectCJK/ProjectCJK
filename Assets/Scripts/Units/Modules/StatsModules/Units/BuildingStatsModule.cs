@@ -1,4 +1,5 @@
 using ScriptableObjects.Scripts;
+using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.StatsModules.Abstract;
 
@@ -11,14 +12,14 @@ namespace Units.Modules.StatsModules.Units
 
     public class BuildingStatsModule : StatsModule, IBuildingStatsModule
     {
-        public float ProductLeadTime => _buildingStatSo.productLeadTime;
-        public int MaxInventorySize => _buildingStatSo.BaseInventorySize;
+        public float ProductLeadTime => _buildingDataSo.productLeadTime;
+        public int MaxInventorySize => _buildingDataSo.BaseInventorySize;
         
-        private readonly BuildingStatSO _buildingStatSo;
+        private readonly BuildingDataSO _buildingDataSo;
 
-        public BuildingStatsModule(BuildingStatSO buildingStatSo)
+        public BuildingStatsModule(BuildingDataSO buildingDataSo)
         {
-            _buildingStatSo = buildingStatSo;
+            _buildingDataSo = buildingDataSo;
         }
     }
 }

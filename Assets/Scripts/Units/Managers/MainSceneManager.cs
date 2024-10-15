@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using Controllers;
-using Enums;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Modules;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts;
+using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Games.Buildings.Controllers;
 using Units.Games.Creatures.Controllers;
 using Units.Games.Items;
 using Units.Games.Items.Controllers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Units.Managers
 {
@@ -20,18 +21,18 @@ namespace Units.Managers
         [SerializeField] private Canvas _canvas;
         [SerializeField] private Grid _grid;
         [SerializeField] private CameraController _cameraController;
-
+        
         [Header("PlayerSettings")]
-        [SerializeField] private PlayerStatSO _playerStatSo;
+        [SerializeField] private PlayerDataSo _playerDataSo;
         
         [Header("BuildingSettings")]
-        [SerializeField] private List<BuildingStatSO> _buildingStatSo;
+        [SerializeField] private List<BuildingDataSO> _buildingStatSo;
         
         [Header("ItemSettings")]
-        [SerializeField] private ItemStatSO _itemStatSo;
+        [SerializeField] private ItemDataSO _itemDataSo;
         
         [Header("LevelSettings")]
-        [SerializeField] private LevelDesignSO _levelDesignSo;
+        [SerializeField] private LevelDesignDataSO _levelDesignDataSo;
 
         private ICreatureController _creatureController;
         private IBuildingController _buildingController;
@@ -54,8 +55,9 @@ namespace Units.Managers
 
         public void RegisterReference()
         {
-            _creatureController = new CreatureController(new CreatureFactory(_playerStatSo, _joystick));
-            _buildingController = new BuildingController(new BuildingFactory(_buildingStatSo, _grid));
+            _itemController = new ItemController(new ItemFactory(_itemDataSo));
+            _creatureController = new CreatureController(new CreatureFactory(_playerDataSo, _joystick, _itemController));
+            _buildingController = new BuildingController(new BuildingFactory(_buildingStatSo, _grid, _itemController));
         }
 
         // 씬 초기 스폰 오브젝트들 처리
@@ -67,8 +69,9 @@ namespace Units.Managers
         
         private void InstantiateUnits()
         {
-            _creatureController.SpawnPlayer();
-            _buildingController.SpawnBuilding();
+            _creatureController.InstantiatePlayer();
+            _buildingController.InstantiateBuilding();
+            _itemController.InstantiateItem();
         }
 
         // 카메라가 플레이어를 추적하도록 설정
@@ -80,14 +83,15 @@ namespace Units.Managers
         // 조이스틱 스폰
         private Joystick SpawnJoystick()
         {
-            GameObject joystickObject = Instantiate(_levelDesignSo.JoystickSpawnData.Prefab, _canvas.transform);
+            GameObject joystickObject = Instantiate(_levelDesignDataSo.JoystickSpawnData.Prefab, _canvas.transform);
             return joystickObject.GetComponent<Joystick>();
         }
 
-        // 레벨 오브젝트 스폰
         private void SpawnLevelObjects()
         {
-            Instantiate(_levelDesignSo.LevelSpawnData.Prefab, _grid.transform);
+            GameObject tilemapObject = Instantiate(_levelDesignDataSo.LevelSpawnData.Prefab, _grid.transform);
+            
+            tilemapObject.transform.localPosition = _levelDesignDataSo.LevelSpawnData.Position;
         }
     }
 }

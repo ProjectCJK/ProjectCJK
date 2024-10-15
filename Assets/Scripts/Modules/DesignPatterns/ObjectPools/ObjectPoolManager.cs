@@ -19,6 +19,10 @@ namespace Modules.DesignPatterns.ObjectPools
         /// 기본 풀 크기. 필요에 따라 오브젝트 생성 시 사용됩니다.
         /// </summary>
         private const int DefaultPoolSize = 10;
+        /// <summary>
+        /// 기본 풀 크기. 필요에 따라 오브젝트 생성 시 사용됩니다.
+        /// </summary>
+        private const int MaxPoolSize = 10;
 
         /// <summary>
         /// 요청한 키에 해당하는 풀에서 오브젝트를 가져옵니다. 풀을 찾을 수 없으면 새로 생성합니다.
@@ -31,10 +35,20 @@ namespace Modules.DesignPatterns.ObjectPools
         {
             if (!poolDictionary.ContainsKey(key))
             {
-                CreatePool(key, DefaultPoolSize, objectFactory);
+                CreatePool(key, DefaultPoolSize, MaxPoolSize, true, objectFactory);
             }
 
             return ((ObjectPool<T>)poolDictionary[key]).GetObject();
+        }
+        
+        public List<T> GetAllObjectsFromPool<T>(string key) where T : IPoolable
+        {
+            if (poolDictionary.TryGetValue(key, out var pool))
+            {
+                return ((ObjectPool<T>)pool).GetAllObjects();
+            }
+
+            throw new Exception($"Pool with key '{key}' does not exist.");
         }
 
         /// <summary>
@@ -61,15 +75,17 @@ namespace Modules.DesignPatterns.ObjectPools
         /// <typeparam name="T">풀링할 객체 타입</typeparam>
         /// <param name="key">풀의 고유 키</param>
         /// <param name="initialSize">초기 풀 크기</param>
-        /// <param name="objectFactory">오브젝트 생성자 함수</param>
-        public void CreatePool<T>(string key, int initialSize, Func<T> objectFactory) where T : IPoolable
+        /// <param name="maxSize">풀의 최대 크기</param>
+        /// <param name="isFlexible">true면 최대 크기를 넘어설 수 있고, false면 최대 크기를 넘지 않습니다.</param>
+        /// <param name="objectFactory">오브젝트 팩토리 함수</param>
+        public void CreatePool<T>(string key, int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory) where T : IPoolable
         {
             if (poolDictionary.ContainsKey(key))
             {
                 throw new Exception($"Pool with key '{key}' already exists.");
             }
 
-            var newPool = new ObjectPool<T>(initialSize, objectFactory);
+            var newPool = new ObjectPool<T>(initialSize: initialSize, maxSize: maxSize, isFlexible:isFlexible, objectFactory);
             poolDictionary[key] = newPool;
         }
 

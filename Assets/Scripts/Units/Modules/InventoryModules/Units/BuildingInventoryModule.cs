@@ -1,34 +1,51 @@
 using System;
-using Enums;
 using Interfaces;
 using Modules;
 using Modules.DataStructures;
+using Units.Games.Items.Controllers;
+using Units.Games.Items.Enums;
+using Units.Games.Items.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
+using Units.Modules.StatsModules.Units;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Units
 {
-    public interface IBuildingInventoryModule : IInventoryModule, IRegisterReference<IInventoryProperty, Tuple<EMaterialType, EItemType>, Tuple<EMaterialType, EItemType>>, IBuildingItemReceiver
+    public interface IBuildingInventoryModule : IInventoryModule
     {
-        public void AddItem(Tuple<EMaterialType, EItemType> inputItemKey);
-        public void RemoveItem(Tuple<EMaterialType, EItemType> inputItemKey);
+        public void AddItem(Tuple<EMaterialType, EProductType> inputItemKey);
+        public void RemoveItem(Tuple<EMaterialType, EProductType> inputItemKey);
+        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
+        public void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver);
     }
     
     public class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
         public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
+        public override Transform ReceiverTransform { get; }
 
         private PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new ();
         
-        private IInventoryProperty _inventoryProperty;
-        private ICreatureItemReceiver currentItemReceiver;
+        private readonly IInventoryProperty _inventoryProperty;
+        private readonly IItemController _itemController;
+        private readonly Tuple<EMaterialType, EProductType> _outputItemKey;
+        private readonly Vector3 _senderTransform;
         
-        private Tuple<EMaterialType, EItemType> _outputItemKey;
+        private ICreatureItemReceiver currentItemReceiver;
 
-        public void RegisterReference(IInventoryProperty inventoryProperty, Tuple<EMaterialType, EItemType> inputItemKey, Tuple<EMaterialType, EItemType> outputItemKey)
+        public BuildingInventoryModule(
+            Vector3 senderTransform,
+            Transform receiverTransform,
+            IInventoryProperty inventoryProperty,
+            IItemController itemController,
+            Tuple<EMaterialType, EProductType> inputItemKey,
+            Tuple<EMaterialType, EProductType> outputItemKey)
         {
+            _senderTransform = senderTransform;
+            ReceiverTransform = receiverTransform;
             _inventoryProperty = inventoryProperty;
+            _itemController = itemController;
             InputItemKey = inputItemKey;
             _outputItemKey = outputItemKey;
         }
@@ -41,6 +58,7 @@ namespace Units.Modules.InventoryModules.Units
         
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver)
         {
+            if (_itemReceiverQueue.Contains(itemReceiver)) return;
             _itemReceiverQueue.Enqueue(itemReceiver, (int) itemReceiver.CreatureType);
             Debug.Log($"{itemReceiver}과 연결 성공, 현재 PriorityQueue Count : {_itemReceiverQueue.Count}개");
         }
@@ -65,20 +83,19 @@ namespace Units.Modules.InventoryModules.Units
 
         public override void SendItem()
         {
+            // 대기열에 등록된 유닛 체크
             if (_itemReceiverQueue.Count == 0) return;
-
-            if (!Inventory.TryGetValue(_outputItemKey, out _))
-            {
-                Debug.Log($"(빌딩 -> 크리처) 아이템 전송 실행 조건 미충족 (!Inventory.TryGetValue(_outputItemKey, out var value) => {!Inventory.TryGetValue(_outputItemKey, out _)})");
-                return;
-            }
-            
+            // 인벤토리에 OutputItem 체크
+            if (!Inventory.TryGetValue(_outputItemKey, out var outputItem)) return;
+            // 대기열에서 우선순위가 가장 높은 Receiver 반환
             if (!_itemReceiverQueue.TryPeek(out currentItemReceiver)) return;
             
-            if (currentItemReceiver.CanReceiveItem() && Inventory[_outputItemKey] > 0)
+            // 반환된 Receiver가 현재 아이템 수령이 가능한 상태이고, OutputItem을 1개 이상 가지고 있다면
+            if (currentItemReceiver.CanReceiveItem() && outputItem > 0)
             {
-                currentItemReceiver.ReceiveItem(_outputItemKey);
                 RemoveItem(_outputItemKey);
+                currentItemReceiver.ReceiveItem(_outputItemKey);
+                _itemController.TransferItem(_outputItemKey, _senderTransform, currentItemReceiver.ReceiverTransform);
             }
             else
             {

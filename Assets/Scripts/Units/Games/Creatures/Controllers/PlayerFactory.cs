@@ -1,7 +1,9 @@
 using Externals.Joystick.Scripts.Base;
 using ScriptableObjects.Scripts;
+using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Games.Creatures.Abstract;
 using Units.Games.Creatures.Units;
+using Units.Games.Items.Controllers;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,20 +16,22 @@ namespace Units.Games.Creatures.Controllers
 
     public class CreatureFactory : ICreatureFactory
     {
-        private readonly PlayerStatSO _playerStatSo;
+        private readonly PlayerDataSo _playerDataSo;
         private readonly Joystick _joystick;
+        private readonly IItemController _itemController;
         
-        public CreatureFactory(PlayerStatSO playerStatSo, Joystick joystick)
+        public CreatureFactory(PlayerDataSo playerDataSo, Joystick joystick, IItemController itemController)
         {
-            _playerStatSo = playerStatSo;
+            _playerDataSo = playerDataSo;
             _joystick = joystick;
+            _itemController = itemController;
         }
 
         public Creature CreateCreature()
         {
             // TODO : NPC SO 추가 후 로직 수정
-            GameObject prefab = _playerStatSo.BaseSpawnData.Prefab;
-            Vector3Int spawnPos = _playerStatSo.BaseSpawnData.Position;
+            GameObject prefab = _playerDataSo.BaseSpawnData.Prefab;
+            Vector3Int spawnPos = _playerDataSo.BaseSpawnData.Position;
             
             GameObject obj = Object.Instantiate(prefab, spawnPos, Quaternion.identity);
             var baseCreature = obj.GetComponent<Creature>();
@@ -36,7 +40,7 @@ namespace Units.Games.Creatures.Controllers
             
             if (player != null)
             {
-                player.RegisterReference(_playerStatSo, _joystick);
+                player.RegisterReference(_playerDataSo, _joystick, _itemController);
                 player.RegisterEventListener();
             }
 
