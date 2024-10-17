@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Modules;
 using Modules.DataStructures;
-using Units.Games.Items.Controllers;
-using Units.Games.Items.Enums;
-using Units.Games.Items.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.StatsModules.Units;
+using Units.Stages.Controllers;
+using Units.Stages.Items.Enums;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Units
@@ -18,36 +18,39 @@ namespace Units.Modules.InventoryModules.Units
         public void RemoveItem(Tuple<EMaterialType, EProductType> inputItemKey);
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
         public void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver);
+        public int GetItemCount(Tuple<EMaterialType, EProductType> inputItemKey);
     }
     
-    public class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
+    public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
         public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
         public override Transform ReceiverTransform { get; }
+        public List<Tuple<EMaterialType, EProductType>> InputItemKey { get; }
+        public List<Tuple<EMaterialType, EProductType>> OutItemKey { get; }
 
         private PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new ();
         
         private readonly IInventoryProperty _inventoryProperty;
         private readonly IItemController _itemController;
         private readonly Tuple<EMaterialType, EProductType> _outputItemKey;
-        private readonly Vector3 _senderTransform;
+        private readonly Transform _senderTransform;
         
         private ICreatureItemReceiver currentItemReceiver;
 
-        public BuildingInventoryModule(
-            Vector3 senderTransform,
+        protected BuildingInventoryModule(
+            Transform senderTransform,
             Transform receiverTransform,
             IInventoryProperty inventoryProperty,
             IItemController itemController,
-            Tuple<EMaterialType, EProductType> inputItemKey,
-            Tuple<EMaterialType, EProductType> outputItemKey)
+            List<Tuple<EMaterialType, EProductType>> inputItemKey,
+            List<Tuple<EMaterialType, EProductType>> outputItemKey)
         {
             _senderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             _inventoryProperty = inventoryProperty;
             _itemController = itemController;
             InputItemKey = inputItemKey;
-            _outputItemKey = outputItemKey;
+            OutItemKey = outputItemKey;
         }
         
         public override void Initialize()
@@ -81,6 +84,11 @@ namespace Units.Modules.InventoryModules.Units
             Debug.Log($"{itemReceiver}과 연결 종료, 현재 PriorityQueue Count : {_itemReceiverQueue.Count}개");
         }
 
+        public int GetItemCount(Tuple<EMaterialType, EProductType> key)
+        {
+            return Inventory.GetValueOrDefault(key, 0);
+        }
+
         public override void SendItem()
         {
             // 대기열에 등록된 유닛 체크
@@ -95,7 +103,7 @@ namespace Units.Modules.InventoryModules.Units
             {
                 RemoveItem(_outputItemKey);
                 currentItemReceiver.ReceiveItem(_outputItemKey);
-                _itemController.TransferItem(_outputItemKey, _senderTransform, currentItemReceiver.ReceiverTransform);
+                _itemController.TransferItem(_outputItemKey, _senderTransform.position, currentItemReceiver.ReceiverTransform);
             }
             else
             {

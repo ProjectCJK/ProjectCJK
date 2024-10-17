@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ScriptableObjects.Scripts.Structs;
-using Units.Games.Items.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects.Scripts.ScriptableObjects

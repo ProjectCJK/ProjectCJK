@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using ScriptableObjects.Scripts.Structs;
-using Units.Games.Items.Units;
+using Units.Stages.Items.Units;
 using UnityEngine;
 
 namespace ScriptableObjects.Scripts.ScriptableObjects

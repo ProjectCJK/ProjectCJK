@@ -55,7 +55,7 @@ namespace Modules.DesignPatterns.MVVMs
         /// <param name="slider">Slider UI 요소</param>
         /// <param name="getValue">ViewModel에서 float 값을 가져오는 함수</param>
         /// <param name="setValue">Slider 값이 변경될 때 ViewModel에 설정하는 액션</param>
-        public static void BindSlider(Slider slider, Func<float> getValue, Action<float> setValue)
+        public static void BindSlider(Slider slider, Func<float> getValue, Action<float> setValue = null)
         {
             slider.value = getValue();
             slider.onValueChanged.AddListener(value => setValue?.Invoke(value));

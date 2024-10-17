@@ -1,4 +1,4 @@
-using Units.Games.Creatures.Enums;
+using Units.Stages.Creatures.Enums;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Interfaces

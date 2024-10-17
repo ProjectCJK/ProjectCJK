@@ -1,5 +1,3 @@
-using Units.Games.Items.Controllers;
-
 namespace Interfaces
 {
     public interface IRegisterReference

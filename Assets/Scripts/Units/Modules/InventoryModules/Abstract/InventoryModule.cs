@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
-using Units.Games.Items.Enums;
 using Units.Modules.InventoryModules.Interfaces;
+using Units.Stages.Items.Enums;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Abstract
@@ -24,7 +24,6 @@ namespace Units.Modules.InventoryModules.Abstract
     {
         public abstract int MaxInventorySize { get; }
         public abstract Transform ReceiverTransform { get; }
-        public Tuple<EMaterialType, EProductType> InputItemKey { get; protected set; }
         public int CurrentInventorySize => Inventory.Sum(item => item.Value);
         
         protected readonly Dictionary<Tuple<EMaterialType, EProductType>, int> Inventory = new();

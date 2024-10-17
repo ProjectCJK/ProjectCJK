@@ -1,10 +1,10 @@
 using System;
 using ScriptableObjects.Scripts;
 using ScriptableObjects.Scripts.ScriptableObjects;
-using Units.Games.Creatures.Enums;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Abstract;
+using Units.Stages.Creatures.Enums;
 
 namespace Units.Modules.StatsModules.Units
 {

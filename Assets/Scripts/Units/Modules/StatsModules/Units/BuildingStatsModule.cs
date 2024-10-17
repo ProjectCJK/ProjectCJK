@@ -1,6 +1,7 @@
 using ScriptableObjects.Scripts;
 using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.InventoryModules.Abstract;
+using Units.Modules.ProductModules;
 using Units.Modules.StatsModules.Abstract;
 
 namespace Units.Modules.StatsModules.Units

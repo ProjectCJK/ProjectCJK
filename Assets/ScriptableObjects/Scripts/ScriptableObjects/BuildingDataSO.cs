@@ -1,5 +1,5 @@
-using Units.Games.Buildings.Enums;
-using Units.Games.Items.Enums;
+using Units.Stages.Buildings.Enums;
+using Units.Stages.Items.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects.Scripts.ScriptableObjects
