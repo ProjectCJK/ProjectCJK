@@ -53,6 +53,8 @@ namespace Units.Modules.InventoryModules.Units
 
         public override void SendItem()
         {
+            if (!IsReadyToSend()) return;
+            
             // 연결된 InteractionZone이 없거나, 인벤토리에 InteractionZone의 InputItemKey가 존재하지 않을 경우
             if (_targetInteractionZone == null) return;
 
@@ -69,6 +71,8 @@ namespace Units.Modules.InventoryModules.Units
                     }   
                 }
             }
+            
+            SetLastSendTime();
         }
 
         public void ConnectWithInteractionTradeZone(Transform interactionZone, bool isConnected)

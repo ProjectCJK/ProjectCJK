@@ -28,10 +28,10 @@ namespace Units.Stages.Controllers
                 
                 switch (building.BuildingType)
                 {
-                    case EBuildingType.Blender:
-                        if (building is IBlender blender) blender.RegisterReference(itemController);
+                    case EBuildingType.Kitchen:
+                        if (building is IKichen blender) blender.RegisterReference(itemController);
                         break;
-                    case EBuildingType.Shelf:
+                    case EBuildingType.FoodStand:
                         if (building is IShelf shelf) shelf.RegisterReference(itemController);
                         break;
                 }

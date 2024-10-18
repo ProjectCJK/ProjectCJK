@@ -92,7 +92,8 @@ namespace Units.Modules.InventoryModules.Units
         {
             // 대기열에 등록된 유닛 체크
             if (_itemReceiverQueue.Count == 0) return;
-            // 인벤토리에 OutputItem 체크
+         
+            if (!IsReadyToSend()) return;
 
             foreach (var currentItemKey in OutItemKey)
             {
@@ -114,6 +115,8 @@ namespace Units.Modules.InventoryModules.Units
                     }     
                 }
             }
+            
+            SetLastSendTime();
         }
     }
 }

@@ -7,8 +7,10 @@ using Units.Modules.StatsModules.Units;
 using Units.Stages.Buildings.Abstract;
 using Units.Stages.Buildings.Enums;
 using Units.Stages.Buildings.Modules;
+using Units.Stages.Buildings.UI.FoodStands;
 using Units.Stages.Controllers;
 using Units.Stages.Items.Enums;
+using UnityEngine;
 
 namespace Units.Stages.Buildings.Units
 {
@@ -17,15 +19,20 @@ namespace Units.Stages.Buildings.Units
         
     }
     
-    public class Shelf : Building, IShelf
+    public class FoodStand : Building, IShelf
     {
+        [SerializeField] private FoodStandView foodStandView;
+        
         public override List<Tuple<EMaterialType, EProductType>> InputItemKey { get; protected set; }
         public override List<Tuple<EMaterialType, EProductType>> OutItemKey { get; protected set; }
         
         private IBuildingStatsModule _buildingStatsModule;
-        private IShelfInventoryModule _shelfInventoryModule;
+        private IFoodStandInventoryModule _foodStandInventoryModule;
         private IItemController _itemController;
         private IInteractionTrade _interactionTrade;
+
+        private FoodStandViewModel _foodStandViewModel;
+        private FoodStandModel _foodStandModel;
         
         public void RegisterReference(IItemController itemController)
         {
@@ -38,17 +45,24 @@ namespace Units.Stages.Buildings.Units
             OutItemKey.Add(new Tuple<EMaterialType, EProductType>(buildingDataSo.MaterialType, buildingDataSo.outputProductType));
             
             _buildingStatsModule = new BuildingStatsModule(buildingDataSo);
-            _shelfInventoryModule = new ShelfInventoryModule(transform, transform, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
+            _foodStandInventoryModule = new FoodStandInventoryModule(transform, transform, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
+
+            _foodStandModel = new FoodStandModel();
+            _foodStandViewModel = new FoodStandViewModel(_foodStandModel);
+            foodStandView.BindViewModel(_foodStandViewModel);
             
             _interactionTrade = GetComponentInChildren<InteractionTrade>();
-            _interactionTrade.RegisterReference(_shelfInventoryModule, InputItemKey);
+            _interactionTrade.RegisterReference(_foodStandInventoryModule, InputItemKey);
+
+            _foodStandInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }
         
         public override void Initialize() { }
-
-        private void Update()
+        
+        private void UpdateViewModel()
         {
-            // _shelfInventoryModule.SendItem();
+            var remainedProductCount = _foodStandInventoryModule.GetItemCount(InputItemKey[0]);
+            _foodStandViewModel.UpdateValues(remainedProductCount);
         }
     }
 }
