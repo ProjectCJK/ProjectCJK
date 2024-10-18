@@ -16,16 +16,15 @@ namespace Units.Stages.Items.Modules
         private Vector3 _controlPoint;
         private Transform _pointB;
 
-        private readonly MonoBehaviour _itemPosition;
+        private readonly Transform _itemTransform;
         private readonly float _baseSpeed;
         private float _moveDuration;
-        private float timeElapsed;
-        
-        private bool isRunning;
+        private float _timeElapsed;
+        private bool _isRunning;
 
-        public BezierCurveMover(MonoBehaviour itemPosition, float baseSpeed)
+        public BezierCurveMover(MonoBehaviour item, float baseSpeed)
         {
-            _itemPosition = itemPosition;
+            _itemTransform = item.transform;
             _baseSpeed = baseSpeed;
 
             Reset();
@@ -33,8 +32,9 @@ namespace Units.Stages.Items.Modules
 
         public void Initialize(Vector3 pointA, Transform pointB, Action action)
         {
-            isRunning = true;
+            _isRunning = true;
             _pointA = pointA;
+            _itemTransform.transform.position = pointA;
             _pointB = pointB;
             OnArrived = action;
 
@@ -55,15 +55,15 @@ namespace Units.Stages.Items.Modules
 
         public void Transfer()
         {
-            if (!isRunning) return;
+            if (!_isRunning) return;
 
-            timeElapsed += Time.deltaTime;
-            var t = timeElapsed / _moveDuration;
+            _timeElapsed += Time.deltaTime;
+            var t = _timeElapsed / _moveDuration;
 
             Vector2 newPosition = CalculateQuadraticBezierPoint(t, _pointA, _controlPoint, _pointB.position);
-            _itemPosition.transform.position = newPosition;
+            _itemTransform.transform.position = newPosition;
 
-            if (t >= 1f && isRunning) // t가 1에 도달한 후 도착 처리
+            if (t >= 1f && _isRunning) // t가 1에 도달한 후 도착 처리
             {
                 OnArrived?.Invoke();
                 Reset();
@@ -78,7 +78,8 @@ namespace Units.Stages.Items.Modules
         private void Reset()
         {
             OnArrived = null;
-            isRunning = false;
+            _isRunning = false;
+            _timeElapsed = 0;
             _pointA = Vector3.zero;
             _pointB = null;
         }

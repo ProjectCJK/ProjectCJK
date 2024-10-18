@@ -6,6 +6,7 @@ namespace Modules.DesignPatterns.ObjectPools
 {
     /// <summary>
     /// 제네릭 오브젝트 풀 클래스. 오브젝트를 생성하고 관리하며, 객체의 생명 주기를 처리합니다.
+    /// 오브젝트 풀링, 재사용성, 파괴 기능을 제공합니다.
     /// </summary>
     /// <typeparam name="T">풀링할 객체 타입 (IPoolable을 구현해야 함)</typeparam>
     public class ObjectPool<T> : ICustomObjectPool<T> where T : IPoolable
@@ -78,7 +79,7 @@ namespace Modules.DesignPatterns.ObjectPools
         }
         
         /// <summary>
-        /// 풀에 있는 모든 객체를 리스트로 반환
+        /// 풀에 있는 모든 객체를 리스트로 반환합니다.
         /// </summary>
         /// <returns>풀에 있는 모든 객체 리스트</returns>
         public List<T> GetAllObjects()

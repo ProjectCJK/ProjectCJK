@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb75ed22eca584de086ebe2a880533b8, type: 3}
   m_Name: Player_DataSO
   m_EditorClassIdentifier: 
-  BaseSpawnData:
-    Position: {x: 0, y: -4, z: 0}
-    Prefab: {fileID: 5688900296772484889, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
   BaseInventorySize: 20
+  creaturePrefab: {fileID: 5688900296772484889, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
   creatureType: 0
   BaseMovementSpeed: 5
   BaseInteractionStandbySecond: 1

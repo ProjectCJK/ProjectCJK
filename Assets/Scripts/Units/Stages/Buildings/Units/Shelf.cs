@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interfaces;
 using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.InventoryModules.Units;
 using Units.Modules.StatsModules.Units;
@@ -11,14 +12,13 @@ using Units.Stages.Items.Enums;
 
 namespace Units.Stages.Buildings.Units
 {
-    public interface IShelf
+    public interface IShelf : IRegisterReference<IItemController>
     {
         
     }
     
     public class Shelf : Building, IShelf
     {
-        public override EBuildingType BuildingType { get; protected set; }
         public override List<Tuple<EMaterialType, EProductType>> InputItemKey { get; protected set; }
         public override List<Tuple<EMaterialType, EProductType>> OutItemKey { get; protected set; }
         
@@ -27,9 +27,8 @@ namespace Units.Stages.Buildings.Units
         private IItemController _itemController;
         private IInteractionTrade _interactionTrade;
         
-        public void RegisterReference(BuildingDataSO buildingDataSo, IItemController itemController)
+        public void RegisterReference(IItemController itemController)
         {
-            BuildingType = buildingDataSo.BuildingType;
             _itemController = itemController;
             
             InputItemKey = new List<Tuple<EMaterialType, EProductType>>();
@@ -49,7 +48,7 @@ namespace Units.Stages.Buildings.Units
 
         private void Update()
         {
-            _shelfInventoryModule.SendItem();
+            // _shelfInventoryModule.SendItem();
         }
     }
 }

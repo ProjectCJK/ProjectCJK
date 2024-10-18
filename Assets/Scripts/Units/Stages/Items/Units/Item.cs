@@ -26,7 +26,6 @@ namespace Units.Stages.Items.Units
         public void Initialize(Sprite sprite, Vector2 pointA, Transform pointB, Action action)
         {
             SetSprite(sprite);
-            transform.position = pointA;
             _bezierCurveMover.Initialize(pointA, pointB, action);
         }
         

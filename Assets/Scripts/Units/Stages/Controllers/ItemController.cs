@@ -11,7 +11,6 @@ namespace Units.Stages.Controllers
 {
     public interface IItemController
     {
-        public void InstantiateItem();
         public void TransferItem(Tuple<EMaterialType, EProductType> itemType, Vector3 sendPosition, Transform receivePosition);
         public void ReturnItem(Item item);
     }
@@ -28,10 +27,11 @@ namespace Units.Stages.Controllers
             _itemFactory = itemFactory;
             PoolKey = itemFactory.PoolKey;
 
-            CreateItemSpriteDictionary(itemFactory.ItemDataSo.itemSprites);
+            CreateSpriteDictionary(itemFactory.ItemDataSo.itemSprites);
+            InstantiateItem();
         }
 
-        private void CreateItemSpriteDictionary(List<ProductSprite> itemSprites)
+        private void CreateSpriteDictionary(List<ProductSprite> itemSprites)
         {
             _itemSprites = new Dictionary<Tuple<EMaterialType, EProductType>, Sprite>();
             
@@ -42,13 +42,12 @@ namespace Units.Stages.Controllers
             }
         }
 
-        public void InstantiateItem()
+        private void InstantiateItem()
         {
             _itemFactory.CreateItem();
         }
 
-        public void TransferItem(Tuple<EMaterialType, EProductType> itemType, Vector3 sendPosition,
-            Transform receivePosition)
+        public void TransferItem(Tuple<EMaterialType, EProductType> itemType, Vector3 sendPosition, Transform receivePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<Item>(PoolKey, null);
             item.Initialize(_itemSprites[itemType], sendPosition, receivePosition, () => ReturnItem(item));

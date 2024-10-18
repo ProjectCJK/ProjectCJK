@@ -32,7 +32,6 @@ namespace Units.Modules.InventoryModules.Units
         
         private readonly IInventoryProperty _inventoryProperty;
         private readonly IItemController _itemController;
-        private readonly Tuple<EMaterialType, EProductType> _outputItemKey;
         private readonly Transform _senderTransform;
         
         private ICreatureItemReceiver currentItemReceiver;
@@ -94,20 +93,26 @@ namespace Units.Modules.InventoryModules.Units
             // 대기열에 등록된 유닛 체크
             if (_itemReceiverQueue.Count == 0) return;
             // 인벤토리에 OutputItem 체크
-            if (!Inventory.TryGetValue(_outputItemKey, out var outputItem)) return;
-            // 대기열에서 우선순위가 가장 높은 Receiver 반환
-            if (!_itemReceiverQueue.TryPeek(out currentItemReceiver)) return;
+
+            foreach (var currentItemKey in OutItemKey)
+            {
+                if (Inventory.TryGetValue(currentItemKey, out var outputItem))
+                {
+                    // 대기열에서 우선순위가 가장 높은 Receiver 반환
+                    if (!_itemReceiverQueue.TryPeek(out currentItemReceiver)) return;
             
-            // 반환된 Receiver가 현재 아이템 수령이 가능한 상태이고, OutputItem을 1개 이상 가지고 있다면
-            if (currentItemReceiver.CanReceiveItem() && outputItem > 0)
-            {
-                RemoveItem(_outputItemKey);
-                currentItemReceiver.ReceiveItem(_outputItemKey);
-                _itemController.TransferItem(_outputItemKey, _senderTransform.position, currentItemReceiver.ReceiverTransform);
-            }
-            else
-            {
-                _itemReceiverQueue.Dequeue();
+                    // 반환된 Receiver가 현재 아이템 수령이 가능한 상태이고, OutputItem을 1개 이상 가지고 있다면
+                    if (currentItemReceiver.CanReceiveItem() && outputItem > 0)
+                    {
+                        RemoveItem(currentItemKey);
+                        currentItemReceiver.ReceiveItem(currentItemKey);
+                        _itemController.TransferItem(currentItemKey, _senderTransform.position, currentItemReceiver.ReceiverTransform);
+                    }
+                    else
+                    {
+                        _itemReceiverQueue.Dequeue();
+                    }     
+                }
             }
         }
     }

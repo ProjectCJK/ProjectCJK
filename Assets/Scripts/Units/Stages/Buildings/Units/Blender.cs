@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace Units.Stages.Buildings.Units
 {
-    public interface IBlender : IRegisterReference<BuildingDataSO, IItemController>
+    public interface IBlender : IBuilding, IRegisterReference<IItemController>
     {
         
     }
@@ -24,7 +24,6 @@ namespace Units.Stages.Buildings.Units
     {
         [SerializeField] private BlenderProductView _blenderProductView;
         
-        public override EBuildingType BuildingType { get; protected set; }
         public override List<Tuple<EMaterialType, EProductType>> InputItemKey { get; protected set; }
         public override List<Tuple<EMaterialType, EProductType>> OutItemKey { get; protected set; }
         
@@ -37,9 +36,8 @@ namespace Units.Stages.Buildings.Units
         private BlenderProductViewModel _blenderProductViewModel;
         private BlenderProductModel _blenderProductModel;
 
-        public void RegisterReference(BuildingDataSO buildingDataSo, IItemController itemController)
+        public void RegisterReference(IItemController itemController)
         {
-            BuildingType = buildingDataSo.BuildingType;
             _itemController = itemController;
 
             InputItemKey = new List<Tuple<EMaterialType, EProductType>>();

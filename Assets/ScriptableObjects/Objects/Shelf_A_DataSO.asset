@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ee394e0d6934a0b899c2cdb71520e11, type: 3}
   m_Name: Shelf_A_DataSO
   m_EditorClassIdentifier: 
-  BaseSpawnData:
-    Position: {x: 0, y: 0, z: 0}
-    Prefab: {fileID: 0}
   BaseInventorySize: 1000
-  BuildingType: 0
+  BuildingType: 1
   MaterialType: 0
-  inputProductType: 0
-  outputProductType: 0
+  inputProductType: 1
+  outputProductType: 1
   productLeadTime: 0
