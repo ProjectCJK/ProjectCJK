@@ -1,152 +1,119 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Managers;
-using Modules;
+using Units.Modules.FSMModules.Units;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Units;
+using Units.Stages.Creatures.Units;
 using UnityEngine;
-using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Modules.MovementModules.Units
 {
-    public interface IPlayerMovementModule : IRegisterReference<IMovementProperty, Joystick>, IInitializable
+    public interface IPlayerMovementModule : IInitializable
     {
-        public event Action<Transform, bool> OnTriggerInteractionZone;
+        public void Move();
+        public void FlipSprite();
     }
     
-    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMovementModule : MovementModule, IPlayerMovementModule
     {
-        public event Action<Transform, bool> OnTriggerInteractionZone;
-        
-        private IMovementProperty _movementProperty;
-        
-        private Joystick _joystick;
-        private Coroutine _interactionCoroutine;
-        private Rigidbody2D _rigidbody2D;
-        private Transform _targetTransform;
+        private readonly IMovementProperty _movementProperty;
+        private readonly CreatureStateMachine _creatureStateMachine;
+        private readonly Joystick _joystick;
+        private readonly Rigidbody2D _rigidbody2D;
+        private readonly Transform _playerTransform;
         
         private float _movementSpeed => _movementProperty.MovementSpeed;
-        private float _waitingTime => _movementProperty.WaitingTime;
         private bool _isMoving;
-        private bool _isInTriggerZone;
-        
-        public void RegisterReference(IMovementProperty movementProperty, Joystick joystick)
+        private bool _isFacingRight = true;
+
+        public PlayerMovementModule(Transform transform, IPlayerStatsModule playerStatsModule, CreatureStateMachine creatureStateMachine, Joystick joystick)
         {
-            _movementProperty = movementProperty;
+            _playerTransform = transform;
+            _rigidbody2D = transform.GetComponent<Rigidbody2D>();
+            
+            _movementProperty = playerStatsModule;
+            _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
-            
-            _rigidbody2D = GetComponent<Rigidbody2D>();
-        }
-        
-        public override void Initialize()
-        {
-            base.Initialize();
-            
-            UpdateMovementFlag();
         }
 
-        private void FixedUpdate()
+        public override void Initialize()
         {
-            MovePosition(CalculateDirection());
             UpdateMovementFlag();
-            CheckInteractionCondition();
+            UpdateStateMachine();
+        }
+
+        public void FlipSprite()
+        {
+            switch (_joystick.direction.x)
+            {
+                case > 0 when !_isFacingRight:
+                    FlipSprite(true);
+                    break;
+                case < 0 when _isFacingRight:
+                    FlipSprite(false);
+                    break;
+            }
+        }
+
+        private void FlipSprite(bool faceRight)
+        {
+            _isFacingRight = faceRight;
+
+            Vector3 scale = _playerTransform.localScale;
+            scale.x = faceRight ? 1 : -1;
+            _playerTransform.localScale = scale;
+        }
+
+        public void Move()
+        {
+            HandleMovement();
+            HandleStateUpdate();
+        }
+
+        private void HandleMovement()
+        {
+            Vector2 newDirection = CalculateDirection();
+            MovePosition(newDirection);
+        }
+
+        public void MovePosition(Vector2 direction)
+        {
+            if (direction != _rigidbody2D.position)
+            {
+                _rigidbody2D.MovePosition(direction);
+            }
+        }
+
+        private void HandleStateUpdate()
+        {
+            UpdateMovementFlag();
+            UpdateStateMachine();
         }
 
         private Vector2 CalculateDirection()
         {
-            Vector2 direction = _joystick.direction.normalized;
+            Vector2 currentDirection = _joystick.direction.normalized;
             Vector2 currentPosition = _rigidbody2D.position;
-            Vector2 movement = direction * (_movementSpeed * Time.deltaTime);
-
+            Vector2 movement = currentDirection * (_movementSpeed * Time.deltaTime);
             return currentPosition + movement;
-        }
-
-        private void MovePosition(Vector2 movement)
-        {
-            _rigidbody2D.MovePosition(movement); 
         }
 
         private void UpdateMovementFlag()
         {
-            if (_joystick == null)
-            {
-                _isMoving = false;
-            }
-            
-            _isMoving = _isMoving switch
-            {
-                true when _joystick.direction == Vector2.zero => false,
-                false when _joystick.direction != Vector2.zero => true,
-                _ => _isMoving
-            };
-        }
-        
-        private void CheckInteractionCondition()
-        {
-            if (_isInTriggerZone)
-            {
-                switch (_isMoving)
-                {
-                    case false when _interactionCoroutine == null:
-                        _interactionCoroutine = StartCoroutine(CoroutineManager.Timer(_waitingTime, OnWaitCompleted));
-                        break;
-                    case true when _interactionCoroutine != null:
-                        StopCoroutine(_interactionCoroutine);
-                        _interactionCoroutine = null;
-                        break;
-                }
-            }
-        }
-        
-        public void OnTriggerEnter2D(Collider2D other)
-        {
-            Debug.Log($"(크리처) InteractionZone Trigger Enter 체크 : 'other.gameObject.layer == InteractionTradeLayerMask || other.gameObject.layer == InteractionUpgradeLayerMask' => {other.gameObject.layer == InteractionTradeLayerMask} || {other.gameObject.layer == InteractionUpgradeLayerMask}");
-            
-            if (other.gameObject.layer == InteractionTradeLayerMask || other.gameObject.layer == InteractionUpgradeLayerMask)
-            {
-                _isInTriggerZone = true;
-                _targetTransform = other.transform;
-                StartInteractionCoroutine();
-            }
-        }
-        
-        public void OnTriggerExit2D(Collider2D other)
-        {
-            Debug.Log($"(크리처) InteractionZone Trigger Exit 체크 : 'other.gameObject.layer == InteractionTradeLayerMask || other.gameObject.layer == InteractionUpgradeLayerMask' => {other.gameObject.layer == InteractionTradeLayerMask} || {other.gameObject.layer == InteractionUpgradeLayerMask}");
-            
-            if (other.gameObject.layer == InteractionTradeLayerMask || other.gameObject.layer == InteractionUpgradeLayerMask)
-            {
-                ResetTriggerState();
-            }
+            _isMoving = _joystick.direction != Vector2.zero;
         }
 
-        private void StartInteractionCoroutine()
+        private void UpdateStateMachine()
         {
-            _interactionCoroutine = StartCoroutine(CoroutineManager.Timer(_waitingTime, OnWaitCompleted));
-        }
-        
-        private void OnWaitCompleted(bool success)
-        {
-            if (success && _isInTriggerZone && !_isMoving)
+            if (_isMoving)
             {
-                OnTriggerInteractionZone?.Invoke(_targetTransform, true);
+                _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureRunState);
             }
-        }
-
-        private void ResetTriggerState()
-        {
-            OnTriggerInteractionZone?.Invoke(_targetTransform, false);
-            
-            if (_interactionCoroutine != null)
+            else
             {
-                StopCoroutine(_interactionCoroutine);
-                _interactionCoroutine = null;
+                _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
             }
-            
-            _isInTriggerZone = false;
-            _targetTransform = null;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
 using Units.Modules.InventoryModules.Units;
+using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Modules.StatsModules.Units;
 using Units.Stages.Items.Enums;
 using UnityEngine;
@@ -39,14 +40,14 @@ namespace Units.Modules.ProductModules
         private readonly IBuildingStatsModule _buildingStatsModule;
         private readonly IBuildingInventoryModule _buildingInventoryModule;
         
-        private readonly List<Tuple<EMaterialType, EProductType>> _inputItemKey;
-        private readonly List<Tuple<EMaterialType, EProductType>> _outputItemKey;
+        private readonly List<Tuple<EMaterialType, EItemType>> _inputItemKey;
+        private readonly List<Tuple<EMaterialType, EItemType>> _outputItemKey;
         
         private float _productLeadTime => _buildingStatsModule.ProductLeadTime;
-        private Tuple<EMaterialType, EProductType> _currentInputKey;
-        private Tuple<EMaterialType, EProductType> _currentOutputKey;
+        private Tuple<EMaterialType, EItemType> _currentInputKey;
+        private Tuple<EMaterialType, EItemType> _currentOutputKey;
 
-        public BuildingProductModule(IBuildingStatsModule buildingStatsModule, IBuildingInventoryModule buildingInventoryModule, List<Tuple<EMaterialType, EProductType>> inputItemKey, List<Tuple<EMaterialType, EProductType>> outputItemKey)
+        public BuildingProductModule(IBuildingStatsModule buildingStatsModule, IBuildingInventoryModule buildingInventoryModule, List<Tuple<EMaterialType, EItemType>> inputItemKey, List<Tuple<EMaterialType, EItemType>> outputItemKey)
         {
             _buildingStatsModule = buildingStatsModule;
             _buildingInventoryModule = buildingInventoryModule;
@@ -99,10 +100,10 @@ namespace Units.Modules.ProductModules
 
         private bool HasMatchingItem()
         {
-            foreach (Tuple<EMaterialType, EProductType> currentInputKey in _inputItemKey.Where(currentInputKey => _buildingInventoryModule.HasMatchingItem(currentInputKey)))
+            foreach (Tuple<EMaterialType, EItemType> currentInputKey in _inputItemKey.Where(currentInputKey => _buildingInventoryModule.HasMatchingItem(currentInputKey)))
             {
                 _currentInputKey = currentInputKey;
-                _currentOutputKey = new Tuple<EMaterialType, EProductType>(currentInputKey.Item1, EProductType.Product);
+                _currentOutputKey = new Tuple<EMaterialType, EItemType>(currentInputKey.Item1, EItemType.Product);
                 return true;
             }
             return false;

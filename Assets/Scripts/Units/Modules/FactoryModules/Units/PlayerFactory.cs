@@ -39,7 +39,6 @@ namespace Units.Modules.FactoryModules.Units
             if (player != null)
             {
                 player.RegisterReference(_playerDataSo, _joystick, _itemController);
-                player.RegisterEventListener();
             }
             
             return baseCreature;
