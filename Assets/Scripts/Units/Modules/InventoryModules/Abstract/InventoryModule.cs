@@ -31,7 +31,7 @@ namespace Units.Modules.InventoryModules.Abstract
         
         public int CurrentInventorySize => Inventory.Sum(item => item.Value);
         
-        protected readonly Dictionary<Tuple<EMaterialType, EProductType>, int> Inventory = new();
+        protected readonly Dictionary<Tuple<EMaterialType, EItemType>, int> Inventory = new();
         
         private const float SendItemInterval = 0.2f;
         private float _lastSendTime;
@@ -40,7 +40,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
         public abstract void SendItem();
         
-        public void RemoveItem(Tuple<EMaterialType, EProductType> itemKey)
+        public void RemoveItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             Inventory[itemKey]--;
             
@@ -52,19 +52,19 @@ namespace Units.Modules.InventoryModules.Abstract
             }
         }
 
-        public void ReceiveItem(Tuple<EMaterialType, EProductType> itemKey)
+        public void ReceiveItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             if (CanReceiveItem()) AddItem(itemKey);
         }
         
-        public void AddItem(Tuple<EMaterialType, EProductType> itemKey)
+        public void AddItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             if (!Inventory.TryAdd(itemKey, 1)) Inventory[itemKey]++;
             
             OnInventoryCountChanged?.Invoke();
         }
 
-        public bool HasMatchingItem(Tuple<EMaterialType, EProductType> InventoryKey) => Inventory.TryGetValue(InventoryKey, out _);
+        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => Inventory.TryGetValue(InventoryKey, out _);
         public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
         public bool IsInventoryFull() => CurrentInventorySize >= MaxInventorySize;
         protected bool IsReadyToSend() => Time.time >= _lastSendTime + SendItemInterval;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interfaces;
 using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.InventoryModules.Units;
+using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.ProductModules;
 using Units.Modules.StatsModules.Units;
 using Units.Stages.Buildings.Abstract;
@@ -17,17 +18,42 @@ using UnityEngine.Serialization;
 
 namespace Units.Stages.Buildings.Units
 {
-    public interface IKichen : IBuilding, IRegisterReference<IItemController>
+    public interface IKitchen : IBuilding, IRegisterReference<IItemController>
     {
         
     }
-    
-    public class Kitchen : Building, IKichen
+
+    [Serializable]
+    public struct KitchenDefaultSetting
     {
-        [SerializeField] private KitchenView kitchenView;
+        [Header("DataSo")]
+        public BuildingDataSO buildingDataSo;
         
-        public override List<Tuple<EMaterialType, EProductType>> InputItemKey { get; protected set; }
-        public override List<Tuple<EMaterialType, EProductType>> OutItemKey { get; protected set; }
+        [Header("Kitchen UI")]
+        public KitchenView kitchenView;
+    }
+
+    [Serializable]
+    public struct KitchenCustomSetting
+    {
+        [Header("재료 타입")]
+        public EMaterialType MaterialType;
+        
+        [Header("Input 아이템 타입")]
+        public EItemType InputItemType;
+        
+        [Header("Output 아이템 타입")]
+        public EItemType OutputItemType;
+    }
+    
+    public class Kitchen : Building, IKitchen
+    {
+        public override EBuildingType BuildingType => KitchenDefaultSetting.buildingDataSo.BuildingType;
+        public override List<Tuple<EMaterialType, EItemType>> InputItemKey { get; protected set; }
+        public override List<Tuple<EMaterialType, EItemType>> OutItemKey { get; protected set; }
+     
+        public KitchenDefaultSetting KitchenDefaultSetting;
+        public KitchenCustomSetting kitchenCustomSetting;
         
         private IBuildingStatsModule _buildingStatsModule;
         private IKitchenInventoryModule _kitchenInventoryModule;
@@ -42,19 +68,19 @@ namespace Units.Stages.Buildings.Units
         {
             _itemController = itemController;
 
-            InputItemKey = new List<Tuple<EMaterialType, EProductType>>();
-            OutItemKey = new List<Tuple<EMaterialType, EProductType>>();
+            InputItemKey = new List<Tuple<EMaterialType, EItemType>>();
+            OutItemKey = new List<Tuple<EMaterialType, EItemType>>();
             
-            InputItemKey.Add(new Tuple<EMaterialType, EProductType>(buildingDataSo.MaterialType, buildingDataSo.inputProductType));
-            OutItemKey.Add(new Tuple<EMaterialType, EProductType>(buildingDataSo.MaterialType, buildingDataSo.outputProductType));
+            InputItemKey.Add(new Tuple<EMaterialType, EItemType>(kitchenCustomSetting.MaterialType, kitchenCustomSetting.InputItemType));
+            OutItemKey.Add(new Tuple<EMaterialType, EItemType>(kitchenCustomSetting.MaterialType, kitchenCustomSetting.OutputItemType));
             
-            _buildingStatsModule = new BuildingStatsModule(buildingDataSo);
+            _buildingStatsModule = new BuildingStatsModule(KitchenDefaultSetting.buildingDataSo);
             _kitchenInventoryModule = new KitchenInventoryModule(transform, transform, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
             _buildingProductModule = new BuildingProductModule(_buildingStatsModule, _kitchenInventoryModule, InputItemKey, OutItemKey);
             
             _kitchenModel = new KitchenModel();
             _kitchenViewModel = new KitchenViewModel(_kitchenModel);
-            kitchenView.BindViewModel(_kitchenViewModel);
+            KitchenDefaultSetting.kitchenView.BindViewModel(_kitchenViewModel);
             
             _interactionTrade = GetComponentInChildren<InteractionTrade>();
             _interactionTrade.RegisterReference(_kitchenInventoryModule, InputItemKey);
@@ -65,7 +91,7 @@ namespace Units.Stages.Buildings.Units
         
         private void OnProcessingStateChanged(bool isProcessing)
         {
-            kitchenView.gameObject.SetActive(isProcessing);
+            KitchenDefaultSetting.kitchenView.gameObject.SetActive(isProcessing);
         }
         
         public override void Initialize() 
@@ -86,7 +112,7 @@ namespace Units.Stages.Buildings.Units
             //TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
-                _kitchenInventoryModule.ReceiveItem(new Tuple<EMaterialType, EProductType>(EMaterialType.A, EProductType.Product));
+                _kitchenInventoryModule.ReceiveItem(new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Product));
             }
             
             // var remainedMaterialCount = _blenderInventoryModule.GetItemCount(InputItemKey);

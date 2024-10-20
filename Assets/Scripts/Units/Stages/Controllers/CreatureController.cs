@@ -1,5 +1,6 @@
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Modules.DesignPatterns.FSMs.Modules;
 using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.FactoryModules.Units;
 using Units.Stages.Creatures.Abstract;
@@ -23,6 +24,7 @@ namespace Units.Stages.Controllers
         [SerializeField] private Transform _customerSpawnPoint;
         
         private ICreatureFactory _playerFactory;
+        
         private Creature _player;
 
         public void RegisterReference(Joystick joystick, IItemController itemController)

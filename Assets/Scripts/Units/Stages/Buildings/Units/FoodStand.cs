@@ -3,28 +3,56 @@ using System.Collections.Generic;
 using Interfaces;
 using ScriptableObjects.Scripts.ScriptableObjects;
 using Units.Modules.InventoryModules.Units;
+using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.StatsModules.Units;
 using Units.Stages.Buildings.Abstract;
 using Units.Stages.Buildings.Enums;
 using Units.Stages.Buildings.Modules;
 using Units.Stages.Buildings.UI.FoodStands;
+using Units.Stages.Buildings.UI.FoodStands;
 using Units.Stages.Controllers;
 using Units.Stages.Items.Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Units.Stages.Buildings.Units
 {
-    public interface IShelf : IRegisterReference<IItemController>
+    public interface IFoodStand : IRegisterReference<IItemController>
     {
         
     }
     
-    public class FoodStand : Building, IShelf
+    [Serializable]
+    public struct FoodStandDefaultSetting
     {
-        [SerializeField] private FoodStandView foodStandView;
+        [Header("DataSo")]
+        public BuildingDataSO BuildingDataSo;
         
-        public override List<Tuple<EMaterialType, EProductType>> InputItemKey { get; protected set; }
-        public override List<Tuple<EMaterialType, EProductType>> OutItemKey { get; protected set; }
+        [Header("FoodStand UI")]
+        public FoodStandView FoodStandView;
+    }
+    
+    [Serializable]
+    public struct FoodStandCustomSetting
+    {
+        [Header("재료 타입")]
+        public EMaterialType MaterialType;
+        
+        [Header("Input 아이템 타입")]
+        public EItemType InputItemType;
+        
+        [Header("Output 아이템 타입")]
+        public EItemType OutputItemType;
+    }
+    
+    public class FoodStand : Building, IFoodStand
+    {
+        public override EBuildingType BuildingType => FoodStandDefaultSetting.BuildingDataSo.BuildingType;
+        public override List<Tuple<EMaterialType, EItemType>> InputItemKey { get; protected set; }
+        public override List<Tuple<EMaterialType, EItemType>> OutItemKey { get; protected set; }
+
+        public FoodStandDefaultSetting FoodStandDefaultSetting;
+        public FoodStandCustomSetting FoodStandCustomSetting;
         
         private IBuildingStatsModule _buildingStatsModule;
         private IFoodStandInventoryModule _foodStandInventoryModule;
@@ -38,18 +66,18 @@ namespace Units.Stages.Buildings.Units
         {
             _itemController = itemController;
             
-            InputItemKey = new List<Tuple<EMaterialType, EProductType>>();
-            OutItemKey = new List<Tuple<EMaterialType, EProductType>>();
+            InputItemKey = new List<Tuple<EMaterialType, EItemType>>();
+            OutItemKey = new List<Tuple<EMaterialType, EItemType>>();
             
-            InputItemKey.Add(new Tuple<EMaterialType, EProductType>(buildingDataSo.MaterialType, buildingDataSo.inputProductType));
-            OutItemKey.Add(new Tuple<EMaterialType, EProductType>(buildingDataSo.MaterialType, buildingDataSo.outputProductType));
+            InputItemKey.Add(new Tuple<EMaterialType, EItemType>(FoodStandCustomSetting.MaterialType, FoodStandCustomSetting.InputItemType));
+            OutItemKey.Add(new Tuple<EMaterialType, EItemType>(FoodStandCustomSetting.MaterialType, FoodStandCustomSetting.OutputItemType));
             
-            _buildingStatsModule = new BuildingStatsModule(buildingDataSo);
+            _buildingStatsModule = new BuildingStatsModule(FoodStandDefaultSetting.BuildingDataSo);
             _foodStandInventoryModule = new FoodStandInventoryModule(transform, transform, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
 
             _foodStandModel = new FoodStandModel();
             _foodStandViewModel = new FoodStandViewModel(_foodStandModel);
-            foodStandView.BindViewModel(_foodStandViewModel);
+            FoodStandDefaultSetting.FoodStandView.BindViewModel(_foodStandViewModel);
             
             _interactionTrade = GetComponentInChildren<InteractionTrade>();
             _interactionTrade.RegisterReference(_foodStandInventoryModule, InputItemKey);

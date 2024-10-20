@@ -58,7 +58,7 @@ namespace Units.Modules.InventoryModules.Units
             // 연결된 InteractionZone이 없거나, 인벤토리에 InteractionZone의 InputItemKey가 존재하지 않을 경우
             if (_targetInteractionZone == null) return;
 
-            foreach (Tuple<EMaterialType, EProductType> inputItemKey in _targetInteractionZone.InputItemKey)
+            foreach (Tuple<EMaterialType, EItemType> inputItemKey in _targetInteractionZone.InputItemKey)
             {
                 if (Inventory.TryGetValue(inputItemKey, out var OutputItemCount))
                 {

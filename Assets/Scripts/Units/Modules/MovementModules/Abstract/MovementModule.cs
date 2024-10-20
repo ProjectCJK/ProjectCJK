@@ -14,18 +14,8 @@ namespace Units.Modules.MovementModules.Abstract
         public float WaitingTime { get; }
     }
     
-    public abstract class MovementModule : MonoBehaviour, IMovementModule
+    public abstract class MovementModule : IMovementModule
     {
-        private const string InteractionTradeLayer = "InteractionTrade";
-        private const string InteractionUpgradeLayer = "InteractionUpgrade";
-
-        protected int InteractionTradeLayerMask;
-        protected int InteractionUpgradeLayerMask;
-        
-        public virtual void Initialize()
-        {
-            InteractionTradeLayerMask = LayerMask.NameToLayer(InteractionTradeLayer);
-            InteractionUpgradeLayerMask = LayerMask.NameToLayer(InteractionUpgradeLayer);
-        }
+        public abstract void Initialize();
     }
 }
