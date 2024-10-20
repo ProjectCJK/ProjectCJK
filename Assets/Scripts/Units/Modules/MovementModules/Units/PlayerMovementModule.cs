@@ -20,21 +20,26 @@ namespace Units.Modules.MovementModules.Units
         private readonly IMovementProperty _movementProperty;
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
-        private readonly Rigidbody2D _rigidbody2D;
-        private readonly Transform _playerTransform;
+        private readonly Rigidbody2D _playerRigidbody2D;
+        private readonly Transform _spriteTransform;
         
         private float _movementSpeed => _movementProperty.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
 
-        public PlayerMovementModule(Transform transform, IPlayerStatsModule playerStatsModule, CreatureStateMachine creatureStateMachine, Joystick joystick)
+        public PlayerMovementModule(
+            IPlayerStatsModule playerStatsModule,
+            CreatureStateMachine creatureStateMachine,
+            Joystick joystick,
+            Rigidbody2D playerRigidbody2D,
+            Transform spriteTransform
+        )
         {
-            _playerTransform = transform;
-            _rigidbody2D = transform.GetComponent<Rigidbody2D>();
-            
             _movementProperty = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
+            _playerRigidbody2D = playerRigidbody2D;
+            _spriteTransform = spriteTransform;
         }
 
         public override void Initialize()
@@ -60,9 +65,9 @@ namespace Units.Modules.MovementModules.Units
         {
             _isFacingRight = faceRight;
 
-            Vector3 scale = _playerTransform.localScale;
+            Vector3 scale = _spriteTransform.localScale;
             scale.x = faceRight ? 1 : -1;
-            _playerTransform.localScale = scale;
+            _spriteTransform.localScale = scale;
         }
 
         public void Move()
@@ -79,9 +84,9 @@ namespace Units.Modules.MovementModules.Units
 
         public void MovePosition(Vector2 direction)
         {
-            if (direction != _rigidbody2D.position)
+            if (direction != _playerRigidbody2D.position)
             {
-                _rigidbody2D.MovePosition(direction);
+                _playerRigidbody2D.MovePosition(direction);
             }
         }
 
@@ -94,7 +99,7 @@ namespace Units.Modules.MovementModules.Units
         private Vector2 CalculateDirection()
         {
             Vector2 currentDirection = _joystick.direction.normalized;
-            Vector2 currentPosition = _rigidbody2D.position;
+            Vector2 currentPosition = _playerRigidbody2D.position;
             Vector2 movement = currentDirection * (_movementSpeed * Time.deltaTime);
             return currentPosition + movement;
         }

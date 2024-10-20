@@ -8,18 +8,22 @@ namespace Units.Modules.CollisionModules.Abstract
     
     }
     
+    public enum ECollisionType
+    {
+        None,
+        TradeZone,
+        UpgradeZone,
+        HuntingZone
+    }
+    
     public class CollisionModule
     {
-        private const string InteractionTradeLayer = "InteractionTrade";
-        private const string InteractionUpgradeLayer = "InteractionUpgrade";
+        private const string tradeZoneLayer = "TradeZone";
+        private const string upgradeZoneLayer = "UpgradeZone";
+        private const string HuntingZoneLayer = "HuntingZone";
         
-        protected int interactionTradeLayerMask;
-        protected int interactionUpgradeLayerMask;
-        
-        public virtual void Initialize()
-        {
-            interactionTradeLayerMask = LayerMask.NameToLayer(InteractionTradeLayer);
-            interactionUpgradeLayerMask = LayerMask.NameToLayer(InteractionUpgradeLayer);
-        }
+        protected readonly int tradeZoneLayerMask = LayerMask.NameToLayer(tradeZoneLayer);
+        protected readonly int upgradeZoneLayerMask = LayerMask.NameToLayer(upgradeZoneLayer);
+        protected readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
     }
 }

@@ -3,6 +3,7 @@ using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Modules.DesignPatterns.FSMs.Modules;
 using ScriptableObjects.Scripts.ScriptableObjects;
+using Units.Modules.BattleModules;
 using Units.Modules.CollisionModules;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.InventoryModules.Units;
@@ -23,6 +24,8 @@ namespace Units.Stages.Creatures.Units
 
     public class Player : Creature, IPlayer
     {
+        [SerializeField] private Transform _weaponTransform;
+        
         public override ECreatureType CreatureType => _playerStatsModule.CreatureType;
         public override Animator Animator { get; protected set; }
         
@@ -31,6 +34,7 @@ namespace Units.Stages.Creatures.Units
         private PlayerDataSo _playerDataSo;
         
         private IPlayerStatsModule _playerStatsModule;
+        private IPlayerBattleModule _playerBattleModule;
         private IPlayerMovementModule _playerMovementModule;
         private IPlayerInventoryModule _playerInventoryModule;
         private IPlayerCollisionModule _playerCollisionModule;
@@ -38,18 +42,23 @@ namespace Units.Stages.Creatures.Units
 
         public void RegisterReference(PlayerDataSo playerDataSo, Joystick joystick, IItemController itemController)
         {
+            Transform playerTransform = transform;
+            
             _playerDataSo = playerDataSo;
             _itemController = itemController;
+            
+            var rigidBody2D = GetComponent<Rigidbody2D>();
+            Animator = spriteTransform.GetComponent<Animator>();
 
             creatureStateMachine = new CreatureStateMachine(this);
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
-            _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemController, CreatureType);
-            _playerMovementModule = new PlayerMovementModule(transform, _playerStatsModule, creatureStateMachine, joystick);
+            _playerBattleModule = new PlayerBattleModule(joystick, playerTransform, _weaponTransform);
+            _playerInventoryModule = new PlayerInventoryModule(playerTransform, playerTransform, _playerStatsModule, _itemController, CreatureType);
+            _playerMovementModule = new PlayerMovementModule(_playerStatsModule, creatureStateMachine, joystick, rigidBody2D, spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule();
             
-            Animator = spriteTransform.GetComponent<Animator>();
-            
-            _playerCollisionModule.OnTriggerInteractionZone += HandleInteractionZone;
+            _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
+            _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
         }
 
         public override void Initialize()
@@ -68,6 +77,7 @@ namespace Units.Stages.Creatures.Units
             
             _playerInventoryModule.SendItem();
             _playerMovementModule.FlipSprite();
+            _playerBattleModule.RotateWeapon();
         }
 
         private void FixedUpdate()
@@ -80,14 +90,24 @@ namespace Units.Stages.Creatures.Units
             _playerCollisionModule.OnTriggerEnter2D(other);
         }
 
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            _playerCollisionModule.OnTriggerStay2D(other);
+        }
+
         private void OnTriggerExit2D(Collider2D other)
         {
             _playerCollisionModule.OnTriggerExit2D(other);
         }
         
-        private void HandleInteractionZone(Transform interactionZone, bool isConnected)
+        private void HandleOnTriggerTradeZone(Transform interactionZone, bool isConnected)
         {
             _playerInventoryModule.ConnectWithInteractionTradeZone(interactionZone, isConnected);
+        }
+        
+        private void HandleOnTriggerHuntingZone(bool value)
+        {
+            _playerBattleModule.HandleOnTriggerHuntingZone(value);
         }
     }
 }
