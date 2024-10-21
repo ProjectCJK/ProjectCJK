@@ -7,14 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Base
+  m_Name: FXM_Additive
   m_Shader: {fileID: 4800000, guid: 27673f230db58274aa412fb588050bd0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _CUSTOMDATA_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -84,8 +83,8 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0.5
     - _Cull: 2
-    - _CustomData: 1
-    - _DST: 10
+    - _CustomData: 0
+    - _DST: 1
     - _Dissolve_Progress: 1
     - _Dissolve_UOffset: 0
     - _Dissolve_UPanner: 0
@@ -93,6 +92,7 @@ Material:
     - _Dissolve_VPanner: 0
     - _EnableExternalAlpha: 0
     - _Main_Intensity: 1
+    - _Main_Polar: 0
     - _Main_Power: 1
     - _Main_UOffset: 0
     - _Main_UPanner: 0

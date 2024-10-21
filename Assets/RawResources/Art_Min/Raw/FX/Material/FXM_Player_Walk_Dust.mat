@@ -7,12 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Base
+  m_Name: FXM_Player_Walk_Dust
   m_Shader: {fileID: 4800000, guid: 27673f230db58274aa412fb588050bd0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _CUSTOMDATA_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -33,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 85b4989804e4aef47828d8ea164a3d42, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Texture:
@@ -84,7 +83,7 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0.5
     - _Cull: 2
-    - _CustomData: 1
+    - _CustomData: 0
     - _DST: 10
     - _Dissolve_Progress: 1
     - _Dissolve_UOffset: 0
@@ -93,6 +92,7 @@ Material:
     - _Dissolve_VPanner: 0
     - _EnableExternalAlpha: 0
     - _Main_Intensity: 1
+    - _Main_Polar: 0
     - _Main_Power: 1
     - _Main_UOffset: 0
     - _Main_UPanner: 0
