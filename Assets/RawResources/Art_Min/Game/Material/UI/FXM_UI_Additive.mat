@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_CM_StrechFlare
-  m_Shader: {fileID: 4800000, guid: 27673f230db58274aa412fb588050bd0, type: 3}
+  m_Name: FXM_UI_Additive
+  m_Shader: {fileID: 4800000, guid: 8697b92d9c69a2146bda8fe302caf64f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _CUSTOMDATA_ON
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _DissolveTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 757982776435b8d4ca6c7459d0332c67, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Dissolve_Texture:
@@ -33,7 +33,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 0669f770f99fb7a43a4c6d44210866c8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8de760f8423e0204c8a7bd5dfd0acbc8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Texture:
@@ -41,10 +41,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mask_Texture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Noise_Texture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -67,7 +63,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _BlendMode: 10
+    - _BlendMode: 1
     - _ColorMask: 15
     - _Cull: 2
     - _CustomData: 1
@@ -78,7 +74,7 @@ Material:
     - _Dissolve_UPanner: 0
     - _Dissolve_VOffset: 0
     - _Dissolve_VPanner: 0
-    - _Dst: 10
+    - _Dst: 1
     - _Float1: 0
     - _Main_Intensity: 1
     - _Main_Power: 1
@@ -87,11 +83,6 @@ Material:
     - _Main_VOffset: 0
     - _Mask_Power: 1
     - _Mask_Range: 1
-    - _Noise_Scale: 0
-    - _Noise_UOffset: 0
-    - _Noise_UPanner: 0
-    - _Noise_VOffset: 0
-    - _Noise_VPanner: 0
     - _Opacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
