@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
-using Interfaces;
 using Modules.DesignPatterns.Singletons;
-using ScriptableObjects.Scripts.ScriptableObjects;
-using Units.Modules.FactoryModules.Units;
+using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Items;
 using Units.Stages.Controllers;
 using UnityEngine;
 
@@ -18,11 +16,9 @@ namespace Units.Stages.Managers
         [SerializeField] private GameObject _StagePrefab;
         [SerializeField] private CameraController _cameraController;
         
-        [Header("ItemSettings")]
-        [SerializeField] private ItemDataSO _itemDataSo;
-        
         private IStageController _stageController;
-        private IItemController _itemController;
+
+        
         private Joystick _joystick;
 
         private void Awake()
@@ -30,9 +26,7 @@ namespace Units.Stages.Managers
             InstantiateJoystick();
             InstantiateStage();
             
-            _itemController = new ItemController(new ItemFactory(_itemDataSo));
-            
-            _stageController.RegisterReference(_joystick, _itemController);
+            _stageController.RegisterReference(_joystick);
         }
 
         private void Start()

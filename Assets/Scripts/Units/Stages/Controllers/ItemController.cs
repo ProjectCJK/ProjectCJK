@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Modules.DesignPatterns.ObjectPools;
-using ScriptableObjects.Scripts.Structs;
+using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Units;
-using Units.Stages.Items.Enums;
-using Units.Stages.Items.Units;
+using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
     public interface IItemController
     {
-        public void TransferItem(Tuple<EMaterialType, EItemType> itemType, Vector3 sendPosition, Transform receivePosition);
-        public void ReturnItem(Item item);
+        public IItem GetItem(Tuple<EMaterialType, EItemType> itemType, Vector3 initialPosition);
+        public void ReturnItem(IItem item);
     }
     
     public class ItemController : IItemController
@@ -27,17 +27,18 @@ namespace Units.Stages.Controllers
             _itemFactory = itemFactory;
             PoolKey = itemFactory.PoolKey;
 
-            CreateSpriteDictionary(itemFactory.ItemDataSo.itemSprites);
+            CreateSpriteDictionary();
             InstantiateItem();
         }
 
-        private void CreateSpriteDictionary(List<ProductSprite> itemSprites)
+        private void CreateSpriteDictionary()
         {
+            List<ItemSprite> itemSprites = _itemFactory.ItemDataSo.ItemSprites;
             _itemSprites = new Dictionary<Tuple<EMaterialType, EItemType>, Sprite>();
             
-            foreach (ProductSprite data in itemSprites)
+            foreach (ItemSprite data in itemSprites)
             {
-                var dicKey = new Tuple<EMaterialType, EItemType>(data.MaterialType, data.itemType);
+                var dicKey = new Tuple<EMaterialType, EItemType>(data.MaterialType, data.ItemType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
             }
         }
@@ -47,13 +48,15 @@ namespace Units.Stages.Controllers
             _itemFactory.CreateItem();
         }
 
-        public void TransferItem(Tuple<EMaterialType, EItemType> itemType, Vector3 sendPosition, Transform receivePosition)
+        public IItem GetItem(Tuple<EMaterialType, EItemType> itemType, Vector3 initializePosition)
         {
-            var item = ObjectPoolManager.Instance.GetObject<Item>(PoolKey, null);
-            item.Initialize(_itemSprites[itemType], sendPosition, receivePosition, () => ReturnItem(item));
+            var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
+            item.Initialize(_itemSprites[itemType], initializePosition);
+
+            return item;
         }
 
-        public void ReturnItem(Item item)
+        public void ReturnItem(IItem item)
         {
             ObjectPoolManager.Instance.ReturnObject(PoolKey, item);
         }

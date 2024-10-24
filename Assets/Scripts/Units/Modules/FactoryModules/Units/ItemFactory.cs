@@ -1,7 +1,8 @@
+using Managers;
 using Modules.DesignPatterns.ObjectPools;
-using ScriptableObjects.Scripts.ScriptableObjects;
+using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Abstract;
-using Units.Stages.Items.Units;
+using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Modules.FactoryModules.Units
@@ -15,26 +16,21 @@ namespace Units.Modules.FactoryModules.Units
     
     public class ItemFactory : Factory, IItemFactory
     {
-        public ItemDataSO ItemDataSo { get; }
-        string IItemFactory.PoolKey => "ItemPool";
+        public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
+        public string PoolKey => "ItemPool";
         
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
-        public ItemFactory(ItemDataSO itemDataSo)
-        {
-            ItemDataSo = itemDataSo;
-        }
-
         public void CreateItem()
         {
-            ObjectPoolManager.Instance.CreatePool(((IItemFactory)this).PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateItem(ItemDataSo.itemPrefab));
+            ObjectPoolManager.Instance.CreatePool(((IItemFactory)this).PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateItem(ItemDataSo.prefab));
         }
         
-        private Item InstantiateItem(Item itemPrefab)
+        private IItem InstantiateItem(GameObject prefab)
         {
-            GameObject obj = Object.Instantiate(itemPrefab.gameObject);
-            var item = obj.GetComponent<Item>();
+            GameObject obj = Object.Instantiate(prefab);
+            var item = obj.GetComponent<IItem>();
             
             item.RegisterReference(ItemDataSo);
             

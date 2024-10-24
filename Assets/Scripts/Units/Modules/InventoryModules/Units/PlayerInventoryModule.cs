@@ -5,10 +5,11 @@ using Interfaces;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.StatsModules.Units;
-using Units.Stages.Buildings.Modules;
 using Units.Stages.Controllers;
-using Units.Stages.Creatures.Enums;
-using Units.Stages.Items.Enums;
+using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Items.Units;
 using UnityEngine;
 using IItemReceiver = Units.Modules.InventoryModules.Interfaces.IItemReceiver;
 
@@ -22,13 +23,15 @@ namespace Units.Modules.InventoryModules.Units
     public class PlayerInventoryModule : InventoryModule, IPlayerInventoryModule
     {
         public ECreatureType CreatureType { get; }
+        public override IItemController ItemController { get; }
         public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
+
+        public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
         private readonly IInventoryProperty _inventoryProperty;
         private readonly IItemController _itemController;
-        private readonly Transform _senderTransform;
-        
+
         private IInteractionTrade _targetInteractionZone;
         private IPlayerInventoryModule _playerInventoryModuleImplementation;
 
@@ -39,10 +42,10 @@ namespace Units.Modules.InventoryModules.Units
             IItemController itemController,
             ECreatureType creatureType)
         {
-            _senderTransform = senderTransform;
+            SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             _inventoryProperty = inventoryProperty;
-            _itemController = itemController;
+            ItemController = itemController;
             CreatureType = creatureType;
         }
 
@@ -50,36 +53,41 @@ namespace Units.Modules.InventoryModules.Units
         {
             Inventory.Clear();
         }
-
-        public override void SendItem()
+        
+        protected override void SendItem()
         {
             if (!IsReadyToSend()) return;
             
-            // 연결된 InteractionZone이 없거나, 인벤토리에 InteractionZone의 InputItemKey가 존재하지 않을 경우
             if (_targetInteractionZone == null) return;
 
+            if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
+            
             foreach (Tuple<EMaterialType, EItemType> inputItemKey in _targetInteractionZone.InputItemKey)
             {
-                if (Inventory.TryGetValue(inputItemKey, out var OutputItemCount))
+                if (Inventory.TryGetValue(inputItemKey, out var OutputItemCount) && OutputItemCount > 0)
                 {
-                    // InteractionZone이 아이템을 받을 수 있는 상황이고, 인벤토리에 InputItemKey의 Value가 0 초과라면
-                    if (_targetInteractionZone.CanReceiveItem() && OutputItemCount > 0)
+                    if (_targetInteractionZone.ReceiveItemWithDestroy(inputItemKey, SenderTransform.position))
                     {
                         RemoveItem(inputItemKey);
-                        _targetInteractionZone.ReceiveItem(inputItemKey);
-                        _itemController.TransferItem(inputItemKey, _senderTransform.position, _targetInteractionZone.ReceiverTransform);
-                    }   
+                        if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
+                    }
+                    
+                    if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
                 }
+                
+                if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
             }
+            
+            if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
             
             SetLastSendTime();
         }
 
-        public void ConnectWithInteractionTradeZone(Transform interactionZone, bool isConnected)
+        public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected)
         {
             if (isConnected)
             {
-                _targetInteractionZone = interactionZone.GetComponent<IInteractionTrade>();
+                _targetInteractionZone = interactionZone;
                 _targetInteractionZone.RegisterItemReceiver(this);
             }
             else if (_targetInteractionZone != null)

@@ -4,41 +4,44 @@ using Interfaces;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Units;
-using Units.Stages.Creatures.Units;
+using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
 namespace Units.Modules.MovementModules.Units
 {
     public interface IPlayerMovementModule : IInitializable
     {
-        public void Move();
-        public void FlipSprite();
+        public void Update();
+        public void FixedUpdate();
     }
     
     public class PlayerMovementModule : MovementModule, IPlayerMovementModule
     {
-        private readonly IMovementProperty _movementProperty;
+        private readonly IMovementProperty _playerStatsModule;
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
-        private readonly Rigidbody2D _playerRigidbody2D;
+        private readonly CircleCollider2D _playerCollider;
+        private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
         
-        private float _movementSpeed => _movementProperty.MovementSpeed;
+        private float _movementSpeed => _playerStatsModule.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
 
+        private Vector2 _movementDirection; // 캐싱된 방향 정보
+
         public PlayerMovementModule(
+            Player player,
             IPlayerStatsModule playerStatsModule,
             CreatureStateMachine creatureStateMachine,
             Joystick joystick,
-            Rigidbody2D playerRigidbody2D,
-            Transform spriteTransform
-        )
+            Transform spriteTransform)
         {
-            _movementProperty = playerStatsModule;
+            _playerCollider = player.GetComponent<CircleCollider2D>();
+            _playerTransform = player.transform;
+            _playerStatsModule = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
-            _playerRigidbody2D = playerRigidbody2D;
             _spriteTransform = spriteTransform;
         }
 
@@ -48,9 +51,9 @@ namespace Units.Modules.MovementModules.Units
             UpdateStateMachine();
         }
 
-        public void FlipSprite()
+        public void Update()
         {
-            switch (_joystick.direction.x)
+            switch (_movementDirection.x)
             {
                 case > 0 when !_isFacingRight:
                     FlipSprite(true);
@@ -59,6 +62,12 @@ namespace Units.Modules.MovementModules.Units
                     FlipSprite(false);
                     break;
             }
+        }
+        
+        public void FixedUpdate()
+        {
+            HandleMovement();
+            HandleStateUpdate();
         }
 
         private void FlipSprite(bool faceRight)
@@ -70,23 +79,68 @@ namespace Units.Modules.MovementModules.Units
             _spriteTransform.localScale = scale;
         }
 
-        public void Move()
-        {
-            HandleMovement();
-            HandleStateUpdate();
-        }
-
         private void HandleMovement()
         {
-            Vector2 newDirection = CalculateDirection();
-            MovePosition(newDirection);
+            _movementDirection = GetMovementDirection();
+            MoveWithCollision(_movementDirection);
         }
 
-        public void MovePosition(Vector2 direction)
+        private Vector2 GetMovementDirection()
         {
-            if (direction != _playerRigidbody2D.position)
+            Vector2 currentDirection = _joystick.direction.normalized;
+            return currentDirection * (_movementSpeed * Time.deltaTime);
+        }
+
+        private void MoveWithCollision(Vector3 move)
+        {
+            // X축 충돌 감지
+            var moveX = new Vector3(move.x, 0, 0);
+            if (!IsColliding(moveX))
             {
-                _playerRigidbody2D.MovePosition(direction);
+                // X축으로 충돌이 없을 때만 이동
+                _playerTransform.position += moveX;
+            }
+
+            // Y축 충돌 감지
+            var moveY = new Vector3(0, move.y, 0);
+            if (!IsColliding(moveY))
+            {
+                // Y축으로 충돌이 없을 때만 이동
+                _playerTransform.position += moveY;
+            }
+        }
+
+        private bool IsColliding(Vector3 move)
+        {
+            // CircleCast 실행
+            RaycastHit2D hit = Physics2D.CircleCast(_playerTransform.position, _playerCollider.radius, move.normalized, move.magnitude, collisionLayerMask);
+
+            // 레이 시각화
+            Color rayColor = hit.collider != null ? Color.red : Color.blue; // 충돌 여부에 따라 색상 변경
+            Debug.DrawRay(_playerTransform.position, move.normalized * move.magnitude, rayColor);
+
+            // Circle을 시각화하여 캐스트의 범위를 표시
+            DebugDrawCircle(_playerTransform.position + move.normalized * move.magnitude, _playerCollider.radius, rayColor);
+
+            // 충돌 여부 반환
+            return hit.collider != null;
+        }
+
+        private static void DebugDrawCircle(Vector3 position, float radius, Color color)
+        {
+            const int segments = 20;
+            const float increment = 360f / segments;
+            var angle = 0f;
+
+            Vector3 lastPoint = position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * radius;
+            angle += increment;
+
+            for (var i = 0; i < segments; i++)
+            {
+                Vector3 nextPoint = position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * radius;
+                Debug.DrawLine(lastPoint, nextPoint, color);
+                lastPoint = nextPoint;
+                angle += increment;
             }
         }
 
@@ -94,14 +148,6 @@ namespace Units.Modules.MovementModules.Units
         {
             UpdateMovementFlag();
             UpdateStateMachine();
-        }
-
-        private Vector2 CalculateDirection()
-        {
-            Vector2 currentDirection = _joystick.direction.normalized;
-            Vector2 currentPosition = _playerRigidbody2D.position;
-            Vector2 movement = currentDirection * (_movementSpeed * Time.deltaTime);
-            return currentPosition + movement;
         }
 
         private void UpdateMovementFlag()

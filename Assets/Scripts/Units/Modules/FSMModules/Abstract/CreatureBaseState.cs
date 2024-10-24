@@ -1,7 +1,7 @@
 using Modules.DesignPatterns.FSMs.Abstract;
 using Modules.DesignPatterns.FSMs.Modules;
 using Units.Modules.FSMModules.Units;
-using Units.Stages.Creatures.Abstract;
+using Units.Stages.Units.Creatures.Abstract;
 using UnityEngine;
 
 namespace Units.Modules.FSMModules.Abstract

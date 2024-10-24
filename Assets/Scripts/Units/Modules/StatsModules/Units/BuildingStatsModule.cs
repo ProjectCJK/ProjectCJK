@@ -1,5 +1,4 @@
-using ScriptableObjects.Scripts;
-using ScriptableObjects.Scripts.ScriptableObjects;
+using ScriptableObjects.Scripts.Buildings;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.ProductModules;
 using Units.Modules.StatsModules.Abstract;

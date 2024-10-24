@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Monster
+  - NPC
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -15,12 +18,12 @@ TagManager:
   - 
   - 
   - 
-  - Creature
+  - Unit
+  - Weapon
   - 
   - 
-  - 
-  - 
-  - Building
+  - Spawner
+  - Collision
   - TradeZone
   - UpgradeZone
   - 
@@ -30,7 +33,7 @@ TagManager:
   - 
   - 
   - 
-  - Wall
+  - 
   - 
   - 
   - 
@@ -49,6 +52,9 @@ TagManager:
     locked: 0
   - name: Creature
     uniqueID: 3773467113
+    locked: 0
+  - name: Weapon
+    uniqueID: 2099780043
     locked: 0
   - name: Item
     uniqueID: 3669459315

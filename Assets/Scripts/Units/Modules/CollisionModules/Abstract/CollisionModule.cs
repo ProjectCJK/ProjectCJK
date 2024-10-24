@@ -3,7 +3,12 @@ using UnityEngine;
 
 namespace Units.Modules.CollisionModules.Abstract
 {
-    public interface ICollisionModule : IInitializable
+    public interface IInteractionProperty
+    {
+        public float WaitingTime { get; }
+    }
+    
+    public interface ICollisionModule
     {
     
     }
@@ -16,7 +21,7 @@ namespace Units.Modules.CollisionModules.Abstract
         HuntingZone
     }
     
-    public class CollisionModule
+    public class CollisionModule : ICollisionModule
     {
         private const string tradeZoneLayer = "TradeZone";
         private const string upgradeZoneLayer = "UpgradeZone";

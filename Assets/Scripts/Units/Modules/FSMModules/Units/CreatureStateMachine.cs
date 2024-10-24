@@ -1,5 +1,5 @@
 using Modules.DesignPatterns.FSMs.Abstract;
-using Units.Stages.Creatures.Abstract;
+using Units.Stages.Units.Creatures.Abstract;
 
 namespace Units.Modules.FSMModules.Units
 {

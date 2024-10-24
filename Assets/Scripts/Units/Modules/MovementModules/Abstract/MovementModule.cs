@@ -11,11 +11,13 @@ namespace Units.Modules.MovementModules.Abstract
     public interface IMovementProperty
     {
         public float MovementSpeed { get; }
-        public float WaitingTime { get; }
     }
     
     public abstract class MovementModule : IMovementModule
     {
+        private const string collisionLayer = "Collision";
+        protected readonly int collisionLayerMask = LayerMask.GetMask(collisionLayer);
+        
         public abstract void Initialize();
     }
 }

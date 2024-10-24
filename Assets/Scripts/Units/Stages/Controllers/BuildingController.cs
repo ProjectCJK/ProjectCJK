@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Interfaces;
-using Units.Stages.Buildings.Abstract;
-using Units.Stages.Buildings.Units;
-using Units.Stages.Items.Enums;
+using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.Buildings.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
-using EBuildingType = Units.Stages.Buildings.Enums.EBuildingType;
+using EBuildingType = Units.Stages.Units.Buildings.Enums.EBuildingType;
 using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
@@ -26,16 +26,16 @@ namespace Units.Stages.Controllers
             {
                 var building = buildingTransform.GetComponent<Building>();
                 
-                switch (building.BuildingType)
+                switch (building)
                 {
-                    case EBuildingType.Kitchen:
-                        if (building is IKitchen kitchen) kitchen.RegisterReference(itemController);
+                    case IKitchen kitchen:
+                        kitchen.RegisterReference(itemController);
                         break;
-                    case EBuildingType.FoodStand:
-                        if (building is IFoodStand foodStand) foodStand.RegisterReference(itemController);
+                    case IStand stand:
+                        stand.RegisterReference(itemController);
                         break;
                 }
-                
+
                 _buildings.TryAdd(building.BuildingType, building);
             }
         }
