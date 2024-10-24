@@ -23,15 +23,15 @@ namespace Units.Modules.MovementModules.Units
         private readonly CircleCollider2D _playerCollider;
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
-        
+        private readonly ParticleSystem _walkParticles;
+
         private float _movementSpeed => _playerStatsModule.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
 
         private Vector2 _movementDirection; // 캐싱된 방향 정보
 
-        public PlayerMovementModule(
-            Player player,
+        public PlayerMovementModule(Player player,
             IPlayerStatsModule playerStatsModule,
             CreatureStateMachine creatureStateMachine,
             Joystick joystick,
@@ -152,7 +152,16 @@ namespace Units.Modules.MovementModules.Units
 
         private void UpdateMovementFlag()
         {
-            _isMoving = _joystick.direction != Vector2.zero;
+            if (_joystick.direction != Vector2.zero)
+            {
+                _isMoving = true;
+                // _walkParticles.Play();
+            }
+            else
+            {
+                _isMoving = false;
+                // _walkParticles.Stop();
+            }
         }
 
         private void UpdateStateMachine()

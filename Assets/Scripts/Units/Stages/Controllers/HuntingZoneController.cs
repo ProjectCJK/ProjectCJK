@@ -30,7 +30,7 @@ namespace Units.Stages.Controllers
         private IPlayer _player;
 
         private float _itemPickupRange;
-        
+
         private readonly List<IItem> _droppedItems = new(); 
         
         public void RegisterReference(IMonsterFactory monsterFactory, IItemController itemController, IPlayer player)
