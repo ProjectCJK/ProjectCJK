@@ -1,29 +1,34 @@
 using System;
-using ScriptableObjects.Scripts;
-using ScriptableObjects.Scripts.ScriptableObjects;
+using ScriptableObjects.Scripts.Creatures;
+using Units.Modules.BattleModules.Abstract;
+using Units.Modules.CollisionModules.Abstract;
+using Units.Modules.CollisionModules.Units;
+using Units.Modules.HealthModules.Abstract;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Abstract;
-using Units.Stages.Creatures.Enums;
+using Units.Stages.Units.Creatures.Enums;
 
 namespace Units.Modules.StatsModules.Units
 {
-    public interface IPlayerStatsModule : IMovementProperty, IInventoryProperty
+    public interface IPlayerStatsModule : IMovementProperty, IInventoryProperty, IInteractionProperty, IBattleProperty, IHealthProperty
     {
-        public ECreatureType CreatureType { get; }
+        public ECreatureType Type { get; }
     }
-    
-    [Serializable]
+
     public class PlayerStatsModule : StatsModule, IPlayerStatsModule
     {
-        public ECreatureType CreatureType => _playerDataSo.creatureType;
+        public ECreatureType Type => _playerDataSo.type;
         public float MovementSpeed => _playerDataSo.BaseMovementSpeed;
         public float WaitingTime => _playerDataSo.BaseInteractionStandbySecond;
         public int MaxInventorySize => _playerDataSo.BaseInventorySize;
+        public int MaxHealth => _playerDataSo.BaseHealth;
+        public int Damage => _playerDataSo.BaseDamage;
+        public float AttackDelay => _playerDataSo.BaseAttackDelay;
 
-        private PlayerDataSo _playerDataSo;
+        private readonly PlayerDataSO _playerDataSo;
 
-        public PlayerStatsModule(PlayerDataSo playerDataSo)
+        public PlayerStatsModule(PlayerDataSO playerDataSo)
         {
             _playerDataSo = playerDataSo;
             

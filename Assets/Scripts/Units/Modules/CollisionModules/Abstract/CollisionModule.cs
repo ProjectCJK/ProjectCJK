@@ -3,23 +3,32 @@ using UnityEngine;
 
 namespace Units.Modules.CollisionModules.Abstract
 {
-    public interface ICollisionModule : IInitializable
+    public interface IInteractionProperty
+    {
+        public float WaitingTime { get; }
+    }
+    
+    public interface ICollisionModule
     {
     
     }
     
-    public class CollisionModule
+    public enum ECollisionType
     {
-        private const string InteractionTradeLayer = "InteractionTrade";
-        private const string InteractionUpgradeLayer = "InteractionUpgrade";
+        None,
+        TradeZone,
+        UpgradeZone,
+        HuntingZone
+    }
+    
+    public class CollisionModule : ICollisionModule
+    {
+        private const string tradeZoneLayer = "TradeZone";
+        private const string upgradeZoneLayer = "UpgradeZone";
+        private const string HuntingZoneLayer = "HuntingZone";
         
-        protected int interactionTradeLayerMask;
-        protected int interactionUpgradeLayerMask;
-        
-        public virtual void Initialize()
-        {
-            interactionTradeLayerMask = LayerMask.NameToLayer(InteractionTradeLayer);
-            interactionUpgradeLayerMask = LayerMask.NameToLayer(InteractionUpgradeLayer);
-        }
+        protected readonly int tradeZoneLayerMask = LayerMask.NameToLayer(tradeZoneLayer);
+        protected readonly int upgradeZoneLayerMask = LayerMask.NameToLayer(upgradeZoneLayer);
+        protected readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
     }
 }

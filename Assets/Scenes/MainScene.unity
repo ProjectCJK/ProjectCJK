@@ -123,6 +123,56 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &662121906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662121907}
+  - component: {fileID: 662121908}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &662121907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662121906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &662121908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662121906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11144cf4148452dab8253a592eb2a08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemData: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
+  PlayerData: {fileID: 11400000, guid: a5944d6208ab5477a82d2f6b3fe552e0, type: 2}
+  MonsterData: {fileID: 11400000, guid: cd352aa2e162346a2a7e480ac5f09e92, type: 2}
+  KitchenData: {fileID: 11400000, guid: 7f7604cdb21da4a05953f98a868747d5, type: 2}
+  StandData: {fileID: 11400000, guid: 1f7da2cd400ff4f5087b1da363170841, type: 2}
+  HuntingZoneData: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
 --- !u!1 &910518067
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,4 +552,3 @@ MonoBehaviour:
   _joystickPrefab: {fileID: 8170153791668043269, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
   _StagePrefab: {fileID: 2696080924102993533, guid: ab859d5c00a014755b2bff4588a41e31, type: 3}
   _cameraController: {fileID: 976220904}
-  _itemDataSo: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}

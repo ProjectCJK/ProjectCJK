@@ -1,31 +1,30 @@
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Modules.DesignPatterns.FSMs.Modules;
-using ScriptableObjects.Scripts.ScriptableObjects;
+using ScriptableObjects.Scripts.Creatures;
 using Units.Modules.FactoryModules.Units;
-using Units.Stages.Creatures.Abstract;
+using Units.Stages.Units.Creatures.Abstract;
+using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
     public interface ICreatureController : IRegisterReference<Joystick, IItemController>, IInitializable
     {
-        public Transform GetPlayerTransform();
+        public IPlayer GetPlayer();
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
     {
         [Header("=== 플레이어 세팅 ===")]
-        [SerializeField] private PlayerDataSo _playerDataSo;
         [SerializeField] private Transform _playerSpawnPoint;
         
         [Header("=== 손님 NPC 세팅 ===")]
         // TODO: NPC Data So
         [SerializeField] private Transform _customerSpawnPoint;
         
-        private ICreatureFactory _playerFactory;
+        private IPlayerFactory _playerFactory;
         
-        private Creature _player;
+        private Player _player;
 
         public void RegisterReference(Joystick joystick, IItemController itemController)
         {
@@ -39,10 +38,10 @@ namespace Units.Stages.Controllers
         
         private void InstantiatePlayer(Joystick joystick, IItemController itemController)
         {
-            _playerFactory = new PlayerFactory(_playerDataSo, _playerSpawnPoint.position, joystick, itemController);
-            _player = _playerFactory.CreateCreature();
+            _playerFactory = new PlayerFactory(_playerSpawnPoint.position, joystick, itemController);
+            _player = _playerFactory.CreatePlayer();
         }
 
-        public Transform GetPlayerTransform() => _player.transform;
+        public IPlayer GetPlayer() => _player;
     }
 }

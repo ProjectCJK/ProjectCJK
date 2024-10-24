@@ -1,119 +1,97 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Modules.DataStructures;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Stages.Controllers;
-using Units.Stages.Items.Enums;
+using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
 {
     public interface IBuildingInventoryModule : IInventoryModule
     {
-        public void AddItem(Tuple<EMaterialType, EItemType> inputItemKey);
-        public void RemoveItem(Tuple<EMaterialType, EItemType> inputItemKey);
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
-        public void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver);
-        public int GetItemCount(Tuple<EMaterialType, EItemType> inputItemKey);
+        void RemoveItem(Tuple<EMaterialType, EItemType> inputItemKey);
+        void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
+        void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver);
+        int GetItemCount(Tuple<EMaterialType, EItemType> inputItemKey);
     }
-    
+
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
         public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
+        public override IItemController ItemController { get; }
+        public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
-        public List<Tuple<EMaterialType, EItemType>> InputItemKey { get; }
-        public List<Tuple<EMaterialType, EItemType>> OutItemKey { get; }
 
-        private PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new ();
-        
         private readonly IInventoryProperty _inventoryProperty;
-        private readonly IItemController _itemController;
-        private readonly Transform _senderTransform;
-        
-        private ICreatureItemReceiver currentItemReceiver;
+        private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
+
+        public List<Tuple<EMaterialType, EItemType>> InputItemKey { get; }
+        public List<Tuple<EMaterialType, EItemType>> OutputItemKey { get; }
 
         protected BuildingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IInventoryProperty inventoryProperty,
             IItemController itemController,
+            IInventoryProperty inventoryProperty,
             List<Tuple<EMaterialType, EItemType>> inputItemKey,
             List<Tuple<EMaterialType, EItemType>> outputItemKey)
         {
-            _senderTransform = senderTransform;
+            SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
+            ItemController = itemController;
             _inventoryProperty = inventoryProperty;
-            _itemController = itemController;
             InputItemKey = inputItemKey;
-            OutItemKey = outputItemKey;
+            OutputItemKey = outputItemKey;
         }
-        
+
         public override void Initialize()
         {
             _itemReceiverQueue.Clear();
             Inventory.Clear();
         }
-        
+
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver)
         {
-            if (_itemReceiverQueue.Contains(itemReceiver)) return;
-            _itemReceiverQueue.Enqueue(itemReceiver, (int) itemReceiver.CreatureType);
-            Debug.Log($"{itemReceiver}과 연결 성공, 현재 PriorityQueue Count : {_itemReceiverQueue.Count}개");
+            if (!_itemReceiverQueue.Contains(itemReceiver))
+            {
+                _itemReceiverQueue.Enqueue(itemReceiver, (int)itemReceiver.CreatureType);
+            }
         }
 
         public void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver)
         {
-            PriorityQueue<ICreatureItemReceiver> queue = _itemReceiverQueue;
-            var newQueue = new PriorityQueue<ICreatureItemReceiver>();
-
-            while (queue.Count > 0)
-            {
-                if (queue.Dequeue() != itemReceiver)
-                {
-                    newQueue.Enqueue(currentItemReceiver, (int)currentItemReceiver.CreatureType);
-                }
-            }
-
-            _itemReceiverQueue = newQueue;
-                
-            Debug.Log($"{itemReceiver}과 연결 종료, 현재 PriorityQueue Count : {_itemReceiverQueue.Count}개");
+            _itemReceiverQueue.Remove(itemReceiver);
         }
 
-        public int GetItemCount(Tuple<EMaterialType, EItemType> key)
-        {
-            return Inventory.GetValueOrDefault(key, 0);
-        }
+        public int GetItemCount(Tuple<EMaterialType, EItemType> key) => Inventory.GetValueOrDefault(key, 0);
 
-        public override void SendItem()
+        protected override void SendItem()
         {
-            // 대기열에 등록된 유닛 체크
-            if (_itemReceiverQueue.Count == 0) return;
-         
-            if (!IsReadyToSend()) return;
+            if (_itemReceiverQueue.Count == 0 || !IsReadyToSend()) return;
 
-            foreach (var currentItemKey in OutItemKey)
+            foreach (Tuple<EMaterialType, EItemType> currentItemKey in OutputItemKey)
             {
-                if (Inventory.TryGetValue(currentItemKey, out var outputItem))
+                if (!Inventory.TryGetValue(currentItemKey, out var itemCount) || itemCount <= 0) continue;
+
+                if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
                 {
-                    // 대기열에서 우선순위가 가장 높은 Receiver 반환
-                    if (!_itemReceiverQueue.TryPeek(out currentItemReceiver)) return;
-            
-                    // 반환된 Receiver가 현재 아이템 수령이 가능한 상태이고, OutputItem을 1개 이상 가지고 있다면
-                    if (currentItemReceiver.CanReceiveItem() && outputItem > 0)
+                    IItem item = PopSpawnedItem();
+                    ItemController.ReturnItem(item);
+
+                    if (currentItemReceiver.ReceiveItemWithDestroy(currentItemKey, item.Transform.position))
                     {
                         RemoveItem(currentItemKey);
-                        currentItemReceiver.ReceiveItem(currentItemKey);
-                        _itemController.TransferItem(currentItemKey, _senderTransform.position, currentItemReceiver.ReceiverTransform);
                     }
-                    else
-                    {
-                        _itemReceiverQueue.Dequeue();
-                    }     
+                }
+                else
+                {
+                    _itemReceiverQueue.Dequeue();
                 }
             }
-            
-            SetLastSendTime();
         }
     }
 }

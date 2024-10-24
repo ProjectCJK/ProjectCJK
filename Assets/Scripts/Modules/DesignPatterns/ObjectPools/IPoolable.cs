@@ -22,10 +22,5 @@ namespace Modules.DesignPatterns.ObjectPools
         /// 오브젝트가 풀로 반환될 때 호출되는 메서드.
         /// </summary>
         public void ReturnToPool();
-
-        /// <summary>
-        /// 오브젝트를 재사용할 때 상태를 초기화하는 메서드.
-        /// </summary>
-        public void Reset();
     }
 }
