@@ -51,7 +51,7 @@ namespace Units.Stages.Controllers
         public IItem GetItem(Tuple<EMaterialType, EItemType> itemType, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
-            item.Initialize(_itemSprites[itemType], initializePosition);
+            item.Initialize(itemType, _itemSprites[itemType], initializePosition);
 
             return item;
         }

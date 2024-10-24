@@ -82,7 +82,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
                     IItem item = PopSpawnedItem();
                     ItemController.ReturnItem(item);
 
-                    if (currentItemReceiver.ReceiveItemWithDestroy(currentItemKey, item.CurrentTransform.position))
+                    if (currentItemReceiver.ReceiveItemWithDestroy(currentItemKey, item.Transform.position))
                     {
                         RemoveItem(currentItemKey);
                     }

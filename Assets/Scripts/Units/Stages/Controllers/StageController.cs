@@ -3,13 +3,14 @@ using Interfaces;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Units;
+using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
     public interface IStageController : IRegisterReference<Joystick>, IInitializable
     {
-        public Transform GetPlayerTransform();
+        public IPlayer GetPlayer();
     }
     
     public class StageController : MonoBehaviour, IStageController
@@ -30,7 +31,7 @@ namespace Units.Stages.Controllers
             
             _creatureController.RegisterReference(joystick, _itemController);
             _buildingController.RegisterReference(_itemController);
-            _huntingZoneController.RegisterReference(_monsterFactory, _itemController);
+            _huntingZoneController.RegisterReference(_monsterFactory, _itemController, _creatureController.GetPlayer());
         }
         
         public void Initialize()
@@ -40,6 +41,6 @@ namespace Units.Stages.Controllers
             _huntingZoneController.Initialize();
         }
 
-        public Transform GetPlayerTransform() => _creatureController.GetPlayerTransform();
+        public IPlayer GetPlayer() => _creatureController.GetPlayer();
     }
 }

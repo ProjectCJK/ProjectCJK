@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Sprite, Action>, ITakeDamage
+    public interface IMonster : IBaseCreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Sprite, Action>, ITakeDamage
     {
         
     }
@@ -26,6 +26,7 @@ namespace Units.Stages.Units.Creatures.Units
         
         public override ECreatureType CreatureType => _monsterStatsModule.Type;
         public override Animator Animator { get; protected set; }
+        public override Transform Transform => transform;
         protected override CreatureStateMachine creatureStateMachine { get; set; }
         
         private IMonsterStatsModule _monsterStatsModule;

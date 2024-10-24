@@ -10,7 +10,7 @@ namespace Units.Stages.Controllers
 {
     public interface ICreatureController : IRegisterReference<Joystick, IItemController>, IInitializable
     {
-        public Transform GetPlayerTransform();
+        public IPlayer GetPlayer();
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
@@ -42,6 +42,6 @@ namespace Units.Stages.Controllers
             _player = _playerFactory.CreatePlayer();
         }
 
-        public Transform GetPlayerTransform() => _player.transform;
+        public IPlayer GetPlayer() => _player;
     }
 }

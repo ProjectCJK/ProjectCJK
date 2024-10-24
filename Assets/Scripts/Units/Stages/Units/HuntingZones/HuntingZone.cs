@@ -38,6 +38,8 @@ namespace Units.Stages.Units.HuntingZones
     
     public class HuntingZone : MonoBehaviour, IHuntingZone
     {
+        private event Action<IItem> OnDroppedItem;
+        
         [SerializeField] private HuntingZoneDefaultSetting HuntingZoneDefaultSetting;
         [Space(20), SerializeField] private HuntingZoneCustomSetting huntingZoneCustomSetting;
 
@@ -54,12 +56,14 @@ namespace Units.Stages.Units.HuntingZones
         
         private string _poolKey;
         
-        public void RegisterReference(string poolKey, Dictionary<EMaterialType, Sprite> monsterSprites, IItemController itemController)
+        public void RegisterReference(string poolKey, Dictionary<EMaterialType, Sprite> monsterSprites, IItemController itemController, Action<IItem> action)
         {
             _huntingZoneDataSo = DataManager.Instance.HuntingZoneData;
             _poolKey = poolKey;
             _monsterSprites = monsterSprites;
             _itemController = itemController;
+
+            OnDroppedItem += action;
 
             _itemType = new Tuple<EMaterialType, EItemType>(huntingZoneCustomSetting._materialType, EItemType.Material);
         }
@@ -98,7 +102,7 @@ namespace Units.Stages.Units.HuntingZones
             Vector3 receiverPosition = GetRandomItemDropPoint(senderTransform.position);
             
             IItem item = _itemController.GetItem(_itemType, senderTransform.position);
-            item.Transfer(senderTransform, receiverPosition, null);
+            item.Transfer(senderTransform, receiverPosition, () => OnDroppedItem?.Invoke(item));
         }
 
         private Vector3 GetRandomItemDropPoint(Vector3 senderPosition)
@@ -131,6 +135,11 @@ namespace Units.Stages.Units.HuntingZones
             var randomY = Random.Range(bounds.min.y, bounds.max.y);
             
             return new Vector3(randomX, randomY, 0);
+        }
+
+        public void RegisterReference(string instance1, Dictionary<EMaterialType, Sprite> instance2, IItemController instance3)
+        {
+            throw new NotImplementedException();
         }
     }
 }

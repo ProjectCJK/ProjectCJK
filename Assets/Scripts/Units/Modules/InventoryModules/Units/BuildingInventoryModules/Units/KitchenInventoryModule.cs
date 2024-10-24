@@ -25,11 +25,5 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             : base(senderTransform, receiverTransform, itemController, inventoryProperty, inputItemKey, outputItemKey)
         {
         }
-
-        public void HandleOnItemReceivedFromProductModule(Tuple<EMaterialType, EItemType> itemKey, IItem item)
-        {
-            AddItem(itemKey);
-            PushSpawnedItem(item);
-        }
     }
 }

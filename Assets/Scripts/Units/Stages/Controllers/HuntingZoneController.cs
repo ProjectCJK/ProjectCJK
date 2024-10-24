@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interfaces;
+using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
 using Units.Modules.FactoryModules.Units;
@@ -8,11 +9,13 @@ using Units.Stages.Enums;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Items.Units;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
-    public interface IHuntingZoneController : IRegisterReference<IMonsterFactory, IItemController>
+    public interface IHuntingZoneController : IRegisterReference<IMonsterFactory, IItemController, IPlayer>
     {
         
     }
@@ -24,11 +27,18 @@ namespace Units.Stages.Controllers
         
         private IMonsterFactory _monsterFactory;
         private IItemController _itemController;
+        private IPlayer _player;
+
+        private float _itemPickupRange;
         
-        public void RegisterReference(IMonsterFactory monsterFactory, IItemController itemController)
+        private readonly List<IItem> _droppedItems = new(); 
+        
+        public void RegisterReference(IMonsterFactory monsterFactory, IItemController itemController, IPlayer player)
         {
             _monsterFactory = monsterFactory;
             _itemController = itemController;
+            _player = player;
+            _itemPickupRange = DataManager.Instance.PlayerData.ItemPickupRange;
 
             CreateSpriteDictionary();
             CreateHuntingZoneDictionary();
@@ -59,7 +69,7 @@ namespace Units.Stages.Controllers
             foreach (Transform child in transform)
             {
                 var huntingZone = child.GetComponent<HuntingZone>();
-                huntingZone.RegisterReference(_monsterFactory.PoolKey, _monsterSprites, _itemController);
+                huntingZone.RegisterReference(_monsterFactory.PoolKey, _monsterSprites, _itemController, item => _droppedItems.Add(item));
                 huntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
             }
         }

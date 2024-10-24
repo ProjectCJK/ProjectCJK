@@ -1,7 +1,5 @@
 using Externals.Joystick.Scripts.Base;
 using Modules.DesignPatterns.Singletons;
-using ScriptableObjects.Scripts.Creatures;
-using ScriptableObjects.Scripts.Items;
 using Units.Stages.Controllers;
 using UnityEngine;
 
@@ -50,7 +48,7 @@ namespace Units.Stages.Managers
         
         private void RegisterCameraToPlayer()
         {
-            _cameraController.RegisterReference(_stageController.GetPlayerTransform());
+            _cameraController.RegisterReference(_stageController.GetPlayer().Transform);
         }
     }
 }

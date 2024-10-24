@@ -59,8 +59,6 @@ namespace Units.Modules.InventoryModules.Units
             if (!IsReadyToSend()) return;
             
             if (_targetInteractionZone == null) return;
-
-            if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
             
             foreach (Tuple<EMaterialType, EItemType> inputItemKey in _targetInteractionZone.InputItemKey)
             {
@@ -69,16 +67,9 @@ namespace Units.Modules.InventoryModules.Units
                     if (_targetInteractionZone.ReceiveItemWithDestroy(inputItemKey, SenderTransform.position))
                     {
                         RemoveItem(inputItemKey);
-                        if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
                     }
-                    
-                    if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
                 }
-                
-                if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
             }
-            
-            if (_targetInteractionZone == null) Debug.LogError("_targetInteractionZone null!");
             
             SetLastSendTime();
         }

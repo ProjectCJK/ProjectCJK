@@ -3,6 +3,7 @@ using Interfaces;
 using JetBrains.Annotations;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Items;
+using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Modules;
 using UnityEngine;
 
@@ -15,14 +16,17 @@ namespace Units.Stages.Units.Items.Units
         public void Transfer(Transform pointA, Vector3 pointB, Action onArrived);
     }
     
-    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<Sprite, Vector3>, IPoolable, IItemTransfer
+    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<Tuple<EMaterialType, EItemType>, Sprite, Vector3>, IPoolable, IItemTransfer
     {
-        public Transform CurrentTransform { get; }
+        public Tuple<EMaterialType, EItemType> Type { get; }
+        public Transform Transform { get; }
     }
 
     public class Item : MonoBehaviour, IItem
     {
-        public Transform CurrentTransform => transform;
+        public Tuple<EMaterialType, EItemType> Type { get; private set; }
+
+        public Transform Transform => transform;
         private SpriteRenderer _spriteRenderer;
         private BezierCurveMover _bezierCurveMover;
         private bool _isInitialized;
@@ -33,8 +37,9 @@ namespace Units.Stages.Units.Items.Units
             _bezierCurveMover = new BezierCurveMover(this, _itemDataSo.BaseMovementSpeed);
         }
 
-        public void Initialize(Sprite sprite, Vector3 initialPosition)
+        public void Initialize(Tuple<EMaterialType, EItemType> type, Sprite sprite, Vector3 initialPosition)
         {
+            Type = type;
             transform.position = initialPosition;
             SetSprite(sprite);
             SetActive(true);
@@ -82,6 +87,7 @@ namespace Units.Stages.Units.Items.Units
         {
             SetSprite(null);
             SetActive(false);
+            Type = null;
             _isInitialized = false;
         }
         

@@ -10,5 +10,6 @@ namespace ScriptableObjects.Scripts.Creatures
         public int BaseHealth;
         public int BaseDamage;
         public float BaseAttackDelay;
+        public float ItemPickupRange;
     }
 }
