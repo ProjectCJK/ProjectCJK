@@ -29,16 +29,16 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
         private readonly IInventoryProperty _inventoryProperty;
         private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
-        public List<Tuple<EMaterialType, EItemType>> InputItemKey { get; }
-        public List<Tuple<EMaterialType, EItemType>> OutputItemKey { get; }
+        public Tuple<EMaterialType, EItemType> InputItemKey { get; }
+        public Tuple<EMaterialType, EItemType> OutputItemKey { get; }
 
         protected BuildingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             IItemController itemController,
             IInventoryProperty inventoryProperty,
-            List<Tuple<EMaterialType, EItemType>> inputItemKey,
-            List<Tuple<EMaterialType, EItemType>> outputItemKey)
+            Tuple<EMaterialType, EItemType> inputItemKey,
+            Tuple<EMaterialType, EItemType> outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
@@ -72,25 +72,22 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
         protected override void SendItem()
         {
             if (_itemReceiverQueue.Count == 0 || !IsReadyToSend()) return;
+            
+            if (!Inventory.TryGetValue(OutputItemKey, out var itemCount) || itemCount <= 0) return;
 
-            foreach (Tuple<EMaterialType, EItemType> currentItemKey in OutputItemKey)
+            if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
             {
-                if (!Inventory.TryGetValue(currentItemKey, out var itemCount) || itemCount <= 0) continue;
+                IItem item = PopSpawnedItem();
+                ItemController.ReturnItem(item);
 
-                if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
+                if (currentItemReceiver.ReceiveItemWithDestroy(OutputItemKey, item.Transform.position))
                 {
-                    IItem item = PopSpawnedItem();
-                    ItemController.ReturnItem(item);
-
-                    if (currentItemReceiver.ReceiveItemWithDestroy(currentItemKey, item.Transform.position))
-                    {
-                        RemoveItem(currentItemKey);
-                    }
+                    RemoveItem(OutputItemKey);
                 }
-                else
-                {
-                    _itemReceiverQueue.Dequeue();
-                }
+            }
+            else
+            {
+                _itemReceiverQueue.Dequeue();
             }
         }
     }

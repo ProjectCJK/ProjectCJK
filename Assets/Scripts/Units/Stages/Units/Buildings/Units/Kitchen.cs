@@ -12,7 +12,6 @@ using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Buildings.UI.Kitchens;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Stages.Units.Buildings.Units
@@ -28,13 +27,13 @@ namespace Units.Stages.Units.Buildings.Units
         [Header("Kitchen UI")]
         public KitchenView kitchenView;
         
-        [Header("아이템 생성 장소")]
+        [Space(10), Header("아이템 생성 장소")]
         public Transform kitchenFactory;
         
-        [Header("아이템 보관 장소")]
+        [Space(10), Header("아이템 보관 장소")]
         public Transform kitchenInventory;
         
-        [Header("Interaction Zone")]
+        [Space(10), Header("Interaction Zone")]
         public InteractionTrade InteractionTrade;
     }
 
@@ -44,10 +43,10 @@ namespace Units.Stages.Units.Buildings.Units
         [Header("재료 타입")]
         public EMaterialType MaterialType;
         
-        [Header("Input 아이템 타입")]
+        [Space(10), Header("Input 아이템 타입")]
         public EItemType InputItemType;
         
-        [Header("Output 아이템 타입")]
+        [Space(10), Header("Output 아이템 타입")]
         public EItemType OutputItemType;
     }
     
@@ -57,8 +56,8 @@ namespace Units.Stages.Units.Buildings.Units
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
         
         public override EBuildingType BuildingType { get; protected set; }
-        public override List<Tuple<EMaterialType, EItemType>> InputItemKey { get; protected set; }
-        public override List<Tuple<EMaterialType, EItemType>> OutItemKey { get; protected set; }
+        public override Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
+        public override Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
         
         private IBuildingStatsModule _buildingStatsModule;
         private IKitchenInventoryModule _kitchenInventoryModule;
@@ -77,11 +76,8 @@ namespace Units.Stages.Units.Buildings.Units
             
             _itemController = itemController;
 
-            InputItemKey = new List<Tuple<EMaterialType, EItemType>>();
-            OutItemKey = new List<Tuple<EMaterialType, EItemType>>();
-            
-            InputItemKey.Add(new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.InputItemType));
-            OutItemKey.Add(new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.OutputItemType));
+            InputItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.InputItemType);
+            OutItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.OutputItemType);
             
             _buildingStatsModule = new BuildingStatsModule(_kitchenDataSO);
             _kitchenInventoryModule = new KitchenInventoryModule(_kitchenDefaultSetting.kitchenInventory, _kitchenDefaultSetting.kitchenInventory, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
@@ -110,7 +106,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void UpdateViewModel()
         {
-            var remainedMaterialCount = _kitchenInventoryModule.GetItemCount(InputItemKey[0]);
+            var remainedMaterialCount = _kitchenInventoryModule.GetItemCount(InputItemKey);
             var elapsedTime = _kitchenProductModule.ElapsedTime;
             var productLeadTime = _kitchenProductModule.ProductLeadTime;
             _kitchenViewModel.UpdateValues(remainedMaterialCount, elapsedTime, productLeadTime);
@@ -121,8 +117,7 @@ namespace Units.Stages.Units.Buildings.Units
             // TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
-                var tempKey = new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Product);
-                _kitchenInventoryModule.ReceiveItemWithDestroy(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _kitchenInventoryModule.ReceiveItemWithDestroy(OutItemKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
             
             _kitchenInventoryModule.Update();

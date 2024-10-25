@@ -20,8 +20,8 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             Transform receiverTransform,
             IInventoryProperty inventoryProperty,
             IItemController itemController,
-            List<Tuple<EMaterialType, EItemType>> inputItemKey,
-            List<Tuple<EMaterialType, EItemType>> outputItemKey)
+            Tuple<EMaterialType, EItemType> inputItemKey,
+            Tuple<EMaterialType, EItemType> outputItemKey)
             : base(senderTransform, receiverTransform, itemController, inventoryProperty, inputItemKey, outputItemKey)
         {
         }
