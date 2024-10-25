@@ -1,7 +1,6 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Managers;
 using ScriptableObjects.Scripts.Creatures;
 using Units.Modules.BattleModules;
 using Units.Modules.CollisionModules.Units;
@@ -15,7 +14,6 @@ using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units

@@ -19,8 +19,8 @@ namespace Units.Modules.ProductModules.Units
             Transform receiverTransform,
             IBuildingStatsModule buildingStatsModule,
             IKitchenInventoryModule kitchenInventoryModule,
-            List<Tuple<EMaterialType, EItemType>> inputItemKey,
-            List<Tuple<EMaterialType, EItemType>> outputItemKey)
+            Tuple<EMaterialType, EItemType> inputItemKey,
+            Tuple<EMaterialType, EItemType> outputItemKey)
             : base(senderTransform, receiverTransform, buildingStatsModule, kitchenInventoryModule, inputItemKey, outputItemKey)
         {
         }

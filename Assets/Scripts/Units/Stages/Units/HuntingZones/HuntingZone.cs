@@ -15,7 +15,7 @@ using Random = UnityEngine.Random;
 
 namespace Units.Stages.Units.HuntingZones
 {
-    public interface IHuntingZone : IRegisterReference<string, Dictionary<EMaterialType, Sprite>, IItemController>, IInitializable
+    public interface IHuntingZone : IRegisterReference<string, Dictionary<EMaterialType, Sprite>, IItemController, Action<IItem>>, IInitializable
     {
         public EActiveStatus ActiveStatus { get; }
     }
@@ -135,11 +135,6 @@ namespace Units.Stages.Units.HuntingZones
             var randomY = Random.Range(bounds.min.y, bounds.max.y);
             
             return new Vector3(randomX, randomY, 0);
-        }
-
-        public void RegisterReference(string instance1, Dictionary<EMaterialType, Sprite> instance2, IItemController instance3)
-        {
-            throw new NotImplementedException();
         }
     }
 }

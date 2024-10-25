@@ -53,6 +53,11 @@ namespace Units.Stages.Controllers
             }
         }
 
+        private void Update()
+        {
+            SendItem();
+        }
+
         private void CreateSpriteDictionary()
         {
             List<MonsterSprite> monsterSpritesList = _monsterFactory.MonsterDataSo.MonsterSprites;
@@ -77,6 +82,28 @@ namespace Units.Stages.Controllers
         private void InstantiateMonster()
         {
             _monsterFactory.CreateMonster();
+        }
+        
+        private void SendItem()
+        {
+            if (_player == null || _droppedItems.Count <= 0) return;
+            
+            for (var i = _droppedItems.Count - 1; i >= 0; i--)
+            {
+                if (!_player.PlayerInventoryModule.CanReceiveItem()) return; 
+                
+                IItem item = _droppedItems[i];
+                Vector3 currentItemPosition = item.Transform.position;
+
+                if (Vector3.Distance(currentItemPosition, _player.Transform.position) <= _itemPickupRange)
+                {
+                    if (_player.PlayerInventoryModule.ReceiveItemWithDestroy(item.Type, currentItemPosition))
+                    {
+                        _itemController.ReturnItem(item);
+                        _droppedItems.RemoveAt(i);
+                    }
+                }
+            }
         }
     }
 }

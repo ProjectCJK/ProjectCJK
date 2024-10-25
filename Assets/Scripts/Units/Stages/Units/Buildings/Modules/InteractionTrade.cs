@@ -9,9 +9,9 @@ using UnityEngine.Tilemaps;
 
 namespace Units.Stages.Units.Buildings.Modules
 {
-    public interface IInteractionTrade : IRegisterReference<Transform, IBuildingInventoryModule, List<Tuple<EMaterialType, EItemType>>>, IItemReceiver
+    public interface IInteractionTrade : IRegisterReference<Transform, IBuildingInventoryModule, Tuple<EMaterialType, EItemType>>, IItemReceiver
     {
-        public List<Tuple<EMaterialType, EItemType>> InputItemKey { get; }
+        public Tuple<EMaterialType, EItemType> InputItemKey { get; }
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
         public void UnregisterItemReceiver(ICreatureItemReceiver itemReceiver);
     }
@@ -22,11 +22,11 @@ namespace Units.Stages.Units.Buildings.Modules
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; private set; }
         
-        public List<Tuple<EMaterialType, EItemType>> InputItemKey { get; private set; }
+        public Tuple<EMaterialType, EItemType> InputItemKey { get; private set; }
         
         private IBuildingInventoryModule _buildingInventoryModule;
 
-        public void RegisterReference(Transform receiverTransform, IBuildingInventoryModule buildingInventoryModule, List<Tuple<EMaterialType, EItemType>> inputItemKey)
+        public void RegisterReference(Transform receiverTransform, IBuildingInventoryModule buildingInventoryModule, Tuple<EMaterialType, EItemType> inputItemKey)
         {
             ReceiverTransform = receiverTransform;
             _buildingInventoryModule = buildingInventoryModule;
