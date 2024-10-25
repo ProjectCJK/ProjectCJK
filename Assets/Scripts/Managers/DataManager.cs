@@ -11,6 +11,7 @@ namespace Managers
         public ItemDataSO ItemData;
         public PlayerDataSO PlayerData;
         public MonsterDataSO MonsterData;
+        public GuestDataSO GuestData;
         public BuildingDataSO KitchenData;
         public BuildingDataSO StandData;
         public HuntingZoneDataSO HuntingZoneData;
