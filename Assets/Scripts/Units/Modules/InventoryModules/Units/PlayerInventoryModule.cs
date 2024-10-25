@@ -59,15 +59,14 @@ namespace Units.Modules.InventoryModules.Units
             if (!IsReadyToSend()) return;
             
             if (_targetInteractionZone == null) return;
+
+            var targetInputItemKey = _targetInteractionZone.InputItemKey;
             
-            foreach (Tuple<EMaterialType, EItemType> inputItemKey in _targetInteractionZone.InputItemKey)
+            if (Inventory.TryGetValue(targetInputItemKey, out var OutputItemCount) && OutputItemCount > 0)
             {
-                if (Inventory.TryGetValue(inputItemKey, out var OutputItemCount) && OutputItemCount > 0)
+                if (_targetInteractionZone.ReceiveItemWithDestroy(targetInputItemKey, SenderTransform.position))
                 {
-                    if (_targetInteractionZone.ReceiveItemWithDestroy(inputItemKey, SenderTransform.position))
-                    {
-                        RemoveItem(inputItemKey);
-                    }
+                    RemoveItem(targetInputItemKey);
                 }
             }
             

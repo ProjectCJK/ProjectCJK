@@ -60,7 +60,7 @@ namespace Units.Stages.Units.Items.Modules
             _pointBTransform = pointBTransform;
             OnArrived = onArrived;
 
-            // A와 B의 중간 좌표
+            // A와 B의 중간 좌표qqqq
             Vector2 middlePoint = (_pointA + _pointB) / 2;
 
             // A와 B의 방향 벡터 계산 (A에서 B로 향하는 방향)

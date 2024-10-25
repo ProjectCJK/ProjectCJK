@@ -45,13 +45,11 @@ namespace Units.Modules.ProductModules
 
         private readonly IBuildingStatsModule _buildingStatsModule;
         private readonly IKitchenInventoryModule _kitchenInventoryModule;
-
-        protected readonly List<Tuple<EMaterialType, EItemType>> _inputItemKey;
-        protected readonly List<Tuple<EMaterialType, EItemType>> _outputItemKey;
+        
+        private readonly Tuple<EMaterialType, EItemType> _inputItemKey;
+        private readonly Tuple<EMaterialType, EItemType> _outputItemKey;
 
         private float _productLeadTime => _buildingStatsModule.ProductLeadTime;
-        private Tuple<EMaterialType, EItemType> _currentInputKey;
-        private Tuple<EMaterialType, EItemType> _currentOutputKey;
 
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }
@@ -61,8 +59,8 @@ namespace Units.Modules.ProductModules
             Transform receiverTransform,
             IBuildingStatsModule buildingStatsModule,
             IKitchenInventoryModule kitchenInventoryModule,
-            List<Tuple<EMaterialType, EItemType>> inputItemKey,
-            List<Tuple<EMaterialType, EItemType>> outputItemKey)
+            Tuple<EMaterialType, EItemType> inputItemKey,
+            Tuple<EMaterialType, EItemType> outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
@@ -84,9 +82,9 @@ namespace Units.Modules.ProductModules
             {
                 if (IsProductProcessed())
                 {
-                    if (_kitchenInventoryModule.ReceiveItemWithoutDestroy(_currentOutputKey, SenderTransform.position))
+                    if (_kitchenInventoryModule.ReceiveItemWithoutDestroy(_outputItemKey, SenderTransform.position))
                     {
-                        _kitchenInventoryModule.RemoveItem(_currentInputKey);       
+                        _kitchenInventoryModule.RemoveItem(_inputItemKey);       
                     }
                     
                     if (HasMatchingItem())
@@ -95,7 +93,6 @@ namespace Units.Modules.ProductModules
                     }
                     else
                     {
-                        _currentInputKey = null;
                         SetProcessingFlag(false);
                     }
                 }
@@ -117,16 +114,7 @@ namespace Units.Modules.ProductModules
             return ElapsedTime >= _productLeadTime;
         }
 
-        private bool HasMatchingItem()
-        {
-            foreach (Tuple<EMaterialType, EItemType> currentInputKey in _inputItemKey.Where(currentInputKey => _kitchenInventoryModule.HasMatchingItem(currentInputKey)))
-            {
-                _currentInputKey = currentInputKey;
-                _currentOutputKey = new Tuple<EMaterialType, EItemType>(currentInputKey.Item1, EItemType.Product);
-                return true;
-            }
-            return false;
-        }
+        private bool HasMatchingItem() => _kitchenInventoryModule.HasMatchingItem(_inputItemKey);
 
         private void SetProcessingFlag(bool isProcessing)
         {

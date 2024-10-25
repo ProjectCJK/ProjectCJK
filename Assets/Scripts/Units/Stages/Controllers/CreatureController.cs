@@ -23,7 +23,7 @@ namespace Units.Stages.Controllers
         [SerializeField] private Transform _customerSpawnPoint;
         
         private IPlayerFactory _playerFactory;
-        
+        // private IGuestFactory _guestFactory;
         private Player _player;
 
         public void RegisterReference(Joystick joystick, IItemController itemController)
