@@ -74,11 +74,14 @@ namespace Units.Stages.Units.Creatures.Units
         
         private void Update()
         {
+#if UNITY_EDITOR
+            // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 var tempKey = new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Material);
                 _playerInventoryModule.ReceiveItemWithDestroy(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
-            }
+            }      
+#endif
             
             _playerInventoryModule.Update();
             _playerMovementModule.Update();

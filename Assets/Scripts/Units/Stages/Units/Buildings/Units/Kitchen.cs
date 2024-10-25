@@ -114,11 +114,13 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void Update()
         {
+#if UNITY_EDITOR
             // TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
                 _kitchenInventoryModule.ReceiveItemWithDestroy(OutItemKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
+#endif
             
             _kitchenInventoryModule.Update();
             _kitchenProductModule.Product();
