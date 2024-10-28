@@ -15,7 +15,7 @@ using Random = UnityEngine.Random;
 
 namespace Units.Stages.Units.HuntingZones
 {
-    public interface IHuntingZone : IRegisterReference<string, Dictionary<EMaterialType, Sprite>, IItemController, Action<IItem>>, IInitializable
+    public interface IHuntingZone : IRegisterReference<ICreatureController, IItemController, Action<IItem>>, IInitializable
     {
         public EActiveStatus ActiveStatus { get; }
     }
@@ -47,20 +47,17 @@ namespace Units.Stages.Units.HuntingZones
         
         private readonly HashSet<Monster> currentSpawnedMonsters = new();
 
+        private ICreatureController _creatureController;
         private IItemController _itemController;
         
         private Tuple<EMaterialType, EItemType> _itemType;
-        private Dictionary<EMaterialType, Sprite> _monsterSprites;
 
         private HuntingZoneDataSO _huntingZoneDataSo; 
         
-        private string _poolKey;
-        
-        public void RegisterReference(string poolKey, Dictionary<EMaterialType, Sprite> monsterSprites, IItemController itemController, Action<IItem> action)
+        public void RegisterReference(ICreatureController creatureController, IItemController itemController, Action<IItem> action)
         {
             _huntingZoneDataSo = DataManager.Instance.HuntingZoneData;
-            _poolKey = poolKey;
-            _monsterSprites = monsterSprites;
+            _creatureController = creatureController;
             _itemController = itemController;
 
             OnDroppedItem += action;
@@ -77,8 +74,7 @@ namespace Units.Stages.Units.HuntingZones
         {
             while (currentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
             {
-                var monster = ObjectPoolManager.Instance.GetObject<Monster>(_poolKey, null);
-                monster.Initialize(_monsterSprites[huntingZoneCustomSetting._materialType], () => ReturnMonster(monster));
+                var monster = _creatureController.GetMonster(_itemType.Item1, ReturnMonster);
                 
                 if (monster != null)
                 {
@@ -90,7 +86,6 @@ namespace Units.Stages.Units.HuntingZones
 
         private void ReturnMonster(Monster monster)
         {
-            ObjectPoolManager.Instance.ReturnObject(_poolKey, monster);
             currentSpawnedMonsters.Remove(monster);
 
             DropItems(monster.transform);

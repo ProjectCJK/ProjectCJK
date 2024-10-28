@@ -909,6 +909,7 @@ GameObject:
   - component: {fileID: 7599543885709168707}
   - component: {fileID: 7288263919502255659}
   - component: {fileID: 905044103458219419}
+  - component: {fileID: 8157233277805791903}
   m_Layer: 15
   m_Name: Sprite_Stand_A
   m_TagString: Untagged
@@ -1208,6 +1209,22 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 6359821315056649380}
+--- !u!114 &8157233277805791903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359821315056649380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8348114765990307838
 GameObject:
   m_ObjectHideFlags: 0

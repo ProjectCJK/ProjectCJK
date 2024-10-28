@@ -4,6 +4,7 @@ using System.Linq;
 using Modules.DataStructures;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
+using Units.Modules.StatsModules.Abstract;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
@@ -21,12 +22,12 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
 
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
-        public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
+        public override int MaxInventorySize => _buildingStatsModule.MaxProductInventorySize;
         public override IItemController ItemController { get; }
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
-        private readonly IInventoryProperty _inventoryProperty;
+        private readonly IBuildingStatsModule _buildingStatsModule;
         private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
         public Tuple<EMaterialType, EItemType> InputItemKey { get; }
@@ -36,14 +37,14 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
             Transform senderTransform,
             Transform receiverTransform,
             IItemController itemController,
-            IInventoryProperty inventoryProperty,
+            IBuildingStatsModule buildingStatsModule,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             ItemController = itemController;
-            _inventoryProperty = inventoryProperty;
+            _buildingStatsModule = buildingStatsModule;
             InputItemKey = inputItemKey;
             OutputItemKey = outputItemKey;
         }
@@ -80,7 +81,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
                 IItem item = PopSpawnedItem();
                 ItemController.ReturnItem(item);
 
-                if (currentItemReceiver.ReceiveItemWithDestroy(OutputItemKey, item.Transform.position))
+                if (currentItemReceiver.ReceiveItem(OutputItemKey, item.Transform.position))
                 {
                     RemoveItem(OutputItemKey);
                 }

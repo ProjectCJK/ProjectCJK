@@ -1,6 +1,7 @@
 using Externals.Joystick.Scripts.Base;
 using Managers;
 using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.FactoryModules.Abstract;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Creatures.Abstract;

@@ -1,17 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interfaces;
-using Units.Modules.InventoryModules.Units;
-using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
-using Units.Modules.StatsModules.Units;
-using Units.Stages.Controllers;
+using Units.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
-namespace Units.Modules.ProductModules
+namespace Units.Modules.ProductModules.Abstract
 {
     public interface IProductProperty
     {
@@ -44,8 +38,9 @@ namespace Units.Modules.ProductModules
         public float ProductLeadTime => _productLeadTime;
 
         private readonly IBuildingStatsModule _buildingStatsModule;
-        private readonly IKitchenInventoryModule _kitchenInventoryModule;
-        
+        private readonly IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
+        private readonly IKitchenProductInventoryModule _kitchenProductInventoryModule;
+
         private readonly Tuple<EMaterialType, EItemType> _inputItemKey;
         private readonly Tuple<EMaterialType, EItemType> _outputItemKey;
 
@@ -54,18 +49,19 @@ namespace Units.Modules.ProductModules
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }
 
-        protected BuildingProductModule(
-            Transform senderTransform,
+        protected BuildingProductModule(Transform senderTransform,
             Transform receiverTransform,
             IBuildingStatsModule buildingStatsModule,
-            IKitchenInventoryModule kitchenInventoryModule,
+            IKitchenMaterialInventoryModule kitchenMaterialInventoryModule,
+            IKitchenProductInventoryModule kitchenProductInventoryModule,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             _buildingStatsModule = buildingStatsModule;
-            _kitchenInventoryModule = kitchenInventoryModule;
+            _kitchenMaterialInventoryModule = kitchenMaterialInventoryModule;
+            _kitchenProductInventoryModule = kitchenProductInventoryModule;
             _inputItemKey = inputItemKey;
             _outputItemKey = outputItemKey;
         }
@@ -82,9 +78,9 @@ namespace Units.Modules.ProductModules
             {
                 if (IsProductProcessed())
                 {
-                    if (_kitchenInventoryModule.ReceiveItemWithoutDestroy(_outputItemKey, SenderTransform.position))
+                    if (_kitchenProductInventoryModule.ReceiveItem(_outputItemKey, SenderTransform.position))
                     {
-                        _kitchenInventoryModule.RemoveItem(_inputItemKey);       
+                        _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);       
                     }
                     
                     if (HasMatchingItem())
@@ -114,7 +110,7 @@ namespace Units.Modules.ProductModules
             return ElapsedTime >= _productLeadTime;
         }
 
-        private bool HasMatchingItem() => _kitchenInventoryModule.HasMatchingItem(_inputItemKey);
+        private bool HasMatchingItem() => _kitchenMaterialInventoryModule.HasMatchingItem(_inputItemKey);
 
         private void SetProcessingFlag(bool isProcessing)
         {

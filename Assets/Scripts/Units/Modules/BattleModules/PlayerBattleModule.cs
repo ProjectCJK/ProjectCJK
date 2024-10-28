@@ -14,7 +14,6 @@ namespace Units.Modules.BattleModules
 
     public class PlayerBattleModule : BattleModule, IPlayerBattleModule
     {
-        private readonly PlayerDataSO _playerDataSo;
         private readonly Joystick _joystick;
         private readonly Weapon _weapon;
         private readonly Transform _playerTransform;
@@ -23,9 +22,8 @@ namespace Units.Modules.BattleModules
 
         private bool _isInHuntingZone;
 
-        public PlayerBattleModule(PlayerDataSO playerDataSo, Joystick joystick, Transform playerTransform, Weapon weapon)
+        public PlayerBattleModule(Joystick joystick, Transform playerTransform, Weapon weapon)
         {
-            _playerDataSo = playerDataSo;
             _joystick = joystick;
             _playerTransform = playerTransform;
             _weapon = weapon;
@@ -78,7 +76,7 @@ namespace Units.Modules.BattleModules
             {
                 // 왼쪽 방향일 때
                 weaponScale.x = -Mathf.Abs(weaponScale.x);  // Flip 처리
-                totalAngle += 90;  // 각도 보정
+                totalAngle += 180;  // 각도 보정
             }
             else
             {
@@ -89,8 +87,8 @@ namespace Units.Modules.BattleModules
             // 무기의 회전을 플레이어 기준으로 설정
             _weapon.transform.rotation = _playerTransform.rotation * Quaternion.Euler(0, 0, totalAngle);
 
-            // 무기의 위치를 조이스틱 방향에 맞게 조정
-            _weapon.transform.localPosition = new Vector3(direction.x, direction.y, 0).normalized;
+            // // 무기의 위치를 조이스틱 방향에 맞게 조정
+            // _weapon.transform.localPosition = new Vector3(direction.x, direction.y, 0).normalized;
 
             // 플립 적용
             _weapon.transform.localScale = weaponScale;

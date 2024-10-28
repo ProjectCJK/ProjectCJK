@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Modules.ProductModules.Abstract;
+using Units.Modules.StatsModules.Abstract;
 using Units.Modules.StatsModules.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
@@ -14,14 +16,14 @@ namespace Units.Modules.ProductModules.Units
     
     public class KitchenProductModule : BuildingProductModule, IKitchenProductModule
     {
-        public KitchenProductModule(
-            Transform senderTransform,
+        public KitchenProductModule(Transform senderTransform,
             Transform receiverTransform,
             IBuildingStatsModule buildingStatsModule,
-            IKitchenInventoryModule kitchenInventoryModule,
+            IKitchenMaterialInventoryModule kitchenMaterialInventoryModule,
+            IKitchenProductInventoryModule kitchenProductInventoryModule,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
-            : base(senderTransform, receiverTransform, buildingStatsModule, kitchenInventoryModule, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, buildingStatsModule, kitchenMaterialInventoryModule, kitchenProductInventoryModule, inputItemKey, outputItemKey)
         {
         }
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units.Modules.MovementModules.Abstract
 {
-    public interface IMovementModule : IInitializable
+    public interface IMovementModule
     {
         
     }
@@ -17,7 +17,5 @@ namespace Units.Modules.MovementModules.Abstract
     {
         private const string collisionLayer = "Collision";
         protected readonly int collisionLayerMask = LayerMask.GetMask(collisionLayer);
-        
-        public abstract void Initialize();
     }
 }

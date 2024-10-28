@@ -24,14 +24,16 @@ namespace Units.Modules.MovementModules.Units
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
         private readonly ParticleSystem _walkParticles;
-
+        private readonly Vector3 _faceScale;
+        
         private float _movementSpeed => _playerStatsModule.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
 
         private Vector2 _movementDirection; // 캐싱된 방향 정보
 
-        public PlayerMovementModule(Player player,
+        public PlayerMovementModule(
+            Player player,
             IPlayerStatsModule playerStatsModule,
             CreatureStateMachine creatureStateMachine,
             Joystick joystick,
@@ -43,9 +45,11 @@ namespace Units.Modules.MovementModules.Units
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
             _spriteTransform = spriteTransform;
+
+            _faceScale = _spriteTransform.localScale;
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             UpdateMovementFlag();
             UpdateStateMachine();
@@ -74,8 +78,8 @@ namespace Units.Modules.MovementModules.Units
         {
             _isFacingRight = faceRight;
 
-            Vector3 scale = _spriteTransform.localScale;
-            scale.x = faceRight ? 1 : -1;
+            Vector3 scale = _faceScale;
+            scale.x = faceRight ? scale.x : scale.x * -1;
             _spriteTransform.localScale = scale;
         }
 
@@ -112,20 +116,25 @@ namespace Units.Modules.MovementModules.Units
 
         private bool IsColliding(Vector3 move)
         {
+            // CircleCollider2D의 오프셋을 반영하여 충돌 검사 시작 위치 조정
+            Vector3 colliderPosition = _playerTransform.position + (Vector3)_playerCollider.offset;
+
             // CircleCast 실행
-            RaycastHit2D hit = Physics2D.CircleCast(_playerTransform.position, _playerCollider.radius, move.normalized, move.magnitude, collisionLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, _playerCollider.radius, move.normalized, move.magnitude, collisionLayerMask);
 
             // 레이 시각화
             Color rayColor = hit.collider != null ? Color.red : Color.blue; // 충돌 여부에 따라 색상 변경
-            Debug.DrawRay(_playerTransform.position, move.normalized * move.magnitude, rayColor);
-
+            
+#if UNITY_EDITOR
+            Debug.DrawRay(colliderPosition, move.normalized * move.magnitude, rayColor);
             // Circle을 시각화하여 캐스트의 범위를 표시
-            DebugDrawCircle(_playerTransform.position + move.normalized * move.magnitude, _playerCollider.radius, rayColor);
-
+            DebugDrawCircle(colliderPosition + move.normalized * move.magnitude, _playerCollider.radius, rayColor);
+#endif
             // 충돌 여부 반환
             return hit.collider != null;
         }
-
+        
+#if UNITY_EDITOR
         private static void DebugDrawCircle(Vector3 position, float radius, Color color)
         {
             const int segments = 20;
@@ -143,7 +152,8 @@ namespace Units.Modules.MovementModules.Units
                 angle += increment;
             }
         }
-
+#endif
+        
         private void HandleStateUpdate()
         {
             UpdateMovementFlag();
@@ -152,16 +162,7 @@ namespace Units.Modules.MovementModules.Units
 
         private void UpdateMovementFlag()
         {
-            if (_joystick.direction != Vector2.zero)
-            {
-                _isMoving = true;
-                // _walkParticles.Play();
-            }
-            else
-            {
-                _isMoving = false;
-                // _walkParticles.Stop();
-            }
+            _isMoving = _joystick.direction != Vector2.zero;
         }
 
         private void UpdateStateMachine()

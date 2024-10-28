@@ -2,6 +2,7 @@ using System;
 using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.HealthModules.Units;
 using Units.Modules.MovementModules.Units;
@@ -22,6 +23,7 @@ namespace Units.Stages.Units.Creatures.Units
 
     public class Monster : Creature, IMonster
     {
+        private event Action OnGetMonster;
         private event Action OnReturnMonster;
         
         public override ECreatureType CreatureType => _monsterStatsModule.Type;

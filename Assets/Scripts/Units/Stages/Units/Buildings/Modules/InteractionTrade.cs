@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 
 namespace Units.Stages.Units.Buildings.Modules
 {
-    public interface IInteractionTrade : IRegisterReference<Transform, IBuildingInventoryModule, Tuple<EMaterialType, EItemType>>, IItemReceiver
+    public interface IInteractionTrade : IRegisterReference<Transform, IBuildingInventoryModule, IBuildingInventoryModule, Tuple<EMaterialType, EItemType>>, IItemReceiver
     {
         public Tuple<EMaterialType, EItemType> InputItemKey { get; }
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
@@ -24,47 +24,39 @@ namespace Units.Stages.Units.Buildings.Modules
         
         public Tuple<EMaterialType, EItemType> InputItemKey { get; private set; }
         
-        private IBuildingInventoryModule _buildingInventoryModule;
+        private IBuildingInventoryModule _buildingReceiverInventoryModule;
+        private IBuildingInventoryModule _buildingSenderInventoryModule;
 
-        public void RegisterReference(Transform receiverTransform, IBuildingInventoryModule buildingInventoryModule, Tuple<EMaterialType, EItemType> inputItemKey)
+        public void RegisterReference(Transform receiverTransform, IBuildingInventoryModule buildingReceiverInventoryModule, IBuildingInventoryModule buildingSenderInventoryModule, Tuple<EMaterialType, EItemType> inputItemKey)
         {
             ReceiverTransform = receiverTransform;
-            _buildingInventoryModule = buildingInventoryModule;
+            _buildingReceiverInventoryModule = buildingReceiverInventoryModule;
+            _buildingSenderInventoryModule = buildingSenderInventoryModule;
             InputItemKey = inputItemKey;
         }
 
         public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver)
         {
-            _buildingInventoryModule.RegisterItemReceiver(itemReceiver);
+            _buildingSenderInventoryModule.RegisterItemReceiver(itemReceiver);
         }
 
         public void UnregisterItemReceiver(ICreatureItemReceiver itemReceiver)
         {
-            _buildingInventoryModule.UnRegisterItemReceiver(itemReceiver);
+            _buildingSenderInventoryModule.UnRegisterItemReceiver(itemReceiver);
         }
 
-        public bool ReceiveItemWithDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
+        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
         {
-            return _buildingInventoryModule.ReceiveItemWithDestroy(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
+            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
         }
 
-        public bool ReceiveItemWithDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
+        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
         {
-            return _buildingInventoryModule.ReceiveItemWithDestroy(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
+            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
         }
 
-        public bool ReceiveItemWithoutDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
-        {
-            return _buildingInventoryModule.ReceiveItemWithoutDestroy(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
-        }
+        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => _buildingReceiverInventoryModule.HasMatchingItem(InventoryKey);
 
-        public bool ReceiveItemWithoutDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
-        {
-            return _buildingInventoryModule.ReceiveItemWithoutDestroy(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
-        }
-
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => _buildingInventoryModule.HasMatchingItem(InventoryKey);
-
-        public bool CanReceiveItem() => _buildingInventoryModule.CanReceiveItem();
+        public bool CanReceiveItem() => _buildingReceiverInventoryModule.CanReceiveItem();
     }
 }
