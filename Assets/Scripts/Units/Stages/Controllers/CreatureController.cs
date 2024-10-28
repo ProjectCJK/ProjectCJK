@@ -16,7 +16,7 @@ namespace Units.Stages.Controllers
     {
         public Player GetPlayer();
         public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn);
-        public Guest GetGuest();
+        public Guest GetGuest(Transform targetBuildingTransform);
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
@@ -41,17 +41,6 @@ namespace Units.Stages.Controllers
             _guestFactory = new GuestFactory();
         }
 
-        private void Update()
-        {
-#if UNITY_EDITOR
-            // TODO : Cheat Code
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                GetGuest();
-            }      
-#endif
-        }
-
         public Player GetPlayer()
         {
             Player player = _playerFactory.GetPlayer();
@@ -66,11 +55,11 @@ namespace Units.Stages.Controllers
             return monster;
         }
 
-        public Guest GetGuest()
+        public Guest GetGuest(Transform targetBuilding)
         {
             Guest guest = _guestFactory.GetGuest();
             
-            guest.Initialize(new Vector3(0, 10, 0));
+            guest.Initialize(targetBuilding.position);
             guest.transform.position = _customerSpawnPoint.position;
             currentSpawnedGuests.Add(guest);
             

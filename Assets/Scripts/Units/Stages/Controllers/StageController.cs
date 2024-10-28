@@ -1,3 +1,4 @@
+using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using ScriptableObjects.Scripts.Creatures;
@@ -37,6 +38,17 @@ namespace Units.Stages.Controllers
         {
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // TODO : Cheat Code
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                _creatureController.GetGuest(Player.transform);
+            }      
+#endif
         }
     }
 }
