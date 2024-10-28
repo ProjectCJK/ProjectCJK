@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using Units.Modules.CollisionModules.Abstract;
+using Units.Modules.StatsModules.Units;
 using Units.Stages.Units.Buildings.Modules;
 using UnityEngine;
 
@@ -21,15 +22,19 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
         public event Action<bool> OnTriggerHuntingZone;
-
-        private bool _isInTriggerZone;
-        private Transform _targetTransform;
-        private readonly Stack<Transform> _tradeZones = new();
         
-        private const float _waitingTime = 1.0f;
+        private readonly Queue<Transform> _tradeZones = new();
+        private readonly float _waitingTime;
+        
         private float _elapsedTime;  // 시간 측정 변수
+        private Transform _targetTransform;
         private Transform _previousTargetTransform; // 이전 트리거 존을 저장
         private bool _isWaitingForTrigger; // 대기 상태 여부
+
+        public PlayerCollisionModule(IInteractionProperty playerStatsModule)
+        {
+            _waitingTime = playerStatsModule.WaitingTime;
+        }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -80,7 +85,7 @@ namespace Units.Modules.CollisionModules.Units
         // Player의 Update에서 호출되는 메서드
         public void Update()
         {
-            if (_isWaitingForTrigger && _isInTriggerZone && _targetTransform != null)
+            if (_isWaitingForTrigger && _targetTransform != null)
             {
                 _elapsedTime += Time.deltaTime;
 
@@ -93,19 +98,19 @@ namespace Units.Modules.CollisionModules.Units
         
         private void EnterTradeZone(Transform tradeZoneTransform)
         {
-            if (_tradeZones.Count == 0 || _tradeZones.Peek() != tradeZoneTransform)
+            if (_tradeZones.Count == 0 || !ReferenceEquals(_tradeZones.Peek(), tradeZoneTransform))
             {
-                _tradeZones.Push(tradeZoneTransform);
+                _tradeZones.Enqueue(tradeZoneTransform);
                 StartWaitingForTrigger(tradeZoneTransform);
             }
         }
 
         private void ExitTradeZone(Transform tradeZoneTransform)
         {
-            if (_tradeZones.Count > 0 && _tradeZones.Peek() == tradeZoneTransform)
+            if (_tradeZones.Count > 0 && ReferenceEquals(_tradeZones.Peek(), tradeZoneTransform))
             {
                 NotifyTradeZoneExit();
-                _tradeZones.Pop();
+                _tradeZones.Dequeue();
                 UpdateTargetTransform();
             }
         }

@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
-    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemFactory, IPlayer>
+    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemFactory, IPlayer>, IInitializable
     {
         
     }

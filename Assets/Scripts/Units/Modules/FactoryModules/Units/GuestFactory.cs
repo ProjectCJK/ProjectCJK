@@ -31,7 +31,6 @@ namespace Units.Modules.FactoryModules.Units
         public Guest GetGuest()
         {
             var guest = ObjectPoolManager.Instance.GetObject<Guest>(PoolKey, null);
-            guest.Initialize(new Vector3(0, 10, 0));
             
             return guest;
         }

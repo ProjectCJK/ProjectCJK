@@ -15,7 +15,6 @@ namespace Units.Stages.Managers
         [SerializeField] private CameraController _cameraController;
         
         private IStageController _stageController;
-
         
         private Joystick _joystick;
 

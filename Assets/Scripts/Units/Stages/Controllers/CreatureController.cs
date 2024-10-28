@@ -59,8 +59,9 @@ namespace Units.Stages.Controllers
         {
             Guest guest = _guestFactory.GetGuest();
             
-            guest.Initialize(targetBuilding.position);
             guest.transform.position = _customerSpawnPoint.position;
+            guest.Initialize(targetBuilding.position);
+            
             currentSpawnedGuests.Add(guest);
             
             return guest != null ? guest : null;

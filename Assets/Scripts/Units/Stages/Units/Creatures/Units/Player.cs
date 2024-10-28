@@ -57,7 +57,7 @@ namespace Units.Stages.Units.Creatures.Units
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
             _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemFactory, CreatureType);
             _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, creatureStateMachine, joystick, spriteTransform);
-            _playerCollisionModule = new PlayerCollisionModule();
+            _playerCollisionModule = new PlayerCollisionModule(_playerStatsModule);
 
             _weapon.RegisterReference(_playerStatsModule);
             
