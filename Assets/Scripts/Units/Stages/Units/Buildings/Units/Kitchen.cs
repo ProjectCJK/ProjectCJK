@@ -4,6 +4,7 @@ using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.ProductModules.Units;
 using Units.Modules.StatsModules.Units;
@@ -18,7 +19,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Buildings.Units
 {
-    public interface IKitchen : IBuilding, IRegisterReference<IItemController>
+    public interface IKitchen : IBuilding, IRegisterReference<IItemFactory>
     {
         
     }
@@ -65,25 +66,25 @@ namespace Units.Stages.Units.Buildings.Units
         private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
         private IKitchenProductInventoryModule _kitchenProductInventoryModule;
         private IKitchenProductModule _kitchenProductModule;
-        private IItemController _itemController;
+        private IItemFactory _itemFactory;
         private IInteractionTrade _interactionTrade;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
         private KitchenModel _kitchenModel;
 
-        public void RegisterReference(IItemController itemController)
+        public void RegisterReference(IItemFactory itemController)
         {
             _kitchenDataSO = DataManager.Instance.KitchenData;
             
-            _itemController = itemController;
+            _itemFactory = itemController;
 
             InputItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.InputItemType);
             OutItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.OutputItemType);
             
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
-            _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.kitchenFactory, _kitchenDefaultSetting.kitchenFactory, _kitchenStatsModule, _itemController, InputItemKey, OutItemKey);
-            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.kitchenInventory, _kitchenDefaultSetting.kitchenInventory, _kitchenStatsModule, _itemController, OutItemKey, OutItemKey);
+            _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.kitchenFactory, _kitchenDefaultSetting.kitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutItemKey);
+            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.kitchenInventory, _kitchenDefaultSetting.kitchenInventory, _kitchenStatsModule, _itemFactory, OutItemKey, OutItemKey);
             _kitchenProductModule = new KitchenProductModule(_kitchenDefaultSetting.kitchenFactory, _kitchenDefaultSetting.kitchenFactory, _kitchenStatsModule, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey, OutItemKey);
             
             _kitchenModel = new KitchenModel();
@@ -109,7 +110,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void UpdateViewModel()
         {
-            var remainedMaterialCount = _kitchenProductInventoryModule.GetItemCount(InputItemKey);
+            var remainedMaterialCount = _kitchenMaterialInventoryModule.GetItemCount(InputItemKey);
             var elapsedTime = _kitchenProductModule.ElapsedTime;
             var productLeadTime = _kitchenProductModule.ProductLeadTime;
             _kitchenViewModel.UpdateValues(remainedMaterialCount, elapsedTime, productLeadTime);

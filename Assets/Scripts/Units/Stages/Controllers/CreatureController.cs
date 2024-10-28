@@ -12,40 +12,33 @@ using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
-    public interface ICreatureController : IRegisterReference<Joystick, IItemController>, IInitializable
+    public interface ICreatureController : IRegisterReference<Joystick, IItemFactory>
     {
-        public Player Player { get; }
-        public Monster GetMonster(EMaterialType materialType, Action<Monster> onReturn);
+        public Player GetPlayer();
+        public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn);
+        public Guest GetGuest();
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
     {
-        public Player Player => _playerController.Player;
-        public IMonsterFactory MonsterFactory => _monsterController.MonsterFactory;
-        public IGuestFactory GuestFactory => _guestController.GuestFactory;
-        
         [Header("=== 플레이어 세팅 ===")]
         [SerializeField] private Transform _playerSpawnPoint;
         
         [Header("=== 손님 NPC 세팅 ===")]
         [SerializeField] private Transform _customerSpawnPoint;
         
-        private IPlayerController _playerController;
-        private IMonsterController _monsterController;
-        private IGuestController _guestController;
+        private IPlayerFactory _playerFactory;
+        private IMonsterFactory _monsterFactory;
+        private IGuestFactory _guestFactory;
+        private IItemFactory _itemFactory;
 
         private readonly HashSet<Guest> currentSpawnedGuests = new();
-        
-        public void RegisterReference(Joystick joystick, IItemController itemController)
+
+        public void RegisterReference(Joystick joystick, IItemFactory itemFactory)
         {
-            _playerController = new PlayerController(_playerSpawnPoint, joystick, itemController);
-            _monsterController = new MonsterController();
-            _guestController = new GuestController();
-        }
-        
-        public void Initialize()
-        {
-            _playerController.Initialize();
+            _playerFactory = new PlayerFactory(_playerSpawnPoint.position, joystick, itemFactory);
+            _monsterFactory = new MonsterFactory();
+            _guestFactory = new GuestFactory();
         }
 
         private void Update()
@@ -59,25 +52,25 @@ namespace Units.Stages.Controllers
 #endif
         }
 
-        public Monster GetMonster(EMaterialType materialType, Action<Monster> onReturn)
+        public Player GetPlayer()
         {
-            var monster = ObjectPoolManager.Instance.GetObject<Monster>(MonsterFactory.PoolKey, null);
+            Player player = _playerFactory.GetPlayer();
             
-            monster.Initialize(MonsterFactory.MonsterSprites[materialType], () =>
-            {
-                ObjectPoolManager.Instance.ReturnObject(MonsterFactory.PoolKey, monster);
-                onReturn?.Invoke(monster);
-            });
+            return player;
+        }
 
-            return monster != null ? monster : null;
+        public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn)
+        {
+            IMonster monster = _monsterFactory.GetMonster(materialType, onReturn);
+            
+            return monster;
         }
 
         public Guest GetGuest()
         {
-            var guest = ObjectPoolManager.Instance.GetObject<Guest>(GuestFactory.PoolKey, null);
+            Guest guest = _guestFactory.GetGuest();
             
             guest.Initialize(new Vector3(0, 10, 0));
-            
             guest.transform.position = _customerSpawnPoint.position;
             currentSpawnedGuests.Add(guest);
             

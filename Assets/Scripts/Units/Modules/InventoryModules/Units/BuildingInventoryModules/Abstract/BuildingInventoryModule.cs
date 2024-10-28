@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Modules.DataStructures;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.StatsModules.Abstract;
@@ -23,7 +24,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
         public override int MaxInventorySize => _buildingStatsModule.MaxProductInventorySize;
-        public override IItemController ItemController { get; }
+        public override IItemFactory ItemFactory { get; }
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
@@ -36,14 +37,14 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
         protected BuildingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IItemController itemController,
+            IItemFactory itemFactory,
             IBuildingStatsModule buildingStatsModule,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
-            ItemController = itemController;
+            ItemFactory = itemFactory;
             _buildingStatsModule = buildingStatsModule;
             InputItemKey = inputItemKey;
             OutputItemKey = outputItemKey;
@@ -79,7 +80,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
             {
                 IItem item = PopSpawnedItem();
-                ItemController.ReturnItem(item);
+                ItemFactory.ReturnItem(item);
 
                 if (currentItemReceiver.ReceiveItem(OutputItemKey, item.Transform.position))
                 {

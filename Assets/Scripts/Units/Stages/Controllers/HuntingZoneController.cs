@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
+using Units.Modules.FactoryModules.Units;
 using Units.Stages.Enums;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.HuntingZones;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
-    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemController, IPlayer>
+    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemFactory, IPlayer>
     {
         
     }
@@ -20,17 +21,17 @@ namespace Units.Stages.Controllers
         private readonly Dictionary<IHuntingZone, EActiveStatus> huntingZones = new();
         
         private ICreatureController _creatureController;
-        private IItemController _itemController;
+        private IItemFactory itemFactory;
         private IPlayer _player;
 
         private float _itemPickupRange;
 
         private readonly List<IItem> _droppedItems = new(); 
         
-        public void RegisterReference(ICreatureController creatureController, IItemController itemController, IPlayer player)
+        public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, IPlayer player)
         {
             _creatureController = creatureController;
-            _itemController = itemController;
+            itemFactory = itemController;
             _player = player;
             _itemPickupRange = DataManager.Instance.PlayerData.ItemPickupRange;
             
@@ -55,7 +56,7 @@ namespace Units.Stages.Controllers
             foreach (Transform child in transform)
             {
                 var huntingZone = child.GetComponent<HuntingZone>();
-                huntingZone.RegisterReference(_creatureController, _itemController, item => _droppedItems.Add(item));
+                huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
                 huntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
             }
         }
@@ -75,7 +76,7 @@ namespace Units.Stages.Controllers
                 {
                     if (_player.PlayerInventoryModule.ReceiveItem(item.Type, currentItemPosition))
                     {
-                        _itemController.ReturnItem(item);
+                        itemFactory.ReturnItem(item);
                         _droppedItems.RemoveAt(i);
                     }
                 }

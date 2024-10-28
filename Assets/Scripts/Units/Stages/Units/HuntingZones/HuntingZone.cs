@@ -4,6 +4,7 @@ using Interfaces;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.HuntingZones;
+using Units.Modules.FactoryModules.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Enums;
 using Units.Stages.Units.Creatures.Units;
@@ -15,7 +16,7 @@ using Random = UnityEngine.Random;
 
 namespace Units.Stages.Units.HuntingZones
 {
-    public interface IHuntingZone : IRegisterReference<ICreatureController, IItemController, Action<IItem>>, IInitializable
+    public interface IHuntingZone : IRegisterReference<ICreatureController, IItemFactory, Action<IItem>>, IInitializable
     {
         public EActiveStatus ActiveStatus { get; }
     }
@@ -45,20 +46,20 @@ namespace Units.Stages.Units.HuntingZones
 
         public EActiveStatus ActiveStatus => huntingZoneCustomSetting._baseActiveStatus;
         
-        private readonly HashSet<Monster> currentSpawnedMonsters = new();
+        private readonly HashSet<IMonster> currentSpawnedMonsters = new();
 
         private ICreatureController _creatureController;
-        private IItemController _itemController;
+        private IItemFactory itemFactory;
         
         private Tuple<EMaterialType, EItemType> _itemType;
 
         private HuntingZoneDataSO _huntingZoneDataSo; 
         
-        public void RegisterReference(ICreatureController creatureController, IItemController itemController, Action<IItem> action)
+        public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, Action<IItem> action)
         {
             _huntingZoneDataSo = DataManager.Instance.HuntingZoneData;
             _creatureController = creatureController;
-            _itemController = itemController;
+            itemFactory = itemController;
 
             OnDroppedItem += action;
 
@@ -78,26 +79,26 @@ namespace Units.Stages.Units.HuntingZones
                 
                 if (monster != null)
                 {
-                    monster.transform.position = GetRandomSpawnPoint();
+                    monster.Transform.position = GetRandomSpawnPoint();
                     currentSpawnedMonsters.Add(monster);
                 }
             }
         }
 
-        private void ReturnMonster(Monster monster)
+        private void ReturnMonster(IMonster monster)
         {
             currentSpawnedMonsters.Remove(monster);
 
-            DropItems(monster.transform);
+            DropItems(monster.Transform.position);
             SpawnMonsters();
         }
 
-        private void DropItems(Transform senderTransform) 
+        private void DropItems(Vector3 senderPosition) 
         {
-            Vector3 receiverPosition = GetRandomItemDropPoint(senderTransform.position);
+            Vector3 receiverPosition = GetRandomItemDropPoint(senderPosition);
             
-            IItem item = _itemController.GetItem(_itemType, senderTransform.position);
-            item.Transfer(senderTransform, receiverPosition, () => OnDroppedItem?.Invoke(item));
+            IItem item = itemFactory.GetItem(_itemType, senderPosition);
+            item.Transfer(senderPosition, receiverPosition, () => OnDroppedItem?.Invoke(item));
         }
 
         private Vector3 GetRandomItemDropPoint(Vector3 senderPosition)

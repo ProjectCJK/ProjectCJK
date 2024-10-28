@@ -1,4 +1,5 @@
 using System;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Modules.ProductModules;
@@ -22,17 +23,17 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             Transform senderTransform,
             Transform receiverTransform,
             IKitchenStatsModule inventoryProperty,
-            IItemController itemController,
+            IItemFactory itemFactory,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
-            : base(senderTransform, receiverTransform, itemController, inventoryProperty, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, itemFactory, inventoryProperty, inputItemKey, outputItemKey)
         {
         }
 
         protected override void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
-            ItemController.ReturnItem(item);
+            ItemFactory.ReturnItem(item);
         }
     }
 }
