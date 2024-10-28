@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using AmplifyShaderEditor;
 using Interfaces;
-using Units.Stages.Buildings.Abstract;
-using Units.Stages.Buildings.Units;
-using Units.Stages.Items.Enums;
+using Units.Modules.FactoryModules.Units;
+using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.Buildings.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
-using EBuildingType = Units.Stages.Buildings.Enums.EBuildingType;
+using EBuildingType = Units.Stages.Units.Buildings.Enums.EBuildingType;
 using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IBuildingController : IRegisterReference<IItemController>, IInitializable
+    public interface IBuildingController : IRegisterReference<IItemFactory>, IInitializable
     {
         
     }
@@ -20,22 +22,22 @@ namespace Units.Stages.Controllers
         private readonly Dictionary<EBuildingType, Building> _buildings = new();
         private List<EMaterialType> _materials;
 
-        public void RegisterReference(IItemController itemController)
+        public void RegisterReference(IItemFactory itemFactory)
         {
             foreach (Transform buildingTransform in transform)
             {
                 var building = buildingTransform.GetComponent<Building>();
                 
-                switch (building.BuildingType)
+                switch (building)
                 {
-                    case EBuildingType.Blender:
-                        if (building is IBlender blender) blender.RegisterReference(itemController);
+                    case IKitchen kitchen:
+                        kitchen.RegisterReference(itemFactory);
                         break;
-                    case EBuildingType.Shelf:
-                        if (building is IShelf shelf) shelf.RegisterReference(itemController);
+                    case IStand stand:
+                        stand.RegisterReference(itemFactory);
                         break;
                 }
-                
+
                 _buildings.TryAdd(building.BuildingType, building);
             }
         }

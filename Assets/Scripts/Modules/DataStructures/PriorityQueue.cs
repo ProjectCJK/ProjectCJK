@@ -92,5 +92,31 @@ namespace Modules.DataStructures
             item = default;
             return false;
         }
+        
+        public bool Remove(T item)
+        {
+            foreach (var priority in _queue.Keys.ToList()) // 우선순위를 반복하기 위해 키를 목록으로 복사합니다.
+            {
+                Queue<T> queue = _queue[priority];
+
+                if (queue.Contains(item))
+                {
+                    // 항목을 제거한 새로운 큐를 만들어 기존 큐를 대체
+                    var newQueue = new Queue<T>(queue.Where(x => !x.Equals(item)));
+                    if (newQueue.Count > 0)
+                    {
+                        _queue[priority] = newQueue; // 수정된 큐로 대체
+                    }
+                    else
+                    {
+                        _queue.Remove(priority); // 큐가 비어있으면 우선순위 키 제거
+                    }
+
+                    Count--;
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

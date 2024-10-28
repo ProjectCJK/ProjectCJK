@@ -48,7 +48,7 @@ namespace Modules.DesignPatterns.ObjectPools
             for (var i = 0; i < initialSize; i++)
             {
                 T obj = objectFactory();
-                obj.Create();  // 객체 생성 시 초기화
+                obj.Create();
                 poolQueue.Enqueue(obj);
             }
         }
@@ -97,7 +97,6 @@ namespace Modules.DesignPatterns.ObjectPools
             if (poolQueue.Count < maxSize || isFlexible)
             {
                 obj.ReturnToPool();
-                obj.Reset();
                 poolQueue.Enqueue(obj);
             }
             else

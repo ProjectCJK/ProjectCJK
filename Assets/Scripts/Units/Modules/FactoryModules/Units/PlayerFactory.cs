@@ -1,48 +1,56 @@
 using Externals.Joystick.Scripts.Base;
-using ScriptableObjects.Scripts.ScriptableObjects;
+using Interfaces;
+using Managers;
+using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.FactoryModules.Abstract;
 using Units.Stages.Controllers;
-using Units.Stages.Creatures.Abstract;
-using Units.Stages.Creatures.Units;
+using Units.Stages.Units.Creatures.Abstract;
+using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Units.Modules.FactoryModules.Units
 {
-    public interface ICreatureFactory
+    public interface IPlayerFactory
     {
-        Creature CreateCreature();
+        public PlayerDataSO PlayerDataSo { get; }
+        public Player GetPlayer();
     }
 
-    public class PlayerFactory : Factory, ICreatureFactory
+    public class PlayerFactory : Factory, IPlayerFactory
     {
-        private readonly PlayerDataSo _playerDataSo;
+        public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerData;
+
         private readonly Joystick _joystick;
-        private readonly IItemController _itemController;
+        private readonly IItemFactory _itemFactory;
         private readonly Vector3 _playerSpawnPoint;
         
-        public PlayerFactory(PlayerDataSo playerDataSo, Vector3 playerSpawnPoint, Joystick joystick, IItemController itemController)
+        private Player _player;
+        
+        public PlayerFactory(Vector3 playerSpawnPoint, Joystick joystick, IItemFactory itemFactory)
         {
-            _playerDataSo = playerDataSo;
             _playerSpawnPoint = playerSpawnPoint;
             _joystick = joystick;
-            _itemController = itemController;
+            _itemFactory = itemFactory;
+            
+            InstantiatePlayer();
+        }
+        
+        public Player GetPlayer()
+        {
+            _player.Initialize();
+
+            return _player;
         }
 
-        public Creature CreateCreature()
+        private void InstantiatePlayer()
         {
-            GameObject obj = Object.Instantiate(_playerDataSo.creaturePrefab, _playerSpawnPoint, Quaternion.identity);
-            var baseCreature = obj.GetComponent<Creature>();
+            GameObject obj = Object.Instantiate(PlayerDataSo.prefab.gameObject, _playerSpawnPoint, Quaternion.identity);
             
-            var player = baseCreature as Player;
+            _player = obj.GetComponent<Player>();
             
-            if (player != null)
-            {
-                player.RegisterReference(_playerDataSo, _joystick, _itemController);
-                player.RegisterEventListener();
-            }
-            
-            return baseCreature;
+            if (_player != null) _player.RegisterReference(PlayerDataSo, _joystick, _itemFactory);
         }
     }
 }
