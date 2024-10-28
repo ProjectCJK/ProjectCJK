@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AmplifyShaderEditor;
 using Interfaces;
+using Units.Modules.FactoryModules.Units;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Units;
 using Units.Stages.Units.Items.Enums;
@@ -11,7 +12,7 @@ using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IBuildingController : IRegisterReference<IItemController>, IInitializable
+    public interface IBuildingController : IRegisterReference<IItemFactory>, IInitializable
     {
         
     }
@@ -21,7 +22,7 @@ namespace Units.Stages.Controllers
         private readonly Dictionary<EBuildingType, Building> _buildings = new();
         private List<EMaterialType> _materials;
 
-        public void RegisterReference(IItemController itemController)
+        public void RegisterReference(IItemFactory itemFactory)
         {
             foreach (Transform buildingTransform in transform)
             {
@@ -30,10 +31,10 @@ namespace Units.Stages.Controllers
                 switch (building)
                 {
                     case IKitchen kitchen:
-                        kitchen.RegisterReference(itemController);
+                        kitchen.RegisterReference(itemFactory);
                         break;
                     case IStand stand:
-                        stand.RegisterReference(itemController);
+                        stand.RegisterReference(itemFactory);
                         break;
                 }
 

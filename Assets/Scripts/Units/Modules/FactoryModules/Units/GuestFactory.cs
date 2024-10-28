@@ -11,8 +11,8 @@ namespace Units.Modules.FactoryModules.Units
     public interface IGuestFactory
     {
         public GuestDataSO GuestDataSo { get; }
-        public string PoolKey { get; }
-        public void CreateGuest();
+        public Guest GetGuest();
+        public void ReturnGuest(Guest guest);
     }
     
     public class GuestFactory : Factory, IGuestFactory
@@ -22,10 +22,28 @@ namespace Units.Modules.FactoryModules.Units
         
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
-        
-        public void CreateGuest()
+
+        public GuestFactory()
         {
-            ObjectPoolManager.Instance.CreatePool(((IGuestFactory)this).PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateGuest(GuestDataSo.prefab));
+            CreateGuestPools();
+        }
+
+        public Guest GetGuest()
+        {
+            var guest = ObjectPoolManager.Instance.GetObject<Guest>(PoolKey, null);
+            guest.Initialize(new Vector3(0, 10, 0));
+            
+            return guest;
+        }
+
+        public void ReturnGuest(Guest guest)
+        {
+            ObjectPoolManager.Instance.ReturnObject(PoolKey, guest);   
+        }
+        
+        private void CreateGuestPools()
+        {
+            ObjectPoolManager.Instance.CreatePool(PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateGuest(GuestDataSo.prefab));
         }
         
         private Guest InstantiateGuest(GameObject prefab)
