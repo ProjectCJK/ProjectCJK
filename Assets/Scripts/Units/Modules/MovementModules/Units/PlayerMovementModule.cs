@@ -20,7 +20,7 @@ namespace Units.Modules.MovementModules.Units
         private readonly IMovementProperty _playerStatsModule;
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
-        private readonly CircleCollider2D _playerCollider;
+        private readonly CapsuleCollider2D _playerCollider;
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
         private readonly ParticleSystem _walkParticles;
@@ -39,7 +39,7 @@ namespace Units.Modules.MovementModules.Units
             Joystick joystick,
             Transform spriteTransform)
         {
-            _playerCollider = player.GetComponent<CircleCollider2D>();
+            _playerCollider = player.GetComponent<CapsuleCollider2D>();
             _playerTransform = player.transform;
             _playerStatsModule = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
@@ -116,11 +116,11 @@ namespace Units.Modules.MovementModules.Units
 
         private bool IsColliding(Vector3 move)
         {
-            // CircleCollider2D의 오프셋을 반영하여 충돌 검사 시작 위치 조정
+            // CapsuleCollider2D의 오프셋을 반영하여 충돌 검사 시작 위치 조정
             Vector3 colliderPosition = _playerTransform.position + (Vector3)_playerCollider.offset;
 
             // CircleCast 실행
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, _playerCollider.radius, move.normalized, move.magnitude, collisionLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, _playerCollider.size.y, move.normalized, move.magnitude, collisionLayerMask);
 
             // 레이 시각화
             Color rayColor = hit.collider != null ? Color.red : Color.blue; // 충돌 여부에 따라 색상 변경
@@ -128,7 +128,7 @@ namespace Units.Modules.MovementModules.Units
 #if UNITY_EDITOR
             Debug.DrawRay(colliderPosition, move.normalized * move.magnitude, rayColor);
             // Circle을 시각화하여 캐스트의 범위를 표시
-            DebugDrawCircle(colliderPosition + move.normalized * move.magnitude, _playerCollider.radius, rayColor);
+            DebugDrawCircle(colliderPosition + move.normalized * move.magnitude, _playerCollider.size.y, rayColor);
 #endif
             // 충돌 여부 반환
             return hit.collider != null;
