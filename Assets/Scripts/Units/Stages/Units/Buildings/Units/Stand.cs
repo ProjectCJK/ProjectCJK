@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings;
+using ScriptableObjects.Scripts.Buildings.Units;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Modules.StatsModules.Abstract;
 using Units.Modules.StatsModules.Units;
+using Units.Modules.StatsModules.Units.Buildings;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
@@ -55,35 +58,34 @@ namespace Units.Stages.Units.Buildings.Units
         public override Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
         public override Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
         
-        private IBuildingStatsModule _buildingStatsModule;
+        private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
         private IItemController _itemController;
         private IInteractionTrade _interactionTrade;
 
+        private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
         private StandModel _standModel;
         
-        private BuildingDataSO _buildingDataSo;
-        
         public void RegisterReference(IItemController itemController)
         {
-            _buildingDataSo = DataManager.Instance.StandData;
+            _standDataSo = DataManager.Instance.StandData;
             
-            BuildingType = _buildingDataSo.BuildingType;
+            BuildingType = _standDataSo.BuildingType;
             _itemController = itemController;
             
             InputItemKey = new Tuple<EMaterialType, EItemType>(standCustomSetting.MaterialType, standCustomSetting.InputItemType);
             OutItemKey = new Tuple<EMaterialType, EItemType>(standCustomSetting.MaterialType, standCustomSetting.OutputItemType);
             
-            _buildingStatsModule = new BuildingStatsModule(_buildingDataSo);
-            _standInventoryModule = new StandInventoryModule(standDefaultSetting.standInventory, standDefaultSetting.standInventory, _buildingStatsModule, _itemController, InputItemKey, OutItemKey);
+            _standStatsModule = new StandStatsModule(_standDataSo);
+            _standInventoryModule = new StandInventoryModule(standDefaultSetting.standInventory, standDefaultSetting.standInventory, _standStatsModule, _itemController, InputItemKey, OutItemKey);
 
             _standModel = new StandModel();
             _standViewModel = new StandViewModel(_standModel);
             standDefaultSetting.standView.BindViewModel(_standViewModel);
 
             _interactionTrade = standDefaultSetting.InteractionTrade;
-            _interactionTrade.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, InputItemKey);
+            _interactionTrade.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, InputItemKey);
 
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }

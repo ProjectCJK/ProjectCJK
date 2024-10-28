@@ -10,6 +10,11 @@ namespace Units.Stages.Units.Creatures.Abstract
         public Transform Transform { get; set; }
     }
     
+    public interface ICreatureTypeProperty
+    {
+        public ECreatureType Type { get; }
+    }
+    
     public abstract class Creature : MonoBehaviour, IBaseCreature
     {
         [SerializeField] protected Transform spriteTransform;

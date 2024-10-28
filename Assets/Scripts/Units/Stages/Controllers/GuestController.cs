@@ -1,17 +1,27 @@
 using Interfaces;
+using Units.Modules.FactoryModules.Units;
 
 namespace Units.Stages.Controllers
 {
-    public interface IGuestController : IRegisterReference
+    public interface IGuestController : IInitializable
     {
+        public IGuestFactory GuestFactory { get; }
         
     }
     
     public class GuestController : IGuestController
     {
-        public void RegisterReference()
+        public IGuestFactory GuestFactory { get; }
+        
+        public GuestController()
         {
-            throw new System.NotImplementedException();
+            GuestFactory = new GuestFactory();
+            GuestFactory.CreateGuest();
+        }
+
+        public void Initialize()
+        {
+            // ObjectPoolManager.Instance.GetObject(GuestFactory.PoolKey, null);
         }
     }
 }

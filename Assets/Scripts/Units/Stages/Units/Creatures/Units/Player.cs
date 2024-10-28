@@ -2,6 +2,7 @@ using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.BattleModules;
 using Units.Modules.CollisionModules.Units;
 using Units.Modules.FSMModules.Units;
@@ -52,7 +53,7 @@ namespace Units.Stages.Units.Creatures.Units
 
             creatureStateMachine = new CreatureStateMachine(this);
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
-            _playerBattleModule = new PlayerBattleModule(_playerDataSo, joystick, transform, _weapon);
+            _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
             _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemController, CreatureType);
             _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, creatureStateMachine, joystick, spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule();
@@ -79,7 +80,7 @@ namespace Units.Stages.Units.Creatures.Units
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 var tempKey = new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Material);
-                _playerInventoryModule.ReceiveItemWithDestroy(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItem(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }      
 #endif
             

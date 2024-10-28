@@ -21,7 +21,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
     public interface IInventoryProperty
     {
-        int MaxInventorySize { get; }
+        int MaxProductInventorySize { get; }
     }
 
     public abstract class InventoryModule : IInventoryModule
@@ -49,32 +49,28 @@ namespace Units.Modules.InventoryModules.Abstract
         /// <summary>
         /// 내부적으로 아이템을 처리하는 메서드. 콜백을 사용하여 아이템이 수신된 후의 추가 작업을 정의.
         /// </summary>
-        private bool ReceiveItemInternal(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Action<IItem> onItemReceived)
+        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
         {
             if (!CanReceiveItem()) return false;
 
             IItem item = ItemController.GetItem(inputItemKey, currentSenderPosition);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
-            item.Transfer(currentSenderPosition, ReceiverTransform.position, () =>
-            {
-                onItemReceived?.Invoke(item); // 아이템이 전달되었을 때 호출할 콜백
-            });
+            item.Transfer(currentSenderPosition, ReceiverTransform.position, () => OnItemReceived(inputItemKey, item));
 
             return true;
         }
         
-        private bool ReceiveItemInternal(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition, Action<IItem> onItemReceived)
+        protected abstract void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item);
+        
+        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
         {
             if (!CanReceiveItem()) return false;
 
             IItem item = ItemController.GetItem(inputItemKey, currentSenderPosition);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
-            item.Transfer(currentSenderPosition, targetReceiverPosition, () =>
-            {
-                onItemReceived?.Invoke(item); // 아이템이 전달되었을 때 호출할 콜백
-            });
+            item.Transfer(currentSenderPosition, targetReceiverPosition, () => OnItemReceived(inputItemKey, item));
 
             return true;
         }
@@ -82,44 +78,27 @@ namespace Units.Modules.InventoryModules.Abstract
         /// <summary>
         /// 아이템을 받은 후 파괴하는 메서드
         /// </summary>
-        public bool ReceiveItemWithDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
+        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
         {
-            return ReceiveItemInternal(inputItemKey, currentSenderPosition, item =>
-            {
-                AddItem(inputItemKey);
-                ItemController.ReturnItem(item);
-            });
+            return TransferItem(inputItemKey, currentSenderPosition);
         }
         
-        public bool ReceiveItemWithDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
+        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
         {
-            return ReceiveItemInternal(inputItemKey, currentSenderPosition, targetReceiverPosition, item =>
-            {
-                AddItem(inputItemKey);
-                ItemController.ReturnItem(item);
-            });
-        }
-
-        /// <summary>
-        /// 아이템을 받은 후 파괴하지 않는 메서드
-        /// </summary>
-        public bool ReceiveItemWithoutDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
-        {
-            return ReceiveItemInternal(inputItemKey, currentSenderPosition, item =>
-            {
-                AddItem(inputItemKey);
-                PushSpawnedItem(item);
-            });
+            return TransferItem(inputItemKey, currentSenderPosition, targetReceiverPosition);
         }
         
-        public bool ReceiveItemWithoutDestroy(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
-        {
-            return ReceiveItemInternal(inputItemKey, currentSenderPosition, targetReceiverPosition, item =>
-            {
-                AddItem(inputItemKey);
-                PushSpawnedItem(item);
-            });
-        }
+        // public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
+        // {
+        //     return TransferItem(inputItemKey, currentSenderPosition, targetReceiverPosition, item =>
+        //     {
+        //         AddItem(inputItemKey);
+        //         ItemController.ReturnItem(item);
+        //         
+        //         AddItem(inputItemKey);
+        //         PushSpawnedItem(item);
+        //     });
+        // }
 
         /// <summary>
         /// 아이템을 제거하는 메서드

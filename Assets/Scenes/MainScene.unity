@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 3
     agentTypeID: 0
-    agentRadius: 0.5
-    agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentRadius: 1
+    agentHeight: 1
+    agentSlope: 0
+    agentClimb: 0
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.33333334
     manualTileSize: 0
     tileSize: 256
     buildHeightMesh: 0
@@ -170,8 +170,9 @@ MonoBehaviour:
   ItemData: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
   PlayerData: {fileID: 11400000, guid: a5944d6208ab5477a82d2f6b3fe552e0, type: 2}
   MonsterData: {fileID: 11400000, guid: cd352aa2e162346a2a7e480ac5f09e92, type: 2}
-  KitchenData: {fileID: 11400000, guid: 7f7604cdb21da4a05953f98a868747d5, type: 2}
-  StandData: {fileID: 11400000, guid: 1f7da2cd400ff4f5087b1da363170841, type: 2}
+  GuestData: {fileID: 11400000, guid: d93aeec5af232420bb056f0bd621cd83, type: 2}
+  KitchenData: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
+  StandData: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
   HuntingZoneData: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
 --- !u!1 &910518067
 GameObject:

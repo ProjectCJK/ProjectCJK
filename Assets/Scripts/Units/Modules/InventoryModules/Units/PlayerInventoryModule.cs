@@ -17,22 +17,20 @@ namespace Units.Modules.InventoryModules.Units
 {
     public interface IPlayerInventoryModule : IInventoryModule, ICreatureItemReceiver
     {
-         
     }
 
     public class PlayerInventoryModule : InventoryModule, IPlayerInventoryModule
     {
         public ECreatureType CreatureType { get; }
         public override IItemController ItemController { get; }
-        public override int MaxInventorySize => _inventoryProperty.MaxInventorySize;
+        public override int MaxInventorySize => _inventoryProperty.MaxProductInventorySize;
 
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
-
+        
+        private readonly HashSet<IInteractionTrade> _interactionTradeZones = new();
         private readonly IInventoryProperty _inventoryProperty;
-        private readonly IItemController _itemController;
 
-        private IInteractionTrade _targetInteractionZone;
         private IPlayerInventoryModule _playerInventoryModuleImplementation;
 
         public PlayerInventoryModule(
@@ -53,37 +51,55 @@ namespace Units.Modules.InventoryModules.Units
         {
             Inventory.Clear();
         }
-        
+
         protected override void SendItem()
         {
-            if (!IsReadyToSend()) return;
+            if (!IsReadyToSend() || _interactionTradeZones.Count <= 0) return;
             
-            if (_targetInteractionZone == null) return;
-
-            var targetInputItemKey = _targetInteractionZone.InputItemKey;
-            
-            if (Inventory.TryGetValue(targetInputItemKey, out var OutputItemCount) && OutputItemCount > 0)
+            foreach (IInteractionTrade targetInteractionZone in _interactionTradeZones.ToList())
             {
-                if (_targetInteractionZone.ReceiveItemWithDestroy(targetInputItemKey, SenderTransform.position))
+                ProcessInteractionZone(targetInteractionZone);
+            }
+
+            SetLastSendTime();
+        }
+
+        private void ProcessInteractionZone(IInteractionTrade targetInteractionZone)
+        {
+            if (targetInteractionZone == null) return;
+
+            Tuple<EMaterialType, EItemType> targetInputItemKey = targetInteractionZone.InputItemKey;
+
+            if (Inventory.TryGetValue(targetInputItemKey, out var outputItemCount) && outputItemCount > 0)
+            {
+                if (targetInteractionZone.ReceiveItem(targetInputItemKey, SenderTransform.position))
                 {
                     RemoveItem(targetInputItemKey);
                 }
             }
-            
-            SetLastSendTime();
+        }
+
+        protected override void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item)
+        {
+            AddItem(inputItemKey);
+            ItemController.ReturnItem(item);
         }
 
         public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected)
         {
             if (isConnected)
             {
-                _targetInteractionZone = interactionZone;
-                _targetInteractionZone.RegisterItemReceiver(this);
+                if (_interactionTradeZones.Add(interactionZone))
+                {
+                    interactionZone.RegisterItemReceiver(this);
+                }
             }
-            else if (_targetInteractionZone != null)
+            else
             {
-                _targetInteractionZone.UnregisterItemReceiver(this);
-                _targetInteractionZone = null;
+                if (_interactionTradeZones.Remove(interactionZone))
+                {
+                    interactionZone.UnregisterItemReceiver(this);
+                }
             }
         }
     }

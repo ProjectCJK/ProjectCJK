@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ScriptableObjects.Scripts.HuntingZones
 {
-    [CreateAssetMenu(fileName = "New HuntingZone Data SO", menuName = "Datas/HuntingZone Data")]
+    [CreateAssetMenu(fileName = "So_HuntingZone", menuName = "Datas/Levels/HuntingZone")]
     public class HuntingZoneDataSO : ScriptableObject
     {
         [Header("### HuntingZone 기본 세팅 ###")]

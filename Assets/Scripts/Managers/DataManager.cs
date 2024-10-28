@@ -1,6 +1,8 @@
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings;
+using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures;
+using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.HuntingZones;
 using ScriptableObjects.Scripts.Items;
 
@@ -12,8 +14,8 @@ namespace Managers
         public PlayerDataSO PlayerData;
         public MonsterDataSO MonsterData;
         public GuestDataSO GuestData;
-        public BuildingDataSO KitchenData;
-        public BuildingDataSO StandData;
+        public KitchenDataSO KitchenData;
+        public StandDataSO StandData;
         public HuntingZoneDataSO HuntingZoneData;
     }
 }

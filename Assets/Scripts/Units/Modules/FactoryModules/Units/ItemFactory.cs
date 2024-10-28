@@ -24,7 +24,7 @@ namespace Units.Modules.FactoryModules.Units
 
         public void CreateItem()
         {
-            ObjectPoolManager.Instance.CreatePool(((IItemFactory)this).PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateItem(ItemDataSo.prefab));
+            ObjectPoolManager.Instance.CreatePool(PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateItem(ItemDataSo.prefab));
         }
         
         private IItem InstantiateItem(GameObject prefab)
