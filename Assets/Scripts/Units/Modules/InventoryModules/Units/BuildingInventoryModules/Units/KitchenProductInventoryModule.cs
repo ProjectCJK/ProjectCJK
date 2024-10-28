@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Modules.StatsModules.Units;
@@ -21,10 +22,10 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             Transform senderTransform,
             Transform receiverTransform,
             IKitchenStatsModule kitchenStatsModule,
-            IItemController itemController,
+            IItemFactory itemFactory,
             Tuple<EMaterialType, EItemType> inputItemKey,
             Tuple<EMaterialType, EItemType> outputItemKey)
-            : base(senderTransform, receiverTransform, itemController, kitchenStatsModule, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
         }
 

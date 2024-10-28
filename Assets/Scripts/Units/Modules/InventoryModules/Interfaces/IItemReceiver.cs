@@ -11,7 +11,6 @@ namespace Units.Modules.InventoryModules.Interfaces
         public Transform ReceiverTransform { get; }
 
         public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition);
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition);
 
         public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey);
         public bool CanReceiveItem();

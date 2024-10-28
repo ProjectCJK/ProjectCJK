@@ -5,6 +5,7 @@ using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.BattleModules;
 using Units.Modules.CollisionModules.Units;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units;
@@ -19,7 +20,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IPlayer : IBaseCreature, IRegisterReference<PlayerDataSO, Joystick, IItemController>, IInitializable
+    public interface IPlayer : IBaseCreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable
     {
         public IItemReceiver PlayerInventoryModule { get; }
     }
@@ -41,20 +42,20 @@ namespace Units.Stages.Units.Creatures.Units
         private IPlayerBattleModule _playerBattleModule;
         private IPlayerMovementModule _playerMovementModule;
         private IPlayerCollisionModule _playerCollisionModule;
-        private IItemController _itemController;
+        private IItemFactory _itemFactory;
         private PlayerDataSO _playerDataSo;
 
-        public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemController itemController)
+        public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemFactory itemFactory)
         {
             _playerDataSo = playerDataSo;
-            _itemController = itemController;
+            _itemFactory = itemFactory;
             
             Animator = spriteTransform.GetComponent<Animator>();
 
             creatureStateMachine = new CreatureStateMachine(this);
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
-            _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemController, CreatureType);
+            _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemFactory, CreatureType);
             _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, creatureStateMachine, joystick, spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule();
 

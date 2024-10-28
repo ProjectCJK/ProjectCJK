@@ -32,19 +32,14 @@ namespace Units.Stages.Units.Items.Modules
         }
 
         // pointB가 고정된 위치일 경우
-        public void Transfer(Transform pointA, Vector3 pointB, Action onArrived)
+        public void Transfer(Vector3 pointA, Transform pointB, Action onArrived)
         {
-            InitializeCommon(pointA.position, pointB, null, onArrived);
+            InitializeCommon(pointA, pointB.position, pointB, onArrived);
         }
 
         public void Transfer(Vector3 pointA, Vector3 pointB, Action onArrived)
         {
             InitializeCommon(pointA, pointB, null, onArrived);
-        }
-
-        public void Transfer(Transform pointATransform, Transform pointBTransform, Action onArrived)
-        {
-            InitializeCommon(pointATransform.position, pointBTransform.position, pointBTransform, onArrived);
         }
 
         private void InitializeCommon(Vector3 pointA, Vector3 pointB, Transform pointBTransform, Action onArrived)

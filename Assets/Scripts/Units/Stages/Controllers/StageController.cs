@@ -1,3 +1,4 @@
+using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using ScriptableObjects.Scripts.Creatures;
@@ -20,25 +21,34 @@ namespace Units.Stages.Controllers
         [SerializeField] private BuildingController _buildingController;
         [SerializeField] private HuntingZoneController _huntingZoneController;
         
-        public Player Player => _creatureController.Player;
+        public Player Player => _creatureController.GetPlayer();
         
-        private IItemController _itemController;
         private IItemFactory _itemFactory;
         
         public void RegisterReference(Joystick joystick)
         {
-            _itemController = new ItemController(new ItemFactory());
+            _itemFactory = new ItemFactory();
             
-            _creatureController.RegisterReference(joystick, _itemController);
-            _buildingController.RegisterReference(_itemController);
-            _huntingZoneController.RegisterReference(_creatureController, _itemController, _creatureController.Player);
+            _creatureController.RegisterReference(joystick, _itemFactory);
+            _buildingController.RegisterReference(_itemFactory);
+            _huntingZoneController.RegisterReference(_creatureController, _itemFactory, Player);
         }
         
         public void Initialize()
         {
-            _creatureController.Initialize();
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // TODO : Cheat Code
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                _creatureController.GetGuest(Player.transform);
+            }      
+#endif
         }
     }
 }

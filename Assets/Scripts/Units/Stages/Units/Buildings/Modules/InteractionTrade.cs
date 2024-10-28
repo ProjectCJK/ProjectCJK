@@ -47,12 +47,7 @@ namespace Units.Stages.Units.Buildings.Modules
 
         public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
         {
-            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
-        }
-
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
-        {
-            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition, ReceiverTransform.transform.position);
+            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition);
         }
 
         public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey) => _buildingReceiverInventoryModule.HasMatchingItem(InventoryKey);

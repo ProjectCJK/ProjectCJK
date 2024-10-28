@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
@@ -13,7 +14,7 @@ namespace Units.Modules.InventoryModules.Abstract
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
         event Action OnInventoryCountChanged;
-        IItemController ItemController { get; }
+        IItemFactory ItemFactory { get; }
         int MaxInventorySize { get; }
         int CurrentInventorySize { get; }
         void Update();
@@ -28,7 +29,7 @@ namespace Units.Modules.InventoryModules.Abstract
     {
         public event Action OnInventoryCountChanged;
 
-        public abstract IItemController ItemController { get; }
+        public abstract IItemFactory ItemFactory { get; }
         public abstract int MaxInventorySize { get; }
         public abstract Transform SenderTransform { get; }
         public abstract Transform ReceiverTransform { get; }
@@ -45,60 +46,25 @@ namespace Units.Modules.InventoryModules.Abstract
         public void Update() => TrySendItem();
 
         protected abstract void SendItem();
-
-        /// <summary>
-        /// 내부적으로 아이템을 처리하는 메서드. 콜백을 사용하여 아이템이 수신된 후의 추가 작업을 정의.
-        /// </summary>
-        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
-        {
-            if (!CanReceiveItem()) return false;
-
-            IItem item = ItemController.GetItem(inputItemKey, currentSenderPosition);
-
-            // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
-            item.Transfer(currentSenderPosition, ReceiverTransform.position, () => OnItemReceived(inputItemKey, item));
-
-            return true;
-        }
         
         protected abstract void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item);
         
-        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
+        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
+        {
+            return TransferItem(inputItemKey, currentSenderPosition, ReceiverTransform);
+        }
+        
+        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Transform targetReceiverPosition)
         {
             if (!CanReceiveItem()) return false;
 
-            IItem item = ItemController.GetItem(inputItemKey, currentSenderPosition);
+            IItem item = ItemFactory.GetItem(inputItemKey, currentSenderPosition);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
             item.Transfer(currentSenderPosition, targetReceiverPosition, () => OnItemReceived(inputItemKey, item));
 
             return true;
         }
-
-        /// <summary>
-        /// 아이템을 받은 후 파괴하는 메서드
-        /// </summary>
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
-        {
-            return TransferItem(inputItemKey, currentSenderPosition);
-        }
-        
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
-        {
-            return TransferItem(inputItemKey, currentSenderPosition, targetReceiverPosition);
-        }
-        
-        // public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Vector3 targetReceiverPosition)
-        // {
-        //     return TransferItem(inputItemKey, currentSenderPosition, targetReceiverPosition, item =>
-        //     {
-        //         AddItem(inputItemKey);
-        //         ItemController.ReturnItem(item);
-        //         
-        //         AddItem(inputItemKey);
-        //         PushSpawnedItem(item);
-        //     });
-        // }
 
         /// <summary>
         /// 아이템을 제거하는 메서드
@@ -118,7 +84,7 @@ namespace Units.Modules.InventoryModules.Abstract
         /// <summary>
         /// 아이템을 추가하는 메서드
         /// </summary>
-        public void AddItem(Tuple<EMaterialType, EItemType> itemKey)
+        protected void AddItem(Tuple<EMaterialType, EItemType> itemKey)
         {
             if (!Inventory.TryAdd(itemKey, 1))
             {

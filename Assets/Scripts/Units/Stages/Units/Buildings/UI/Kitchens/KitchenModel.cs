@@ -12,11 +12,12 @@ namespace Units.Stages.Units.Buildings.UI.Kitchens
         public int RemainedMaterialCount
         {
             get => _remainedMaterialCount;
-            set
+            
+            private set
             {
                 if (SetField(ref _remainedMaterialCount, value)) // 값이 변경되면 PropertyChanged 호출
                 {
-                    OnPropertyChanged(nameof(RemainedMaterialCount));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -25,11 +26,12 @@ namespace Units.Stages.Units.Buildings.UI.Kitchens
         public float ElapsedTime
         {
             get => _elapsedTime;
-            set
+            
+            private set
             {
                 if (SetField(ref _elapsedTime, value))
                 {
-                    OnPropertyChanged(nameof(ElapsedTime));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -38,11 +40,12 @@ namespace Units.Stages.Units.Buildings.UI.Kitchens
         public float ProductLeadTime
         {
             get => _productLeadTime;
-            set
+
+            private set
             {
                 if (SetField(ref _productLeadTime, value))
                 {
-                    OnPropertyChanged(nameof(ProductLeadTime));
+                    OnPropertyChanged();
                 }
             }
         }

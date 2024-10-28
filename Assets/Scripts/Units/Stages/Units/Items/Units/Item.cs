@@ -12,8 +12,7 @@ namespace Units.Stages.Units.Items.Units
     public interface IItemTransfer
     {
         public void Transfer(Vector3 pointA, Vector3 pointB, Action onArrived);
-        public void Transfer(Transform pointA, Transform pointB, Action onArrived);
-        public void Transfer(Transform pointA, Vector3 pointB, Action onArrived);
+        public void Transfer(Vector3 pointA, Transform pointB, Action onArrived);
     }
     
     public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<Tuple<EMaterialType, EItemType>, Sprite, Vector3>, IPoolable, IItemTransfer
@@ -51,14 +50,9 @@ namespace Units.Stages.Units.Items.Units
             _bezierCurveMover.Transfer(pointA, pointB, onArrived);
         }
 
-        public void Transfer(Transform pointATransform, Transform pointBTransform, Action onArrived)
+        public void Transfer(Vector3 pointA, Transform pointBTransform, Action onArrived)
         {
-            _bezierCurveMover.Transfer(pointATransform, pointBTransform, onArrived);
-        }
-
-        public void Transfer(Transform pointA, Vector3 pointB, Action onArrived)
-        {
-            _bezierCurveMover.Transfer(pointA, pointB, onArrived);
+            _bezierCurveMover.Transfer(pointA, pointBTransform, onArrived);
         }
 
         private void Update()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.StatsModules.Units;
@@ -22,7 +23,7 @@ namespace Units.Modules.InventoryModules.Units
     public class PlayerInventoryModule : InventoryModule, IPlayerInventoryModule
     {
         public ECreatureType CreatureType { get; }
-        public override IItemController ItemController { get; }
+        public override IItemFactory ItemFactory { get; }
         public override int MaxInventorySize => _inventoryProperty.MaxProductInventorySize;
 
         public override Transform SenderTransform { get; }
@@ -37,13 +38,13 @@ namespace Units.Modules.InventoryModules.Units
             Transform senderTransform,
             Transform receiverTransform,
             IInventoryProperty inventoryProperty,
-            IItemController itemController,
+            IItemFactory itemController,
             ECreatureType creatureType)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             _inventoryProperty = inventoryProperty;
-            ItemController = itemController;
+            ItemFactory = itemController;
             CreatureType = creatureType;
         }
 
@@ -82,7 +83,7 @@ namespace Units.Modules.InventoryModules.Units
         protected override void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
-            ItemController.ReturnItem(item);
+            ItemFactory.ReturnItem(item);
         }
 
         public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected)

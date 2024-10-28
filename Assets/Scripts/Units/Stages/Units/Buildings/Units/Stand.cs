@@ -4,6 +4,7 @@ using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.StatsModules.Abstract;
 using Units.Modules.StatsModules.Units;
@@ -18,7 +19,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Buildings.Units
 {
-    public interface IStand : IRegisterReference<IItemController>
+    public interface IStand : IRegisterReference<IItemFactory>
     {
         
     }
@@ -60,25 +61,25 @@ namespace Units.Stages.Units.Buildings.Units
         
         private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
-        private IItemController _itemController;
+        private IItemFactory _itemFactory;
         private IInteractionTrade _interactionTrade;
 
         private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
         private StandModel _standModel;
         
-        public void RegisterReference(IItemController itemController)
+        public void RegisterReference(IItemFactory itemController)
         {
             _standDataSo = DataManager.Instance.StandData;
             
             BuildingType = _standDataSo.BuildingType;
-            _itemController = itemController;
+            _itemFactory = itemController;
             
             InputItemKey = new Tuple<EMaterialType, EItemType>(standCustomSetting.MaterialType, standCustomSetting.InputItemType);
             OutItemKey = new Tuple<EMaterialType, EItemType>(standCustomSetting.MaterialType, standCustomSetting.OutputItemType);
             
             _standStatsModule = new StandStatsModule(_standDataSo);
-            _standInventoryModule = new StandInventoryModule(standDefaultSetting.standInventory, standDefaultSetting.standInventory, _standStatsModule, _itemController, InputItemKey, OutItemKey);
+            _standInventoryModule = new StandInventoryModule(standDefaultSetting.standInventory, standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutItemKey);
 
             _standModel = new StandModel();
             _standViewModel = new StandViewModel(_standModel);
