@@ -47,11 +47,6 @@ namespace Units.Stages.Units.Creatures.Units
             _guestMovementModule.Update();
         }
 
-        private void FixedUpdate()
-        {
-            _guestMovementModule.FixedUpdate();
-        }
-
         public void Create()
         {
             SetActive(false);
