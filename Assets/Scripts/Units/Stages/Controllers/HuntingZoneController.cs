@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
@@ -7,13 +8,15 @@ using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using Unity.VisualScripting;
 using UnityEngine;
+using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemFactory, IPlayer>
+    public interface IHuntingZoneController : IRegisterReference<ICreatureController, IItemFactory, IPlayer>, IInitializable
     {
-        
+        public void HandleOnRegisterPlayer(IPlayer player, bool register);
     }
     
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
@@ -81,6 +84,11 @@ namespace Units.Stages.Controllers
                     }
                 }
             }
+        }
+        
+        public void HandleOnRegisterPlayer(IPlayer player, bool register)
+        {
+            _player = register ? player : null;
         }
     }
 }

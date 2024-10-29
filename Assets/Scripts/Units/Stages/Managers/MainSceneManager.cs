@@ -15,7 +15,6 @@ namespace Units.Stages.Managers
         [SerializeField] private CameraController _cameraController;
         
         private IStageController _stageController;
-
         
         private Joystick _joystick;
 
@@ -48,7 +47,7 @@ namespace Units.Stages.Managers
         
         private void RegisterCameraToPlayer()
         {
-            _cameraController.RegisterReference(_stageController.Player.transform);
+            _cameraController.RegisterReference(_stageController.PlayerTransform);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Interfaces;
+using Modules;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
@@ -27,25 +28,31 @@ namespace Units.Stages.Units.Creatures.Units
         private event Action OnReturnMonster;
         
         public override ECreatureType CreatureType => _monsterStatsModule.Type;
-        public override Animator Animator { get; protected set; }
+        public override Animator Animator => _animator;
         public override Transform Transform => transform;
+
         protected override CreatureStateMachine creatureStateMachine { get; set; }
         
         private IMonsterStatsModule _monsterStatsModule;
         private IMonsterHealthModule _monsterHealthModule;
         private IMonsterMovementModule _monsterMovementModule;
+        private IDamageFlashModule _damageFlashModule;
         
         private SpriteRenderer _spriteRenderer;
         private EMaterialType _materialType;
+        private Animator _animator;
 
         public void RegisterReference(MonsterDataSO monsterDataSo)
         {
             _spriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
-
+            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
+            
             creatureStateMachine = new CreatureStateMachine(this);
             _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
             _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
             _monsterMovementModule = new MonsterMovementModule(_monsterStatsModule);
+            
+            _damageFlashModule.RegisterReference();
         }
         
         public void Initialize(Sprite monsterSprite, Action action)
@@ -90,6 +97,10 @@ namespace Units.Stages.Units.Creatures.Units
             if (_monsterHealthModule.TakeDamage(damage))
             {
                 OnReturnMonster?.Invoke();
+            }
+            else
+            {
+                _damageFlashModule.ActivateEffects();
             }
         }
     }

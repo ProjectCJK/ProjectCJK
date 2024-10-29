@@ -23,9 +23,9 @@ namespace Units.Modules.FactoryModules.Units
     public class MonsterFactory : Factory, IMonsterFactory
     {
         public MonsterDataSO MonsterDataSo { get; } = DataManager.Instance.MonsterData;
-        public string PoolKey => "MonsterPool";
         public Dictionary<EMaterialType, Sprite> MonsterSprites { get; } = new();
 
+        private static string PoolKey => "MonsterPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
@@ -47,7 +47,12 @@ namespace Units.Modules.FactoryModules.Units
 
             return monster;
         }
-
+        
+        private void CreateMonsterPools()
+        {
+            ObjectPoolManager.Instance.CreatePool(PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateMonster(MonsterDataSo.prefab));
+        }
+        
         private IMonster InstantiateMonster(GameObject prefab)
         {
             GameObject obj = Object.Instantiate(prefab);
@@ -56,11 +61,6 @@ namespace Units.Modules.FactoryModules.Units
             monster.RegisterReference(MonsterDataSo);
             
             return monster;
-        }
-        
-        private void CreateMonsterPools()
-        {
-            ObjectPoolManager.Instance.CreatePool(PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateMonster(MonsterDataSo.prefab));
         }
         
         private void CreateSpriteDictionary()
