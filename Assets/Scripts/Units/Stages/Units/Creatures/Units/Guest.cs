@@ -4,10 +4,12 @@ using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
+using Units.Modules.CollisionModules.Units;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.MovementModules.Units;
 using Units.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
@@ -15,9 +17,9 @@ using UnityEngine.AI;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IGuest : IBaseCreature, IPoolable, IRegisterReference<GuestDataSO>, IInitializable<Action>
+    public interface IGuest : IBaseCreature, IPoolable, IRegisterReference<GuestDataSO>, IInitializable<Vector3, Action>
     {
-        public void SetDestinations(Vector3 startPosition, List<Transform> destinations);
+        public void SetDestinations(List<Transform> destinations);
     }
     
     public class Guest : Creature, IGuest
@@ -32,6 +34,10 @@ namespace Units.Stages.Units.Creatures.Units
         
         private IGuestStatModule _guestStatModule;
         private IGuestMovementModule _guestMovementModule;
+        private IGuestCollisionModule _guestCollisionModule;
+
+        private List<Transform> _destinations;
+        private int _destinationIndex;
         
         private Animator _animator;
 
@@ -43,16 +49,23 @@ namespace Units.Stages.Units.Creatures.Units
             
             _guestStatModule = new GuestStatModule(guestDataSo);
             _guestMovementModule = new GuestMovementModule(this, _guestStatModule);
+            _guestCollisionModule = new GuestCollisionModule(_guestStatModule);
+
+            _guestCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
         }
         
-        public void Initialize(Action action)
+        public void Initialize(Vector3 startPosition, Action action)
         {
+            _destinationIndex = 0;
+            transform.position = startPosition;
             OnReturnGuest = action;
+            
+            _guestMovementModule.Initialize(startPosition);
         }
 
-        public void SetDestinations(Vector3 startPosition, List<Transform> destinations)
+        public void SetDestinations(List<Transform> destinations)
         {
-            _guestMovementModule.Initialize(startPosition, destinations);
+            _destinations = destinations;
         }
 
         private void FixedUpdate()
@@ -78,6 +91,11 @@ namespace Units.Stages.Units.Creatures.Units
         private void SetActive(bool value)
         {
             if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
+        }
+
+        private bool HandleOnTriggerTradeZone(Transform targetTransform, bool connected)
+        {
+            return true;
         }
     }
 }

@@ -26,9 +26,20 @@ namespace Units.Modules.CollisionModules.Abstract
         private const string tradeZoneLayer = "TradeZone";
         private const string upgradeZoneLayer = "UpgradeZone";
         private const string HuntingZoneLayer = "HuntingZone";
+
+        private readonly int tradeZoneLayerMask = LayerMask.NameToLayer(tradeZoneLayer);
+        private readonly int upgradeZoneLayerMask = LayerMask.NameToLayer(upgradeZoneLayer);
+        private readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
         
-        protected readonly int tradeZoneLayerMask = LayerMask.NameToLayer(tradeZoneLayer);
-        protected readonly int upgradeZoneLayerMask = LayerMask.NameToLayer(upgradeZoneLayer);
-        protected readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
+        protected ECollisionType CheckLayer(int layer)
+        {
+            return layer switch
+            {
+                _ when layer == tradeZoneLayerMask => ECollisionType.TradeZone,
+                _ when layer == upgradeZoneLayerMask => ECollisionType.UpgradeZone,
+                _ when layer == huntingZoneLayerMask => ECollisionType.HuntingZone,
+                _ => ECollisionType.None
+            };
+        }
     }
 }

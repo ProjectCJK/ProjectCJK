@@ -30,17 +30,22 @@ namespace Units.Modules.FactoryModules.Units
             CreateGuestPools();
         }
 
-        public IGuest GetGuest(Action<IGuest> onReturn = null)
+        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn = null)
         {
             var guest = ObjectPoolManager.Instance.GetObject<IGuest>(PoolKey, null);
             
-            guest.Initialize(() =>
+            guest.Initialize(startPosition, () =>
             {
                 ObjectPoolManager.Instance.ReturnObject(PoolKey, guest);
                 onReturn?.Invoke(guest);
             });
             
             return guest;
+        }
+
+        public IGuest GetGuest(Action<IGuest> onReturn)
+        {
+            throw new NotImplementedException();
         }
 
         public void ReturnGuest(Guest guest)

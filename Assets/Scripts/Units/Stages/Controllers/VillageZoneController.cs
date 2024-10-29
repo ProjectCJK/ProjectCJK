@@ -52,9 +52,8 @@ namespace Units.Stages.Controllers
             if (Input.GetKeyDown(KeyCode.E))
             {
                 IGuest guest = _creatureController.GetGuest(ReturnGuest);
-                guest.Initialize(() => ReturnGuest(guest));
-                guest.SetDestinations(_guestSpawnPoint.position, GetRandomDestination());
                 guest.Transform.position = _guestSpawnPoint.position;
+                guest.SetDestinations(GetRandomDestination());
                 
                 currentSpawnedGuests.Add(guest);
             }
