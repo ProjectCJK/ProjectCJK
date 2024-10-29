@@ -42,7 +42,7 @@ namespace Units.Modules.MovementModules.Units
             SetDestination(destination);
         }
 
-        public void SetDestination(Vector3 destination)
+        private void SetDestination(Vector3 destination)
         {
             // 목적지를 NavMesh.SamplePosition을 사용해 설정
             if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 10f, NavMesh.AllAreas))
