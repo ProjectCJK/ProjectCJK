@@ -538,7 +538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &729906670
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -893,7 +893,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057649932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.48, y: 1.09, z: 0}
+  m_LocalPosition: {x: -0.748, y: 0.843, z: 0}
   m_LocalScale: {x: 0.26, y: 0.26, z: 0.26}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1637,32 +1637,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2138629938 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5258536663029941406, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
-  m_PrefabInstance: {fileID: 3719346357935683703}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &2138629940
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2138629938}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a76fe46916d9cb64e9a33d0c16d00393, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &2067415523607524564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1674,10 +1648,6 @@ PrefabInstance:
     - target: {fileID: 446992618960586422, guid: 16125c2450190aa409feac670ffc773e, type: 3}
       propertyPath: m_Name
       value: Sprite_Cucumber_Boss
-      objectReference: {fileID: 0}
-    - target: {fileID: 4142788390924215386, guid: 16125c2450190aa409feac670ffc773e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.291
       objectReference: {fileID: 0}
     - target: {fileID: 5578464288887727691, guid: 16125c2450190aa409feac670ffc773e, type: 3}
       propertyPath: m_RootOrder
@@ -1736,10 +1706,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2657862412923977867, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.269
-      objectReference: {fileID: 0}
     - target: {fileID: 5258536663029941406, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
       propertyPath: m_Name
       value: Sprtie_Cucumber
@@ -1750,11 +1716,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7556215525286448846, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.835
+      value: -1.011
       objectReference: {fileID: 0}
     - target: {fileID: 7556215525286448846, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.129
+      value: -0.267
       objectReference: {fileID: 0}
     - target: {fileID: 7556215525286448846, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1791,10 +1757,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5258536663029941406, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2138629940}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3833c3c8239e71b4fafb2541a2bdd2f7, type: 3}
 --- !u!1001 &6058873156093984968
 PrefabInstance:
@@ -1808,21 +1771,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sprite_Tomato_Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 253498568410702649, guid: 950269965ec28cc489613a23c094d087, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.421
-      objectReference: {fileID: 0}
     - target: {fileID: 2621358140294597189, guid: 950269965ec28cc489613a23c094d087, type: 3}
       propertyPath: m_RootOrder
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2621358140294597189, guid: 950269965ec28cc489613a23c094d087, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.312
+      value: 0.37399995
       objectReference: {fileID: 0}
     - target: {fileID: 2621358140294597189, guid: 950269965ec28cc489613a23c094d087, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.89
+      value: 1.237
       objectReference: {fileID: 0}
     - target: {fileID: 2621358140294597189, guid: 950269965ec28cc489613a23c094d087, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1869,10 +1828,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1892008898733386306, guid: 3786ff402d469bf409a4650e39985cbe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.356
-      objectReference: {fileID: 0}
     - target: {fileID: 3648900026470626953, guid: 3786ff402d469bf409a4650e39985cbe, type: 3}
       propertyPath: m_Name
       value: Sprite_Tomato
