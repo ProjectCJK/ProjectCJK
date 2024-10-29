@@ -57,8 +57,9 @@ namespace Units.Stages.Units.Buildings.Units
     {
         [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
-        
-        public override EBuildingType BuildingType { get; protected set; }
+
+        public override EBuildingType BuildingType => _kitchenDataSO.BuildingType;
+        public override EMaterialType BuildingMaterialType => _kitchenCustomSetting.MaterialType;
         public override Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
         public override Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
         

@@ -4,51 +4,58 @@ using Interfaces;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Units;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Creatures.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
 {
     public interface IStageController : IRegisterReference<Joystick>, IInitializable
     {
-        public Player Player { get; }
+        public Transform PlayerTransform { get; }
+    }
+
+    [Serializable]
+    public struct StageReferences
+    {
+        public CreatureController CreatureController;
+        public BuildingController BuildingController;
+        public HuntingZoneController HuntingZoneController;
+        public VillageZoneController VillageZoneController;
     }
     
     public class StageController : MonoBehaviour, IStageController
     {
         [Header("### Stage Settings ###")]
-        [SerializeField] private CreatureController _creatureController;
-        [SerializeField] private BuildingController _buildingController;
-        [SerializeField] private HuntingZoneController _huntingZoneController;
+        public StageReferences stageReferences;
         
-        public Player Player => _creatureController.GetPlayer();
+        [Space(10), SerializeField] private int maxGuestCount;
+
+        public Transform PlayerTransform => _creatureController.PlayerTransform;
         
-        private IItemFactory _itemFactory;
-        
+        private ICreatureController _creatureController => stageReferences.CreatureController;
+        private IBuildingController _buildingController => stageReferences.BuildingController;
+        private IHuntingZoneController _huntingZoneController => stageReferences.HuntingZoneController;
+        private IVillageZoneController _villageZoneController => stageReferences.VillageZoneController;
+
         public void RegisterReference(Joystick joystick)
         {
-            _itemFactory = new ItemFactory();
+            var itemFactory = new ItemFactory();
             
-            _creatureController.RegisterReference(joystick, _itemFactory);
-            _buildingController.RegisterReference(_itemFactory);
-            _huntingZoneController.RegisterReference(_creatureController, _itemFactory, Player);
+            _creatureController.RegisterReference(joystick, itemFactory);
+            _buildingController.RegisterReference(itemFactory);
+            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController);
+            _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
+
+            _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
         }
         
         public void Initialize()
         {
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
-        }
-
-        private void Update()
-        {
-#if UNITY_EDITOR
-            // TODO : Cheat Code
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                _creatureController.GetGuest(Player.transform);
-            }      
-#endif
+            _villageZoneController.Initialize();
         }
     }
 }

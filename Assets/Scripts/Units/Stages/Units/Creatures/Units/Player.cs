@@ -1,6 +1,7 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Modules;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.BattleModules;
@@ -20,19 +21,20 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IPlayer : IBaseCreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable
+    public interface IPlayer : IBaseCreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable<Vector3, Action>
     {
         public IItemReceiver PlayerInventoryModule { get; }
     }
 
     public class Player : Creature, IPlayer
     {
+        private event Action OnReturnPlayer;
         [SerializeField] private Weapon _weapon;
      
         public IItemReceiver PlayerInventoryModule => _playerInventoryModule;
-        
+
         public override ECreatureType CreatureType => _playerStatsModule.Type;
-        public override Animator Animator { get; protected set; }
+        public override Animator Animator => _animator;
         public override Transform Transform => transform;
 
         protected override CreatureStateMachine creatureStateMachine { get; set; }
@@ -43,35 +45,46 @@ namespace Units.Stages.Units.Creatures.Units
         private IPlayerMovementModule _playerMovementModule;
         private IPlayerCollisionModule _playerCollisionModule;
         private IItemFactory _itemFactory;
+        private IDamageFlashModule _damageFlashModule;
+        
         private PlayerDataSO _playerDataSo;
+        private Animator _animator;
 
         public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemFactory itemFactory)
         {
             _playerDataSo = playerDataSo;
             _itemFactory = itemFactory;
             
-            Animator = spriteTransform.GetComponent<Animator>();
-
+            _animator = spriteTransform.GetComponent<Animator>();
+            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
+            
             creatureStateMachine = new CreatureStateMachine(this);
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
             _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemFactory, CreatureType);
             _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, creatureStateMachine, joystick, spriteTransform);
-            _playerCollisionModule = new PlayerCollisionModule();
+            _playerCollisionModule = new PlayerCollisionModule(_playerStatsModule);
 
+            _damageFlashModule.RegisterReference();
             _weapon.RegisterReference(_playerStatsModule);
             
             _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
             _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
         }
 
-        public void Initialize()
+        
+        public void Initialize(Vector3 position, Action action)
         {
+            OnReturnPlayer = action;
+            
             _playerMovementModule.Initialize();
             _playerInventoryModule.Initialize();
             _playerBattleModule.Initialize();
             
             creatureStateMachine.ChangeState(creatureStateMachine.CreatureIdleState);
+            
+            transform.position = position;
+            transform.gameObject.SetActive(true);
         }
         
         private void Update()
