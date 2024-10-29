@@ -7,7 +7,7 @@ namespace Units.Stages.Units.Creatures.Abstract
 {
     public interface IBaseCreature
     {
-        public Transform Transform { get; set; }
+        public Transform Transform { get; }
     }
     
     public interface ICreatureTypeProperty
@@ -21,10 +21,9 @@ namespace Units.Stages.Units.Creatures.Abstract
         private Transform _transform;
 
         public abstract ECreatureType CreatureType { get; }
-        public abstract Animator Animator { get; protected set; }
-
+        public abstract Animator Animator { get; }
+        public abstract Transform Transform { get; }
+        
         protected abstract CreatureStateMachine creatureStateMachine { get; set; }
-
-        public virtual Transform Transform { get; set; }
     }
 }

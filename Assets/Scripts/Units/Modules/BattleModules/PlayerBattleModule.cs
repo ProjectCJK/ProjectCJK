@@ -37,8 +37,7 @@ namespace Units.Modules.BattleModules
         {
             _weapon.transform.localRotation = _initialRotation;
             _weapon.transform.localEulerAngles = new Vector3(_weapon.transform.localEulerAngles.x, _weapon.transform.localEulerAngles.y, _initialAngleOffset);
-            
-            if (_weapon.transform.gameObject.activeInHierarchy) _weapon.transform.gameObject.SetActive(false);
+            _weapon.transform.gameObject.SetActive(false);
         }
 
         public void HandleOnTriggerHuntingZone(bool value)

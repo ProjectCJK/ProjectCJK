@@ -15,42 +15,40 @@ namespace Units.Modules.FactoryModules.Units
     public interface IPlayerFactory
     {
         public PlayerDataSO PlayerDataSo { get; }
-        public Player GetPlayer();
+        public Transform PlayerTransform { get; }
+        public IPlayer GetPlayer();
     }
 
     public class PlayerFactory : Factory, IPlayerFactory
     {
         public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerData;
+        public Transform PlayerTransform => _player.Transform;
 
         private readonly Joystick _joystick;
         private readonly IItemFactory _itemFactory;
-        private readonly Vector3 _playerSpawnPoint;
         
-        private Player _player;
+        private IPlayer _player;
         
-        public PlayerFactory(Vector3 playerSpawnPoint, Joystick joystick, IItemFactory itemFactory)
+        public PlayerFactory(Joystick joystick, IItemFactory itemFactory)
         {
-            _playerSpawnPoint = playerSpawnPoint;
             _joystick = joystick;
             _itemFactory = itemFactory;
             
             InstantiatePlayer();
         }
         
-        public Player GetPlayer()
+        public IPlayer GetPlayer()
         {
-            _player.Initialize();
-
             return _player;
         }
 
         private void InstantiatePlayer()
         {
-            GameObject obj = Object.Instantiate(PlayerDataSo.prefab.gameObject, _playerSpawnPoint, Quaternion.identity);
+            GameObject obj = Object.Instantiate(PlayerDataSo.prefab);
             
-            _player = obj.GetComponent<Player>();
-            
-            if (_player != null) _player.RegisterReference(PlayerDataSo, _joystick, _itemFactory);
+            _player = obj.GetComponent<IPlayer>();
+            _player.Transform.gameObject.SetActive(false);
+            _player?.RegisterReference(PlayerDataSo, _joystick, _itemFactory);
         }
     }
 }

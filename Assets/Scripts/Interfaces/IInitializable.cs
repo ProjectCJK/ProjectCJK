@@ -1,10 +1,12 @@
+using UnityEngine;
+
 namespace Interfaces
 {
     public interface IInitializable
     {
         public void Initialize();
     }
-    
+
     public interface IInitializable<in T>
     {
         public void Initialize(T instance1);

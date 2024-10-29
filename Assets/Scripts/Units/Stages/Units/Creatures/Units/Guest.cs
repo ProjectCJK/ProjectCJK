@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
@@ -14,19 +15,26 @@ using UnityEngine.AI;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IGuest : IPoolable, IRegisterReference<GuestDataSO>, IInitializable<Vector3>
+    public interface IGuest : IBaseCreature, IPoolable, IRegisterReference<GuestDataSO>, IInitializable<Action>
     {
+        public void SetDestinations(Vector3 startPosition, List<Transform> destinations);
     }
     
     public class Guest : Creature, IGuest
     {
+        private event Action OnReturnGuest;
+        
         public override ECreatureType CreatureType => _guestStatModule.Type;
-        public override Animator Animator { get; protected set; }
+        public override Animator Animator => _animator;
+        public override Transform Transform => transform;
+        
         protected override CreatureStateMachine creatureStateMachine { get; set; }
         
         private IGuestStatModule _guestStatModule;
         private IGuestMovementModule _guestMovementModule;
         
+        private Animator _animator;
+
         public void RegisterReference(GuestDataSO guestDataSo)
         {
             var navMeshAgent = GetComponent<NavMeshAgent>();
@@ -37,14 +45,19 @@ namespace Units.Stages.Units.Creatures.Units
             _guestMovementModule = new GuestMovementModule(this, _guestStatModule);
         }
         
-        public void Initialize(Vector3 targetPosition)
+        public void Initialize(Action action)
         {
-            _guestMovementModule.Initialize(targetPosition);
+            OnReturnGuest = action;
         }
 
-        private void Update()
+        public void SetDestinations(Vector3 startPosition, List<Transform> destinations)
         {
-            _guestMovementModule.Update();
+            _guestMovementModule.Initialize(startPosition, destinations);
+        }
+
+        private void FixedUpdate()
+        {
+            _guestMovementModule.FixedUpdate();
         }
 
         public void Create()

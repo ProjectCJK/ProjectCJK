@@ -14,36 +14,31 @@ namespace Units.Stages.Controllers
 {
     public interface ICreatureController : IRegisterReference<Joystick, IItemFactory>
     {
-        public Player GetPlayer();
+        public Transform PlayerTransform { get; }
+        public IPlayer GetPlayer();
         public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn);
-        public Guest GetGuest(Transform targetBuildingTransform);
+        public IGuest GetGuest(Action<IGuest> onReturn);
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
     {
-        [Header("=== 플레이어 세팅 ===")]
-        [SerializeField] private Transform _playerSpawnPoint;
-        
-        [Header("=== 손님 NPC 세팅 ===")]
-        [SerializeField] private Transform _customerSpawnPoint;
+        public Transform PlayerTransform => _playerFactory.PlayerTransform;
         
         private IPlayerFactory _playerFactory;
         private IMonsterFactory _monsterFactory;
         private IGuestFactory _guestFactory;
         private IItemFactory _itemFactory;
 
-        private readonly HashSet<Guest> currentSpawnedGuests = new();
-
         public void RegisterReference(Joystick joystick, IItemFactory itemFactory)
         {
-            _playerFactory = new PlayerFactory(_playerSpawnPoint.position, joystick, itemFactory);
+            _playerFactory = new PlayerFactory(joystick, itemFactory);
             _monsterFactory = new MonsterFactory();
             _guestFactory = new GuestFactory();
         }
 
-        public Player GetPlayer()
+        public IPlayer GetPlayer()
         {
-            Player player = _playerFactory.GetPlayer();
+            IPlayer player = _playerFactory.GetPlayer();
             
             return player;
         }
@@ -55,16 +50,11 @@ namespace Units.Stages.Controllers
             return monster;
         }
 
-        public Guest GetGuest(Transform targetBuilding)
+        public IGuest GetGuest(Action<IGuest> onReturn)
         {
-            Guest guest = _guestFactory.GetGuest();
+            IGuest guest = _guestFactory.GetGuest(onReturn);
             
-            guest.transform.position = _customerSpawnPoint.position;
-            guest.Initialize(targetBuilding.position);
-            
-            currentSpawnedGuests.Add(guest);
-            
-            return guest != null ? guest : null;
+            return guest;
         }
     }
 }

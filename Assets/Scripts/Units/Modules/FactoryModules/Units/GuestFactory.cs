@@ -1,3 +1,4 @@
+using System;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
@@ -5,21 +6,22 @@ using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.FactoryModules.Abstract;
 using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Units.Modules.FactoryModules.Units
 {
     public interface IGuestFactory
     {
         public GuestDataSO GuestDataSo { get; }
-        public Guest GetGuest();
+        public IGuest GetGuest(Action<IGuest> onReturn);
         public void ReturnGuest(Guest guest);
     }
     
     public class GuestFactory : Factory, IGuestFactory
     {
         public GuestDataSO GuestDataSo => DataManager.Instance.GuestData;
-        public string PoolKey => "GuestPool";
         
+        private static string PoolKey => "GuestPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
@@ -28,9 +30,15 @@ namespace Units.Modules.FactoryModules.Units
             CreateGuestPools();
         }
 
-        public Guest GetGuest()
+        public IGuest GetGuest(Action<IGuest> onReturn = null)
         {
-            var guest = ObjectPoolManager.Instance.GetObject<Guest>(PoolKey, null);
+            var guest = ObjectPoolManager.Instance.GetObject<IGuest>(PoolKey, null);
+            
+            guest.Initialize(() =>
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolKey, guest);
+                onReturn?.Invoke(guest);
+            });
             
             return guest;
         }
@@ -45,10 +53,10 @@ namespace Units.Modules.FactoryModules.Units
             ObjectPoolManager.Instance.CreatePool(PoolKey, DefaultPoolSize, MaxPoolSize, true, () => InstantiateGuest(GuestDataSo.prefab));
         }
         
-        private Guest InstantiateGuest(GameObject prefab)
+        private IGuest InstantiateGuest(GameObject prefab)
         {
             GameObject obj = Object.Instantiate(prefab);
-            var guest = obj.GetComponent<Guest>();
+            var guest = obj.GetComponent<IGuest>();
             
             guest.RegisterReference(GuestDataSo);
             

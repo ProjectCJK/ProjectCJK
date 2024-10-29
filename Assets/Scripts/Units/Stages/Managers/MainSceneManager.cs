@@ -47,7 +47,7 @@ namespace Units.Stages.Managers
         
         private void RegisterCameraToPlayer()
         {
-            _cameraController.RegisterReference(_stageController.Player.transform);
+            _cameraController.RegisterReference(_stageController.PlayerTransform);
         }
     }
 }

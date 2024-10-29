@@ -206,7 +206,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 508829953372350672, guid: 1099ad0971784446798524d70d712225, type: 3}
       propertyPath: m_Name
-      value: Weapon
+      value: Weapon_Player
       objectReference: {fileID: 0}
     - target: {fileID: 5426655516986845127, guid: 1099ad0971784446798524d70d712225, type: 3}
       propertyPath: m_RootOrder
@@ -327,15 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4425499224170583929, guid: 61456ef14f1863c498be5144f12176eb, type: 3}
       propertyPath: m_Name
-      value: Sprite
-      objectReference: {fileID: 0}
-    - target: {fileID: 4440315458551935930, guid: 61456ef14f1863c498be5144f12176eb, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4440315458551935930, guid: 61456ef14f1863c498be5144f12176eb, type: 3}
-      propertyPath: m_Color.g
-      value: 1
+      value: Sprite_Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

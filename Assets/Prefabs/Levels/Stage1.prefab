@@ -28,9 +28,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 962245502948282717}
-  - {fileID: 4445839680587516354}
+  m_Children: []
   m_Father: {fileID: 883747140878942718}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54e48b34eaa41e3a9379843d4aa5456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSpawnPoint: {fileID: 962245502948282717}
-  _customerSpawnPoint: {fileID: 4445839680587516354}
 --- !u!1 &2345680110785525863
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +60,7 @@ GameObject:
   - component: {fileID: 3652605025982311099}
   - component: {fileID: 6910189585019948605}
   m_Layer: 21
-  m_Name: Sprite
+  m_Name: Sprite_HuntingZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1141,8 +1137,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5730420342092205632}
+  - component: {fileID: 7788019660766051830}
   m_Layer: 20
-  m_Name: Levels
+  m_Name: VillageZoneController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1160,10 +1157,26 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 962245502948282717}
+  - {fileID: 4445839680587516354}
   - {fileID: 2620751893228379910}
   m_Father: {fileID: 883747140878942718}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7788019660766051830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2517582643758382939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea778511327404d9c420c1465d06c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerSpawnPoint: {fileID: 962245502948282717}
+  _guestSpawnPoint: {fileID: 4445839680587516354}
 --- !u!1 &2696080924102993533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,6 +1230,7 @@ MonoBehaviour:
     CreatureController: {fileID: 7029098254779289546}
     BuildingController: {fileID: 1993691879986538255}
     HuntingZoneController: {fileID: 923915092575285867}
+    VillageZoneController: {fileID: 7788019660766051830}
   maxGuestCount: 0
 --- !u!1 &2902427963975940575
 GameObject:
@@ -5020,7 +5034,7 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 171be12a03aa54e1fa7d50d398e029a5, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 6e0ece2e603fa4ad08a3e0a0866e6016, type: 2}
 --- !u!114 &4984134483689686144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46699,7 +46713,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4775225128448612688}
+    m_TransformParent: {fileID: 5730420342092205632}
     m_Modifications:
     - target: {fileID: 446490442880972720, guid: ae5e1c6fed9e74ec092f05779110537a, type: 3}
       propertyPath: m_RootOrder
@@ -46765,7 +46779,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4775225128448612688}
+    m_TransformParent: {fileID: 5730420342092205632}
     m_Modifications:
     - target: {fileID: 2467739441455631197, guid: 74ecefbe2c68e49e8ad32ecc235af115, type: 3}
       propertyPath: m_Name

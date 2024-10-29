@@ -13,7 +13,7 @@ namespace Units.Stages.Controllers
 {
     public interface IStageController : IRegisterReference<Joystick>, IInitializable
     {
-        public Player Player { get; }
+        public Transform PlayerTransform { get; }
     }
 
     [Serializable]
@@ -22,6 +22,7 @@ namespace Units.Stages.Controllers
         public CreatureController CreatureController;
         public BuildingController BuildingController;
         public HuntingZoneController HuntingZoneController;
+        public VillageZoneController VillageZoneController;
     }
     
     public class StageController : MonoBehaviour, IStageController
@@ -30,12 +31,13 @@ namespace Units.Stages.Controllers
         public StageReferences stageReferences;
         
         [Space(10), SerializeField] private int maxGuestCount;
-        
-        public Player Player => _creatureController.GetPlayer();
+
+        public Transform PlayerTransform => _creatureController.PlayerTransform;
         
         private ICreatureController _creatureController => stageReferences.CreatureController;
         private IBuildingController _buildingController => stageReferences.BuildingController;
         private IHuntingZoneController _huntingZoneController => stageReferences.HuntingZoneController;
+        private IVillageZoneController _villageZoneController => stageReferences.VillageZoneController;
 
         public void RegisterReference(Joystick joystick)
         {
@@ -43,24 +45,17 @@ namespace Units.Stages.Controllers
             
             _creatureController.RegisterReference(joystick, itemFactory);
             _buildingController.RegisterReference(itemFactory);
-            _huntingZoneController.RegisterReference(_creatureController, itemFactory, Player);
+            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController);
+            _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
+
+            _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
         }
         
         public void Initialize()
         {
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
-        }
-
-        private void Update()
-        {
-#if UNITY_EDITOR
-            // TODO : Cheat Code
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                _creatureController.GetGuest(_buildingController.Buildings[new Tuple<EBuildingType, EMaterialType>(EBuildingType.Stand, EMaterialType.A)].transform);
-            }
-#endif
+            _villageZoneController.Initialize();
         }
     }
 }

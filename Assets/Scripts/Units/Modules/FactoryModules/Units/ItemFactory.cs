@@ -21,10 +21,10 @@ namespace Units.Modules.FactoryModules.Units
     public class ItemFactory : Factory, IItemFactory
     {
         public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
-        public string PoolKey => "ItemPool";
         
         private Dictionary<Tuple<EMaterialType, EItemType>, Sprite> _itemSprites;
         
+        private static string PoolKey => "ItemPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
