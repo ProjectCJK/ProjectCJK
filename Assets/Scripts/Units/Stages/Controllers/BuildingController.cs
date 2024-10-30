@@ -41,6 +41,9 @@ namespace Units.Stages.Controllers
                     case IStand stand:
                         stand.RegisterReference(itemFactory);
                         break;
+                    case IManagementDesk managementDesk:
+                        managementDesk.RegisterReference(itemFactory);
+                        break;
                 }
 
                 var key = building.BuildingKey;

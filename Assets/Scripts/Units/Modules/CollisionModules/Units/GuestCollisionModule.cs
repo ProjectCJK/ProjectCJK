@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Units.Modules.CollisionModules.Abstract;
+using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
 
 namespace Units.Modules.CollisionModules.Units
@@ -9,7 +11,7 @@ namespace Units.Modules.CollisionModules.Units
     public interface IGuestCollisionModule
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
-        public event Func<string, bool, bool> OnCheckValidTransform;
+        public event Func<string, bool> OnCompareWithTarget;
         public void OnTriggerEnter2D(Collider2D other);
         public void OnTriggerStay2D(Collider2D other);
         public void OnTriggerExit2D(Collider2D other);
@@ -18,17 +20,16 @@ namespace Units.Modules.CollisionModules.Units
     public class GuestCollisionModule : CollisionModule, IGuestCollisionModule
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
-        public event Func<string, bool, bool> OnCheckValidTransform;
+        public event Func<string, bool> OnCompareWithTarget;
         
+        private readonly ECreatureType _creatureType;
         private readonly float _waitingTime;
+
+        private IInteractionTrade _tradeZone;
         
-        private Transform _targetTransform;
-        private Transform _previousTargetTransform; // 이전 트리거 존을 저장
-        private float _elapsedTime;  // 시간 측정 변수
-        private bool _isWaitingForTrigger; // 대기 상태 여부
-        
-        public GuestCollisionModule(IInteractionProperty guestStatModule)
+        public GuestCollisionModule(IGuestStatModule guestStatModule)
         {
+            _creatureType = guestStatModule.Type;
             _waitingTime = guestStatModule.WaitingTime;    
         }
 
@@ -39,12 +40,17 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.TradeZone:
-                    var tradeZone = other.transform.GetComponent<IInteractionTrade>();
-                    
-                    if (tradeZone != null && OnCheckValidTransform != null && OnCheckValidTransform(tradeZone.BuildingKey, true))
+                    var currentInteractionTrade = other.transform.GetComponent<IInteractionTrade>();
+
+                    if (currentInteractionTrade.CheckAccessor(_creatureType))
                     {
-                        Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {tradeZone}");
-                        OnTriggerTradeZone?.Invoke(tradeZone, true);
+                        if (OnCompareWithTarget != null && OnCompareWithTarget(currentInteractionTrade.BuildingKey))
+                        {
+                            _tradeZone = currentInteractionTrade;
+                            OnTriggerTradeZone?.Invoke(currentInteractionTrade, true);
+                            
+                            Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZone}");
+                        }   
                     }
                     break;
             }
@@ -62,9 +68,17 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.TradeZone:
-                    if (_targetTransform != null && ReferenceEquals(_targetTransform, other.transform))
+                    var currentInteractionTrade = other.transform.GetComponent<IInteractionTrade>();
+
+                    if (currentInteractionTrade.CheckAccessor(_creatureType))
                     {
-                        _targetTransform = null;
+                        if (_tradeZone != null && _tradeZone == currentInteractionTrade)
+                        {
+                            _tradeZone = null;
+                            OnTriggerTradeZone?.Invoke(currentInteractionTrade, false);
+                            
+                            Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZone}");
+                        }   
                     }
                     break;
             }

@@ -38,8 +38,11 @@ namespace Units.Stages.Units.Buildings.Units
         [Space(10), Header("아이템 보관 장소")]
         public Transform kitchenInventory;
         
-        [Space(10), Header("Interaction Zone")]
-        public InteractionTrade InteractionTrade;
+        [Space(10), Header("TradeZone_Player")]
+        public InteractionTrade InteractionTradePlayer;
+        
+        [Space(10), Header("TradeZone_NPC")]
+        public InteractionTrade InteractionTradeNPC;
     }
 
     [Serializable]
@@ -70,7 +73,8 @@ namespace Units.Stages.Units.Buildings.Units
         private IKitchenProductInventoryModule _kitchenProductInventoryModule;
         private IKitchenProductModule _kitchenProductModule;
         private IItemFactory _itemFactory;
-        private IInteractionTrade _interactionTrade;
+        private IInteractionTrade _interactionTradePlayer;
+        private IInteractionTrade _interactionTradeNPC;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
@@ -82,9 +86,9 @@ namespace Units.Stages.Units.Buildings.Units
             
             _itemFactory = itemController;
             MaterialType = _kitchenCustomSetting.MaterialType;
-            BuildingKey = EnumParserModule.ParseDoubleEnumToString(_kitchenDataSO.BuildingType, _kitchenCustomSetting.MaterialType); 
-            InputItemKey = EnumParserModule.ParseDoubleEnumToString(_kitchenCustomSetting.InputItemType, _kitchenCustomSetting.MaterialType);
-            OutItemKey = EnumParserModule.ParseDoubleEnumToString(_kitchenCustomSetting.OutputItemType, _kitchenCustomSetting.MaterialType);
+            BuildingKey = EnumParserModule.ParseEnumToString(_kitchenDataSO.BuildingType, _kitchenCustomSetting.MaterialType);
+            InputItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.InputItemType, _kitchenCustomSetting.MaterialType);
+            OutItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.OutputItemType, _kitchenCustomSetting.MaterialType);
             
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
             _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.kitchenFactory, _kitchenDefaultSetting.kitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutItemKey);
@@ -95,8 +99,11 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenViewModel = new KitchenViewModel(_kitchenModel);
             _kitchenDefaultSetting.kitchenView.BindViewModel(_kitchenViewModel);
             
-            _interactionTrade = _kitchenDefaultSetting.InteractionTrade;
-            _interactionTrade.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            _interactionTradePlayer = _kitchenDefaultSetting.InteractionTradePlayer;
+            _interactionTradePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            
+            _interactionTradeNPC = _kitchenDefaultSetting.InteractionTradeNPC;
+            _interactionTradePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;

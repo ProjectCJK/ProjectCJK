@@ -36,10 +36,13 @@ namespace Units.Modules
 
             return (parsedA, parsedB);
         }
+        
+        public static string ParseEnumToString<TEnum1>(TEnum1 enum1) where TEnum1 : Enum
+        {
+            return $"{enum1}";
+        }
 
-        public static string ParseDoubleEnumToString<TEnum1, TEnum2>(TEnum1 enum1, TEnum2 enum2)
-            where TEnum1 : Enum
-            where TEnum2 : Enum
+        public static string ParseEnumToString<TEnum1, TEnum2>(TEnum1 enum1, TEnum2 enum2) where TEnum1 : Enum where TEnum2 : Enum
         {
             return $"{enum1}_{enum2}";
         }

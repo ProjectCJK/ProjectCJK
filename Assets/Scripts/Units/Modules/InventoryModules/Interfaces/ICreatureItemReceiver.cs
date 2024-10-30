@@ -7,6 +7,6 @@ namespace Units.Modules.InventoryModules.Interfaces
     public interface ICreatureItemReceiver : IItemReceiver
     {
         public ECreatureType CreatureType { get; }
-        public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected);
+        public void RegisterItemReceiver(IInteractionTrade interactionZone, bool isConnected);
     }
 }

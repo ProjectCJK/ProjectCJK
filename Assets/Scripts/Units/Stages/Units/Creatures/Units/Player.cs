@@ -96,8 +96,11 @@ namespace Units.Stages.Units.Creatures.Units
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                var tempKey = EnumParserModule.ParseDoubleEnumToString(EItemType.Material, EMaterialType.A);
-                _playerInventoryModule.ReceiveItem(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                var temp1Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
+                var temp2Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
+                
+                _playerInventoryModule.ReceiveItem(temp1Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItem(temp2Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }      
 #endif
             
@@ -129,7 +132,7 @@ namespace Units.Stages.Units.Creatures.Units
         
         private void HandleOnTriggerTradeZone(IInteractionTrade interactionZone, bool isConnected)
         {
-            _playerInventoryModule.ConnectWithInteractionTradeZone(interactionZone, isConnected);
+            _playerInventoryModule.RegisterItemReceiver(interactionZone, isConnected);
         }
         
         private void HandleOnTriggerHuntingZone(bool value)

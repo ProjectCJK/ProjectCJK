@@ -4,6 +4,7 @@ using Interfaces;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -14,13 +15,20 @@ namespace Units.Stages.Units.Buildings.Modules
     {
         public string BuildingKey { get; }
         public string InputItemKey { get; }
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
+        public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
+        public bool CheckAccessor(ECreatureType creatureType);
+        public bool CheckInputAccessor(ECreatureType creatureType);
+        public bool CheckOutputAccessor(ECreatureType creatureType);
     }
     
     [RequireComponent(typeof(TilemapCollider2D))]
     public class InteractionTrade : MonoBehaviour, IInteractionTrade
     {
-        public Transform SenderTransform { get; }
+        [Header("접근 가능한 유닛 타입")]
+        public List<ECreatureType> InputAccessCreatureTypes;
+        public List<ECreatureType> OutAccessCreatureTypes;
+
+        public Transform SenderTransform => null;
         public Transform ReceiverTransform { get; private set; }
 
         public string BuildingKey { get; private set; }
@@ -43,14 +51,29 @@ namespace Units.Stages.Units.Buildings.Modules
             InputItemKey = inputItemKey;
         }
 
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register)
+        public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register)
         {
-            _buildingSenderInventoryModule.RegisterItemReceiver(itemReceiver, register);
+            return _buildingSenderInventoryModule.RegisterItemReceiver(itemReceiver, register);
         }
 
-        public bool ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
+        public bool CheckAccessor(ECreatureType creatureType)
         {
-            return _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition);
+            return InputAccessCreatureTypes.Contains(creatureType) || OutAccessCreatureTypes.Contains(creatureType);
+        }
+
+        public bool CheckOutputAccessor(ECreatureType creatureType)
+        {
+            return OutAccessCreatureTypes.Contains(creatureType);
+        }
+
+        public bool CheckInputAccessor(ECreatureType creatureType)
+        {
+            return InputAccessCreatureTypes.Contains(creatureType);
+        }
+
+        public void ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
+        {
+            _buildingReceiverInventoryModule.ReceiveItem(inputItemKey, currentSenderPosition);
         }
 
         public bool HasMatchingItem(string InventoryKey) => _buildingReceiverInventoryModule.HasMatchingItem(InventoryKey);
