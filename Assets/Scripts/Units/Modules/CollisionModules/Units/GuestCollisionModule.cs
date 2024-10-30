@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Units.Modules.CollisionModules.Abstract;
 using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Units;
 using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
         public event Func<string, bool> OnCompareWithTarget;
+        public event Action OnTriggerSpawnZone;
+        
         public void OnTriggerEnter2D(Collider2D other);
         public void OnTriggerStay2D(Collider2D other);
         public void OnTriggerExit2D(Collider2D other);
@@ -21,7 +24,8 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
         public event Func<string, bool> OnCompareWithTarget;
-        
+        public event Action OnTriggerSpawnZone;
+
         private readonly ECreatureType _creatureType;
         private readonly float _waitingTime;
 
@@ -40,18 +44,30 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.TradeZone:
-                    var currentInteractionTrade = other.transform.GetComponent<IInteractionTrade>();
+                    var currentTradeZone = other.transform.GetComponent<IInteractionTrade>();
 
-                    if (currentInteractionTrade.CheckAccessor(_creatureType))
+                    if (currentTradeZone.CheckAccessor(_creatureType))
                     {
-                        if (OnCompareWithTarget != null && OnCompareWithTarget(currentInteractionTrade.BuildingKey))
+                        if (OnCompareWithTarget != null && OnCompareWithTarget(currentTradeZone.BuildingKey))
                         {
-                            _tradeZone = currentInteractionTrade;
-                            OnTriggerTradeZone?.Invoke(currentInteractionTrade, true);
+                            _tradeZone = currentTradeZone;
+                            OnTriggerTradeZone?.Invoke(currentTradeZone, true);
                             
                             Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZone}");
                         }   
                     }
+                    break;
+                case ECollisionType.SpawnZone:
+                    var currentSpawnZone = other.transform.GetComponent<ISpawnZone>();
+
+                    if (currentSpawnZone.CreatureType == _creatureType)
+                    {
+                        if (currentSpawnZone is IGuestSpawnZone { NpcType: ENPCType.Guest })
+                        {
+                            OnTriggerSpawnZone?.Invoke();
+                        }
+                    }
+                    
                     break;
             }
         }

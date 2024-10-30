@@ -37,10 +37,10 @@ namespace Units.Stages.Units.Buildings.Units
         public Transform standInventory;
         
         [Space(10), Header("TradeZone_Player")]
-        public InteractionTrade InteractionTradePlayer;
+        public Transform InteractionTradePlayer;
         
         [Space(10), Header("TradeZone_NPC")]
-        public InteractionTrade InteractionTradeNPC;
+        public Transform InteractionTradeNPC;
     }
     
     [Serializable]
@@ -64,8 +64,9 @@ namespace Units.Stages.Units.Buildings.Units
         public EMaterialType MaterialType { get; private set; }
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
-        public override string OutItemKey { get; protected set; }
-        
+        public override string OutputItemKey { get; protected set; }
+        public override Transform TradeZoneNpcTransform => _standDefaultSetting.InteractionTradeNPC;
+
         private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
         private IItemFactory _itemFactory;
@@ -84,24 +85,24 @@ namespace Units.Stages.Units.Buildings.Units
             MaterialType = _standCustomSetting.MaterialType;
             BuildingKey = EnumParserModule.ParseEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
             InputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
-            OutItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
+            OutputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
             
             _standStatsModule = new StandStatsModule(_standDataSo);
-            _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory, _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutItemKey);
+            _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory, _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutputItemKey);
 
             _standModel = new StandModel();
             _standViewModel = new StandViewModel(_standModel);
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
-            _interactionTradePlayer = _standDefaultSetting.InteractionTradePlayer;
+            _interactionTradePlayer = _standDefaultSetting.InteractionTradePlayer.GetComponent<IInteractionTrade>();
             _interactionTradePlayer.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
-            _interactionTradeNPC = _standDefaultSetting.InteractionTradeNPC;
+            _interactionTradeNPC = _standDefaultSetting.InteractionTradeNPC.GetComponent<IInteractionTrade>();
             _interactionTradeNPC.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }
-        
+
         public override void Initialize() { }
 
         private void Update()

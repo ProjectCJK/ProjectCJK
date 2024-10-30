@@ -29,7 +29,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
         public override Transform ReceiverTransform { get; }
 
         private readonly IBuildingStatsModule _buildingStatsModule;
-        private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
+        protected readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
         public string InputItemKey { get; }
         public string OutputItemKey { get; }
