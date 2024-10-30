@@ -14,14 +14,8 @@ namespace Modules.DesignPatterns.ObjectPools
         /// 키와 풀을 연결하는 딕셔너리.
         /// </summary>
         private readonly Dictionary<string, object> poolDictionary = new();
-        
-        /// <summary>
-        /// 기본 풀 크기. 필요에 따라 오브젝트 생성 시 사용됩니다.
-        /// </summary>
+
         private const int DefaultPoolSize = 10;
-        /// <summary>
-        /// 기본 풀 크기. 필요에 따라 오브젝트 생성 시 사용됩니다.
-        /// </summary>
         private const int MaxPoolSize = 10;
 
         /// <summary>
@@ -38,17 +32,20 @@ namespace Modules.DesignPatterns.ObjectPools
                 CreatePool(key, DefaultPoolSize, MaxPoolSize, true, objectFactory);
             }
 
-            return ((ObjectPool<T>)poolDictionary[key]).GetObject();
+            if (poolDictionary[key] is ObjectPool<T> pool)
+            {
+                return pool.GetObject();
+            }
+            throw new InvalidCastException($"The pool with key '{key}' does not match the requested type.");
         }
-        
+
         public List<T> GetAllObjectsFromPool<T>(string key) where T : IPoolable
         {
-            if (poolDictionary.TryGetValue(key, out var pool))
+            if (poolDictionary.TryGetValue(key, out var pool) && pool is ObjectPool<T> typedPool)
             {
-                return ((ObjectPool<T>)pool).GetAllObjects();
+                return typedPool.GetAllObjects();
             }
-
-            throw new Exception($"Pool with key '{key}' does not exist.");
+            throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
         }
 
         /// <summary>
@@ -59,13 +56,13 @@ namespace Modules.DesignPatterns.ObjectPools
         /// <param name="obj">반환할 오브젝트</param>
         public void ReturnObject<T>(string key, T obj) where T : IPoolable
         {
-            if (poolDictionary.TryGetValue(key, out var pool))
+            if (poolDictionary.TryGetValue(key, out var pool) && pool is ObjectPool<T> typedPool)
             {
-                ((ObjectPool<T>)pool).ReturnObject(obj);
+                typedPool.ReturnObject(obj);
             }
             else
             {
-                throw new Exception($"Pool with key '{key}' does not exist.");
+                throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
             }
         }
 
@@ -85,7 +82,7 @@ namespace Modules.DesignPatterns.ObjectPools
                 throw new Exception($"Pool with key '{key}' already exists.");
             }
 
-            var newPool = new ObjectPool<T>(initialSize: initialSize, maxSize: maxSize, isFlexible:isFlexible, objectFactory);
+            var newPool = new ObjectPool<T>(initialSize, maxSize, isFlexible, objectFactory);
             poolDictionary[key] = newPool;
         }
 
@@ -93,16 +90,16 @@ namespace Modules.DesignPatterns.ObjectPools
         /// 요청한 키에 해당하는 오브젝트 풀을 제거하고 풀 내부의 모든 오브젝트를 파괴합니다.
         /// </summary>
         /// <param name="key">풀의 고유 키</param>
-        public void DestroyPool(string key)
+        public void DestroyPool<T>(string key) where T : IPoolable
         {
-            if (poolDictionary.TryGetValue(key, out var pool))
+            if (poolDictionary.TryGetValue(key, out var pool) && pool is ObjectPool<T> typedPool)
             {
-                ((ObjectPool<IPoolable>)pool).DestroyPool();
+                typedPool.DestroyPool();
                 poolDictionary.Remove(key);
             }
             else
             {
-                throw new Exception($"Pool with key '{key}' does not exist.");
+                throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
             }
         }
     }

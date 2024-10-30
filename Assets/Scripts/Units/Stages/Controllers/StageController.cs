@@ -41,7 +41,7 @@ namespace Units.Stages.Controllers
 
         public void RegisterReference(Joystick joystick)
         {
-            var itemFactory = new ItemFactory();
+            var itemFactory = new ItemFactory(transform);
             
             _creatureController.RegisterReference(joystick, itemFactory);
             _buildingController.RegisterReference(itemFactory);

@@ -11,53 +11,45 @@ namespace Modules.DesignPatterns.ObjectPools
     /// <typeparam name="T">풀링할 객체 타입 (IPoolable을 구현해야 함)</typeparam>
     public class ObjectPool<T> : ICustomObjectPool<T> where T : IPoolable
     {
-        /// <summary>
-        /// 풀 내부에서 관리되는 큐. 오브젝트를 보관합니다.
-        /// </summary>
         private readonly Queue<T> poolQueue = new();
-
-        /// <summary>
-        /// 오브젝트를 생성하는 팩토리 메서드. 오브젝트가 부족할 경우 새로 생성합니다.
-        /// </summary>
         private readonly Func<T> objectFactory;
-
-        /// <summary>
-        /// 풀의 최대 크기
-        /// </summary>
         private readonly int maxSize;
-
-        /// <summary>
-        /// 풀의 크기가 Flexible하면, 최대 크기를 넘어설 수 있습니다.
-        /// </summary>
         private readonly bool isFlexible;
+        private readonly Transform parentTransform;
 
-        /// <summary>
-        /// 지정된 초기 크기와 최대 크기, 유연성 여부로 오브젝트 풀을 생성합니다.
-        /// </summary>
-        /// <param name="initialSize">초기 풀 크기</param>
-        /// <param name="maxSize">풀의 최대 크기</param>
-        /// <param name="isFlexible">true면 최대 크기를 넘어설 수 있고, false면 최대 크기를 넘지 않습니다.</param>
-        /// <param name="objectFactory">오브젝트 팩토리 함수</param>
-        public ObjectPool(int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory)
+        public ObjectPool(int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory, Transform parentTransform = null)
         {
             this.objectFactory = objectFactory;
             this.maxSize = maxSize;
             this.isFlexible = isFlexible;
+            this.parentTransform = parentTransform;
 
             // 초기 풀 크기만큼 오브젝트를 생성하여 큐에 추가합니다.
             for (var i = 0; i < initialSize; i++)
             {
-                T obj = objectFactory();
-                obj.Create();
+                T obj = CreateObject();
                 poolQueue.Enqueue(obj);
             }
         }
 
         /// <summary>
-        /// 풀에서 오브젝트를 가져옵니다. 
-        /// 오브젝트가 부족하면 Flexible 여부에 따라 새로 생성하거나 null을 반환합니다.
+        /// 오브젝트를 생성하고, 지정된 부모 Transform이 있다면 그 부모로 설정합니다.
         /// </summary>
-        /// <returns>풀에서 가져온 오브젝트</returns>
+        /// <returns>새로 생성된 오브젝트</returns>
+        private T CreateObject()
+        {
+            T obj = objectFactory();
+            obj.Create();
+            
+            // GameObject인지 체크하고, MonoBehaviour를 상속한 경우 부모 설정
+            if (obj is MonoBehaviour monoObject && parentTransform != null)
+            {
+                monoObject.transform.SetParent(parentTransform);
+            }
+
+            return obj;
+        }
+
         public T GetObject()
         {
             if (poolQueue.Count > 0)
@@ -69,46 +61,39 @@ namespace Modules.DesignPatterns.ObjectPools
 
             if (isFlexible || poolQueue.Count < maxSize)
             {
-                T obj = objectFactory();
+                T obj = CreateObject();
                 obj.GetFromPool();
                 return obj;
             }
 
-            // 풀에 오브젝트가 없고, 유연하지 않다면 null 반환
             return default;
         }
-        
-        /// <summary>
-        /// 풀에 있는 모든 객체를 리스트로 반환합니다.
-        /// </summary>
-        /// <returns>풀에 있는 모든 객체 리스트</returns>
+
         public List<T> GetAllObjects()
         {
-            return new List<T>(poolQueue);  // Queue를 리스트로 변환하여 반환
+            return new List<T>(poolQueue);
         }
 
-        /// <summary>
-        /// 오브젝트를 풀로 반환합니다.
-        /// 반환된 오브젝트는 재사용할 수 있도록 초기화됩니다.
-        /// </summary>
-        /// <param name="obj">반환할 오브젝트</param>
         public void ReturnObject(T obj)
         {
             if (poolQueue.Count < maxSize || isFlexible)
             {
                 obj.ReturnToPool();
+
+                // MonoBehaviour를 상속한 경우, 부모 Transform 확인 및 설정
+                if (obj is MonoBehaviour monoObject && monoObject.transform.parent != parentTransform)
+                {
+                    monoObject.transform.SetParent(parentTransform);
+                }
+
                 poolQueue.Enqueue(obj);
             }
             else
             {
-                // 최대 크기를 넘어서면 오브젝트를 제거
                 DestroyObject(obj);
             }
         }
 
-        /// <summary>
-        /// 모든 풀링된 오브젝트를 파괴하고 풀을 비웁니다.
-        /// </summary>
         public void DestroyPool()
         {
             while (poolQueue.Count > 0)
@@ -118,17 +103,12 @@ namespace Modules.DesignPatterns.ObjectPools
             }
         }
 
-        /// <summary>
-        /// 오브젝트를 파괴합니다. GameObject인 경우 Destroy 호출.
-        /// </summary>
-        /// <param name="obj">파괴할 오브젝트</param>
         private void DestroyObject(T obj)
         {
             obj.ReturnToPool();
-            var gameObject = obj as GameObject;
-            if (gameObject != null)
+            if (obj is MonoBehaviour monoObject)
             {
-                UnityEngine.Object.Destroy(gameObject);
+                UnityEngine.Object.Destroy(monoObject.gameObject);
             }
         }
     }

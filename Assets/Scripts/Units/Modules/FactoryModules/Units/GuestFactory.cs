@@ -27,7 +27,7 @@ namespace Units.Modules.FactoryModules.Units
 
         private readonly IItemFactory _itemFactory;
             
-        public GuestFactory( IItemFactory itemFactory)
+        public GuestFactory(IItemFactory itemFactory)
         {
             _itemFactory = itemFactory;
             CreateGuestPools();

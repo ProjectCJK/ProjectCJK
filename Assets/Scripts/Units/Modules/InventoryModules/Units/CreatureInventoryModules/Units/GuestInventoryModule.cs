@@ -55,7 +55,7 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
-            PushSpawnedItem(item);
+            PushSpawnedItem(ReceiverTransform, item);
         }
         
         public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected)
