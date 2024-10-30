@@ -9,18 +9,16 @@ namespace Units.Stages.Units.Buildings.Abstract
 {
     public interface IBuilding : IInitializable
     {
-        public EBuildingType BuildingType { get; }
-        public EMaterialType BuildingMaterialType { get; }
-        public Tuple<EMaterialType, EItemType> InputItemKey { get; }
-        public Tuple<EMaterialType, EItemType> OutItemKey { get; }
+        public string BuildingKey { get; }
+        public string InputItemKey { get; }
+        public string OutItemKey { get; }
     }
 
     public abstract class Building : MonoBehaviour, IBuilding
     {
-        public abstract EBuildingType BuildingType { get; }
-        public abstract EMaterialType BuildingMaterialType { get; }
-        public abstract Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
-        public abstract Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
+        public abstract string BuildingKey { get; protected set; }
+        public abstract string InputItemKey { get; protected set; }
+        public abstract string OutItemKey { get; protected set; }
 
         public abstract void Initialize();
     }

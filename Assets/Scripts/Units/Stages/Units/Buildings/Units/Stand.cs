@@ -4,11 +4,13 @@ using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Modules;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.StatsModules.Abstract;
 using Units.Modules.StatsModules.Units;
 using Units.Modules.StatsModules.Units.Buildings;
+using Units.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
@@ -54,11 +56,11 @@ namespace Units.Stages.Units.Buildings.Units
     {
         [SerializeField] private StandDefaultSetting _standDefaultSetting;
         [SerializeField] private StandCustomSetting _standCustomSetting;
-        
-        public override EBuildingType BuildingType => _standDataSo.BuildingType;
-        public override EMaterialType BuildingMaterialType => _standCustomSetting.MaterialType;
-        public override Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
-        public override Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
+
+        public EMaterialType MaterialType { get; private set; }
+        public override string BuildingKey { get; protected set; }
+        public override string InputItemKey { get; protected set; }
+        public override string OutItemKey { get; protected set; }
         
         private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
@@ -74,9 +76,10 @@ namespace Units.Stages.Units.Buildings.Units
             _standDataSo = DataManager.Instance.StandData;
             
             _itemFactory = itemController;
-            
-            InputItemKey = new Tuple<EMaterialType, EItemType>(_standCustomSetting.MaterialType, _standCustomSetting.InputItemType);
-            OutItemKey = new Tuple<EMaterialType, EItemType>(_standCustomSetting.MaterialType, _standCustomSetting.OutputItemType);
+            MaterialType = _standCustomSetting.MaterialType;
+            BuildingKey = EnumParserModule.ParseDoubleEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
+            InputItemKey = EnumParserModule.ParseDoubleEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
+            OutItemKey =EnumParserModule.ParseDoubleEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
             
             _standStatsModule = new StandStatsModule(_standDataSo);
             _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory, _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutItemKey);
@@ -86,13 +89,18 @@ namespace Units.Stages.Units.Buildings.Units
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
             _interactionTrade = _standDefaultSetting.InteractionTrade;
-            _interactionTrade.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, InputItemKey);
+            _interactionTrade.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
 
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }
         
         public override void Initialize() { }
-        
+
+        private void Update()
+        {
+            _standInventoryModule.Update();
+        }
+
         private void UpdateViewModel()
         {
             var remainedProductCount = _standInventoryModule.GetItemCount(InputItemKey);

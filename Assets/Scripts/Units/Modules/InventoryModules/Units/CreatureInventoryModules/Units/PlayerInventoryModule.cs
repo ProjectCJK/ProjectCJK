@@ -1,26 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interfaces;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
-using Units.Modules.StatsModules.Units;
-using Units.Stages.Controllers;
+using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
-using IItemReceiver = Units.Modules.InventoryModules.Interfaces.IItemReceiver;
 
-namespace Units.Modules.InventoryModules.Units
+namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
 {
-    public interface IPlayerInventoryModule : IInventoryModule, ICreatureItemReceiver
+    public interface IPlayerInventoryModule : ICreatureInventoryModule, ICreatureItemReceiver
     {
     }
 
-    public class PlayerInventoryModule : InventoryModule, IPlayerInventoryModule
+    public class PlayerInventoryModule : CreatureInventoryModule, IPlayerInventoryModule
     {
         public ECreatureType CreatureType { get; }
         public override IItemFactory ItemFactory { get; }
@@ -69,7 +67,7 @@ namespace Units.Modules.InventoryModules.Units
         {
             if (targetInteractionZone == null) return;
 
-            Tuple<EMaterialType, EItemType> targetInputItemKey = targetInteractionZone.InputItemKey;
+            string targetInputItemKey = targetInteractionZone.InputItemKey;
 
             if (Inventory.TryGetValue(targetInputItemKey, out var outputItemCount) && outputItemCount > 0)
             {
@@ -80,7 +78,7 @@ namespace Units.Modules.InventoryModules.Units
             }
         }
 
-        protected override void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item)
+        protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
             ItemFactory.ReturnItem(item);
@@ -92,14 +90,28 @@ namespace Units.Modules.InventoryModules.Units
             {
                 if (_interactionTradeZones.Add(interactionZone))
                 {
-                    interactionZone.RegisterItemReceiver(this);
+                    switch (EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(interactionZone.BuildingKey).Item1)
+                    {
+                        case EBuildingType.Kitchen:
+                            interactionZone.RegisterItemReceiver(this, true);
+                            break;
+                        case EBuildingType.Stand:
+                            break;
+                    }
                 }
             }
             else
             {
                 if (_interactionTradeZones.Remove(interactionZone))
                 {
-                    interactionZone.UnregisterItemReceiver(this);
+                    switch (EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(interactionZone.BuildingKey).Item1)
+                    {
+                        case EBuildingType.Kitchen:
+                            interactionZone.RegisterItemReceiver(this, false);
+                            break;
+                        case EBuildingType.Stand:
+                            break;
+                    }
                 }
             }
         }

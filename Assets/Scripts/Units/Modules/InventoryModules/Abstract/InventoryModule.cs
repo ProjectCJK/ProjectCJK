@@ -22,7 +22,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
     public interface IInventoryProperty
     {
-        int MaxProductInventorySize { get; }
+        public int MaxProductInventorySize { get; }
     }
 
     public abstract class InventoryModule : IInventoryModule
@@ -36,7 +36,7 @@ namespace Units.Modules.InventoryModules.Abstract
 
         public int CurrentInventorySize => Inventory.Values.Sum();
         
-        protected readonly Dictionary<Tuple<EMaterialType, EItemType>, int> Inventory = new();
+        protected readonly Dictionary<string, int> Inventory = new();
         protected readonly Stack<IItem> _spawnedItemStack = new();
         
         private const float SendItemInterval = 0.2f;
@@ -47,14 +47,14 @@ namespace Units.Modules.InventoryModules.Abstract
 
         protected abstract void SendItem();
         
-        protected abstract void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item);
+        protected abstract void OnItemReceived(string inputItemKey, IItem item);
         
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition)
+        public bool ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
         {
             return TransferItem(inputItemKey, currentSenderPosition, ReceiverTransform);
         }
         
-        private bool TransferItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition, Transform targetReceiverPosition)
+        private bool TransferItem(string inputItemKey, Vector3 currentSenderPosition, Transform targetReceiverPosition)
         {
             if (!CanReceiveItem()) return false;
 
@@ -69,7 +69,7 @@ namespace Units.Modules.InventoryModules.Abstract
         /// <summary>
         /// 아이템을 제거하는 메서드
         /// </summary>
-        public void RemoveItem(Tuple<EMaterialType, EItemType> itemKey)
+        public void RemoveItem(string itemKey)
         {
             if (!Inventory.ContainsKey(itemKey)) return;
 
@@ -84,7 +84,7 @@ namespace Units.Modules.InventoryModules.Abstract
         /// <summary>
         /// 아이템을 추가하는 메서드
         /// </summary>
-        protected void AddItem(Tuple<EMaterialType, EItemType> itemKey)
+        protected void AddItem(string itemKey)
         {
             if (!Inventory.TryAdd(itemKey, 1))
             {
@@ -93,7 +93,7 @@ namespace Units.Modules.InventoryModules.Abstract
             OnInventoryCountChanged?.Invoke();
         }
 
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> inventoryKey) => Inventory.ContainsKey(inventoryKey);
+        public bool HasMatchingItem(string inventoryKey) => Inventory.ContainsKey(inventoryKey);
         public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
 
         protected bool IsInventoryFull() => CurrentInventorySize >= MaxInventorySize;

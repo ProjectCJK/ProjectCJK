@@ -1,8 +1,7 @@
-using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
-using Units.Modules.StatsModules.Abstract;
+using Units.Modules.StatsModules.Units.Buildings.Abstract;
 
-namespace Units.Modules.StatsModules.Units.Buildings
+namespace Units.Modules.StatsModules.Units.Buildings.Units
 {
     public interface IKitchenStatsModule : IBuildingStatsModule
     {

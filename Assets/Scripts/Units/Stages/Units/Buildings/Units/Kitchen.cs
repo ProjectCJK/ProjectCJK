@@ -4,11 +4,13 @@ using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Modules;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.ProductModules.Units;
 using Units.Modules.StatsModules.Units;
 using Units.Modules.StatsModules.Units.Buildings;
+using Units.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
@@ -58,10 +60,10 @@ namespace Units.Stages.Units.Buildings.Units
         [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
 
-        public override EBuildingType BuildingType => _kitchenDataSO.BuildingType;
-        public override EMaterialType BuildingMaterialType => _kitchenCustomSetting.MaterialType;
-        public override Tuple<EMaterialType, EItemType> InputItemKey { get; protected set; }
-        public override Tuple<EMaterialType, EItemType> OutItemKey { get; protected set; }
+        public EMaterialType MaterialType { get; private set; }
+        public override string BuildingKey { get; protected set; }
+        public override string InputItemKey { get; protected set; }
+        public override string OutItemKey { get; protected set; }
         
         private IKitchenStatsModule _kitchenStatsModule;
         private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
@@ -79,9 +81,10 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenDataSO = DataManager.Instance.KitchenData;
             
             _itemFactory = itemController;
-
-            InputItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.InputItemType);
-            OutItemKey = new Tuple<EMaterialType, EItemType>(_kitchenCustomSetting.MaterialType, _kitchenCustomSetting.OutputItemType);
+            MaterialType = _kitchenCustomSetting.MaterialType;
+            BuildingKey = EnumParserModule.ParseDoubleEnumToString(_kitchenDataSO.BuildingType, _kitchenCustomSetting.MaterialType); 
+            InputItemKey = EnumParserModule.ParseDoubleEnumToString(_kitchenCustomSetting.InputItemType, _kitchenCustomSetting.MaterialType);
+            OutItemKey = EnumParserModule.ParseDoubleEnumToString(_kitchenCustomSetting.OutputItemType, _kitchenCustomSetting.MaterialType);
             
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
             _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.kitchenFactory, _kitchenDefaultSetting.kitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutItemKey);
@@ -93,7 +96,7 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenDefaultSetting.kitchenView.BindViewModel(_kitchenViewModel);
             
             _interactionTrade = _kitchenDefaultSetting.InteractionTrade;
-            _interactionTrade.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey);
+            _interactionTrade.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;

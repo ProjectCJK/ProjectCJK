@@ -15,15 +15,15 @@ namespace Units.Stages.Units.Items.Units
         public void Transfer(Vector3 pointA, Transform pointB, Action onArrived);
     }
     
-    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<Tuple<EMaterialType, EItemType>, Sprite, Vector3>, IPoolable, IItemTransfer
+    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<string, Sprite, Vector3>, IPoolable, IItemTransfer
     {
-        public Tuple<EMaterialType, EItemType> Type { get; }
+        public string Type { get; }
         public Transform Transform { get; }
     }
 
     public class Item : MonoBehaviour, IItem
     {
-        public Tuple<EMaterialType, EItemType> Type { get; private set; }
+        public string Type { get; private set; }
 
         public Transform Transform => transform;
         private SpriteRenderer _spriteRenderer;
@@ -36,7 +36,7 @@ namespace Units.Stages.Units.Items.Units
             _bezierCurveMover = new BezierCurveMover(this, _itemDataSo.BaseMovementSpeed);
         }
 
-        public void Initialize(Tuple<EMaterialType, EItemType> type, Sprite sprite, Vector3 initialPosition)
+        public void Initialize(string type, Sprite sprite, Vector3 initialPosition)
         {
             Type = type;
             transform.position = initialPosition;

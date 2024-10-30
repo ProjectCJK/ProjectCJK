@@ -10,9 +10,8 @@ namespace Units.Modules.InventoryModules.Interfaces
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }
 
-        public bool ReceiveItem(Tuple<EMaterialType, EItemType> inputItemKey, Vector3 currentSenderPosition);
-
-        public bool HasMatchingItem(Tuple<EMaterialType, EItemType> InventoryKey);
+        public bool ReceiveItem(string inputItemKey, Vector3 currentSenderPosition);
+        public bool HasMatchingItem(string InventoryKey);
         public bool CanReceiveItem();
     }
 }

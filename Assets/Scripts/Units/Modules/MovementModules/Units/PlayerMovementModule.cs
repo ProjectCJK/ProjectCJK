@@ -4,6 +4,7 @@ using Interfaces;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Units;
+using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
