@@ -86,8 +86,8 @@ namespace Units.Stages.Controllers
             
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(targetKey, _buildingController.Buildings[targetKey].transform),
-                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].transform),
+                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
+                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
                 new(string.Empty, _guestSpawnPoint)
             };
 

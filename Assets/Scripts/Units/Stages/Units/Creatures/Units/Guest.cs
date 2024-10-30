@@ -9,6 +9,7 @@ using Units.Modules.FSMModules.Units;
 using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
 using Units.Modules.MovementModules.Units;
 using Units.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
@@ -68,15 +69,9 @@ namespace Units.Stages.Units.Creatures.Units
             _guestMovementModule.Initialize(startPoint);
         }
 
-        public void SetTargetPurchaseQuantity(int targetPurchaseQuantity)
+        private void Update()
         {
-            _guestStatModule.SetMaxInventorySize(targetPurchaseQuantity);
-        }
-        
-        public void SetDestinations(List<Tuple<string, Transform>> destinations)
-        {
-            _destinations = destinations;
-            _guestMovementModule.SetDestination(_destinations[_destinationIndex].Item2.position);
+            _guestInventoryModule.Update();
         }
 
         private void FixedUpdate()
@@ -97,6 +92,17 @@ namespace Units.Stages.Units.Creatures.Units
         private void OnTriggerExit2D(Collider2D other)
         {
             _guestCollisionModule.OnTriggerExit2D(other);
+        }
+        
+        public void SetTargetPurchaseQuantity(int targetPurchaseQuantity)
+        {
+            _guestStatModule.SetMaxInventorySize(targetPurchaseQuantity);
+        }
+        
+        public void SetDestinations(List<Tuple<string, Transform>> destinations)
+        {
+            _destinations = destinations;
+            _guestMovementModule.SetDestination(_destinations[_destinationIndex].Item2.position);
         }
 
         public void Create()
@@ -132,7 +138,7 @@ namespace Units.Stages.Units.Creatures.Units
         
         private void HandleOnTriggerTradeZone(IInteractionTrade interactionZone, bool isConnected)
         {
-            _guestInventoryModule.RegisterItemReceiver(interactionZone, isConnected);
+            _guestInventoryModule.RegisterItemReceiver(interactionZone, isConnected); 
         }
 
         private void HandleOnTargetQuantityReceived()

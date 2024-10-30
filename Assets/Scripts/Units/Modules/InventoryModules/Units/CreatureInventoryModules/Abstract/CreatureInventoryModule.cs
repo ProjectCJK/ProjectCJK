@@ -6,6 +6,7 @@ using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
@@ -54,12 +55,20 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
             if (interactionZone == null) return;
             
             var targetInputItemKey = interactionZone.InputItemKey;
-            if (Inventory.TryGetValue(targetInputItemKey, out var itemCount) && itemCount > 0)
+            
+            if (string.Equals(targetInputItemKey, $"{ECurrencyType.Money}"))
             {
-                if (interactionZone.CanReceiveItem())
+                interactionZone.ReceiveItem(targetInputItemKey, SenderTransform.position);
+            }
+            else
+            {
+                if (Inventory.TryGetValue(targetInputItemKey, out var itemCount) && itemCount > 0)
                 {
-                    interactionZone.ReceiveItem(targetInputItemKey, SenderTransform.position);
-                    RemoveItem(targetInputItemKey);   
+                    if (interactionZone.CanReceiveItem())
+                    {
+                        interactionZone.ReceiveItem(targetInputItemKey, SenderTransform.position);
+                        RemoveItem(targetInputItemKey);   
+                    }
                 }
             }
         }

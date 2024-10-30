@@ -20,7 +20,7 @@ namespace ScriptableObjects.Scripts.Items
     public struct CurrencySprite
     {
         [Header("상품 타입")] 
-        public ECurrencyType ItemType;
+        public ECurrencyType CurrencyType;
         [Header("아이템 이미지")] 
         public Sprite Sprite;
     }

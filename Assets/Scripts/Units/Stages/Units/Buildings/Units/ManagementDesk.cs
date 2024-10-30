@@ -25,10 +25,10 @@ namespace Units.Stages.Units.Buildings.Units
         public Transform managementDeskInventory;
         
         [Space(10), Header("TradeZone_Player")]
-        public InteractionTrade InteractionTradePlayer;
+        public Transform InteractionTradePlayer;
         
         [Space(10), Header("TradeZone_NPC")]
-        public InteractionTrade InteractionTradeNPC;
+        public Transform InteractionTradeNPC;
     }
     
     [Serializable]
@@ -45,7 +45,8 @@ namespace Units.Stages.Units.Buildings.Units
         
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
-        public override string OutItemKey { get; protected set; }
+        public override string OutputItemKey { get; protected set; }
+        public override Transform TradeZoneNpcTransform => _managementDeskDefaultSetting.InteractionTradeNPC;
 
         private IManagementDeskStatsModule _managementDeskStatsModule;
         private IManagementDeskInventoryModule _managementDeskInventoryModule;
@@ -61,20 +62,29 @@ namespace Units.Stages.Units.Buildings.Units
             
             _itemFactory = itemController;
             BuildingKey = EnumParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
-            OutItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
+            InputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
+            OutputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
 
-            // _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
-            // _managementDeskInventoryModule = new ManagementDeskInventoryModule(
-            //     _managementDeskDefaultSetting.managementDeskInventory,
-            //     _managementDeskDefaultSetting.managementDeskInventory,
-            //     _managementDeskStatsModule,
-            //     _itemFactory,
-            //     string.Empty, OutItemKey);
-        }
-        
-        public override void Initialize()
-        {
+            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
+            _managementDeskInventoryModule = new ManagementDeskInventoryModule(
+                _managementDeskDefaultSetting.managementDeskInventory,
+                _managementDeskDefaultSetting.managementDeskInventory,
+                _managementDeskStatsModule,
+                _itemFactory,
+                InputItemKey, OutputItemKey);
             
+            _interactionTradePlayer = _managementDeskDefaultSetting.InteractionTradePlayer.GetComponent<IInteractionTrade>();
+            _interactionTradePlayer.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+            
+            _interactionTradeNPC = _managementDeskDefaultSetting.InteractionTradeNPC.GetComponent<IInteractionTrade>();
+            _interactionTradeNPC.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+        }
+
+        public override void Initialize() { }
+        
+        private void Update()
+        {
+            _managementDeskInventoryModule.Update();
         }
     }
 }
