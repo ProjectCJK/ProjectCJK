@@ -43,13 +43,14 @@ namespace Units.Modules.MovementModules.Units
 
         public void Initialize(Vector3 startPosition)
         {
-            ActivateNavMeshAgent(false);
             _navMeshAgent.speed = _movementSpeed;
                 
             if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             {
                 _guestTransform.position = hit.position;
             }
+            
+            ActivateNavMeshAgent(false);
         }
 
         public void SetDestination(Vector3 destination)

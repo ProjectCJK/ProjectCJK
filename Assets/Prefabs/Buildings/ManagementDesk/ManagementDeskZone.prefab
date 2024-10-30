@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 717793097357247185}
   - component: {fileID: 2820492816623360951}
   - component: {fileID: 6036905710143211297}
-  m_Layer: 15
+  m_Layer: 14
   m_Name: Inventory_ManagementDesk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,19 +86,29 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 3, y: 0, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 4
+  - m_RefCount: 5
     m_Data: {fileID: 11400000, guid: 649396610f5f74004bc3868f1057e672, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 4
+  - m_RefCount: 5
     m_Data: {fileID: 21300000, guid: e61c1e60462c13c4c8b36bbe95814ae5, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 4
+  - m_RefCount: 5
     m_Data:
       e00: 1
       e01: 0
@@ -117,7 +127,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 4
+  - m_RefCount: 5
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: 0.8613179, g: 0.35177737, b: 0.4416101, a: 1}
@@ -185,7 +195,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -925509469
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -296,20 +306,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 6239173806724782391}
     m_ColliderPaths:
-    - - X: 30000000
+    - - X: 40000000
         Y: 10000000
       - X: -10000000
         Y: 10000000
       - X: -10000000
         Y: 0
-      - X: 30000000
+      - X: 40000000
         Y: 0
   m_CompositePaths:
     m_Paths:
-    - - {x: 3, y: 1}
+    - - {x: 4, y: 1}
       - {x: -1, y: 1}
       - {x: -1, y: 0}
-      - {x: 3, y: 0}
+      - {x: 4, y: 0}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
@@ -395,7 +405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3393669777916176694}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 1, z: 0}
+  m_LocalPosition: {x: 4, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -550,7 +560,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -925509469
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -7656,7 +7666,7 @@ GameObject:
   - component: {fileID: 2342220403841986501}
   - component: {fileID: 9172679750964473068}
   - component: {fileID: 6586469278632007687}
-  m_Layer: 15
+  m_Layer: 14
   m_Name: Sprite_ManagementDesk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7687,16 +7697,6 @@ Tilemap:
   m_GameObject: {fileID: 4292149282673467428}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: 3, y: 0, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 3, y: 1, z: 0}
     second:
       serializedVersion: 2
@@ -7749,17 +7749,17 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data: {fileID: 11400000, guid: 9690be70e728a4be1aa09087dc2ea944, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data: {fileID: 21300000, guid: 7aec87028f70b254eba685a7e74b5b0b, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data:
       e00: 1
       e01: 0
@@ -7778,7 +7778,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: 0.8613179, g: 0.35177737, b: 0.4416101, a: 1}
@@ -7846,7 +7846,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -925509469
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -7962,15 +7962,15 @@ CompositeCollider2D:
       - X: 30000000
         Y: 60000000
       - X: 30000000
-        Y: 0
+        Y: 10000000
       - X: 40000000
-        Y: 0
+        Y: 10000000
   m_CompositePaths:
     m_Paths:
     - - {x: 4, y: 6}
       - {x: 3, y: 6}
-      - {x: 3, y: 0}
-      - {x: 4, y: 0}
+      - {x: 3, y: 1}
+      - {x: 4, y: 1}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
@@ -8591,7 +8591,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9093880379541834868}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 1, z: 0}
+  m_LocalPosition: {x: 2, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -8716,7 +8716,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -925509469
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16

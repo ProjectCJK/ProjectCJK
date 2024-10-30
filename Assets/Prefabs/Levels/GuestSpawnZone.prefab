@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8264122607348850255}
   - component: {fileID: 4580045523442297285}
   - component: {fileID: 3287176272788640655}
-  m_Layer: 14
-  m_Name: GuestSpawner
+  - component: {fileID: 8584235576531805682}
+  m_Layer: 18
+  m_Name: GuestSpawnZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,3 +228,15 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &8584235576531805682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2467739441455631197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44df511dd5d43399547d1ebfda939d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
