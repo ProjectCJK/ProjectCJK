@@ -1,119 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
-using Units.Stages.Units.Buildings.Enums;
-using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
 {
-    public interface IPlayerInventoryModule : ICreatureInventoryModule, ICreatureItemReceiver
-    {
-    }
+    public interface IPlayerInventoryModule : ICreatureInventoryModule { }
 
     public class PlayerInventoryModule : CreatureInventoryModule, IPlayerInventoryModule
     {
-        public ECreatureType CreatureType { get; }
+        public override ECreatureType CreatureType { get; }
         public override IItemFactory ItemFactory { get; }
-        public override int MaxInventorySize => _inventoryProperty.MaxProductInventorySize;
-
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
-        
-        private readonly HashSet<IInteractionTrade> _interactionTradeZones = new();
-        private readonly IInventoryProperty _inventoryProperty;
-
-        private IPlayerInventoryModule _playerInventoryModuleImplementation;
 
         public PlayerInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             IInventoryProperty inventoryProperty,
-            IItemFactory itemController,
-            ECreatureType creatureType)
+            IItemFactory itemFactory,
+            ECreatureType creatureType) : base(inventoryProperty)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
-            _inventoryProperty = inventoryProperty;
-            ItemFactory = itemController;
+            ItemFactory = itemFactory;
             CreatureType = creatureType;
         }
-
-        public override void Initialize()
-        {
-            Inventory.Clear();
-        }
-
-        protected override void SendItem()
-        {
-            if (!IsReadyToSend() || _interactionTradeZones.Count <= 0) return;
-            
-            foreach (IInteractionTrade targetInteractionZone in _interactionTradeZones.ToList())
-            {
-                ProcessInteractionZone(targetInteractionZone);
-            }
-
-            SetLastSendTime();
-        }
-
-        private void ProcessInteractionZone(IInteractionTrade targetInteractionZone)
-        {
-            if (targetInteractionZone == null) return;
-
-            string targetInputItemKey = targetInteractionZone.InputItemKey;
-
-            if (Inventory.TryGetValue(targetInputItemKey, out var outputItemCount) && outputItemCount > 0)
-            {
-                if (targetInteractionZone.ReceiveItem(targetInputItemKey, SenderTransform.position))
-                {
-                    RemoveItem(targetInputItemKey);
-                }
-            }
-        }
-
+        
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
             ItemFactory.ReturnItem(item);
-        }
-
-        public void ConnectWithInteractionTradeZone(IInteractionTrade interactionZone, bool isConnected)
-        {
-            if (isConnected)
-            {
-                if (_interactionTradeZones.Add(interactionZone))
-                {
-                    switch (EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(interactionZone.BuildingKey).Item1)
-                    {
-                        case EBuildingType.Kitchen:
-                            interactionZone.RegisterItemReceiver(this, true);
-                            break;
-                        case EBuildingType.Stand:
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                if (_interactionTradeZones.Remove(interactionZone))
-                {
-                    switch (EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(interactionZone.BuildingKey).Item1)
-                    {
-                        case EBuildingType.Kitchen:
-                            interactionZone.RegisterItemReceiver(this, false);
-                            break;
-                        case EBuildingType.Stand:
-                            break;
-                    }
-                }
-            }
         }
     }
 }

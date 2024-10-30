@@ -16,6 +16,7 @@ namespace Managers
         public GuestDataSO GuestData;
         public KitchenDataSO KitchenData;
         public StandDataSO StandData;
+        public ManagementDeskDataSO ManagementDeskData;
         public HuntingZoneDataSO HuntingZoneData;
     }
 }

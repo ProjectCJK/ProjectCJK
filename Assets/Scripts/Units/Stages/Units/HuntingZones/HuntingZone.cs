@@ -4,6 +4,7 @@ using Interfaces;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.HuntingZones;
+using Units.Modules;
 using Units.Modules.FactoryModules.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Enums;
@@ -63,7 +64,7 @@ namespace Units.Stages.Units.HuntingZones
 
             OnDroppedItem += action;
 
-            _itemKey = $"{EItemType.Material}_{huntingZoneCustomSetting._materialType}";
+            _itemKey = EnumParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
         }
         
         public void Initialize()

@@ -73,7 +73,7 @@ namespace Units.Modules.FactoryModules.Units
             
             foreach (ItemSprite data in itemSprites)
             {
-                var dicKey = EnumParserModule.ParseDoubleEnumToString(data.ItemType, data.MaterialType);
+                var dicKey = EnumParserModule.ParseEnumToString(data.ItemType, data.MaterialType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
             }
         }
