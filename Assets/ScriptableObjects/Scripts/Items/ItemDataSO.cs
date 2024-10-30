@@ -8,10 +8,10 @@ namespace ScriptableObjects.Scripts.Items
     [Serializable]
     public struct ItemSprite
     {
-        [Header("재료 타입")] 
-        public EMaterialType MaterialType;
         [Header("상품 타입")] 
         public EItemType ItemType;
+        [Header("재료 타입")] 
+        public EMaterialType MaterialType;
         [Header("아이템 이미지")] 
         public Sprite Sprite;
     }

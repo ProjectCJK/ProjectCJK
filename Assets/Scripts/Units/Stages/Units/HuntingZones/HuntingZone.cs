@@ -51,7 +51,7 @@ namespace Units.Stages.Units.HuntingZones
         private ICreatureController _creatureController;
         private IItemFactory itemFactory;
         
-        private Tuple<EMaterialType, EItemType> _itemType;
+        private string _itemKey;
 
         private HuntingZoneDataSO _huntingZoneDataSo; 
         
@@ -63,7 +63,7 @@ namespace Units.Stages.Units.HuntingZones
 
             OnDroppedItem += action;
 
-            _itemType = new Tuple<EMaterialType, EItemType>(huntingZoneCustomSetting._materialType, EItemType.Material);
+            _itemKey = $"{EItemType.Material}_{huntingZoneCustomSetting._materialType}";
         }
         
         public void Initialize()
@@ -75,11 +75,10 @@ namespace Units.Stages.Units.HuntingZones
         {
             while (currentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
             {
-                var monster = _creatureController.GetMonster(_itemType.Item1, ReturnMonster);
+                var monster = _creatureController.GetMonster(GetRandomSpawnPoint(), huntingZoneCustomSetting._materialType, ReturnMonster);
                 
                 if (monster != null)
                 {
-                    monster.Transform.position = GetRandomSpawnPoint();
                     currentSpawnedMonsters.Add(monster);
                 }
             }
@@ -97,7 +96,7 @@ namespace Units.Stages.Units.HuntingZones
         {
             Vector3 receiverPosition = GetRandomItemDropPoint(senderPosition);
             
-            IItem item = itemFactory.GetItem(_itemType, senderPosition);
+            IItem item = itemFactory.GetItem(_itemKey, senderPosition);
             item.Transfer(senderPosition, receiverPosition, () => OnDroppedItem?.Invoke(item));
         }
 

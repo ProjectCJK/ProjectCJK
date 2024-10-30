@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interfaces;
+using Units.Modules;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
@@ -51,10 +52,9 @@ namespace Units.Stages.Controllers
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.E))
             {
-                IGuest guest = _creatureController.GetGuest(ReturnGuest);
-                guest.Initialize(() => ReturnGuest(guest));
-                guest.SetDestinations(_guestSpawnPoint.position, GetRandomDestination());
-                guest.Transform.position = _guestSpawnPoint.position;
+                IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
+                guest.SetTargetPurchaseQuantity(1);
+                guest.SetDestinations(GetRandomDestination());
                 
                 currentSpawnedGuests.Add(guest);
             }
@@ -79,11 +79,12 @@ namespace Units.Stages.Controllers
             currentSpawnedGuests.Remove(guest);
         }
 
-        private List<Transform> GetRandomDestination()
+        private List<Tuple<string, Transform>> GetRandomDestination()
         {
-            var destinations = new List<Transform>
+            var key = EnumParserModule.ParseDoubleEnumToString(EBuildingType.Stand, EMaterialType.A);
+            var destinations = new List<Tuple<string, Transform>>
             {
-                _buildingController.Buildings[new Tuple<EBuildingType, EMaterialType>(EBuildingType.Stand, EMaterialType.A)].transform
+                new(key, _buildingController.Buildings[key].transform)
             };
 
             return destinations;

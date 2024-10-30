@@ -12,10 +12,10 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
         public event Action<bool> OnTriggerHuntingZone;
+        public void Update();
         public void OnTriggerEnter2D(Collider2D other);
         public void OnTriggerStay2D(Collider2D other);
         public void OnTriggerExit2D(Collider2D other);
-        public void Update();  // Player의 Update에서 호출할 메서드
     }
 
     public class PlayerCollisionModule : CollisionModule, IPlayerCollisionModule
@@ -26,14 +26,27 @@ namespace Units.Modules.CollisionModules.Units
         private readonly Queue<Transform> _tradeZones = new();
         private readonly float _waitingTime;
         
-        private float _elapsedTime;  // 시간 측정 변수
         private Transform _targetTransform;
         private Transform _previousTargetTransform; // 이전 트리거 존을 저장
+        private float _elapsedTime;  // 시간 측정 변수
         private bool _isWaitingForTrigger; // 대기 상태 여부
 
         public PlayerCollisionModule(IInteractionProperty playerStatsModule)
         {
             _waitingTime = playerStatsModule.WaitingTime;
+        }
+        
+        public void Update()
+        {
+            if (_isWaitingForTrigger && _targetTransform != null)
+            {
+                _elapsedTime += Time.deltaTime;
+
+                if (_elapsedTime >= _waitingTime)
+                {
+                    CompleteWaitForTrigger();
+                }
+            }
         }
 
         public void OnTriggerEnter2D(Collider2D other)
@@ -79,20 +92,6 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.HuntingZone:
                     OnTriggerHuntingZone?.Invoke(false);
                     break;
-            }
-        }
-
-        // Player의 Update에서 호출되는 메서드
-        public void Update()
-        {
-            if (_isWaitingForTrigger && _targetTransform != null)
-            {
-                _elapsedTime += Time.deltaTime;
-
-                if (_elapsedTime >= _waitingTime)
-                {
-                    CompleteWaitForTrigger();
-                }
             }
         }
         
@@ -166,17 +165,6 @@ namespace Units.Modules.CollisionModules.Units
                 Debug.Log($"[NotifyTradeZoneExit] Exiting trade zone: {tradeZone}");
                 OnTriggerTradeZone?.Invoke(tradeZone, false);
             }
-        }
-
-        private ECollisionType CheckLayer(int layer)
-        {
-            return layer switch
-            {
-                _ when layer == tradeZoneLayerMask => ECollisionType.TradeZone,
-                _ when layer == upgradeZoneLayerMask => ECollisionType.UpgradeZone,
-                _ when layer == huntingZoneLayerMask => ECollisionType.HuntingZone,
-                _ => ECollisionType.None
-            };
         }
     }
 }

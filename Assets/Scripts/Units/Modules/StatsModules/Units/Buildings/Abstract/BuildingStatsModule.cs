@@ -1,10 +1,9 @@
-using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Abstract;
 using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.ProductModules;
 using Units.Modules.ProductModules.Abstract;
+using Units.Modules.StatsModules.Abstract;
 
-namespace Units.Modules.StatsModules.Abstract
+namespace Units.Modules.StatsModules.Units.Buildings.Abstract
 {
     public interface IBuildingStatsModule : IInventoryProperty, IProductProperty
     {
