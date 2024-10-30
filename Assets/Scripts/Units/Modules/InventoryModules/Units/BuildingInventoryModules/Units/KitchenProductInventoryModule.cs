@@ -5,6 +5,7 @@ using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Modules.StatsModules.Units;
 using Units.Modules.StatsModules.Units.Buildings;
+using Units.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
@@ -23,13 +24,13 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             Transform receiverTransform,
             IKitchenStatsModule kitchenStatsModule,
             IItemFactory itemFactory,
-            Tuple<EMaterialType, EItemType> inputItemKey,
-            Tuple<EMaterialType, EItemType> outputItemKey)
+            string inputItemKey,
+            string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
         }
 
-        protected override void OnItemReceived(Tuple<EMaterialType, EItemType> inputItemKey, IItem item)
+        protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
             PushSpawnedItem(item);

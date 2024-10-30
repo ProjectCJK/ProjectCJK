@@ -1,13 +1,11 @@
-using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Modules.HealthModules.Abstract;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.Creatures.Interfaces;
 
-namespace Units.Modules.StatsModules.Units
+namespace Units.Modules.StatsModules.Units.Creatures.Units
 {
     public interface IMonsterStatsModule : ICreatureTypeProperty, IMovementProperty, IHealthProperty
     {

@@ -13,7 +13,7 @@ namespace Units.Modules.FactoryModules.Units
     public interface IGuestFactory
     {
         public GuestDataSO GuestDataSo { get; }
-        public IGuest GetGuest(Action<IGuest> onReturn);
+        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn);
         public void ReturnGuest(Guest guest);
     }
     
@@ -25,12 +25,15 @@ namespace Units.Modules.FactoryModules.Units
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
-        public GuestFactory()
+        private readonly IItemFactory _itemFactory;
+            
+        public GuestFactory( IItemFactory itemFactory)
         {
+            _itemFactory = itemFactory;
             CreateGuestPools();
         }
 
-        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn = null)
+        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn)
         {
             var guest = ObjectPoolManager.Instance.GetObject<IGuest>(PoolKey, null);
             
@@ -41,11 +44,6 @@ namespace Units.Modules.FactoryModules.Units
             });
             
             return guest;
-        }
-
-        public IGuest GetGuest(Action<IGuest> onReturn)
-        {
-            throw new NotImplementedException();
         }
 
         public void ReturnGuest(Guest guest)
@@ -63,7 +61,7 @@ namespace Units.Modules.FactoryModules.Units
             GameObject obj = Object.Instantiate(prefab);
             var guest = obj.GetComponent<IGuest>();
             
-            guest.RegisterReference(GuestDataSo);
+            guest.RegisterReference(GuestDataSo, _itemFactory);
             
             return guest;
         }

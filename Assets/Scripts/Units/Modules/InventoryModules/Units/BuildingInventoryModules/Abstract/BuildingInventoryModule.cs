@@ -6,6 +6,7 @@ using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.StatsModules.Abstract;
+using Units.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
@@ -15,10 +16,9 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
 {
     public interface IBuildingInventoryModule : IInventoryModule
     {
-        void RemoveItem(Tuple<EMaterialType, EItemType> inputItemKey);
-        void RegisterItemReceiver(ICreatureItemReceiver itemReceiver);
-        void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver);
-        int GetItemCount(Tuple<EMaterialType, EItemType> inputItemKey);
+        public void RemoveItem(string inputItemKey);
+        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
+        public int GetItemCount(string inputItemKey);
     }
 
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
@@ -31,16 +31,16 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
         private readonly IBuildingStatsModule _buildingStatsModule;
         private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
-        public Tuple<EMaterialType, EItemType> InputItemKey { get; }
-        public Tuple<EMaterialType, EItemType> OutputItemKey { get; }
+        public string InputItemKey { get; }
+        public string OutputItemKey { get; }
 
         protected BuildingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
             IBuildingStatsModule buildingStatsModule,
-            Tuple<EMaterialType, EItemType> inputItemKey,
-            Tuple<EMaterialType, EItemType> outputItemKey)
+            string inputItemKey,
+            string outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
@@ -56,20 +56,23 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
             Inventory.Clear();
         }
 
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver)
+        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register)
         {
-            if (!_itemReceiverQueue.Contains(itemReceiver))
+            switch (register)
             {
-                _itemReceiverQueue.Enqueue(itemReceiver, (int)itemReceiver.CreatureType);
+                case true:
+                    if (!_itemReceiverQueue.Contains(itemReceiver))
+                    {
+                        _itemReceiverQueue.Enqueue(itemReceiver, (int)itemReceiver.CreatureType);
+                    }
+                    break;
+                case false:
+                    _itemReceiverQueue.Remove(itemReceiver);
+                    break;
             }
         }
 
-        public void UnRegisterItemReceiver(ICreatureItemReceiver itemReceiver)
-        {
-            _itemReceiverQueue.Remove(itemReceiver);
-        }
-
-        public int GetItemCount(Tuple<EMaterialType, EItemType> key) => Inventory.GetValueOrDefault(key, 0);
+        public int GetItemCount(string key) => Inventory.GetValueOrDefault(key, 0);
 
         protected override void SendItem()
         {

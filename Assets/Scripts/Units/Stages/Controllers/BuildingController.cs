@@ -16,13 +16,13 @@ namespace Units.Stages.Controllers
 {
     public interface IBuildingController : IRegisterReference<IItemFactory>, IInitializable
     {
-        public Dictionary<Tuple<EBuildingType, EMaterialType>, Building> Buildings { get; }
+        public Dictionary<string, Building> Buildings { get; }
         public Dictionary<Building, EActiveStatus> BuildingActiveStatuses { get; }
     }
 
     public class BuildingController : MonoBehaviour, IBuildingController
     {
-        public Dictionary<Tuple<EBuildingType, EMaterialType>, Building> Buildings { get; } = new();
+        public Dictionary<string, Building> Buildings { get; } = new();
         public Dictionary<Building, EActiveStatus> BuildingActiveStatuses { get; } = new();
 
         private List<EMaterialType> _materials;
@@ -43,7 +43,7 @@ namespace Units.Stages.Controllers
                         break;
                 }
 
-                var key = new Tuple<EBuildingType, EMaterialType>(building.BuildingType, building.BuildingMaterialType);
+                var key = building.BuildingKey;
 
                 Buildings.TryAdd(key, building);
                 
@@ -54,12 +54,12 @@ namespace Units.Stages.Controllers
 
         public void Initialize()
         {
-            foreach (KeyValuePair<Tuple<EBuildingType, EMaterialType>, Building> building in Buildings)
+            foreach (KeyValuePair<string, Building> building in Buildings)
             {
                 building.Value.Initialize();
             }
         }
         
-        public Transform GetBuildingTransform(Tuple<EBuildingType, EMaterialType> key) => Buildings[key].transform;
+        public Transform GetBuildingTransform(string key) => Buildings[key].transform;
     }
 }

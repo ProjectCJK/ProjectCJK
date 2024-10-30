@@ -16,8 +16,8 @@ namespace Units.Stages.Controllers
     {
         public Transform PlayerTransform { get; }
         public IPlayer GetPlayer();
-        public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn);
-        public IGuest GetGuest(Action<IGuest> onReturn);
+        public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType materialType, Action<IMonster> onReturn);
+        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn);
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
@@ -33,7 +33,7 @@ namespace Units.Stages.Controllers
         {
             _playerFactory = new PlayerFactory(joystick, itemFactory);
             _monsterFactory = new MonsterFactory();
-            _guestFactory = new GuestFactory();
+            _guestFactory = new GuestFactory(itemFactory);
         }
 
         public IPlayer GetPlayer()
@@ -43,16 +43,16 @@ namespace Units.Stages.Controllers
             return player;
         }
 
-        public IMonster GetMonster(EMaterialType materialType, Action<IMonster> onReturn)
+        public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType materialType, Action<IMonster> onReturn)
         {
-            IMonster monster = _monsterFactory.GetMonster(materialType, onReturn);
+            IMonster monster = _monsterFactory.GetMonster(randomSpawnPoint, materialType, onReturn);
             
             return monster;
         }
 
-        public IGuest GetGuest(Action<IGuest> onReturn)
+        public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn)
         {
-            IGuest guest = _guestFactory.GetGuest(onReturn);
+            IGuest guest = _guestFactory.GetGuest(startPosition, onReturn);
             
             return guest;
         }

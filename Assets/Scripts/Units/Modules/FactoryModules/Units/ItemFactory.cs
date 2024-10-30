@@ -14,7 +14,7 @@ namespace Units.Modules.FactoryModules.Units
     public interface IItemFactory
     {
         public ItemDataSO ItemDataSo { get; }
-        IItem GetItem(Tuple<EMaterialType, EItemType> itemType, Vector3 initializePosition);
+        IItem GetItem(string itemType, Vector3 initializePosition);
         void ReturnItem(IItem item);
     }
     
@@ -22,7 +22,7 @@ namespace Units.Modules.FactoryModules.Units
     {
         public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
         
-        private Dictionary<Tuple<EMaterialType, EItemType>, Sprite> _itemSprites;
+        private Dictionary<string, Sprite> _itemSprites;
         
         private static string PoolKey => "ItemPool";
         private const int DefaultPoolSize = 20;
@@ -34,7 +34,7 @@ namespace Units.Modules.FactoryModules.Units
             CreateSpriteDictionary();
         }
 
-        public IItem GetItem(Tuple<EMaterialType, EItemType> itemType, Vector3 initializePosition)
+        public IItem GetItem(string itemType, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
             item.Initialize(itemType, _itemSprites[itemType], initializePosition);
@@ -65,11 +65,11 @@ namespace Units.Modules.FactoryModules.Units
         private void CreateSpriteDictionary()
         {
             List<ItemSprite> itemSprites = ItemDataSo.ItemSprites;
-            _itemSprites = new Dictionary<Tuple<EMaterialType, EItemType>, Sprite>();
+            _itemSprites = new Dictionary<string, Sprite>();
             
             foreach (ItemSprite data in itemSprites)
             {
-                var dicKey = new Tuple<EMaterialType, EItemType>(data.MaterialType, data.ItemType);
+                var dicKey = EnumParserModule.ParseDoubleEnumToString(data.ItemType, data.MaterialType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
             }
         }

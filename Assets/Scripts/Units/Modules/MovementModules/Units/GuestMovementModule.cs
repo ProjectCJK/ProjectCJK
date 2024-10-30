@@ -12,6 +12,8 @@ namespace Units.Modules.MovementModules.Units
     public interface IGuestMovementModule : IInitializable<Vector3>
     {
         public void FixedUpdate();
+        public void SetDestination(Vector3 destination);
+        public void ActivateNavMeshAgent(bool value);
     }
 
     public class GuestMovementModule : MovementModule, IGuestMovementModule
@@ -21,9 +23,6 @@ namespace Units.Modules.MovementModules.Units
         private readonly Transform _guestTransform;
 
         private Vector3 _destination;
-        private bool _isInitialized;
-        private bool _hasReachedDestination;
-        private bool _isPathReady; // 경로가 계산되었는지 여부
         private float _movementSpeed => _guestStatModule.MovementSpeed;
 
         public GuestMovementModule(Guest guest, IGuestStatModule guestStatModule)
@@ -43,14 +42,13 @@ namespace Units.Modules.MovementModules.Units
 
         public void Initialize(Vector3 startPosition)
         {
-            _navMeshAgent.isStopped = true;
+            ActivateNavMeshAgent(true);
             _navMeshAgent.speed = _movementSpeed;
             _navMeshAgent.acceleration = _movementSpeed;
-            
+                
             if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             {
                 _guestTransform.position = hit.position;
-                _navMeshAgent.isStopped = false;
             }
         }
 
@@ -67,13 +65,14 @@ namespace Units.Modules.MovementModules.Units
                 if (NavMesh.CalculatePath(_guestTransform.position, destination, NavMesh.AllAreas, path))
                 {
                     _navMeshAgent.SetPath(path);
+                    ActivateNavMeshAgent(false);
                 }   
             }
         }
 
         public void FixedUpdate()
         {
-            if (_navMeshAgent != null && _navMeshAgent.enabled && _navMeshAgent.isOnNavMesh)
+            if (_navMeshAgent != null && _navMeshAgent.isStopped != true && _navMeshAgent.enabled && _navMeshAgent.isOnNavMesh)
             {
                 // 현재 위치에서 목적지까지 경로 확인
                 var path = new NavMeshPath();
@@ -83,6 +82,11 @@ namespace Units.Modules.MovementModules.Units
                     _navMeshAgent.SetPath(path);
                 }
             }
+        }
+
+        public void ActivateNavMeshAgent(bool value)
+        {
+            _navMeshAgent.isStopped = value;
         }
     }
 }

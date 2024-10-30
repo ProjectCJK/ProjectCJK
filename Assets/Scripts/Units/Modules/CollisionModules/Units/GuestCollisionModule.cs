@@ -8,7 +8,8 @@ namespace Units.Modules.CollisionModules.Units
 {
     public interface IGuestCollisionModule
     {
-        public event Func<Transform, bool, bool> OnTriggerTradeZone;
+        public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
+        public event Func<string, bool, bool> OnCheckValidTransform;
         public void OnTriggerEnter2D(Collider2D other);
         public void OnTriggerStay2D(Collider2D other);
         public void OnTriggerExit2D(Collider2D other);
@@ -16,9 +17,9 @@ namespace Units.Modules.CollisionModules.Units
 
     public class GuestCollisionModule : CollisionModule, IGuestCollisionModule
     {
-        public event Func<Transform, bool, bool> OnTriggerTradeZone;
+        public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
+        public event Func<string, bool, bool> OnCheckValidTransform;
         
-        private readonly Queue<Transform> _tradeZones = new();
         private readonly float _waitingTime;
         
         private Transform _targetTransform;
@@ -38,9 +39,12 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.TradeZone:
-                    if (OnTriggerTradeZone != null && OnTriggerTradeZone(other.transform, true))
+                    var tradeZone = other.transform.GetComponent<IInteractionTrade>();
+                    
+                    if (tradeZone != null && OnCheckValidTransform != null && OnCheckValidTransform(tradeZone.BuildingKey, true))
                     {
-                        _targetTransform = other.transform;
+                        Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {tradeZone}");
+                        OnTriggerTradeZone?.Invoke(tradeZone, true);
                     }
                     break;
             }

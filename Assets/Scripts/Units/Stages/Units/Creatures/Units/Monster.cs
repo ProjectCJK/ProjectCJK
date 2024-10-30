@@ -8,6 +8,7 @@ using Units.Modules.FSMModules.Units;
 using Units.Modules.HealthModules.Units;
 using Units.Modules.MovementModules.Units;
 using Units.Modules.StatsModules.Units;
+using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
@@ -17,7 +18,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : IBaseCreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Sprite, Action>, ITakeDamage
+    public interface IMonster : IBaseCreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
     {
         
     }
@@ -55,13 +56,13 @@ namespace Units.Stages.Units.Creatures.Units
             _damageFlashModule.RegisterReference();
         }
         
-        public void Initialize(Sprite monsterSprite, Action action)
+        public void Initialize(Vector3 randomSpawnPoint, Sprite monsterSprite, Action action)
         {
             // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
             // _spriteRenderer.sprite = monsterSprite;
             
+            transform.position = randomSpawnPoint;
             OnReturnMonster = action;
-            _spriteRenderer.color = Color.red;
         }
 
         public void Create()

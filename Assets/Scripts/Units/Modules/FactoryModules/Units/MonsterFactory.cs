@@ -17,7 +17,7 @@ namespace Units.Modules.FactoryModules.Units
     {
         public MonsterDataSO MonsterDataSo { get; }
         public Dictionary<EMaterialType, Sprite> MonsterSprites { get; }
-        public IMonster GetMonster(EMaterialType type, Action<IMonster> onReturn);
+        public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType type, Action<IMonster> onReturn);
     }
     
     public class MonsterFactory : Factory, IMonsterFactory
@@ -35,11 +35,11 @@ namespace Units.Modules.FactoryModules.Units
             CreateSpriteDictionary();
         }
 
-        public IMonster GetMonster(EMaterialType type, Action<IMonster> onReturn)
+        public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType type, Action<IMonster> onReturn)
         {
             var monster = ObjectPoolManager.Instance.GetObject<IMonster>(PoolKey, null);
             
-            monster.Initialize(MonsterSprites[type], () =>
+            monster.Initialize(randomSpawnPoint, MonsterSprites[type], () =>
             {
                 ObjectPoolManager.Instance.ReturnObject(PoolKey, monster);
                 onReturn?.Invoke(monster);

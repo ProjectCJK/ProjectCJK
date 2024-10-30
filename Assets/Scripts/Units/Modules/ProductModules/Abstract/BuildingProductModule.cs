@@ -2,6 +2,7 @@ using System;
 using Interfaces;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Modules.StatsModules.Abstract;
+using Units.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -41,8 +42,8 @@ namespace Units.Modules.ProductModules.Abstract
         private readonly IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
         private readonly IKitchenProductInventoryModule _kitchenProductInventoryModule;
 
-        private readonly Tuple<EMaterialType, EItemType> _inputItemKey;
-        private readonly Tuple<EMaterialType, EItemType> _outputItemKey;
+        private readonly string _inputItemKey;
+        private readonly string _outputItemKey;
 
         private float _productLeadTime => _buildingStatsModule.ProductLeadTime;
 
@@ -54,8 +55,8 @@ namespace Units.Modules.ProductModules.Abstract
             IBuildingStatsModule buildingStatsModule,
             IKitchenMaterialInventoryModule kitchenMaterialInventoryModule,
             IKitchenProductInventoryModule kitchenProductInventoryModule,
-            Tuple<EMaterialType, EItemType> inputItemKey,
-            Tuple<EMaterialType, EItemType> outputItemKey)
+            string inputItemKey,
+            string outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;

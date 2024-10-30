@@ -4,14 +4,17 @@ using Interfaces;
 using Modules;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
+using Units.Modules;
 using Units.Modules.BattleModules;
 using Units.Modules.CollisionModules.Units;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units;
+using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
 using Units.Modules.MovementModules.Units;
 using Units.Modules.StatsModules.Units;
+using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Creatures.Abstract;
@@ -93,7 +96,7 @@ namespace Units.Stages.Units.Creatures.Units
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                var tempKey = new Tuple<EMaterialType, EItemType>(EMaterialType.A, EItemType.Material);
+                var tempKey = EnumParserModule.ParseDoubleEnumToString(EItemType.Material, EMaterialType.A);
                 _playerInventoryModule.ReceiveItem(tempKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }      
 #endif
