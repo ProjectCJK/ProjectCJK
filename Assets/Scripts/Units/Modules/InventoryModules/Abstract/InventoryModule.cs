@@ -14,11 +14,11 @@ namespace Units.Modules.InventoryModules.Abstract
 {
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
-        event Action OnInventoryCountChanged;
-        IItemFactory ItemFactory { get; }
-        int MaxInventorySize { get; }
-        int CurrentInventorySize { get; }
-        void Update();
+        public event Action OnInventoryCountChanged;
+        public IItemFactory ItemFactory { get; }
+        public int MaxInventorySize { get; }
+        public int CurrentInventorySize { get; }
+        public void Update();
     }
 
     public interface IInventoryProperty
@@ -43,6 +43,8 @@ namespace Units.Modules.InventoryModules.Abstract
         private const float SendItemInterval = 0.2f;
         private float _lastSendTime;
 
+        private bool isItemReceiving;
+
         public abstract void Initialize();
         public void Update() => TrySendItem();
 
@@ -50,21 +52,18 @@ namespace Units.Modules.InventoryModules.Abstract
         
         protected abstract void OnItemReceived(string inputItemKey, IItem item);
         
-        public bool ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
+        public void ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
         {
-            return TransferItem(inputItemKey, currentSenderPosition, ReceiverTransform);
-        }
-        
-        private bool TransferItem(string inputItemKey, Vector3 currentSenderPosition, Transform targetReceiverPosition)
-        {
-            if (!CanReceiveItem()) return false;
-
+            isItemReceiving = true;
+            
             IItem item = ItemFactory.GetItem(inputItemKey, currentSenderPosition);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
-            item.Transfer(currentSenderPosition, targetReceiverPosition, () => OnItemReceived(inputItemKey, item));
-
-            return true;
+            item.Transfer(currentSenderPosition, ReceiverTransform, () =>
+            {
+                OnItemReceived(inputItemKey, item);
+                isItemReceiving = false;
+            });
         }
 
         /// <summary>
@@ -95,7 +94,9 @@ namespace Units.Modules.InventoryModules.Abstract
         }
 
         public bool HasMatchingItem(string inventoryKey) => Inventory.ContainsKey(inventoryKey);
-        public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
+
+        public bool CanReceiveItem() => CurrentInventorySize + (isItemReceiving ? 2 : 1) <= MaxInventorySize;
+        
         protected bool IsReadyToSend() => Time.time >= _lastSendTime + SendItemInterval;
         protected void SetLastSendTime() => _lastSendTime = Time.time;
 

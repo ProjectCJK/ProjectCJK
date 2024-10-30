@@ -100,6 +100,7 @@ namespace Units.Stages.Units.Items.Modules
 
         private void Reset()
         {
+            _itemTransform.position = _pointB;
             OnArrived = null;
             _isRunning = false;
             _timeElapsed = 0;

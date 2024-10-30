@@ -1,6 +1,6 @@
 namespace Units.Stages.Units.Items.Enums
 {
-    public enum CurrencyType
+    public enum ECurrencyType
     {
         Money
     }

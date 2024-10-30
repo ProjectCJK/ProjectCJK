@@ -16,6 +16,7 @@ using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Buildings.UI.Stands;
+using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -35,8 +36,11 @@ namespace Units.Stages.Units.Buildings.Units
         [Space(10), Header("아이템 보관 장소")]
         public Transform standInventory;
         
-        [Space(10), Header("Interaction Zone")]
-        public InteractionTrade InteractionTrade;
+        [Space(10), Header("TradeZone_Player")]
+        public InteractionTrade InteractionTradePlayer;
+        
+        [Space(10), Header("TradeZone_NPC")]
+        public InteractionTrade InteractionTradeNPC;
     }
     
     [Serializable]
@@ -65,7 +69,8 @@ namespace Units.Stages.Units.Buildings.Units
         private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
         private IItemFactory _itemFactory;
-        private IInteractionTrade _interactionTrade;
+        private IInteractionTrade _interactionTradePlayer;
+        private IInteractionTrade _interactionTradeNPC;
 
         private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
@@ -77,9 +82,9 @@ namespace Units.Stages.Units.Buildings.Units
             
             _itemFactory = itemController;
             MaterialType = _standCustomSetting.MaterialType;
-            BuildingKey = EnumParserModule.ParseDoubleEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
-            InputItemKey = EnumParserModule.ParseDoubleEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
-            OutItemKey =EnumParserModule.ParseDoubleEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
+            BuildingKey = EnumParserModule.ParseEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
+            InputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
+            OutItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
             
             _standStatsModule = new StandStatsModule(_standDataSo);
             _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory, _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutItemKey);
@@ -88,9 +93,12 @@ namespace Units.Stages.Units.Buildings.Units
             _standViewModel = new StandViewModel(_standModel);
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
-            _interactionTrade = _standDefaultSetting.InteractionTrade;
-            _interactionTrade.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
-
+            _interactionTradePlayer = _standDefaultSetting.InteractionTradePlayer;
+            _interactionTradePlayer.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            
+            _interactionTradeNPC = _standDefaultSetting.InteractionTradeNPC;
+            _interactionTradeNPC.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }
         

@@ -81,10 +81,14 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestination()
         {
-            var key = EnumParserModule.ParseDoubleEnumToString(EBuildingType.Stand, EMaterialType.A);
+            var targetKey = EnumParserModule.ParseEnumToString(EBuildingType.Stand, EMaterialType.A);
+            var managementDeskKey = EnumParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
+            
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(key, _buildingController.Buildings[key].transform)
+                new(targetKey, _buildingController.Buildings[targetKey].transform),
+                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].transform),
+                new(string.Empty, _guestSpawnPoint)
             };
 
             return destinations;

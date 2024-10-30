@@ -54,8 +54,10 @@ namespace Units.Stages.Units.Creatures.Units
             _guestCollisionModule = new GuestCollisionModule(_guestStatModule);
             _guestInventoryModule = new GuestInventoryModule(transform, transform, _guestStatModule, itemFactory, CreatureType);
 
-            _guestCollisionModule.OnCheckValidTransform += HandleOnCheckValidTransform;
+            _guestCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;
             _guestCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
+
+            _guestInventoryModule.OnTargetQuantityReceived += HandleOnTargetQuantityReceived;
         }
         
         public void Initialize(Vector3 startPoint, Action action)
@@ -74,7 +76,7 @@ namespace Units.Stages.Units.Creatures.Units
         public void SetDestinations(List<Tuple<string, Transform>> destinations)
         {
             _destinations = destinations;
-            _guestMovementModule.SetDestination(destinations[_destinationIndex].Item2.position);
+            _guestMovementModule.SetDestination(_destinations[_destinationIndex].Item2.position);
         }
 
         private void FixedUpdate()
@@ -117,7 +119,7 @@ namespace Units.Stages.Units.Creatures.Units
             if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
         }
 
-        private bool HandleOnCheckValidTransform(string buildingKey, bool connected)
+        private bool HandleOnCompareWithTarget(string buildingKey)
         {
             if (string.Equals(buildingKey, _destinations[_destinationIndex].Item1))
             {
@@ -130,7 +132,12 @@ namespace Units.Stages.Units.Creatures.Units
         
         private void HandleOnTriggerTradeZone(IInteractionTrade interactionZone, bool isConnected)
         {
-            _guestInventoryModule.ConnectWithInteractionTradeZone(interactionZone, isConnected);
+            _guestInventoryModule.RegisterItemReceiver(interactionZone, isConnected);
+        }
+
+        private void HandleOnTargetQuantityReceived()
+        {
+            _guestMovementModule.SetDestination(_destinations[++_destinationIndex].Item2.position);
         }
     }
 }

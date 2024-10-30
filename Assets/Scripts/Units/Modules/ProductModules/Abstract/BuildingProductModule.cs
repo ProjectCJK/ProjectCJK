@@ -79,9 +79,11 @@ namespace Units.Modules.ProductModules.Abstract
             {
                 if (IsProductProcessed())
                 {
-                    if (_kitchenProductInventoryModule.ReceiveItem(_outputItemKey, SenderTransform.position))
+
+                    if (_kitchenProductInventoryModule.CanReceiveItem())
                     {
-                        _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);       
+                        _kitchenProductInventoryModule.ReceiveItem(_outputItemKey, SenderTransform.position);
+                        _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);
                     }
                     
                     if (HasMatchingItem())

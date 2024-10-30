@@ -17,7 +17,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
     public interface IBuildingInventoryModule : IInventoryModule
     {
         public void RemoveItem(string inputItemKey);
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
+        public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
         public int GetItemCount(string inputItemKey);
     }
 
@@ -56,7 +56,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
             Inventory.Clear();
         }
 
-        public void RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register)
+        public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register)
         {
             switch (register)
             {
@@ -64,11 +64,12 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
                     if (!_itemReceiverQueue.Contains(itemReceiver))
                     {
                         _itemReceiverQueue.Enqueue(itemReceiver, (int)itemReceiver.CreatureType);
+                        return true;
                     }
-                    break;
+                    return false;
                 case false:
                     _itemReceiverQueue.Remove(itemReceiver);
-                    break;
+                    return true;
             }
         }
 
@@ -82,11 +83,12 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
 
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
             {
-                IItem item = PopSpawnedItem();
-                ItemFactory.ReturnItem(item);
-
-                if (currentItemReceiver.ReceiveItem(OutputItemKey, item.Transform.position))
+                if (currentItemReceiver.CanReceiveItem())
                 {
+                    IItem item = PopSpawnedItem();
+                    ItemFactory.ReturnItem(item);
+
+                    currentItemReceiver.ReceiveItem(OutputItemKey, item.Transform.position);
                     RemoveItem(OutputItemKey);
                 }
             }

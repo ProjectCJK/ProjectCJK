@@ -37,14 +37,14 @@ namespace Units.Modules.MovementModules.Units
             _navMeshAgent.updateUpAxis = false;
             _navMeshAgent.autoTraverseOffMeshLink = false; // 자동 오프메시 링크 이동 비활성화
             _navMeshAgent.autoBraking = false; // 목적지 도착 시 자동 정지 비활성화
-            _navMeshAgent.stoppingDistance = 2f; // 정지 거리를 작게 설정
+            _navMeshAgent.stoppingDistance = 0.1f; // 정지 거리를 작게 설정
+            _navMeshAgent.acceleration = 120f;
         }
 
         public void Initialize(Vector3 startPosition)
         {
-            ActivateNavMeshAgent(true);
+            ActivateNavMeshAgent(false);
             _navMeshAgent.speed = _movementSpeed;
-            _navMeshAgent.acceleration = _movementSpeed;
                 
             if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             {
@@ -54,19 +54,22 @@ namespace Units.Modules.MovementModules.Units
 
         public void SetDestination(Vector3 destination)
         {
-            _destination = destination;
-            
-            if (_navMeshAgent.isOnNavMesh)
+            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             {
-                _navMeshAgent.ResetPath();
-            
-                var path = new NavMeshPath();
-            
-                if (NavMesh.CalculatePath(_guestTransform.position, destination, NavMesh.AllAreas, path))
+                _destination = hit.position;
+                
+                if (_navMeshAgent.isOnNavMesh)
                 {
-                    _navMeshAgent.SetPath(path);
-                    ActivateNavMeshAgent(false);
-                }   
+                    _navMeshAgent.ResetPath();
+            
+                    var path = new NavMeshPath();
+            
+                    if (NavMesh.CalculatePath(_guestTransform.position, destination, NavMesh.AllAreas, path))
+                    {
+                        _navMeshAgent.SetPath(path);
+                        ActivateNavMeshAgent(true);
+                    }   
+                }
             }
         }
 
@@ -86,7 +89,7 @@ namespace Units.Modules.MovementModules.Units
 
         public void ActivateNavMeshAgent(bool value)
         {
-            _navMeshAgent.isStopped = value;
+            _navMeshAgent.isStopped = !value;
         }
     }
 }
