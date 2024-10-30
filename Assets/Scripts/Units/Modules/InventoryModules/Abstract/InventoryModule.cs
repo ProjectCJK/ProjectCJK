@@ -7,6 +7,7 @@ using Units.Modules.InventoryModules.Interfaces;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Units.Modules.InventoryModules.Abstract
@@ -95,8 +96,6 @@ namespace Units.Modules.InventoryModules.Abstract
 
         public bool HasMatchingItem(string inventoryKey) => Inventory.ContainsKey(inventoryKey);
         public bool CanReceiveItem() => CurrentInventorySize + 1 <= MaxInventorySize;
-
-        protected bool IsInventoryFull() => CurrentInventorySize >= MaxInventorySize;
         protected bool IsReadyToSend() => Time.time >= _lastSendTime + SendItemInterval;
         protected void SetLastSendTime() => _lastSendTime = Time.time;
 
@@ -108,8 +107,12 @@ namespace Units.Modules.InventoryModules.Abstract
                 SetLastSendTime();
             }
         }
-        
-        protected void PushSpawnedItem(IItem item) => _spawnedItemStack.Push(item);
+
+        protected void PushSpawnedItem(Transform receiveTransform, IItem item)
+        {
+            item.Transform.SetParent(receiveTransform);
+            _spawnedItemStack.Push(item);   
+        }
         protected IItem PopSpawnedItem() => _spawnedItemStack.Pop();
     }
 }

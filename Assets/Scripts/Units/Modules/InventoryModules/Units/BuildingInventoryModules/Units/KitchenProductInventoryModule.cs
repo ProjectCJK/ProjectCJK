@@ -33,7 +33,7 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey);
-            PushSpawnedItem(item);
+            PushSpawnedItem(ReceiverTransform, item);
         }
     }
 }

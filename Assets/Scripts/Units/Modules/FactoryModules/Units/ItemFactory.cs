@@ -14,8 +14,8 @@ namespace Units.Modules.FactoryModules.Units
     public interface IItemFactory
     {
         public ItemDataSO ItemDataSo { get; }
-        IItem GetItem(string itemType, Vector3 initializePosition);
-        void ReturnItem(IItem item);
+        public IItem GetItem(string itemType, Vector3 initializePosition);
+        public void ReturnItem(IItem item);
     }
     
     public class ItemFactory : Factory, IItemFactory
@@ -23,13 +23,16 @@ namespace Units.Modules.FactoryModules.Units
         public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
         
         private Dictionary<string, Sprite> _itemSprites;
+     
+        private readonly Transform _parentTransform;
         
         private static string PoolKey => "ItemPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
-        public ItemFactory()
+        public ItemFactory(Transform parentTransform)
         {
+            _parentTransform = parentTransform;
             CreateItemPools();
             CreateSpriteDictionary();
         }
@@ -44,6 +47,7 @@ namespace Units.Modules.FactoryModules.Units
 
         public void ReturnItem(IItem item)
         {
+            if (!ReferenceEquals(item.Transform.parent, _parentTransform)) item.Transform.SetParent(_parentTransform);
             ObjectPoolManager.Instance.ReturnObject(PoolKey, item);
         }
         
