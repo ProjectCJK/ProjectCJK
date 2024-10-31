@@ -14,7 +14,7 @@ namespace Units.Modules.StatsModules.Units.Creatures.Units
 
     public class MonsterStatsModule : StatsModule, IMonsterStatsModule
     {
-        public ECreatureType Type => _monsterDataSo.type;
+        public ECreatureType CreatureType => ECreatureType.Monster;
         public float MovementSpeed => _monsterDataSo.BaseMovementSpeed;
         public int MaxHealth => _monsterDataSo.BaseHealth;
 

@@ -29,11 +29,5 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
             AddItem(inputItemKey);
             PushSpawnedItem(ReceiverTransform, item);
         }
-
-        protected override void SendItem()
-        {
-            
-            base.SendItem();
-        }
     }
 }

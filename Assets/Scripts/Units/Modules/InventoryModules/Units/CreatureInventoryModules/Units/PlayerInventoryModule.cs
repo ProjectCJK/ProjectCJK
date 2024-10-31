@@ -1,6 +1,9 @@
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
+using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
@@ -15,7 +18,7 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
         public override IItemFactory ItemFactory { get; }
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
-
+        
         public PlayerInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -33,6 +36,44 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
         {
             AddItem(inputItemKey);
             ItemFactory.ReturnItem(item);
+        }
+        
+        public override void RegisterItemReceiver(ITradeZone zone, bool isConnected)
+        {
+            if (isConnected)
+            {
+                RegisterZone(zone as IPlayerTradeZone);
+            }
+            else
+            {
+                UnregisterZone(zone as IPlayerTradeZone);
+            }
+        }
+
+        private void RegisterZone(IPlayerTradeZone zone)
+        {
+            if (zone.CheckInputAccessorPlayer() && interactionTradeZones.Add(zone))
+            {
+                Debug.Log($"{CreatureType} => {zone.BuildingKey} 도킹 완료 @~@");
+            }
+            
+            if (zone.CheckOutputAccessorPlayer() && zone.RegisterItemReceiver(this, true))
+            {
+                Debug.Log($"{zone.BuildingKey} => {CreatureType} 도킹 완료 @~@");
+            }
+        }
+
+        private void UnregisterZone(IPlayerTradeZone zone)
+        {
+            if (zone.CheckInputAccessorPlayer() && interactionTradeZones.Remove(zone))
+            {
+                Debug.Log($"{CreatureType} => {zone.BuildingKey} 도킹 해제 완료 @~@");
+            }
+            
+            if (zone.CheckOutputAccessorPlayer() && zone.RegisterItemReceiver(this, false))
+            {
+                Debug.Log($"{zone.BuildingKey} => {CreatureType} 도킹 해제 완료 @~@");
+            }
         }
     }
 }

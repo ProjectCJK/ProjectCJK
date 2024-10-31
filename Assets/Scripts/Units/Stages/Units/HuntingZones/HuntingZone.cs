@@ -19,6 +19,7 @@ namespace Units.Stages.Units.HuntingZones
 {
     public interface IHuntingZone : IRegisterReference<ICreatureController, IItemFactory, Action<IItem>>, IInitializable
     {
+        public void RegisterTargetOnHuntingZone(bool value, Transform target);
         public EActiveStatus ActiveStatus { get; }
     }
     
@@ -41,6 +42,7 @@ namespace Units.Stages.Units.HuntingZones
     public class HuntingZone : MonoBehaviour, IHuntingZone
     {
         private event Action<IItem> OnDroppedItem;
+        private event Action HandleOnPlayerEncounter;
         
         [SerializeField] private HuntingZoneDefaultSetting HuntingZoneDefaultSetting;
         [Space(20), SerializeField] private HuntingZoneCustomSetting huntingZoneCustomSetting;
@@ -53,6 +55,7 @@ namespace Units.Stages.Units.HuntingZones
         private IItemFactory itemFactory;
         
         private string _itemKey;
+        private bool playerEncountered;
 
         private HuntingZoneDataSO _huntingZoneDataSo; 
         
@@ -69,6 +72,7 @@ namespace Units.Stages.Units.HuntingZones
         
         public void Initialize()
         {
+            playerEncountered = false;
             SpawnMonsters();
         }
 
@@ -76,11 +80,33 @@ namespace Units.Stages.Units.HuntingZones
         {
             while (currentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
             {
-                var monster = _creatureController.GetMonster(GetRandomSpawnPoint(), huntingZoneCustomSetting._materialType, ReturnMonster);
+                IMonster monster = _creatureController.GetMonster(GetRandomSpawnPoint(), huntingZoneCustomSetting._materialType, ReturnMonster);
                 
                 if (monster != null)
                 {
                     currentSpawnedMonsters.Add(monster);
+                }
+            }
+        }
+        
+        public void RegisterTargetOnHuntingZone(bool value, Transform target)
+        {
+            if (playerEncountered == value) return;
+            
+            playerEncountered = value;
+
+            if (playerEncountered)
+            {
+                foreach (IMonster monster in currentSpawnedMonsters)
+                {
+                    monster.HandleOnTargetEncounter(true, target);
+                }
+            }
+            else
+            {
+                foreach (IMonster monster in currentSpawnedMonsters)
+                {
+                    monster.HandleOnTargetEncounter(false, null);
                 }
             }
         }

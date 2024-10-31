@@ -5,17 +5,18 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Abstract
 {
-    public interface IBaseCreature
+    public interface ICreature
     {
+        public ECreatureType CreatureType { get; }
         public Transform Transform { get; }
     }
     
     public interface ICreatureTypeProperty
     {
-        public ECreatureType Type { get; }
+        public ECreatureType CreatureType { get; }
     }
     
-    public abstract class Creature : MonoBehaviour, IBaseCreature
+    public abstract class Creature : MonoBehaviour, ICreature
     {
         [SerializeField] protected Transform spriteTransform;
         private Transform _transform;

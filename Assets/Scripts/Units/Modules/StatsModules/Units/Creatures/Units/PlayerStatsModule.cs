@@ -4,22 +4,24 @@ using Units.Modules.CollisionModules.Abstract;
 using Units.Modules.HealthModules.Abstract;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.MovementModules.Abstract;
+using Units.Modules.PaymentModule.Abstract;
 using Units.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 
 namespace Units.Modules.StatsModules.Units.Creatures.Units
 {
-    public interface IPlayerStatsModule : ICreatureTypeProperty, IMovementProperty, IInventoryProperty, IInteractionProperty, IBattleProperty, IHealthProperty
+    public interface IPlayerStatsModule : ICreatureTypeProperty, IMovementProperty, IInventoryProperty, IInteractionProperty, IBattleProperty, IHealthProperty, IPaymentProperty
     {
         
     }
 
     public class PlayerStatsModule : StatsModule, IPlayerStatsModule
     {
-        public ECreatureType Type => _playerDataSo.type;
+        public ECreatureType CreatureType => ECreatureType.Player;
         public float MovementSpeed => _playerDataSo.BaseMovementSpeed;
         public float WaitingTime => _playerDataSo.BaseInteractionStandbySecond;
+        public float PaymentDelay => _playerDataSo.BasePaymentDelay;
         public int MaxProductInventorySize => _playerDataSo.BaseInventorySize;
         public int MaxHealth => _playerDataSo.BaseHealth;
         public int Damage => _playerDataSo.BaseDamage;

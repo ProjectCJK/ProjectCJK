@@ -1,13 +1,18 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
 using Units.Modules;
 using Units.Modules.FactoryModules.Units;
+using Units.Modules.InventoryModules.Interfaces;
 using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Modules.PaymentModule.Units;
 using Units.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -25,10 +30,13 @@ namespace Units.Stages.Units.Buildings.Units
         public Transform managementDeskInventory;
         
         [Space(10), Header("TradeZone_Player")]
-        public Transform InteractionTradePlayer;
+        public Transform TradeZone_Player;
         
-        [Space(10), Header("TradeZone_NPC")]
-        public Transform InteractionTradeNPC;
+        [Space(10), Header("PaymentZone_Player")]
+        public Transform PaymentZone_Player;
+        
+        [Space(10), Header("PaymentZone_NPC")]
+        public Transform PaymentZone_NPC;
     }
     
     [Serializable]
@@ -46,15 +54,19 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
-        public override Transform TradeZoneNpcTransform => _managementDeskDefaultSetting.InteractionTradeNPC;
+        public override Transform TradeZoneZoneZoneZoneNpcTransform => _managementDeskDefaultSetting.PaymentZone_NPC;
 
         private IManagementDeskStatsModule _managementDeskStatsModule;
+        private IManagementDeskPaymentModule _managementDeskPaymentModule;
         private IManagementDeskInventoryModule _managementDeskInventoryModule;
         private IItemFactory _itemFactory;
-        private IInteractionTrade _interactionTradePlayer;
-        private IInteractionTrade _interactionTradeNPC;
+        private ITradeZone _tradeZonePlayer;
+        private IPaymentZone _paymentZonePlayer;
+        private IPaymentZone _paymentZoneNpc;
         
         private ManagementDeskDataSO _managementDeskDataSo;
+        
+        // private HashSet<ICreatureItemReceiver>
 
         public void RegisterReference(IItemFactory itemController)
         {
@@ -64,7 +76,7 @@ namespace Units.Stages.Units.Buildings.Units
             BuildingKey = EnumParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
             InputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
             OutputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-
+            
             _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
             _managementDeskInventoryModule = new ManagementDeskInventoryModule(
                 _managementDeskDefaultSetting.managementDeskInventory,
@@ -73,17 +85,22 @@ namespace Units.Stages.Units.Buildings.Units
                 _itemFactory,
                 InputItemKey, OutputItemKey);
             
-            _interactionTradePlayer = _managementDeskDefaultSetting.InteractionTradePlayer.GetComponent<IInteractionTrade>();
-            _interactionTradePlayer.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+            _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
-            _interactionTradeNPC = _managementDeskDefaultSetting.InteractionTradeNPC.GetComponent<IInteractionTrade>();
-            _interactionTradeNPC.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+            _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+            
+            _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<IPaymentZone>();
+            _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
+            _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<IPaymentZone>();
+            _paymentZoneNpc.RegisterReference(_managementDeskPaymentModule, BuildingKey);
         }
 
         public override void Initialize() { }
         
         private void Update()
         {
+            _managementDeskPaymentModule.Update();
             _managementDeskInventoryModule.Update();
         }
     }

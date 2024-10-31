@@ -9,7 +9,6 @@ namespace Units.Stages.Managers
     {
         [Header("Stage Settings")]
         [SerializeField] private Canvas _canvas;
-        [SerializeField] private Grid _grid;
         [SerializeField] private GameObject _joystickPrefab;
         [SerializeField] private GameObject _StagePrefab;
         [SerializeField] private CameraController _cameraController;
@@ -41,7 +40,7 @@ namespace Units.Stages.Managers
 
         private void InstantiateStage()
         {
-            GameObject obj = Instantiate(_StagePrefab, _grid.transform);
+            GameObject obj = Instantiate(_StagePrefab);
             _stageController = obj.GetComponent<StageController>();
         }
         

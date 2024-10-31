@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: So_Player
   m_EditorClassIdentifier: 
   prefab: {fileID: 5688900296772484889, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
-  type: 0
   BaseMovementSpeed: 5
   BaseInventorySize: 20
   BaseInteractionStandbySecond: 1
@@ -21,3 +20,4 @@ MonoBehaviour:
   BaseDamage: 10
   BaseAttackDelay: 0.2
   ItemPickupRange: 2
+  BasePaymentDelay: 0.5

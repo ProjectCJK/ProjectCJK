@@ -10,7 +10,7 @@ namespace Units.Modules.ProductModules.Abstract
 {
     public interface IProductProperty
     {
-        public float ProductLeadTime { get; }
+        public float BaseProductLeadTime { get; }
     }
     
     public interface IBuildingProductModule : IInitializable
@@ -45,7 +45,7 @@ namespace Units.Modules.ProductModules.Abstract
         private readonly string _inputItemKey;
         private readonly string _outputItemKey;
 
-        private float _productLeadTime => _buildingStatsModule.ProductLeadTime;
+        private float _productLeadTime => _buildingStatsModule.BaseProductLeadTime;
 
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }
@@ -79,10 +79,9 @@ namespace Units.Modules.ProductModules.Abstract
             {
                 if (IsProductProcessed())
                 {
-
                     if (_kitchenProductInventoryModule.CanReceiveItem())
                     {
-                        _kitchenProductInventoryModule.ReceiveItem(_outputItemKey, SenderTransform.position);
+                        _kitchenProductInventoryModule.ReceiveItemThroughTransfer(_outputItemKey, SenderTransform.position);
                         _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);
                     }
                     

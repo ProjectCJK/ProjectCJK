@@ -15,6 +15,7 @@ using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.UI.Kitchens;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -39,10 +40,10 @@ namespace Units.Stages.Units.Buildings.Units
         public Transform kitchenInventory;
         
         [Space(10), Header("TradeZone_Player")]
-        public Transform InteractionTradePlayer;
+        public Transform TradeZone_Player;
         
         [Space(10), Header("TradeZone_NPC")]
-        public Transform InteractionTradeNPC;
+        public Transform TradeZone_NPC;
     }
 
     [Serializable]
@@ -67,15 +68,15 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
-        public override Transform TradeZoneNpcTransform => _kitchenDefaultSetting.InteractionTradeNPC;
+        public override Transform TradeZoneZoneZoneZoneNpcTransform => _kitchenDefaultSetting.TradeZone_NPC;
 
         private IKitchenStatsModule _kitchenStatsModule;
         private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
         private IKitchenProductInventoryModule _kitchenProductInventoryModule;
         private IKitchenProductModule _kitchenProductModule;
         private IItemFactory _itemFactory;
-        private IInteractionTrade _interactionTradePlayer;
-        private IInteractionTrade _interactionTradeNPC;
+        private ITradeZone _tradeZonePlayer;
+        private ITradeZone _tradeZoneNpc;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
@@ -100,11 +101,11 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenViewModel = new KitchenViewModel(_kitchenModel);
             _kitchenDefaultSetting.kitchenView.BindViewModel(_kitchenViewModel);
             
-            _interactionTradePlayer = _kitchenDefaultSetting.InteractionTradePlayer.GetComponent<IInteractionTrade>();
-            _interactionTradePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            _tradeZonePlayer = _kitchenDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
-            _interactionTradeNPC = _kitchenDefaultSetting.InteractionTradeNPC.GetComponent<IInteractionTrade>();
-            _interactionTradePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            _tradeZoneNpc = _kitchenDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_kitchenDefaultSetting.kitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;
@@ -129,7 +130,7 @@ namespace Units.Stages.Units.Buildings.Units
             // TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
-                _kitchenProductInventoryModule.ReceiveItem(OutputItemKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _kitchenProductInventoryModule.ReceiveItemThroughTransfer(OutputItemKey, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
 #endif
             
