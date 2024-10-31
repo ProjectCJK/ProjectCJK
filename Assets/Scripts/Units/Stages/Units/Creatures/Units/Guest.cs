@@ -12,6 +12,8 @@ using Units.Modules.MovementModules.Units;
 using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
@@ -19,17 +21,20 @@ using UnityEngine.AI;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IGuest : IBaseCreature, IPoolable, IRegisterReference<GuestDataSO, IItemFactory>, IInitializable<Vector3, Action>
+
+    
+    public interface IGuest : INPC, IPoolable, IRegisterReference<GuestDataSO, IItemFactory>, IInitializable<Vector3, Action>
     {
         public void SetDestinations(List<Tuple<string, Transform>> destinations);
         public void SetTargetPurchaseQuantity(int targetPurchaseQuantity);
+        public void CheckNextDestination();
     }
     
-    public class Guest : Creature, IGuest
+    public class Guest : NPC, IGuest
     {
         private event Action OnReturnGuest;
         
-        public override ECreatureType CreatureType => _guestStatModule.Type;
+        public override ECreatureType CreatureType => _guestStatModule.CreatureType;
         public override Animator Animator => _animator;
         public override Transform Transform => transform;
         
@@ -43,6 +48,7 @@ namespace Units.Stages.Units.Creatures.Units
         private List<Tuple<string, Transform>> _destinations;
         private int _destinationIndex;
         
+        private ENPCType NPCType => _guestStatModule.NPCType;
         private Animator _animator;
 
         private float _elapsedTime;  // 시간 측정 변수
@@ -58,13 +64,14 @@ namespace Units.Stages.Units.Creatures.Units
             _guestStatModule = new GuestStatModule(guestDataSo);
             _guestMovementModule = new GuestMovementModule(this, _guestStatModule);
             _guestCollisionModule = new GuestCollisionModule(_guestStatModule);
-            _guestInventoryModule = new GuestInventoryModule(transform, transform, _guestStatModule, itemFactory, CreatureType);
+            _guestInventoryModule = new GuestInventoryModule(transform, transform, _guestStatModule, itemFactory, CreatureType, NPCType);
 
             _guestCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;
             _guestCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
             _guestCollisionModule.OnTriggerSpawnZone += HandleOnTriggerSpawnZone;
+            _guestCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
 
-            _guestInventoryModule.OnTargetQuantityReceived += HandleOnTargetQuantityReceived;
+            _guestInventoryModule.OnTargetQuantityReceived += CheckNextDestination;
         }
 
         public void Initialize(Vector3 startPoint, Action action)
@@ -164,13 +171,8 @@ namespace Units.Stages.Units.Creatures.Units
 
             return false;
         }
-        
-        private void HandleOnTriggerTradeZone(IInteractionTrade interactionZone, bool isConnected)
-        {
-            _guestInventoryModule.RegisterItemReceiver(interactionZone, isConnected); 
-        }
 
-        private void HandleOnTargetQuantityReceived()
+        public void CheckNextDestination()
         {
             if (_waitingTrigger)
             {
@@ -180,7 +182,7 @@ namespace Units.Stages.Units.Creatures.Units
             
             _destinationIndex++;
 
-            if (_destinationIndex == _destinations.Count)
+            if (_destinationIndex == _destinations.Count - 1)
             {
                 _returnTrigger = true;
             }
@@ -191,6 +193,16 @@ namespace Units.Stages.Units.Creatures.Units
         private void HandleOnTriggerSpawnZone()
         {
             if (_returnTrigger) OnReturnGuest?.Invoke();
+        }
+        
+        private void HandleOnTriggerTradeZone(ITradeZone zone, bool isConnected)
+        {
+            _guestInventoryModule.RegisterItemReceiver(zone, isConnected); 
+        }
+            
+        private void HandleOnTriggerPaymentZone(IPaymentZone zone, bool isConnected)
+        {
+            zone.RegisterPaymentTarget(this, true);
         }
     }
 }

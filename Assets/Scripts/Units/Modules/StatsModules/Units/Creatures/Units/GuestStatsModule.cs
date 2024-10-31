@@ -7,7 +7,7 @@ using Units.Stages.Units.Creatures.Enums;
 
 namespace Units.Modules.StatsModules.Units.Creatures.Units
 {
-    public interface IGuestStatModule : IMovementProperty, ICreatureTypeProperty, IInteractionProperty, IInventoryProperty
+    public interface IGuestStatModule : IMovementProperty, ICreatureTypeProperty, IInteractionProperty, IInventoryProperty, INPCProperty
     {
         public void SetMaxInventorySize(int targetPurchaseQuantity);
     }
@@ -16,11 +16,13 @@ namespace Units.Modules.StatsModules.Units.Creatures.Units
     {
         public int MaxProductInventorySize { get; private set; }
 
-        public ECreatureType Type => _guestDataSo.type;
+        public ECreatureType CreatureType => ECreatureType.NPC;
+        public ENPCType NPCType => ENPCType.Guest;
         public float MovementSpeed => _guestDataSo.BaseMovementSpeed;
         public float WaitingTime => _guestDataSo.BaseInteractionStandbySecond;
         private readonly GuestDataSO _guestDataSo;
-        
+        private ENPCType _creatureType;
+
         public GuestStatModule(GuestDataSO guestDataSo)
         {
             _guestDataSo = guestDataSo;

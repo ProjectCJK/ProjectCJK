@@ -15,6 +15,7 @@ using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.UI.Stands;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
@@ -37,10 +38,10 @@ namespace Units.Stages.Units.Buildings.Units
         public Transform standInventory;
         
         [Space(10), Header("TradeZone_Player")]
-        public Transform InteractionTradePlayer;
+        public Transform TradeZone_Player;
         
         [Space(10), Header("TradeZone_NPC")]
-        public Transform InteractionTradeNPC;
+        public Transform TradeZone_NPC;
     }
     
     [Serializable]
@@ -65,13 +66,13 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
-        public override Transform TradeZoneNpcTransform => _standDefaultSetting.InteractionTradeNPC;
+        public override Transform TradeZoneZoneZoneZoneNpcTransform => _standDefaultSetting.TradeZone_NPC;
 
         private IStandStatsModule _standStatsModule;
         private IStandInventoryModule _standInventoryModule;
         private IItemFactory _itemFactory;
-        private IInteractionTrade _interactionTradePlayer;
-        private IInteractionTrade _interactionTradeNPC;
+        private ITradeZone _tradeZonePlayer;
+        private ITradeZone _tradeZoneNpc;
 
         private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
@@ -94,11 +95,11 @@ namespace Units.Stages.Units.Buildings.Units
             _standViewModel = new StandViewModel(_standModel);
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
-            _interactionTradePlayer = _standDefaultSetting.InteractionTradePlayer.GetComponent<IInteractionTrade>();
-            _interactionTradePlayer.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            _tradeZonePlayer = _standDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
-            _interactionTradeNPC = _standDefaultSetting.InteractionTradeNPC.GetComponent<IInteractionTrade>();
-            _interactionTradeNPC.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            _tradeZoneNpc = _standDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
+            _tradeZoneNpc.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
         }

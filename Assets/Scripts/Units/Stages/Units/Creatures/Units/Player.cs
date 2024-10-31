@@ -17,16 +17,20 @@ using Units.Modules.StatsModules.Units;
 using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Controllers;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IPlayer : IBaseCreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable<Vector3, Action>
+    public interface IPlayer : ICreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable<Vector3, Action>
     {
         public IItemReceiver PlayerInventoryModule { get; }
+        public float PaymentDelay { get; }
     }
 
     public class Player : Creature, IPlayer
@@ -35,8 +39,9 @@ namespace Units.Stages.Units.Creatures.Units
         [SerializeField] private Weapon _weapon;
      
         public IItemReceiver PlayerInventoryModule => _playerInventoryModule;
+        public float PaymentDelay => _playerStatsModule.PaymentDelay;
 
-        public override ECreatureType CreatureType => _playerStatsModule.Type;
+        public override ECreatureType CreatureType => _playerStatsModule.CreatureType;
         public override Animator Animator => _animator;
         public override Transform Transform => transform;
 
@@ -73,6 +78,7 @@ namespace Units.Stages.Units.Creatures.Units
             
             _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
             _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
+            _playerCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
         }
 
         
@@ -99,8 +105,8 @@ namespace Units.Stages.Units.Creatures.Units
                 var temp1Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
                 var temp2Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
                 
-                _playerInventoryModule.ReceiveItem(temp1Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
-                _playerInventoryModule.ReceiveItem(temp2Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItemThroughTransfer(temp1Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItemThroughTransfer(temp2Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }      
 #endif
             
@@ -130,14 +136,20 @@ namespace Units.Stages.Units.Creatures.Units
             _playerCollisionModule.OnTriggerExit2D(other);
         }
         
-        private void HandleOnTriggerTradeZone(IInteractionTrade interactionZone, bool isConnected)
+        private void HandleOnTriggerTradeZone(ITradeZone zone, bool isConnected)
         {
-            _playerInventoryModule.RegisterItemReceiver(interactionZone, isConnected);
+            _playerInventoryModule.RegisterItemReceiver(zone, isConnected);
         }
         
-        private void HandleOnTriggerHuntingZone(bool value)
+        private void HandleOnTriggerHuntingZone(IHuntingZone zone, bool value)
         {
+            zone.RegisterTargetOnHuntingZone(value, transform);
             _playerBattleModule.HandleOnTriggerHuntingZone(value);
+        }
+        
+        private void HandleOnTriggerPaymentZone(IPaymentZone zone, bool value)
+        {
+            zone.RegisterPaymentTarget(this, value);
         }
     }
 }
