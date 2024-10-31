@@ -11,14 +11,17 @@ namespace Units.Stages.Units.Buildings.Abstract
     {
         public string BuildingKey { get; }
         public string InputItemKey { get; }
-        public string OutItemKey { get; }
+        public string OutputItemKey { get; }
+
+        public Transform TradeZoneNpcTransform { get; }
     }
 
     public abstract class Building : MonoBehaviour, IBuilding
     {
         public abstract string BuildingKey { get; protected set; }
         public abstract string InputItemKey { get; protected set; }
-        public abstract string OutItemKey { get; protected set; }
+        public abstract string OutputItemKey { get; protected set; }
+        public abstract Transform TradeZoneNpcTransform { get; }
 
         public abstract void Initialize();
     }

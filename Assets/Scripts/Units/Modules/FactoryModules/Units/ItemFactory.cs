@@ -23,6 +23,7 @@ namespace Units.Modules.FactoryModules.Units
         public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
         
         private Dictionary<string, Sprite> _itemSprites;
+        private Dictionary<string, Sprite> _currencySprites;
      
         private readonly Transform _parentTransform;
         
@@ -40,7 +41,19 @@ namespace Units.Modules.FactoryModules.Units
         public IItem GetItem(string itemType, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
-            item.Initialize(itemType, _itemSprites[itemType], initializePosition);
+
+            Sprite itemSprite = null;
+            
+            if (_itemSprites.TryGetValue(itemType, out Sprite sprite))
+            {
+                itemSprite = sprite;
+            }
+            else if (_currencySprites.TryGetValue(itemType, out Sprite currencySprite))
+            {
+                itemSprite = currencySprite;
+            }
+            
+            item.Initialize(itemType, itemSprite, initializePosition);
 
             return item;
         }
@@ -75,6 +88,15 @@ namespace Units.Modules.FactoryModules.Units
             {
                 var dicKey = EnumParserModule.ParseEnumToString(data.ItemType, data.MaterialType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
+            }
+            
+            List<CurrencySprite> currencySprites = ItemDataSo.CurrencySprites;
+            _currencySprites = new Dictionary<string, Sprite>();
+            
+            foreach (CurrencySprite data in currencySprites)
+            {
+                var dicKey = EnumParserModule.ParseEnumToString(data.CurrencyType);
+                _currencySprites.TryAdd(dicKey, data.Sprite);
             }
         }
     }

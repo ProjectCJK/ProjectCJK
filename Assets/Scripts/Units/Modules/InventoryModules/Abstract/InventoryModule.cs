@@ -94,7 +94,6 @@ namespace Units.Modules.InventoryModules.Abstract
         }
 
         public bool HasMatchingItem(string inventoryKey) => Inventory.ContainsKey(inventoryKey);
-
         public bool CanReceiveItem() => CurrentInventorySize + (isItemReceiving ? 2 : 1) <= MaxInventorySize;
         
         protected bool IsReadyToSend() => Time.time >= _lastSendTime + SendItemInterval;
