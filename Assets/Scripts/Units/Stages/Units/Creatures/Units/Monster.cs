@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Modules;
 using Modules.DesignPatterns.ObjectPools;
@@ -19,9 +20,8 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
+    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, List<Sprite>, Action>, ITakeDamage
     {
-        
     }
 
     public class Monster : Creature, IMonster
@@ -59,7 +59,7 @@ namespace Units.Stages.Units.Creatures.Units
             _damageFlashModule.RegisterReference();
         }
         
-        public void Initialize(Vector3 randomSpawnPoint, Sprite monsterSprite, Action action)
+        public void Initialize(Vector3 randomSpawnPoint, List<Sprite> monsterSprites, Action action)
         {
             // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
             // _spriteRenderer.sprite = monsterSprite;

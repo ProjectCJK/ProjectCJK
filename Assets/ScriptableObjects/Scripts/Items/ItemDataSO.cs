@@ -11,7 +11,7 @@ namespace ScriptableObjects.Scripts.Items
         [Header("상품 타입")] 
         public EItemType ItemType;
         [Header("재료 타입")] 
-        public EMaterialType MaterialType;
+        public EStageMaterialType StageMaterialType;
         [Header("아이템 이미지")] 
         public Sprite Sprite;
     }
