@@ -21,7 +21,7 @@ namespace Units.Stages.Units.Creatures.Units
 {
     public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
     {
-        public void HandleOnTargetEncounter(bool value, Transform target);
+        
     }
 
     public class Monster : Creature, IMonster
@@ -75,6 +75,11 @@ namespace Units.Stages.Units.Creatures.Units
             _monsterMovementModule.Update();
         }
 
+        private void FixedUpdate()
+        {
+            _monsterMovementModule.FixedUpdate();
+        }
+
         public void Create()
         {
             SetActive(false);
@@ -103,22 +108,17 @@ namespace Units.Stages.Units.Creatures.Units
             _spriteRenderer.sprite = sprite;   
         }
 
-        public void TakeDamage(int damage)
+        public bool TakeDamage(int damage)
         {
             if (_monsterHealthModule.TakeDamage(damage))
             {
-                OnReturnMonster?.Invoke();
-            }
-            else
-            {
-                _monsterMovementModule.hit = true;
+                _monsterMovementModule.hitTrigger = true;
                 _damageFlashModule.ActivateEffects();
+                return true;
             }
-        }
 
-        public void HandleOnTargetEncounter(bool value, Transform target)
-        {
-            _monsterMovementModule.HandleOnPlayerEncounter(value, target);
+            OnReturnMonster?.Invoke();
+            return false;
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Units.Modules.MovementModules.Abstract
     
     public abstract class MovementModule : IMovementModule
     {
-        private const string collisionLayer = "Collision";
-        protected readonly int collisionLayerMask = LayerMask.GetMask(collisionLayer);
+        protected readonly int collisionLayerMask = LayerMaskParserModule.CollisionLayerMask;
     }
 }

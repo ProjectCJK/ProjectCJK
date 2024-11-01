@@ -19,7 +19,6 @@ namespace Units.Stages.Units.HuntingZones
 {
     public interface IHuntingZone : IRegisterReference<ICreatureController, IItemFactory, Action<IItem>>, IInitializable
     {
-        public void RegisterTargetOnHuntingZone(bool value, Transform target);
         public EActiveStatus ActiveStatus { get; }
     }
     
@@ -85,28 +84,6 @@ namespace Units.Stages.Units.HuntingZones
                 if (monster != null)
                 {
                     currentSpawnedMonsters.Add(monster);
-                }
-            }
-        }
-        
-        public void RegisterTargetOnHuntingZone(bool value, Transform target)
-        {
-            if (playerEncountered == value) return;
-            
-            playerEncountered = value;
-
-            if (playerEncountered)
-            {
-                foreach (IMonster monster in currentSpawnedMonsters)
-                {
-                    monster.HandleOnTargetEncounter(true, target);
-                }
-            }
-            else
-            {
-                foreach (IMonster monster in currentSpawnedMonsters)
-                {
-                    monster.HandleOnTargetEncounter(false, null);
                 }
             }
         }
