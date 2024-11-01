@@ -16,21 +16,23 @@ namespace Units.Modules.FactoryModules.Units
     public interface IMonsterFactory
     {
         public MonsterDataSO MonsterDataSo { get; }
-        public Dictionary<EMaterialType, Sprite> MonsterSprites { get; }
+        public Dictionary<EStageMaterialType, List<Sprite>> MonsterSprites { get; }
         public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType type, Action<IMonster> onReturn);
     }
     
     public class MonsterFactory : Factory, IMonsterFactory
     {
         public MonsterDataSO MonsterDataSo { get; } = DataManager.Instance.MonsterData;
-        public Dictionary<EMaterialType, Sprite> MonsterSprites { get; } = new();
-
+        public Dictionary<EStageMaterialType, List<Sprite>> MonsterSprites { get; } = new();
+        private readonly Dictionary<EMaterialType, EStageMaterialType> _materialMappings;
+        
         private static string PoolKey => "MonsterPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
-
-        public MonsterFactory()
+        
+        public MonsterFactory(List<MaterialMapping> materialMappings)
         {
+            _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings, key => key.MaterialType, value => value.StageMaterialType);
             CreateMonsterPools();
             CreateSpriteDictionary();
         }
@@ -39,7 +41,7 @@ namespace Units.Modules.FactoryModules.Units
         {
             var monster = ObjectPoolManager.Instance.GetObject<IMonster>(PoolKey, null);
             
-            monster.Initialize(randomSpawnPoint, MonsterSprites[type], () =>
+            monster.Initialize(randomSpawnPoint, MonsterSprites[_materialMappings[type]], () =>
             {
                 ObjectPoolManager.Instance.ReturnObject(PoolKey, monster);
                 onReturn?.Invoke(monster);
@@ -69,8 +71,17 @@ namespace Units.Modules.FactoryModules.Units
             
             foreach (MonsterSprite data in monsterSpritesList)
             {
-                EMaterialType dicKey = data.MaterialType;
-                MonsterSprites.TryAdd(dicKey, data.Sprite);
+                EStageMaterialType dicKey = data.StageMaterialType;
+
+                var monsterSprites = new List<Sprite>
+                {
+                    data.EmotionIdleSprite,
+                    data.EmotionIdleSprite,
+                    data.BodySprite,
+                    data.LegLeftSprite,
+                    data.LegRightSprite
+                };
+                MonsterSprites.TryAdd(dicKey, monsterSprites);
             }
         }
     }

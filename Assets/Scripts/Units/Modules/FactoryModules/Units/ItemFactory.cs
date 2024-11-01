@@ -37,33 +37,36 @@ namespace Units.Modules.FactoryModules.Units
         public ItemFactory(Transform parentTransform, List<MaterialMapping> materialMappings)
         {
             _parentTransform = parentTransform;
-            // _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings);
+            _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings, key => key.MaterialType, value => value.StageMaterialType);
             CreateItemPools();
-            CreateMaterialDictionary();
             CreateSpriteDictionary();
         }
-
-        private void CreateMaterialDictionary()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IItem GetItem(string itemType, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
 
-            Sprite itemSprite = null;
-            
-            if (_itemSprites.TryGetValue(itemType, out Sprite sprite))
+            (EItemType? _itemType, EMaterialType? _materialType) = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(itemType);
+
+            if (_itemType != null && _materialType != null)
             {
-                itemSprite = sprite;
-            }
-            else if (_currencySprites.TryGetValue(itemType, out Sprite currencySprite))
-            {
-                itemSprite = currencySprite;
-            }
+                EStageMaterialType stageMaterialType = _materialMappings[_materialType.Value];
+                
+                var newKey = $"{_itemType}_{stageMaterialType}";
+
+                Sprite itemSprite = null;
             
-            item.Initialize(itemType, itemSprite, initializePosition);
+                if (_itemSprites.TryGetValue(newKey, out Sprite sprite))
+                {
+                    itemSprite = sprite;
+                }
+                else if (_currencySprites.TryGetValue(newKey, out Sprite currencySprite))
+                {
+                    itemSprite = currencySprite;
+                }
+            
+                item.Initialize(newKey, itemSprite, initializePosition);
+            }
 
             return item;
         }
@@ -96,7 +99,7 @@ namespace Units.Modules.FactoryModules.Units
             
             foreach (ItemSprite data in itemSprites)
             {
-                var dicKey = EnumParserModule.ParseEnumToString(data.ItemType, data.MaterialType);
+                var dicKey = EnumParserModule.ParseEnumToString(data.ItemType, data.StageMaterialType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
             }
             
