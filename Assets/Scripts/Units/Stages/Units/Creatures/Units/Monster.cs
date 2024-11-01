@@ -4,6 +4,7 @@ using Modules;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
+using Units.Modules;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.HealthModules.Units;
 using Units.Modules.MovementModules.Units;
@@ -18,7 +19,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : IBaseCreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
+    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
     {
         
     }
@@ -28,7 +29,9 @@ namespace Units.Stages.Units.Creatures.Units
         private event Action OnGetMonster;
         private event Action OnReturnMonster;
         
-        public override ECreatureType CreatureType => _monsterStatsModule.Type;
+        
+        
+        public override ECreatureType CreatureType => _monsterStatsModule.CreatureType;
         public override Animator Animator => _animator;
         public override Transform Transform => transform;
 
@@ -51,7 +54,7 @@ namespace Units.Stages.Units.Creatures.Units
             creatureStateMachine = new CreatureStateMachine(this);
             _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
             _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
-            _monsterMovementModule = new MonsterMovementModule(_monsterStatsModule);
+            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule);
             
             _damageFlashModule.RegisterReference();
         }
@@ -63,6 +66,18 @@ namespace Units.Stages.Units.Creatures.Units
             
             transform.position = randomSpawnPoint;
             OnReturnMonster = action;
+
+            _monsterMovementModule.Initialize();
+        }
+
+        private void Update()
+        {
+            _monsterMovementModule.Update();
+        }
+
+        private void FixedUpdate()
+        {
+            _monsterMovementModule.FixedUpdate();
         }
 
         public void Create()
@@ -93,16 +108,17 @@ namespace Units.Stages.Units.Creatures.Units
             _spriteRenderer.sprite = sprite;   
         }
 
-        public void TakeDamage(int damage)
+        public bool TakeDamage(int damage)
         {
             if (_monsterHealthModule.TakeDamage(damage))
             {
-                OnReturnMonster?.Invoke();
-            }
-            else
-            {
+                _monsterMovementModule.hitTrigger = true;
                 _damageFlashModule.ActivateEffects();
+                return true;
             }
+
+            OnReturnMonster?.Invoke();
+            return false;
         }
     }
 }

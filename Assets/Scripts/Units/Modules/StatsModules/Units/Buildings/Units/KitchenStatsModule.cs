@@ -5,7 +5,7 @@ namespace Units.Modules.StatsModules.Units.Buildings.Units
 {
     public interface IKitchenStatsModule : IBuildingStatsModule
     {
-        
+        public int MaxMaterialInventorySize { get; }
     }
     
     public class KitchenStatsModule : BuildingStatsModule, IKitchenStatsModule

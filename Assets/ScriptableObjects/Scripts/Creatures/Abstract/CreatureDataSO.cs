@@ -7,7 +7,6 @@ namespace ScriptableObjects.Scripts.Creatures.Abstract
     {
         [Header("### 유닛 기본 세팅 ###")]
         [Header("프리팹")] public GameObject prefab;
-        [Header("유닛 타입")] public ECreatureType type;
         [Header("기본 이동 속도")] public float BaseMovementSpeed;
     }
 }

@@ -14,6 +14,7 @@ namespace Units.Modules.InventoryModules.Abstract
 {
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
+        public void ReceiveItemNoThroughTransfer(string inputItemKey);
         public event Action OnInventoryCountChanged;
         public IItemFactory ItemFactory { get; }
         public int MaxInventorySize { get; }
@@ -51,8 +52,18 @@ namespace Units.Modules.InventoryModules.Abstract
         protected abstract void SendItem();
         
         protected abstract void OnItemReceived(string inputItemKey, IItem item);
-        
-        public void ReceiveItem(string inputItemKey, Vector3 currentSenderPosition)
+
+        public void ReceiveItem(string inputItemKey)
+        {
+            isItemReceiving = true;
+            
+            IItem item = ItemFactory.GetItem(inputItemKey,ReceiverTransform.position);
+
+            OnItemReceived(inputItemKey, item);
+            isItemReceiving = false;
+        }
+
+        public void ReceiveItemThroughTransfer(string inputItemKey, Vector3 currentSenderPosition)
         {
             isItemReceiving = true;
             
@@ -64,6 +75,15 @@ namespace Units.Modules.InventoryModules.Abstract
                 OnItemReceived(inputItemKey, item);
                 isItemReceiving = false;
             });
+        }
+
+        public void ReceiveItemNoThroughTransfer(string inputItemKey)
+        {
+            isItemReceiving = true;
+            
+            IItem item = ItemFactory.GetItem(inputItemKey, ReceiverTransform.position);
+            OnItemReceived(inputItemKey, item);
+            isItemReceiving = false;
         }
 
         /// <summary>

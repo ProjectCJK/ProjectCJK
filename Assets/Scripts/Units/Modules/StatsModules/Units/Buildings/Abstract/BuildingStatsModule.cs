@@ -12,7 +12,7 @@ namespace Units.Modules.StatsModules.Units.Buildings.Abstract
 
     public abstract class BuildingStatsModule : StatsModule, IBuildingStatsModule
     {
-        public float ProductLeadTime => _buildingDataSo.productLeadTime;
+        public float BaseProductLeadTime => _buildingDataSo.BaseProductLeadTime;
         public int MaxProductInventorySize => _buildingDataSo.BaseProductInventorySize;
         
         private readonly BuildingDataSO _buildingDataSo;

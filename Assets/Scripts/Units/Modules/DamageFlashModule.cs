@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
-namespace Modules
+namespace Units.Modules
 {
     public interface IDamageFlashModule : IRegisterReference
     {

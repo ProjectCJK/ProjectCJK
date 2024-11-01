@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using Units.Modules.BattleModules.Abstract;
 using Units.Stages.Units.Creatures.Interfaces;
@@ -10,11 +11,13 @@ namespace Units.Modules.BattleModules
 {
     public interface IAttackTrigger : IRegisterReference<IBattleProperty, LayerMask, List<EBattleTag>>, IInitializable<bool>
     {
-        
+        public event Action OnHitSuccessful;
     }
 
     public class AttackTrigger : MonoBehaviour, IAttackTrigger
     {
+        public event Action OnHitSuccessful;
+        
         private int _damage => _battleProperty.Damage;
         private float _attackDelay => _battleProperty.AttackDelay;
         
@@ -82,10 +85,15 @@ namespace Units.Modules.BattleModules
                 // 대상 태그와 일치하는 경우에만 처리
                 if (_targetTags.Exists(obj => other.gameObject.CompareTag(obj.ToString())))
                 {
-                    var target = other.gameObject.GetComponent<ITakeDamage>();
-                    target?.TakeDamage(_damage);
+                    if (other.gameObject.TryGetComponent(out ITakeDamage target))
+                    {
+                        if (target.TakeDamage(_damage))
+                        {
+                            OnHitSuccessful?.Invoke();
+                        }
+                    }
                 }
             }
         }
     }
-}
+} 

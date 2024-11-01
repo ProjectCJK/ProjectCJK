@@ -77,7 +77,7 @@ namespace Units.Stages.Controllers
 
                 if (Vector3.Distance(currentItemPosition, _player.Transform.position) <= _itemPickupRange)
                 {
-                    _player.PlayerInventoryModule.ReceiveItem(item.Type, currentItemPosition);
+                    _player.PlayerInventoryModule.ReceiveItemThroughTransfer(item.Type, currentItemPosition);
                     itemFactory.ReturnItem(item);
                     _droppedItems.RemoveAt(i);
                 }

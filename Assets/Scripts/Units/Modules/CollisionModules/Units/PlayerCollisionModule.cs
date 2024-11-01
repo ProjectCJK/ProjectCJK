@@ -5,15 +5,21 @@ using Units.Modules.CollisionModules.Abstract;
 using Units.Modules.StatsModules.Units;
 using Units.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.PaymentZones.Units;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.HuntingZones;
 using UnityEngine;
 
 namespace Units.Modules.CollisionModules.Units
 {
     public interface IPlayerCollisionModule
     {
-        public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
+        public event Action<ITradeZone, bool> OnTriggerTradeZone;
+        public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
         public event Action<bool> OnTriggerHuntingZone;
         public void Update();
         public void OnTriggerEnter2D(Collider2D other);
@@ -23,28 +29,29 @@ namespace Units.Modules.CollisionModules.Units
 
     public class PlayerCollisionModule : CollisionModule, IPlayerCollisionModule
     {
-        public event Action<IInteractionTrade, bool> OnTriggerTradeZone;
+        public event Action<ITradeZone, bool> OnTriggerTradeZone;
+        public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
         public event Action<bool> OnTriggerHuntingZone;
         
         private readonly ECreatureType _creatureType;
-        private readonly Queue<IInteractionTrade> _tradeZones = new();
+        private readonly Queue<ITradeZone> _tradeZones = new();
         private readonly float _waitingTime;
         
-        private IInteractionTrade _interactionTrade;
-        private IInteractionTrade _previousInteractionTrade; // 이전 트리거 존을 저장
+        private ITradeZone _tradeZone;
+        private ITradeZone _previousTradeZone; // 이전 트리거 존을 저장
         
         private float _elapsedTime;  // 시간 측정 변수
         private bool _isWaitingForTrigger; // 대기 상태 여부
 
         public PlayerCollisionModule(IPlayerStatsModule playerStatsModule)
         {
-            _creatureType = playerStatsModule.Type;
+            _creatureType = playerStatsModule.CreatureType;
             _waitingTime = playerStatsModule.WaitingTime;
         }
         
         public void Update()
         {
-            if (_isWaitingForTrigger && _interactionTrade != null)
+            if (_isWaitingForTrigger && _tradeZone != null)
             {
                 _elapsedTime += Time.deltaTime;
 
@@ -61,16 +68,22 @@ namespace Units.Modules.CollisionModules.Units
             {
                 case ECollisionType.None:
                     break;
+                
                 case ECollisionType.TradeZone:
-                    var currentInteractionTrade = other.transform.GetComponent<IInteractionTrade>();
-                    
-                    if (currentInteractionTrade.CheckAccessor(_creatureType))
+                    if (other.transform.TryGetComponent(out IPlayerTradeZone currentTradeZone))
                     {
-                        EnterTradeZone(currentInteractionTrade);   
+                        if (currentTradeZone.CheckAccessorPlayer()) EnterTradeZone(currentTradeZone);                        
                     }
                     break;
-
+                
                 case ECollisionType.UpgradeZone:
+                    break;
+                
+                case ECollisionType.PaymentZone:
+                    if (other.transform.TryGetComponent(out IPlayerPaymentZone currentPaymentZone))
+                    {
+                        OnTriggerPaymentZone?.Invoke(currentPaymentZone, true);                        
+                    }
                     break;
             }
         }
@@ -82,7 +95,8 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.HuntingZone:
-                    OnTriggerHuntingZone?.Invoke(true);
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(true);
                     break;
             }
         }
@@ -93,12 +107,11 @@ namespace Units.Modules.CollisionModules.Units
             {
                 case ECollisionType.None:
                     break;
+                
                 case ECollisionType.TradeZone:
-                    var currentInteractionTrade = other.transform.GetComponent<IInteractionTrade>();
-                    
-                    if (currentInteractionTrade.CheckAccessor(_creatureType))
+                    if (other.transform.TryGetComponent(out IPlayerTradeZone currentTradeZone))
                     {
-                        ExitTradeZone(currentInteractionTrade);   
+                        if (currentTradeZone.CheckAccessorPlayer()) ExitTradeZone(currentTradeZone);    
                     }
                     break;
 
@@ -106,23 +119,31 @@ namespace Units.Modules.CollisionModules.Units
                     break;
 
                 case ECollisionType.HuntingZone:
-                    OnTriggerHuntingZone?.Invoke(false);
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(false);
+                    break;
+                
+                case ECollisionType.PaymentZone:
+                    if (other.transform.TryGetComponent(out IPlayerPaymentZone currentPaymentZone))
+                    {
+                        OnTriggerPaymentZone?.Invoke(currentPaymentZone, false);                        
+                    }
                     break;
             }
         }
         
-        private void EnterTradeZone(IInteractionTrade interactionTrade)
+        private void EnterTradeZone(ITradeZone tradeZone)
         {
-            if (_tradeZones.Count == 0 || !ReferenceEquals(_tradeZones.Peek(), interactionTrade))
+            if (_tradeZones.Count == 0 || !ReferenceEquals(_tradeZones.Peek(), tradeZone))
             {
-                _tradeZones.Enqueue(interactionTrade);
-                StartWaitingForTrigger(interactionTrade);
+                _tradeZones.Enqueue(tradeZone);
+                StartWaitingForTrigger(tradeZone);
             }
         }
 
-        private void ExitTradeZone(IInteractionTrade interactionTrade)
+        private void ExitTradeZone(ITradeZone tradeZone)
         {
-            if (_tradeZones.Count > 0 && ReferenceEquals(_tradeZones.Peek(), interactionTrade))
+            if (_tradeZones.Count > 0 && ReferenceEquals(_tradeZones.Peek(), tradeZone))
             {
                 NotifyTradeZoneExit();
                 _tradeZones.Dequeue();
@@ -130,9 +151,9 @@ namespace Units.Modules.CollisionModules.Units
             }
         }
 
-        private void StartWaitingForTrigger(IInteractionTrade interactionTrade)
+        private void StartWaitingForTrigger(ITradeZone tradeZone)
         {
-            _interactionTrade = interactionTrade;
+            _tradeZone = tradeZone;
             _isWaitingForTrigger = true;
             _elapsedTime = 0f;
         }
@@ -142,10 +163,10 @@ namespace Units.Modules.CollisionModules.Units
             _isWaitingForTrigger = false;
             _elapsedTime = 0f;
             
-            if (_interactionTrade != null)
+            if (_tradeZone != null)
             {
-                Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_interactionTrade}");
-                OnTriggerTradeZone?.Invoke(_interactionTrade, true);
+                Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZone}");
+                OnTriggerTradeZone?.Invoke(_tradeZone, true);
             }
             else
             {
@@ -167,19 +188,19 @@ namespace Units.Modules.CollisionModules.Units
 
         private void ResetTriggerState()
         {
-            _interactionTrade = null;
+            _tradeZone = null;
             _isWaitingForTrigger = false;
             _elapsedTime = 0f;
         }
 
         private void NotifyTradeZoneExit()
         {
-            IInteractionTrade tradeZone = _tradeZones.Peek();
+            ITradeZone tradeZoneZone = _tradeZones.Peek();
             
-            if (tradeZone != null)
+            if (tradeZoneZone != null)
             {
-                Debug.Log($"[NotifyTradeZoneExit] Exiting trade zone: {tradeZone}");
-                OnTriggerTradeZone?.Invoke(tradeZone, false);
+                Debug.Log($"[NotifyTradeZoneExit] Exiting trade zone: {tradeZoneZone}");
+                OnTriggerTradeZone?.Invoke(tradeZoneZone, false);
             }
         }
     }

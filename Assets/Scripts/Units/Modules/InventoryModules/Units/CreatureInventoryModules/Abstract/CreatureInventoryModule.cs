@@ -5,6 +5,7 @@ using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Buildings.Modules;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
@@ -16,7 +17,7 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
     {
         
     }
-    
+
     public abstract class CreatureInventoryModule : InventoryModule, ICreatureInventoryModule
     {
         public abstract ECreatureType CreatureType { get; }
@@ -24,8 +25,9 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
         public abstract override Transform SenderTransform { get; }
         public abstract override Transform ReceiverTransform { get; }
         public override int MaxInventorySize => InventoryProperty.MaxProductInventorySize;
-        
-        private readonly HashSet<IInteractionTrade> _interactionTradeZones = new();
+
+        protected readonly HashSet<ITradeZone> interactionTradeZones = new();
+
         private readonly IInventoryProperty InventoryProperty;
 
         protected CreatureInventoryModule(IInventoryProperty inventoryProperty)
@@ -40,9 +42,9 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
 
         protected override void SendItem()
         {
-            if (!IsReadyToSend() || _interactionTradeZones.Count == 0) return;
+            if (!IsReadyToSend() || interactionTradeZones.Count == 0) return;
 
-            foreach (IInteractionTrade targetZone in _interactionTradeZones.ToList())
+            foreach (ITradeZone targetZone in interactionTradeZones.ToList())
             {
                 ProcessInteractionZone(targetZone);
             }
@@ -50,65 +52,29 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
             SetLastSendTime();
         }
 
-        protected void ProcessInteractionZone(IInteractionTrade interactionZone)
+        protected void ProcessInteractionZone(ITradeZone zone)
         {
-            if (interactionZone == null) return;
-            
-            var targetInputItemKey = interactionZone.InputItemKey;
-            
+            if (zone == null) return;
+
+            var targetInputItemKey = zone.InputItemKey;
+
             if (string.Equals(targetInputItemKey, $"{ECurrencyType.Money}"))
             {
-                interactionZone.ReceiveItem(targetInputItemKey, SenderTransform.position);
+                zone.ReceiveItemThroughTransfer(targetInputItemKey, SenderTransform.position);
             }
             else
             {
                 if (Inventory.TryGetValue(targetInputItemKey, out var itemCount) && itemCount > 0)
                 {
-                    if (interactionZone.CanReceiveItem())
+                    if (zone.CanReceiveItem())
                     {
-                        interactionZone.ReceiveItem(targetInputItemKey, SenderTransform.position);
-                        RemoveItem(targetInputItemKey);   
+                        zone.ReceiveItemThroughTransfer(targetInputItemKey, SenderTransform.position);
+                        RemoveItem(targetInputItemKey);
                     }
                 }
             }
         }
 
-        public void RegisterItemReceiver(IInteractionTrade interactionZone, bool isConnected)
-        {
-            if (isConnected)
-            {
-                RegisterZone(interactionZone);
-            }
-            else
-            {
-                UnregisterZone(interactionZone);
-            }
-        }
-
-        private void RegisterZone(IInteractionTrade interactionZone)
-        {
-            if (interactionZone.CheckOutputAccessor(CreatureType) && interactionZone.RegisterItemReceiver(this, true))
-            {
-                Debug.Log($"{interactionZone.BuildingKey} => {CreatureType} 도킹 완료 @~@");
-            }
-
-            if (interactionZone.CheckInputAccessor(CreatureType) && _interactionTradeZones.Add(interactionZone))
-            {
-                Debug.Log($"{CreatureType} => {interactionZone.BuildingKey} 도킹 완료 @~@");
-            }
-        }
-
-        private void UnregisterZone(IInteractionTrade interactionZone)
-        {
-            if (interactionZone.CheckOutputAccessor(CreatureType) && interactionZone.RegisterItemReceiver(this, false))
-            {
-                Debug.Log($"{interactionZone.BuildingKey} => {CreatureType} 도킹 해제 완료 @~@");
-            }
-
-            if (interactionZone.CheckInputAccessor(CreatureType) && _interactionTradeZones.Remove(interactionZone))
-            {
-                Debug.Log($"{CreatureType} => {interactionZone.BuildingKey} 도킹 해제 완료 @~@");
-            }
-        }
+        public abstract void RegisterItemReceiver(ITradeZone zone, bool isConnected);
     }
 }
