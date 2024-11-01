@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
@@ -15,29 +13,26 @@ namespace Units.Modules.MovementModules.Units
 {
     public interface IPlayerMovementModule : IInitializable
     {
-        public void Update();
-        public void FixedUpdate();
-        public void HandleOnHit();
+        void Update();
+        void FixedUpdate();
+        void HandleOnHit();
     }
-    
-    public class PlayerMovementModule : MovementModule, IPlayerMovementModule
+
+    public class PlayerMovementModule : MovementModuleWithoutNavMeshAgent, IPlayerMovementModule
     {
+        protected override CapsuleCollider2D capsuleCollider2D { get; }
+        
         private readonly IMovementProperty _playerStatsModule;
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
-        private readonly CapsuleCollider2D _playerCollider;
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
-        private readonly ParticleSystem _walkParticles;
-        private readonly Vector3 _faceScale;
         
         private float _movementSpeed => _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
-        private bool _isMoving;
         private bool _isFacingRight = true;
-        private const float _slowDuration = 0.5f; // 최대 1초 동안 속도 감소
-        private Coroutine _slowCoroutine;
+        private bool _isMoving;
         private bool _isSlowed;
-        private Vector2 _movementDirection; // 캐싱된 방향 정보
+        private Coroutine _slowCoroutine;
 
         public PlayerMovementModule(
             Player player,
@@ -46,14 +41,13 @@ namespace Units.Modules.MovementModules.Units
             Joystick joystick,
             Transform spriteTransform)
         {
-            _playerCollider = player.GetComponent<CapsuleCollider2D>();
-            _playerTransform = player.transform;
             _playerStatsModule = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
+            _playerTransform = player.transform;
             _spriteTransform = spriteTransform;
-
-            _faceScale = _spriteTransform.localScale;
+            
+            capsuleCollider2D = _playerTransform.GetComponent<CapsuleCollider2D>();
         }
 
         public void Initialize()
@@ -64,7 +58,9 @@ namespace Units.Modules.MovementModules.Units
 
         public void Update()
         {
-            switch (_movementDirection.x)
+            Vector2 direction = _joystick.direction;
+            
+            switch (direction.x)
             {
                 case > 0 when !_isFacingRight:
                     FlipSprite(true);
@@ -74,125 +70,58 @@ namespace Units.Modules.MovementModules.Units
                     break;
             }
         }
-        
+
         public void FixedUpdate()
         {
-            HandleMovement();
+            Vector3 moveDirection = _joystick.direction.normalized * (_movementSpeed * Time.deltaTime);
+            MoveWithCollision(_playerTransform, moveDirection, ref moveDirection);
             HandleStateUpdate();
+        }
+        
+        protected override bool HandleCollision(CapsuleCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+        {
+            Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
+            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized, move.magnitude, collisionLayerMask);
+            if (hit.collider != null)
+            {
+                direction = Vector3.Reflect(direction, hit.normal);
+                return false;
+            }
+            return true;
         }
 
         private void FlipSprite(bool faceRight)
         {
             _isFacingRight = faceRight;
-
-            Vector3 scale = _faceScale;
-            scale.x = faceRight ? scale.x : scale.x * -1;
+            Vector3 scale = _spriteTransform.localScale;
+            scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
             _spriteTransform.localScale = scale;
         }
 
-        private void HandleMovement()
-        {
-            _movementDirection = GetMovementDirection();
-            MoveWithCollision(_movementDirection);
-        }
-
-        private Vector2 GetMovementDirection()
-        {
-            Vector2 currentDirection = _joystick.direction.normalized;
-            return currentDirection * (_movementSpeed * Time.deltaTime);
-        }
-
-        private void MoveWithCollision(Vector3 move)
-        {
-            var moveX = new Vector3(move.x, 0, 0);
-            if (!IsColliding(moveX))
-            {
-                _playerTransform.position += moveX;
-            }
-
-            var moveY = new Vector3(0, move.y, 0);
-            if (!IsColliding(moveY))
-            {
-                _playerTransform.position += moveY;
-            }
-        }
-
-        private bool IsColliding(Vector3 move)
-        {
-            // CapsuleCollider2D의 오프셋을 반영하여 충돌 검사 시작 위치 조정
-            Vector3 colliderPosition = _playerTransform.position + (Vector3)_playerCollider.offset;
-
-            // CircleCast 실행
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, _playerCollider.size.y, move.normalized, move.magnitude, collisionLayerMask);
-
-            // 레이 시각화
-            Color rayColor = hit.collider != null ? Color.red : Color.blue; // 충돌 여부에 따라 색상 변경
-            
-#if UNITY_EDITOR
-            Debug.DrawRay(colliderPosition, move.normalized * move.magnitude, rayColor);
-            // Circle을 시각화하여 캐스트의 범위를 표시
-            DebugDrawCircle(colliderPosition + move.normalized * move.magnitude, _playerCollider.size.y, rayColor);
-#endif
-            // 충돌 여부 반환
-            return hit.collider != null;
-        }
-        
-#if UNITY_EDITOR
-        private static void DebugDrawCircle(Vector3 position, float radius, Color color)
-        {
-            const int segments = 20;
-            const float increment = 360f / segments;
-            var angle = 0f;
-
-            Vector3 lastPoint = position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * radius;
-            angle += increment;
-
-            for (var i = 0; i < segments; i++)
-            {
-                Vector3 nextPoint = position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * radius;
-                Debug.DrawLine(lastPoint, nextPoint, color);
-                lastPoint = nextPoint;
-                angle += increment;
-            }
-        }
-#endif
-        
         private void HandleStateUpdate()
         {
             UpdateMovementFlag();
             UpdateStateMachine();
         }
 
-        private void UpdateMovementFlag()
-        {
-            _isMoving = _joystick.direction != Vector2.zero;
-        }
+        private void UpdateMovementFlag() => _isMoving = _joystick.direction != Vector2.zero;
 
         private void UpdateStateMachine()
         {
-            if (_isMoving)
-            {
-                _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureRunState);
-            }
-            else
-            {
-                _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
-            }
+            _creatureStateMachine.ChangeState(_isMoving ? _creatureStateMachine.CreatureRunState : _creatureStateMachine.CreatureIdleState);
         }
-        
+
         public void HandleOnHit()
         {
             if (_slowCoroutine != null)
-            {
                 CoroutineManager.Instance.StopCoroutine(_slowCoroutine);
-            }
             _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
         }
-        
+
         private IEnumerator SlowDownTemporarily()
         {
             _isSlowed = true;
-            yield return new WaitForSeconds(_slowDuration);
+            yield return new WaitForSeconds(0.5f);
             _isSlowed = false;
         }
     }

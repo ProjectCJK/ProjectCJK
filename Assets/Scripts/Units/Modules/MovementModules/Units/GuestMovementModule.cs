@@ -16,7 +16,7 @@ namespace Units.Modules.MovementModules.Units
         public void ActivateNavMeshAgent(bool value);
     }
 
-    public class GuestMovementModule : MovementModule, IGuestMovementModule
+    public class GuestMovementModule : MovementModuleWithNavMeshAgent, IGuestMovementModule
     {
         private readonly IGuestStatModule _guestStatModule;
         private readonly NavMeshAgent _navMeshAgent;
