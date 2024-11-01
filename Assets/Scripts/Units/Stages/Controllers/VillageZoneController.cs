@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Interfaces;
+using Managers;
+using ScriptableObjects.Scripts.Zones;
 using Units.Modules;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Units.Stages.Controllers
 {
     public interface IVillageZoneController : IInitializable
     {
-        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController, IHuntingZoneController huntingZoneController);
+        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController,
+            IHuntingZoneController huntingZoneController, StageCustomSettings stageDefaultSettings);
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
     }
@@ -34,11 +38,21 @@ namespace Units.Stages.Controllers
         
         private readonly HashSet<IGuest> currentSpawnedGuests = new();
 
-        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController, IHuntingZoneController huntingZoneController)
+        private GuestSpawnZoneDataSo _guestSpawnZoneDataSo;
+        
+        private float _guestSpawnElapsedTime;
+        private float _guestSpawnCheckTime;
+        private float _guestMaxCount;
+
+        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController,
+            IHuntingZoneController huntingZoneController, StageCustomSettings stageCustomSettings)
         {
             _creatureController = creatureController;
             _buildingController = buildingController;
             _huntingZoneController = huntingZoneController;
+            
+            _guestSpawnZoneDataSo = DataManager.Instance.GuestSpawnZoneDataSo;
+            _guestMaxCount = stageCustomSettings.MaxGuestCount;
         }
 
         public void Initialize()
@@ -59,6 +73,33 @@ namespace Units.Stages.Controllers
                 currentSpawnedGuests.Add(guest);
             }
 #endif
+            
+            if (currentSpawnedGuests.Count < _guestMaxCount)
+            {
+                SpawnGuests();   
+            }
+        }
+
+        private void SpawnGuests()
+        {
+            if (_guestSpawnCheckTime == 0f)
+            {
+                _guestSpawnCheckTime = UnityEngine.Random.Range(_guestSpawnZoneDataSo.guestSpawnMinimumTime, _guestSpawnZoneDataSo.guestSpawnMaximumTime);
+            }
+            
+            _guestSpawnElapsedTime += Time.deltaTime;
+
+            if (_guestSpawnElapsedTime >= _guestSpawnCheckTime)
+            {
+                IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
+                guest.SetTargetPurchaseQuantity(1);
+                guest.SetDestinations(GetRandomDestination());
+                
+                currentSpawnedGuests.Add(guest);
+
+                _guestSpawnElapsedTime = 0f;
+                _guestSpawnCheckTime = 0f;
+            }
         }
 
         private void SpawnPlayer()
