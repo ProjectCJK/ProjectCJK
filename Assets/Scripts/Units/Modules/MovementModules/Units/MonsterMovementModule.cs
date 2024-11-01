@@ -142,12 +142,19 @@ namespace Units.Modules.MovementModules.Units
         private void StartEncounter()
         {
             encounterTrigger = true;
-            _destination = (_monsterTransform.position - _target.position).normalized * 3f;
+    
+            // 타겟 반대 방향으로 3m 떨어진 위치를 도망 목적지로 설정
+            Vector3 fleeDirection = (_monsterTransform.position - _target.position).normalized;
+            _destination = _monsterTransform.position + fleeDirection * 3f;
+
             _monsterCollider.enabled = false;
+
+            // 타겟 반대 방향으로의 도망 경로를 디버그 레이로 표시
+            Debug.DrawRay(_monsterTransform.position, fleeDirection * 3f, Color.yellow, 3f);
 
             if (_encounterCoroutine != null)
                 CoroutineManager.Instance.StopCoroutine(_encounterCoroutine);
-            
+    
             _encounterCoroutine = CoroutineManager.Instance.StartCoroutine(EncounterRoutine());
         }
 
@@ -188,6 +195,9 @@ namespace Units.Modules.MovementModules.Units
             }
             _monsterTransform.position += moveX;
 
+            // 이동 방향을 레이로 표시
+            Debug.DrawRay(_monsterTransform.position, moveX, Color.green);
+
             // Y축 이동
             var moveY = new Vector3(0, move.y, 0);
             if (IsColliding(moveY, out RaycastHit2D hitY))
@@ -196,6 +206,9 @@ namespace Units.Modules.MovementModules.Units
                 moveY = Vector3.Reflect(moveY, hitY.normal);
             }
             _monsterTransform.position += moveY;
+
+            // 이동 방향을 레이로 표시
+            Debug.DrawRay(_monsterTransform.position, moveY, Color.green);
         }
 
         private bool IsColliding(Vector3 move, out RaycastHit2D hit)
