@@ -20,7 +20,7 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<ITradeZone, bool> OnTriggerTradeZone;
         public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
-        public event Action<IHuntingZone, bool> OnTriggerHuntingZone;
+        public event Action<bool> OnTriggerHuntingZone;
         public void Update();
         public void OnTriggerEnter2D(Collider2D other);
         public void OnTriggerStay2D(Collider2D other);
@@ -31,7 +31,7 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<ITradeZone, bool> OnTriggerTradeZone;
         public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
-        public event Action<IHuntingZone, bool> OnTriggerHuntingZone;
+        public event Action<bool> OnTriggerHuntingZone;
         
         private readonly ECreatureType _creatureType;
         private readonly Queue<ITradeZone> _tradeZones = new();
@@ -95,10 +95,8 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.HuntingZone:
-                    if (other.transform.TryGetComponent(out IHuntingZone currentHuntingZone))
-                    {
-                        OnTriggerHuntingZone?.Invoke(currentHuntingZone, true);   
-                    }
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(true);
                     break;
             }
         }
@@ -121,10 +119,8 @@ namespace Units.Modules.CollisionModules.Units
                     break;
 
                 case ECollisionType.HuntingZone:
-                    if (other.transform.TryGetComponent(out IHuntingZone currentHuntingZone))
-                    {
-                        OnTriggerHuntingZone?.Invoke(currentHuntingZone, false);   
-                    }
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(false);
                     break;
                 
                 case ECollisionType.PaymentZone:

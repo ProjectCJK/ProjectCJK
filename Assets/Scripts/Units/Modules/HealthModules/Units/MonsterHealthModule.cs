@@ -35,11 +35,11 @@ namespace Units.Modules.HealthModules.Units
             if (tempHealth < 0)
             {
                 _currentHealth = 0;
-                return true;
+                return false;
             }
 
             _currentHealth = tempHealth;
-            return false;
+            return true;
         }
     }
 }
