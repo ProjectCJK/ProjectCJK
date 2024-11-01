@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Managers;
 using Units.Modules.FSMModules.Units;
 using Units.Modules.MovementModules.Abstract;
 using Units.Modules.StatsModules.Units;
@@ -14,6 +17,7 @@ namespace Units.Modules.MovementModules.Units
     {
         public void Update();
         public void FixedUpdate();
+        public void HandleOnHit();
     }
     
     public class PlayerMovementModule : MovementModule, IPlayerMovementModule
@@ -27,10 +31,12 @@ namespace Units.Modules.MovementModules.Units
         private readonly ParticleSystem _walkParticles;
         private readonly Vector3 _faceScale;
         
-        private float _movementSpeed => _playerStatsModule.MovementSpeed;
+        private float _movementSpeed => _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
-
+        private float _slowDuration = 0.5f; // 최대 1초 동안 속도 감소
+        private Coroutine _slowCoroutine;
+        private bool _isSlowed;
         private Vector2 _movementDirection; // 캐싱된 방향 정보
 
         public PlayerMovementModule(
@@ -98,19 +104,15 @@ namespace Units.Modules.MovementModules.Units
 
         private void MoveWithCollision(Vector3 move)
         {
-            // X축 충돌 감지
             var moveX = new Vector3(move.x, 0, 0);
             if (!IsColliding(moveX))
             {
-                // X축으로 충돌이 없을 때만 이동
                 _playerTransform.position += moveX;
             }
 
-            // Y축 충돌 감지
             var moveY = new Vector3(0, move.y, 0);
             if (!IsColliding(moveY))
             {
-                // Y축으로 충돌이 없을 때만 이동
                 _playerTransform.position += moveY;
             }
         }
@@ -176,6 +178,22 @@ namespace Units.Modules.MovementModules.Units
             {
                 _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
             }
+        }
+        
+        public void HandleOnHit()
+        {
+            if (_slowCoroutine != null)
+            {
+                CoroutineManager.Instance.StopCoroutine(_slowCoroutine);
+            }
+            _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
+        }
+        
+        private IEnumerator SlowDownTemporarily()
+        {
+            _isSlowed = true;
+            yield return new WaitForSeconds(_slowDuration);
+            _isSlowed = false;
         }
     }
 }

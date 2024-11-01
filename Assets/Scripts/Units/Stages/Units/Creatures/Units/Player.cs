@@ -79,6 +79,8 @@ namespace Units.Stages.Units.Creatures.Units
             _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
             _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
             _playerCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
+
+            _weapon.AttackTrigger.OnHitSuccessful += _playerMovementModule.HandleOnHit;
         }
 
         
@@ -141,9 +143,8 @@ namespace Units.Stages.Units.Creatures.Units
             _playerInventoryModule.RegisterItemReceiver(zone, isConnected);
         }
         
-        private void HandleOnTriggerHuntingZone(IHuntingZone zone, bool value)
+        private void HandleOnTriggerHuntingZone(bool value)
         {
-            zone.RegisterTargetOnHuntingZone(value, transform);
             _playerBattleModule.HandleOnTriggerHuntingZone(value);
         }
         

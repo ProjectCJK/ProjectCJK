@@ -17,11 +17,14 @@ namespace Units.Modules.BattleModules
     
     public interface IWeapon : IRegisterReference<IBattleProperty>
     {
+        public AttackTrigger AttackTrigger { get; }
         public void ActivateWeapon(bool value);
     }
     
     public class Weapon : MonoBehaviour, IWeapon
     {
+        public AttackTrigger AttackTrigger => _attackTrigger;
+        
         [SerializeField] private AttackTrigger _attackTrigger;
         [SerializeField] private LayerMask _targetLayerMask;
         [SerializeField] private List<EBattleTag> _targetTags;

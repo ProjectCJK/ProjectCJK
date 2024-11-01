@@ -1,12 +1,7 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using ScriptableObjects.Scripts.Creatures;
-using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Units;
-using Units.Stages.Units.Buildings.Enums;
-using Units.Stages.Units.Creatures.Units;
-using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
