@@ -34,7 +34,7 @@ namespace Units.Modules.MovementModules.Units
         private float _movementSpeed => _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
         private bool _isMoving;
         private bool _isFacingRight = true;
-        private float _slowDuration = 0.5f; // 최대 1초 동안 속도 감소
+        private const float _slowDuration = 0.5f; // 최대 1초 동안 속도 감소
         private Coroutine _slowCoroutine;
         private bool _isSlowed;
         private Vector2 _movementDirection; // 캐싱된 방향 정보
