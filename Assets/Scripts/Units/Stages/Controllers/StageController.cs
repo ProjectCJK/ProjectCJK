@@ -49,7 +49,7 @@ namespace Units.Stages.Controllers
         [Header("### Stage Default Settings ### "), SerializeField]
         private StageDefaultSettings _stageDefaultSettings;
         
-        [Header("### Stage Custom Settings ### "), SerializeField, Space(10)]
+        [Space(10), Header("### Stage Custom Settings ### "), SerializeField]
         private StageCustomSettings _stageCustomSettings;
 
         public Transform PlayerTransform => _creatureController.PlayerTransform;
@@ -59,11 +59,16 @@ namespace Units.Stages.Controllers
         private IHuntingZoneController _huntingZoneController => _stageDefaultSettings.stageReferences.HuntingZoneController;
         private IVillageZoneController _villageZoneController => _stageDefaultSettings.stageReferences.VillageZoneController;
 
+
+        
         public void RegisterReference(Joystick joystick)
         {
             var itemFactory = new ItemFactory(transform, _stageCustomSettings.materialMappings);
+            var playerFactory = new PlayerFactory(joystick, itemFactory);
+            var monsterFactory = new MonsterFactory(_stageCustomSettings.materialMappings);
+            var guestFactory = new GuestFactory(itemFactory);
             
-            _creatureController.RegisterReference(joystick, itemFactory);
+            _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory);
             _buildingController.RegisterReference(itemFactory);
             _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController, _stageCustomSettings);
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);

@@ -9,8 +9,15 @@ namespace ScriptableObjects.Scripts.Creatures.Units
     [Serializable]
     public struct MonsterSprite
     {
-        [Header("--- 재료 타입 ---")] public EMaterialType MaterialType;
-        [Header("--- 이미지 타입 ---")] public Sprite Sprite;
+        [Header("--- 재료 타입 ---")]
+        public EStageMaterialType StageMaterialType;
+        
+        [Space(10), Header("--- 이미지 타입 ---")]
+        public Sprite EmotionIdleSprite;
+        public Sprite EmotionScaredSprite;
+        public Sprite BodySprite;
+        public Sprite LegLeftSprite;
+        public Sprite LegRightSprite;
     }
     
     [CreateAssetMenu(fileName = "So_Monster", menuName = "Datas/Creatures/Monster")]
