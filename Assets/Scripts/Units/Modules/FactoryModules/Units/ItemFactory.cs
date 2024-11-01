@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Items;
 using Units.Modules.FactoryModules.Abstract;
+using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
@@ -26,16 +28,24 @@ namespace Units.Modules.FactoryModules.Units
         private Dictionary<string, Sprite> _currencySprites;
      
         private readonly Transform _parentTransform;
-        
+        private readonly Dictionary<EMaterialType, EStageMaterialType> _materialMappings;
+
         private static string PoolKey => "ItemPool";
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
 
-        public ItemFactory(Transform parentTransform)
+        public ItemFactory(Transform parentTransform, List<MaterialMapping> materialMappings)
         {
             _parentTransform = parentTransform;
+            // _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings);
             CreateItemPools();
+            CreateMaterialDictionary();
             CreateSpriteDictionary();
+        }
+
+        private void CreateMaterialDictionary()
+        {
+            throw new NotImplementedException();
         }
 
         public IItem GetItem(string itemType, Vector3 initializePosition)

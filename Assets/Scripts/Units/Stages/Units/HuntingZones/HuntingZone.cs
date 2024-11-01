@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
-using ScriptableObjects.Scripts.HuntingZones;
+using ScriptableObjects.Scripts.Zones;
 using Units.Modules;
 using Units.Modules.FactoryModules.Units;
 using Units.Stages.Controllers;

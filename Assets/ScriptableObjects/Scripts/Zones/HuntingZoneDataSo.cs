@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ScriptableObjects.Scripts.HuntingZones
+namespace ScriptableObjects.Scripts.Zones
 {
     [CreateAssetMenu(fileName = "So_HuntingZone", menuName = "Datas/Levels/HuntingZone")]
     public class HuntingZoneDataSO : ScriptableObject
