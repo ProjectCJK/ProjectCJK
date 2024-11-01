@@ -127,7 +127,7 @@ Shader "FX/Master_Particle"
 			#else
 				float staticSwitch80 = _Main_Intensity;
 			#endif
-			o.Emission = ( ( _Main_Color * ( tex2DNode25 * staticSwitch80 ) ) * i.vertexColor ).rgb;
+			o.Emission = ( ( _Main_Color * float4( ( tex2DNode25.rgb * staticSwitch80 ) , 0.0 ) ) * i.vertexColor ).rgb;
 			float4 uvs_Mask_Texture = i.uv_texcoord;
 			uvs_Mask_Texture.xy = i.uv_texcoord.xy * _Mask_Texture_ST.xy + _Mask_Texture_ST.zw;
 			float4 tex2DNode50 = tex2D( _Mask_Texture, uvs_Mask_Texture.xy );
@@ -229,11 +229,11 @@ Node;AmplifyShaderEditor.SaturateNode;165;16,560;Inherit;False;1;0;FLOAT;0;False
 Node;AmplifyShaderEditor.StaticSwitch;80;-928,-560;Inherit;False;Property;_CustomData;CustomData;0;0;Create;True;0;0;0;False;0;False;0;0;0;True;;Toggle;2;Key0;Key1;Reference;74;True;True;All;9;1;FLOAT;0;False;0;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;56;96,800;Inherit;False;Property;_Opacity;Opacity;4;0;Create;True;0;0;0;False;0;False;1;1;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;105;208,496;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.VertexColorNode;58;-96,16;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;44;-608,-640;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;44;-608,-640;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.ColorNode;101;-576,-880;Inherit;False;Property;_Main_Color;Main_Color;6;1;[HDR];Create;True;0;0;0;False;0;False;1,1,1,1;0,0,0,0;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;55;432,528;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;100;-352,-576;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.VertexColorNode;58;48,48;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;100;-352,-576;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;FLOAT3;0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;60;624,448;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;20;1424,224;Inherit;False;Property;_SRC;SRC;2;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.BlendMode;True;0;False;5;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;22;1440,320;Inherit;False;Property;_DST;DST;3;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.BlendMode;True;0;False;10;0;0;0;0;1;FLOAT;0
@@ -305,7 +305,7 @@ WireConnection;80;1;45;0
 WireConnection;80;0;81;3
 WireConnection;105;0;164;0
 WireConnection;105;1;165;0
-WireConnection;44;0;25;0
+WireConnection;44;0;25;5
 WireConnection;44;1;80;0
 WireConnection;55;0;105;0
 WireConnection;55;1;56;0
@@ -319,4 +319,4 @@ WireConnection;61;0;60;0
 WireConnection;162;2;59;0
 WireConnection;162;9;61;0
 ASEEND*/
-//CHKSM=191E487E0307C19603C5DE0F3A4073297A400292
+//CHKSM=0BD0487114E6EF448B32691EAFAC68C6FDB4C75B
