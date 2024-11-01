@@ -59,7 +59,7 @@ namespace Units.Stages.Controllers
         private IHuntingZoneController _huntingZoneController => _stageDefaultSettings.stageReferences.HuntingZoneController;
         private IVillageZoneController _villageZoneController => _stageDefaultSettings.stageReferences.VillageZoneController;
 
-
+        private readonly List<EMaterialType> _currentActiveMaterials = new();
         
         public void RegisterReference(Joystick joystick)
         {
@@ -69,8 +69,8 @@ namespace Units.Stages.Controllers
             var guestFactory = new GuestFactory(itemFactory);
             
             _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory);
-            _buildingController.RegisterReference(itemFactory);
-            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController, _stageCustomSettings);
+            _buildingController.RegisterReference(itemFactory, _currentActiveMaterials);
+            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController, _stageCustomSettings, _currentActiveMaterials);
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;

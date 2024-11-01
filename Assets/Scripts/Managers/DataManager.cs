@@ -12,20 +12,20 @@ namespace Managers
     public class DataManager : SingletonMono<DataManager>
     {
         [Header("### Unit Data ###")]
-        public PlayerDataSO PlayerData;
-        public MonsterDataSO MonsterData;
-        public GuestDataSO GuestData;
+        public PlayerDataSO PlayerDataSo;
+        public MonsterDataSO MonsterDataSo;
+        public GuestDataSO GuestDataSo;
         
         [Space(20), Header("### Building Data ###")]
-        public KitchenDataSO KitchenData;
-        public StandDataSO StandData;
-        public ManagementDeskDataSO ManagementDeskData;
+        public KitchenDataSO KitchenDataSo;
+        public StandDataSO StandDataSo;
+        public ManagementDeskDataSO ManagementDeskDataSo;
         
         [Space(20), Header("### Zone Data ###")]
-        public HuntingZoneDataSO HuntingZoneData;
+        public HuntingZoneDataSO HuntingZoneDataSo;
         public GuestSpawnZoneDataSo GuestSpawnZoneDataSo;
         
         [Space(20), Header("### Item Data ###")]
-        public ItemDataSO ItemData;
+        public ItemDataSO ItemDataSo;
     }
 }

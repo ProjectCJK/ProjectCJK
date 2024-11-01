@@ -202,7 +202,10 @@ namespace Units.Stages.Units.Creatures.Units
             
         private void HandleOnTriggerPaymentZone(IPaymentZone zone, bool isConnected)
         {
-            zone.RegisterPaymentTarget(this, true);
+            if (_destinationIndex != _destinations.Count - 1)
+            {
+                zone.RegisterPaymentTarget(this, true);   
+            }
         }
     }
 }

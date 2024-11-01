@@ -22,7 +22,7 @@ namespace Units.Modules.FactoryModules.Units
     
     public class ItemFactory : Factory, IItemFactory
     {
-        public ItemDataSO ItemDataSo => DataManager.Instance.ItemData;
+        public ItemDataSO ItemDataSo => DataManager.Instance.ItemDataSo;
         
         private Dictionary<string, Sprite> _itemSprites;
         private Dictionary<string, Sprite> _currencySprites;
@@ -45,28 +45,39 @@ namespace Units.Modules.FactoryModules.Units
         public IItem GetItem(string itemType, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
-
-            (EItemType? _itemType, EMaterialType? _materialType) = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(itemType);
-
-            if (_itemType != null && _materialType != null)
-            {
-                EStageMaterialType stageMaterialType = _materialMappings[_materialType.Value];
-                
-                var newKey = $"{_itemType}_{stageMaterialType}";
-
-                Sprite itemSprite = null;
             
-                if (_itemSprites.TryGetValue(newKey, out Sprite sprite))
-                {
-                    itemSprite = sprite;
-                }
-                else if (_currencySprites.TryGetValue(newKey, out Sprite currencySprite))
+            Sprite itemSprite = null;
+            var split = itemType.Split('_');
+
+            if (Enum.TryParse(split[0], out ECurrencyType currencyType))
+            {
+                if (_currencySprites.TryGetValue($"{currencyType}", out Sprite currencySprite))
                 {
                     itemSprite = currencySprite;
                 }
-            
-                item.Initialize(newKey, itemSprite, initializePosition);
             }
+            else
+            {
+                (EItemType? _itemType, EMaterialType? _materialType) = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(itemType);
+            
+                if (_itemType != null && _materialType != null)
+                {
+                    EStageMaterialType stageMaterialType = _materialMappings[_materialType.Value];
+                
+                    var newKey = $"{_itemType}_{stageMaterialType}";
+
+                    if (_itemSprites.TryGetValue(newKey, out Sprite sprite))
+                    {
+                        itemSprite = sprite;
+                    }
+                }
+            }
+            
+#if UNITY_EDITOR
+            if (itemSprite == null) Debug.LogError($"{itemType} is not a valid item type");
+#endif
+            
+            item.Initialize(itemType, itemSprite, initializePosition);
 
             return item;
         }

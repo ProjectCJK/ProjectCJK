@@ -60,7 +60,7 @@ namespace Units.Stages.Units.HuntingZones
         
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, Action<IItem> action)
         {
-            _huntingZoneDataSo = DataManager.Instance.HuntingZoneData;
+            _huntingZoneDataSo = DataManager.Instance.HuntingZoneDataSo;
             _creatureController = creatureController;
             itemFactory = itemController;
 

@@ -26,9 +26,9 @@ namespace Units.Stages.Controllers
         private ICreatureController _creatureController;
         private IItemFactory itemFactory;
         private IPlayer _player;
-
+        
         private float _itemPickupRange;
-
+        
         private readonly List<IItem> _droppedItems = new(); 
         
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, IPlayer player)
@@ -36,7 +36,7 @@ namespace Units.Stages.Controllers
             _creatureController = creatureController;
             itemFactory = itemController;
             _player = player;
-            _itemPickupRange = DataManager.Instance.PlayerData.ItemPickupRange;
+            _itemPickupRange = DataManager.Instance.PlayerDataSo.ItemPickupRange;
             
             CreateHuntingZoneDictionary();
         }

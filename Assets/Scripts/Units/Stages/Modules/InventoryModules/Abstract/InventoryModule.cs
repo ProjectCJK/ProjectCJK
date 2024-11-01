@@ -53,16 +53,6 @@ namespace Units.Modules.InventoryModules.Abstract
         
         protected abstract void OnItemReceived(string inputItemKey, IItem item);
 
-        public void ReceiveItem(string inputItemKey)
-        {
-            isItemReceiving = true;
-            
-            IItem item = ItemFactory.GetItem(inputItemKey,ReceiverTransform.position);
-
-            OnItemReceived(inputItemKey, item);
-            isItemReceiving = false;
-        }
-
         public void ReceiveItemThroughTransfer(string inputItemKey, Vector3 currentSenderPosition)
         {
             isItemReceiving = true;
@@ -106,10 +96,8 @@ namespace Units.Modules.InventoryModules.Abstract
         /// </summary>
         protected void AddItem(string itemKey)
         {
-            if (!Inventory.TryAdd(itemKey, 1))
-            {
-                Inventory[itemKey]++;
-            }
+            if (!Inventory.TryAdd(itemKey, 1)) Inventory[itemKey]++;
+            
             OnInventoryCountChanged?.Invoke();
         }
 
@@ -133,6 +121,7 @@ namespace Units.Modules.InventoryModules.Abstract
             item.Transform.SetParent(receiveTransform);
             _spawnedItemStack.Push(item);   
         }
+        
         protected IItem PopSpawnedItem() => _spawnedItemStack.Pop();
     }
 }

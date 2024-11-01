@@ -22,7 +22,7 @@ namespace Units.Modules.FactoryModules.Units
     
     public class MonsterFactory : Factory, IMonsterFactory
     {
-        public MonsterDataSO MonsterDataSo { get; } = DataManager.Instance.MonsterData;
+        public MonsterDataSO MonsterDataSo { get; } = DataManager.Instance.MonsterDataSo;
         public Dictionary<EStageMaterialType, List<Sprite>> MonsterSprites { get; } = new();
         private readonly Dictionary<EMaterialType, EStageMaterialType> _materialMappings;
         
@@ -76,7 +76,7 @@ namespace Units.Modules.FactoryModules.Units
                 var monsterSprites = new List<Sprite>
                 {
                     data.EmotionIdleSprite,
-                    data.EmotionIdleSprite,
+                    data.EmotionScaredSprite,
                     data.BodySprite,
                     data.LegLeftSprite,
                     data.LegRightSprite

@@ -21,7 +21,7 @@ namespace Units.Modules.FactoryModules.Units
 
     public class PlayerFactory : Factory, IPlayerFactory
     {
-        public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerData;
+        public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerDataSo;
         public Transform PlayerTransform => _player.Transform;
 
         private readonly Joystick _joystick;

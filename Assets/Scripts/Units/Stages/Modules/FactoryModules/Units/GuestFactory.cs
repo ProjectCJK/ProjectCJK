@@ -19,7 +19,7 @@ namespace Units.Modules.FactoryModules.Units
     
     public class GuestFactory : Factory, IGuestFactory
     {
-        public GuestDataSO GuestDataSo => DataManager.Instance.GuestData;
+        public GuestDataSO GuestDataSo => DataManager.Instance.GuestDataSo;
         
         private static string PoolKey => "GuestPool";
         private const int DefaultPoolSize = 20;

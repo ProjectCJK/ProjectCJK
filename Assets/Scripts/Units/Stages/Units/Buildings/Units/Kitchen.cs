@@ -84,7 +84,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         public void RegisterReference(IItemFactory itemController)
         {
-            _kitchenDataSO = DataManager.Instance.KitchenData;
+            _kitchenDataSO = DataManager.Instance.KitchenDataSo;
             
             _itemFactory = itemController;
             MaterialType = _kitchenCustomSetting.MaterialType;

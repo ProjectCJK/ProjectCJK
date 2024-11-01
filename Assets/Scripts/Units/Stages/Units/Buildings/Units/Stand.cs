@@ -80,7 +80,7 @@ namespace Units.Stages.Units.Buildings.Units
         
         public void RegisterReference(IItemFactory itemController)
         {
-            _standDataSo = DataManager.Instance.StandData;
+            _standDataSo = DataManager.Instance.StandDataSo;
             
             _itemFactory = itemController;
             MaterialType = _standCustomSetting.MaterialType;

@@ -70,7 +70,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         public void RegisterReference(IItemFactory itemController)
         {
-            _managementDeskDataSo = DataManager.Instance.ManagementDeskData;
+            _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
             
             _itemFactory = itemController;
             BuildingKey = EnumParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);

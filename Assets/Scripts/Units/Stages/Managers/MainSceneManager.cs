@@ -1,4 +1,5 @@
 using Externals.Joystick.Scripts.Base;
+using Managers;
 using Modules.DesignPatterns.Singletons;
 using Units.Stages.Controllers;
 using UnityEngine;
@@ -12,25 +13,33 @@ namespace Units.Stages.Managers
         [SerializeField] private GameObject _joystickPrefab;
         [SerializeField] private GameObject _StagePrefab;
         [SerializeField] private CameraController _cameraController;
-        
+
+        private ICurrencyManager _currencyManager;
         private IStageController _stageController;
         
         private Joystick _joystick;
 
         private void Awake()
         {
+            InstantiateManagers();
             InstantiateJoystick();
             InstantiateStage();
             
             _stageController.RegisterReference(_joystick);
         }
-
+        
         private void Start()
         {
             RegisterCameraToPlayer();
             
             _stageController.Initialize();
         }
+        
+        private void InstantiateManagers()
+        {
+            _currencyManager = new CurrencyManager();
+        }
+
         
         private void InstantiateJoystick()
         {

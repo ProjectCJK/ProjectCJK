@@ -1,3 +1,5 @@
+using System;
+using Managers;
 using Units.Modules.FactoryModules.Units;
 using Units.Modules.InventoryModules.Abstract;
 using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
@@ -5,6 +7,7 @@ using Units.Stages.Units.Buildings.Modules;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
@@ -34,6 +37,16 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
         
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
+            if (Enum.TryParse(inputItemKey, out ECurrencyType currencyType))
+            {
+                switch (currencyType)
+                {
+                    case ECurrencyType.Money:
+                        CurrencyManager.Instance.Gold += 1000;
+                        break;
+                }
+            }
+            
             AddItem(inputItemKey);
             ItemFactory.ReturnItem(item);
         }
