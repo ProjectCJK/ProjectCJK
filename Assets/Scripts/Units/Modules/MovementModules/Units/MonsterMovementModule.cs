@@ -31,6 +31,13 @@ namespace Units.Modules.MovementModules.Units
         private readonly float _patrolChangeTime = 3.0f;
         private readonly float _detectionRange = 2.0f;
 
+        private Transform _target;
+        private Vector3 _destination;
+        private bool _isSlowed;
+        private bool _isPatrolling;
+        private float _nextPatrolChangeTime;
+        private Coroutine _encounterCoroutine;
+
         private float _movementSpeed
         {
             get
@@ -49,12 +56,6 @@ namespace Units.Modules.MovementModules.Units
             }
         }
 
-        private Transform _target;
-        private Vector3 _destination;
-        private bool _isSlowed;
-        private Vector3 _randomDirection;
-        private float _nextPatrolChangeTime;
-
         public MonsterMovementModule(Monster monster, IMonsterStatsModule monsterStatModule)
         {
             _monsterStatModule = monsterStatModule;
@@ -69,16 +70,21 @@ namespace Units.Modules.MovementModules.Units
             encounterTrigger = false;
             _isSlowed = false;
 
-            SetRandomPatrolDestination();
-            _nextPatrolChangeTime = Time.time + _patrolChangeTime;
+            StartPatrolling();
         }
 
         public void Update()
         {
-            if (!encounterTrigger && DetectPlayer())
+            if (!encounterTrigger && !hitTrigger)
             {
-                encounterTrigger = true;
-                MoveAwayFromTarget();
+                if (DetectPlayer())
+                {
+                    StartEncounter();
+                }
+                else
+                {
+                    UpdatePatrol();
+                }
             }
 
             if (hitTrigger)
@@ -86,16 +92,37 @@ namespace Units.Modules.MovementModules.Units
                 hitTrigger = false;
                 StartSlowEffect();
             }
-
-            if (!encounterTrigger && !hitTrigger)
-            {
-                Patrol();
-            }
         }
 
         public void FixedUpdate()
         {
-            MoveWithCollision((_destination - _monsterTransform.position).normalized * (_movementSpeed * Time.fixedDeltaTime));
+            if (_isPatrolling || encounterTrigger)
+            {
+                MoveWithCollision((_destination - _monsterTransform.position).normalized * (_movementSpeed * Time.fixedDeltaTime));
+            }
+        }
+
+        private void StartPatrolling()
+        {
+            _isPatrolling = true;
+            _destination = GetRandomPatrolPoint();
+            _nextPatrolChangeTime = Time.time + UnityEngine.Random.Range(1f, _patrolChangeTime);
+        }
+
+        private void UpdatePatrol()
+        {
+            if (Time.time >= _nextPatrolChangeTime || Vector3.Distance(_monsterTransform.position, _destination) < 0.1f)
+            {
+                _destination = GetRandomPatrolPoint();
+                _nextPatrolChangeTime = Time.time + UnityEngine.Random.Range(1f, _patrolChangeTime);
+            }
+        }
+
+        private Vector3 GetRandomPatrolPoint()
+        {
+            Vector3 randomDirection = UnityEngine.Random.insideUnitCircle * 5f;
+            randomDirection.z = 0;
+            return _monsterTransform.position + randomDirection;
         }
 
         private bool DetectPlayer()
@@ -112,26 +139,24 @@ namespace Units.Modules.MovementModules.Units
             return false;
         }
 
-        private void Patrol()
+        private void StartEncounter()
         {
-            if (Time.time >= _nextPatrolChangeTime || Vector3.Distance(_monsterTransform.position, _destination) < 0.1f)
-            {
-                SetRandomPatrolDestination();
-                _nextPatrolChangeTime = Time.time + _patrolChangeTime;
-            }
+            encounterTrigger = true;
+            _destination = (_monsterTransform.position - _target.position).normalized * 3f;
+            _monsterCollider.enabled = false;
+
+            if (_encounterCoroutine != null)
+                CoroutineManager.Instance.StopCoroutine(_encounterCoroutine);
+            
+            _encounterCoroutine = CoroutineManager.Instance.StartCoroutine(EncounterRoutine());
         }
 
-        private void SetRandomPatrolDestination()
+        private IEnumerator EncounterRoutine()
         {
-            _randomDirection = UnityEngine.Random.insideUnitSphere * 5f;
-            _randomDirection.z = 0;
-            _destination = _monsterTransform.position + _randomDirection;
-        }
-
-        private void MoveAwayFromTarget()
-        {
-            Vector3 directionAway = (_monsterTransform.position - _target.position).normalized;
-            _destination = _monsterTransform.position + directionAway * 5f;
+            yield return new WaitForSeconds(3f);
+            encounterTrigger = false;
+            _monsterCollider.enabled = true;
+            StartPatrolling();
         }
 
         private void StartSlowEffect()
@@ -153,24 +178,23 @@ namespace Units.Modules.MovementModules.Units
         {
             Vector3 originalPosition = _monsterTransform.position;
 
+            // X축 이동
             var moveX = new Vector3(move.x, 0, 0);
             if (IsColliding(moveX, out RaycastHit2D hitX))
             {
-                // X축 충돌이 발생하면 벽 바깥으로 밀어내기
-                _monsterTransform.position = originalPosition + (Vector3)hitX.normal * 0.05f;
-                moveX = Vector3.zero; // X축 이동 중단
+                // 충돌 발생 시 충돌 방향 반사 및 위치 보정
+                _monsterTransform.position = originalPosition + (Vector3)hitX.normal * 0.1f;
+                moveX = Vector3.Reflect(moveX, hitX.normal); // 반사 방향으로 이동
             }
-
             _monsterTransform.position += moveX;
 
+            // Y축 이동
             var moveY = new Vector3(0, move.y, 0);
-            if (IsColliding(moveY, out var hitY))
+            if (IsColliding(moveY, out RaycastHit2D hitY))
             {
-                // Y축 충돌이 발생하면 벽 바깥으로 밀어내기
-                _monsterTransform.position = originalPosition + (Vector3) hitY.normal * 0.05f;
-                moveY = Vector3.zero; // Y축 이동 중단
+                _monsterTransform.position = originalPosition + (Vector3)hitY.normal * 0.1f;
+                moveY = Vector3.Reflect(moveY, hitY.normal);
             }
-
             _monsterTransform.position += moveY;
         }
 
@@ -179,7 +203,7 @@ namespace Units.Modules.MovementModules.Units
             Vector3 colliderPosition = _monsterTransform.position + (Vector3)_monsterCollider.offset;
             var combinedLayerMask = collisionLayerMask | _monsterCollisionLayerMask;
 
-            hit = Physics2D.CircleCast(colliderPosition, _monsterCollider.size.y, move.normalized, move.magnitude, combinedLayerMask);
+            hit = Physics2D.CircleCast(colliderPosition, _monsterCollider.size.y / 2, move.normalized, move.magnitude, combinedLayerMask);
 
 #if UNITY_EDITOR
             Color rayColor = hit.collider != null ? Color.red : Color.blue;
@@ -189,6 +213,7 @@ namespace Units.Modules.MovementModules.Units
 
             return hit.collider != null;
         }
+
 
 #if UNITY_EDITOR
         private static void DebugDrawCircle(Vector3 position, float radius, Color color)
