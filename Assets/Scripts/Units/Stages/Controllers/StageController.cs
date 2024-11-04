@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Units.Modules.FactoryModules.Units;
+using Units.Stages.Enums;
+using Units.Stages.Modules;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.UnlockModules.Abstract;
+using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
@@ -19,28 +25,72 @@ namespace Units.Stages.Controllers
         public HuntingZoneController HuntingZoneController;
         public VillageZoneController VillageZoneController;
     }
-    
+
+    [Serializable]
+    public struct StageDefaultSettings
+    {
+        public StageReferences stageReferences;
+    }
+
+    [Serializable]
+    public struct MaterialMapping
+    {
+        public EMaterialType MaterialType;
+        public EStageMaterialType StageMaterialType;
+    }
+
+    [Serializable]
+    public struct StageCustomSettings
+    {
+        [Header("--- 재료 타입 정의 ---")]
+        public List<MaterialMapping> materialMappings;
+        
+        [Header("최대 손님 수")]
+        public int MaxGuestCount;
+
+        [Header("--- 해금 조건 정의 ---")]
+        public List<ActiveStatusSettings> activeStatusSettings;
+    }
+
+    [Serializable]
+    public struct ActiveStatusSettings
+    {
+        public GameObject GameObject;
+        public EActiveStatus InitialActiveStatus;
+        public int ReguiredGoldCountForUnlock;
+    }
+
     public class StageController : MonoBehaviour, IStageController
     {
-        [Header("### Stage Settings ###")]
-        public StageReferences stageReferences;
+        [Header("### Stage Default Settings ### "), SerializeField]
+        private StageDefaultSettings _stageDefaultSettings;
         
-        [Space(10), SerializeField] private int maxGuestCount;
+        [Space(10), Header("### Stage Custom Settings ### "), SerializeField]
+        private StageCustomSettings _stageCustomSettings;
 
         public Transform PlayerTransform => _creatureController.PlayerTransform;
         
-        private ICreatureController _creatureController => stageReferences.CreatureController;
-        private IBuildingController _buildingController => stageReferences.BuildingController;
-        private IHuntingZoneController _huntingZoneController => stageReferences.HuntingZoneController;
-        private IVillageZoneController _villageZoneController => stageReferences.VillageZoneController;
+        private ICreatureController _creatureController => _stageDefaultSettings.stageReferences.CreatureController;
+        private IBuildingController _buildingController => _stageDefaultSettings.stageReferences.BuildingController;
+        private IHuntingZoneController _huntingZoneController => _stageDefaultSettings.stageReferences.HuntingZoneController;
+        private IVillageZoneController _villageZoneController => _stageDefaultSettings.stageReferences.VillageZoneController;
 
+        private readonly List<EMaterialType> _currentActiveMaterials = new();
+
+        private int activeStatusSettingIndex = 0;
+        
         public void RegisterReference(Joystick joystick)
         {
-            var itemFactory = new ItemFactory(transform);
+            InitializeZone();
             
-            _creatureController.RegisterReference(joystick, itemFactory);
-            _buildingController.RegisterReference(itemFactory);
-            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController);
+            var itemFactory = new ItemFactory(transform, _stageCustomSettings.materialMappings);
+            var playerFactory = new PlayerFactory(joystick, itemFactory);
+            var monsterFactory = new MonsterFactory(_stageCustomSettings.materialMappings);
+            var guestFactory = new GuestFactory(itemFactory);
+            
+            _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory);
+            _buildingController.RegisterReference(itemFactory, _currentActiveMaterials);
+            _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController, _stageCustomSettings, _currentActiveMaterials);
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
@@ -51,6 +101,26 @@ namespace Units.Stages.Controllers
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
             _villageZoneController.Initialize();
+        }
+
+        private void InitializeZone()
+        {
+            var firstLockZoneFounded = false;
+            for (var index = 0; index < _stageCustomSettings.activeStatusSettings.Count; index++)
+            {
+                ActiveStatusSettings activeStatus = _stageCustomSettings.activeStatusSettings[index];
+
+                if (activeStatus.InitialActiveStatus != EActiveStatus.Active && !firstLockZoneFounded)
+                {
+                    firstLockZoneFounded = true;
+                    activeStatusSettingIndex = index;
+                }
+                
+                var activeStatusModule = activeStatus.GameObject.GetComponent<UnlockZoneModule>();
+                
+                activeStatusModule.RequiredGoldForUnlock = activeStatus.ReguiredGoldCountForUnlock;
+                activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
+            }
         }
     }
 }

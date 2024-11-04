@@ -183,6 +183,5 @@
         }
     }
 
-    CustomEditor "UnityEditor.ShaderGraphUnlitGUI"
     Fallback Off
 }

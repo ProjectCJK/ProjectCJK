@@ -1,16 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Modules;
 using Modules.DesignPatterns.ObjectPools;
-using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
-using Units.Modules;
-using Units.Modules.FSMModules.Units;
-using Units.Modules.HealthModules.Units;
-using Units.Modules.MovementModules.Units;
-using Units.Modules.StatsModules.Units;
-using Units.Modules.StatsModules.Units.Creatures.Units;
-using Units.Stages.Controllers;
+using Units.Stages.Modules;
+using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.HealthModules.Units;
+using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Creatures.Interfaces;
@@ -19,9 +17,8 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, Sprite, Action>, ITakeDamage
+    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, List<Sprite>, Action>, ITakeDamage
     {
-        
     }
 
     public class Monster : Creature, IMonster
@@ -59,7 +56,7 @@ namespace Units.Stages.Units.Creatures.Units
             _damageFlashModule.RegisterReference();
         }
         
-        public void Initialize(Vector3 randomSpawnPoint, Sprite monsterSprite, Action action)
+        public void Initialize(Vector3 randomSpawnPoint, List<Sprite> monsterSprites, Action action)
         {
             // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
             // _spriteRenderer.sprite = monsterSprite;

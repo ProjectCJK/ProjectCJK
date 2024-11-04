@@ -4,18 +4,16 @@ using System.Linq;
 using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures.Units;
-using Units.Modules.CollisionModules.Units;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.FSMModules.Units;
-using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
-using Units.Modules.MovementModules.Units;
-using Units.Modules.StatsModules.Units.Creatures.Units;
-using Units.Stages.Units.Buildings.Enums;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Units.Stages.Modules.CollisionModules.Units;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
+using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -152,6 +150,8 @@ namespace Units.Stages.Units.Creatures.Units
             _elapsedTime = 0;
             _waitingTrigger = false;
             _returnTrigger = false;
+
+            _guestInventoryModule.Reset();
             SetActive(false);
         }
         
@@ -179,8 +179,11 @@ namespace Units.Stages.Units.Creatures.Units
                 _waitingTrigger = false;
                 _elapsedTime = 0f;
             }
-            
-            _destinationIndex++;
+
+            if (_destinationIndex < _destinations.Count - 1)
+            {
+                _destinationIndex++;
+            }
 
             if (_destinationIndex == _destinations.Count - 1)
             {
@@ -202,7 +205,15 @@ namespace Units.Stages.Units.Creatures.Units
             
         private void HandleOnTriggerPaymentZone(IPaymentZone zone, bool isConnected)
         {
-            zone.RegisterPaymentTarget(this, true);
+            if (_destinationIndex != _destinations.Count - 1)
+            {
+                zone.RegisterPaymentTarget(this, true);   
+            }
+        }
+
+        public Tuple<string, int> GetItem()
+        {
+            return _guestInventoryModule.GetItem();
         }
     }
 }
