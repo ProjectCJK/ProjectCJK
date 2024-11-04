@@ -6,6 +6,7 @@ using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstr
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Units;
 using UnityEngine;
@@ -47,7 +48,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
             }
             else
             {
-                AddItem(inputItemKey);
+                AddItem(inputItemKey, item.Count);
             }
             
             ItemFactory.ReturnItem(item);

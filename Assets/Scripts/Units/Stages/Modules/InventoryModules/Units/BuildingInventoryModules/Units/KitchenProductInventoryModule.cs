@@ -25,7 +25,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
-            AddItem(inputItemKey);
+            AddItem(inputItemKey, item.Count);
             PushSpawnedItem(ReceiverTransform, item);
         }
     }
