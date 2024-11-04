@@ -1,5 +1,5 @@
-using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects.Scripts.Buildings.Abstract

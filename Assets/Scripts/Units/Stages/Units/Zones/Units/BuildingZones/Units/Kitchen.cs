@@ -1,0 +1,176 @@
+using System;
+using Interfaces;
+using Managers;
+using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Stages.Enums;
+using Units.Stages.Modules;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Stages.Modules.ProductModules.Units;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
+using Units.Stages.Modules.UnlockModules.Abstract;
+using Units.Stages.Modules.UnlockModules.Enums;
+using Units.Stages.Modules.UnlockModules.Interfaces;
+using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.UI.Kitchens;
+using UnityEngine;
+
+namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
+{
+    public interface IKitchen : IBuildingZone, IRegisterReference<IItemFactory>, IUnlockZoneProperty
+    {
+        
+    }
+    
+    [Serializable]
+    public struct KitchenDefaultSetting
+    {
+        [Header("Kitchen UI")]
+        public KitchenView KitchenView;
+        
+        [Space(10), Header("아이템 생성 장소")]
+        public Transform KitchenFactory;
+        
+        [Space(10), Header("아이템 보관 장소")]
+        public Transform KitchenInventory;
+        
+        [Space(10), Header("TradeZone_Player")]
+        public Transform TradeZone_Player;
+        
+        [Space(10), Header("TradeZone_NPC")]
+        public Transform TradeZone_NPC;
+        
+        [Space(10), Header("UnlockZone_Player")]
+        public Transform UnlockZone_Player;
+    }
+
+    [Serializable]
+    public struct KitchenCustomSetting
+    {
+        [Header("재료 타입")]
+        public EMaterialType MaterialType;
+        
+        [Space(10), Header("Input 아이템 타입")]
+        public EItemType InputItemType;
+        
+        [Space(10), Header("Output 아이템 타입")]
+        public EItemType OutputItemType;
+    }
+    
+    public class Kitchen : UnlockableBuildingZoneProperty, IKitchen
+    {
+        [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
+        [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
+
+        public override UnlockZoneModule UnlockZoneModule { get; protected set; }
+        public override EUnlockZoneType UnlockZoneType => UnlockZoneModule.UnlockZoneType;
+        public override EActiveStatus ActiveStatus => UnlockZoneModule.ActiveStatus;
+        public override int RequiredGoldForUnlock => UnlockZoneModule.RequiredGoldForUnlock;
+        public override int CurrentGoldForUnlock { get; set; }
+        public EMaterialType MaterialType { get; private set; }
+        public override string BuildingKey { get; protected set; }
+        public override string InputItemKey { get; protected set; }
+        public override string OutputItemKey { get; protected set; }
+        public override Transform TradeZoneNpcTransform => _kitchenDefaultSetting.TradeZone_NPC;
+
+        private IKitchenStatsModule _kitchenStatsModule;
+        private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
+        private IKitchenProductInventoryModule _kitchenProductInventoryModule;
+        private IKitchenProductModule _kitchenProductModule;
+        private IItemFactory _itemFactory;
+        private ITradeZone _tradeZonePlayer;
+        private ITradeZone _tradeZoneNpc;
+        private ITradeZone _unlockZonePlayer;
+        
+        private KitchenDataSO _kitchenDataSO;
+        private KitchenViewModel _kitchenViewModel;
+        private KitchenModel _kitchenModel;
+
+        public void RegisterReference(IItemFactory itemController)
+        {
+            _kitchenDataSO = DataManager.Instance.KitchenDataSo;
+            
+            _itemFactory = itemController;
+            MaterialType = _kitchenCustomSetting.MaterialType;
+            BuildingKey = EnumParserModule.ParseEnumToString(_kitchenDataSO.BuildingType, _kitchenCustomSetting.MaterialType);
+            InputItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.InputItemType, _kitchenCustomSetting.MaterialType);
+            OutputItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.OutputItemType, _kitchenCustomSetting.MaterialType);
+
+            _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
+            _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutputItemKey);
+            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory, _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey, OutputItemKey);
+            _kitchenProductModule = new KitchenProductModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey, OutputItemKey);
+            
+            UnlockZoneModule = GetComponent<UnlockZoneModule>();
+            UnlockZoneModule.RegisterReference();
+            
+            _kitchenModel = new KitchenModel();
+            _kitchenViewModel = new KitchenViewModel(_kitchenModel);
+            _kitchenDefaultSetting.KitchenView.BindViewModel(_kitchenViewModel);
+            
+            _tradeZonePlayer = _kitchenDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            
+            _tradeZoneNpc = _kitchenDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
+            _tradeZonePlayer.RegisterReference(_kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+
+            _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer.RegisterReference(_kitchenDefaultSetting.UnlockZone_Player, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
+            
+            _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
+            _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;
+
+            _kitchenMaterialInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
+        }
+
+        public override void Initialize()
+        {
+            UpdateViewModel();
+            UnlockZoneModule.UpdateViewModel();
+        }
+
+        private void UpdateViewModel()
+        {
+            var remainedMaterialCount = _kitchenMaterialInventoryModule.GetItemCount(InputItemKey);
+            var elapsedTime = _kitchenProductModule.ElapsedTime;
+            var productLeadTime = _kitchenProductModule.ProductLeadTime;
+            _kitchenViewModel.UpdateValues(remainedMaterialCount, elapsedTime, productLeadTime);
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // TODO : Test Scripts
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                _kitchenProductInventoryModule.ReceiveItemThroughTransfer(OutputItemKey, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+            }
+#endif
+            
+            _kitchenProductInventoryModule.Update();
+            _kitchenProductModule.Product();
+        }
+        
+        private void OnProcessingStateChanged(bool isProcessing)
+        {
+            _kitchenDefaultSetting.KitchenView.gameObject.SetActive(isProcessing);
+        }
+        
+        private void HandleOnMoneyReceived(int value)
+        {
+            CurrentGoldForUnlock += value;
+            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
+            
+            UnlockZoneModule.UpdateViewModel();
+            
+            if (CurrentGoldForUnlock >= RequiredGoldForUnlock)
+            {
+                Debug.Log($"{ECurrencyType.Money} gold received");
+            }
+        }
+    }
+}

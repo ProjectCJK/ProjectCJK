@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Zones;
-using Units.Modules;
-using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Modules;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using UnityEngine;
 using Random = System.Random;
 
 namespace Units.Stages.Controllers
 {
-    public interface IVillageZoneController : IInitializable
+    public interface IVillageZoneController : IRegisterReference<ICreatureController, IBuildingController, IHuntingZoneController, StageCustomSettings, List<EMaterialType>>, IInitializable
     {
-        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController,
-            IHuntingZoneController huntingZoneController, StageCustomSettings stageDefaultSettings);
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
     }
@@ -35,24 +33,30 @@ namespace Units.Stages.Controllers
         private ICreatureController _creatureController;
         private IBuildingController _buildingController;
         private IHuntingZoneController _huntingZoneController;
-        
+        private StageCustomSettings _stageCustomSettings;
         private readonly HashSet<IGuest> currentSpawnedGuests = new();
 
         private GuestSpawnZoneDataSo _guestSpawnZoneDataSo;
         
         private float _guestSpawnElapsedTime;
         private float _guestSpawnCheckTime;
-        private float _guestMaxCount;
+        private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
+        private List<EMaterialType> _currentActiveStandType;
 
-        public void RegisterReference(ICreatureController creatureController, IBuildingController buildingController,
-            IHuntingZoneController huntingZoneController, StageCustomSettings stageCustomSettings)
+        public void RegisterReference(
+            ICreatureController creatureController,
+            IBuildingController buildingController,
+            IHuntingZoneController huntingZoneController,
+            StageCustomSettings stageCustomSettings,
+            List<EMaterialType> currentActiveMaterials)
         {
             _creatureController = creatureController;
             _buildingController = buildingController;
             _huntingZoneController = huntingZoneController;
             
             _guestSpawnZoneDataSo = DataManager.Instance.GuestSpawnZoneDataSo;
-            _guestMaxCount = stageCustomSettings.MaxGuestCount;
+            _stageCustomSettings = stageCustomSettings;
+            _currentActiveStandType = currentActiveMaterials;
         }
 
         public void Initialize()
@@ -68,13 +72,13 @@ namespace Units.Stages.Controllers
             {
                 IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
                 guest.SetTargetPurchaseQuantity(1);
-                guest.SetDestinations(GetRandomDestination());
+                guest.SetDestinations(GetRandomDestinationForGuest());
                 
                 currentSpawnedGuests.Add(guest);
             }
 #endif
             
-            if (currentSpawnedGuests.Count < _guestMaxCount)
+            if (currentSpawnedGuests.Count < _guestMaxCount && _currentActiveStandType.Count > 0)
             {
                 SpawnGuests();   
             }
@@ -93,7 +97,7 @@ namespace Units.Stages.Controllers
             {
                 IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
                 guest.SetTargetPurchaseQuantity(1);
-                guest.SetDestinations(GetRandomDestination());
+                guest.SetDestinations(GetRandomDestinationForGuest());
                 
                 currentSpawnedGuests.Add(guest);
 
@@ -120,15 +124,16 @@ namespace Units.Stages.Controllers
             currentSpawnedGuests.Remove(guest);
         }
 
-        private List<Tuple<string, Transform>> GetRandomDestination()
+        private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            var targetKey = EnumParserModule.ParseEnumToString(EBuildingType.Stand, EMaterialType.A);
+            var randomIndex = new Random().Next(_currentActiveStandType.Count);
+            var targetKey = EnumParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
             var managementDeskKey = EnumParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneZoneZoneZoneNpcTransform),
-                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneZoneZoneZoneNpcTransform),
+                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
+                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
                 new(string.Empty, _guestSpawnPoint)
             };
 

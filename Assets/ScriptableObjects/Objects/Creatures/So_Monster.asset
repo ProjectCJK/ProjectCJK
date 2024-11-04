@@ -15,10 +15,18 @@ MonoBehaviour:
   prefab: {fileID: 948783869296736964, guid: fae129e2424114e029aeaedd08bb6e10, type: 3}
   BaseMovementSpeed: 1
   MonsterSprites:
-  - MaterialType: 0
-    Sprite: {fileID: 232270323, guid: bb8eb39371b7043c09a092d3aea22a73, type: 3}
-  - MaterialType: 1
-    Sprite: {fileID: -1812441782, guid: f8656526e40cc434a9aa99d0edf484a8, type: 3}
+  - StageMaterialType: 0
+    EmotionIdleSprite: {fileID: 0}
+    EmotionScaredSprite: {fileID: 0}
+    BodySprite: {fileID: 0}
+    LegLeftSprite: {fileID: 0}
+    LegRightSprite: {fileID: 0}
+  - StageMaterialType: 1
+    EmotionIdleSprite: {fileID: 0}
+    EmotionScaredSprite: {fileID: 0}
+    BodySprite: {fileID: 0}
+    LegLeftSprite: {fileID: 0}
+    LegRightSprite: {fileID: 0}
   BaseHealth: 100
   BaseDamage: 10
   BaseAttackSpeed: 1

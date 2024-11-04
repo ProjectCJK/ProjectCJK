@@ -167,15 +167,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11144cf4148452dab8253a592eb2a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerData: {fileID: 11400000, guid: a5944d6208ab5477a82d2f6b3fe552e0, type: 2}
-  MonsterData: {fileID: 11400000, guid: cd352aa2e162346a2a7e480ac5f09e92, type: 2}
-  GuestData: {fileID: 11400000, guid: d93aeec5af232420bb056f0bd621cd83, type: 2}
-  KitchenData: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
-  StandData: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
-  ManagementDeskData: {fileID: 11400000, guid: 5f80df1fa3fb04f37aaf200ff1d77ab0, type: 2}
-  HuntingZoneData: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
+  PlayerDataSo: {fileID: 11400000, guid: a5944d6208ab5477a82d2f6b3fe552e0, type: 2}
+  MonsterDataSo: {fileID: 11400000, guid: cd352aa2e162346a2a7e480ac5f09e92, type: 2}
+  GuestDataSo: {fileID: 11400000, guid: d93aeec5af232420bb056f0bd621cd83, type: 2}
+  KitchenDataSo: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
+  StandDataSo: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
+  ManagementDeskDataSo: {fileID: 11400000, guid: 5f80df1fa3fb04f37aaf200ff1d77ab0, type: 2}
+  HuntingZoneDataSo: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
   GuestSpawnZoneDataSo: {fileID: 11400000, guid: dc962c01ce4cd4e2e8dfa155cdaea5e2, type: 2}
-  ItemData: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
+  ItemDataSo: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
+  ItemPriceSettings:
+    ItemPrices:
+    - ItemType: 1
+      MaterialType: 0
+      Price: 1000
+    - ItemType: 1
+      MaterialType: 1
+      Price: 2000
 --- !u!1 &910518067
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +197,7 @@ GameObject:
   - component: {fileID: 910518069}
   - component: {fileID: 910518068}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: RootCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,10 +515,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e453dd40c6f046c8a5df24a4b051dfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvas: {fileID: 910518070}
-  _joystickPrefab: {fileID: 8170153791668043269, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
-  _StagePrefab: {fileID: 4430950896216972855, guid: 639dd4fbdc1554635976156249eb3a0c, type: 3}
-  _cameraController: {fileID: 976220904}
+  _mainSceneDefaultSetting:
+    Canvas: {fileID: 910518070}
+    JoystickPrefab: {fileID: 8170153791668043269, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
+    StagePrefab: {fileID: 4430950896216972855, guid: 639dd4fbdc1554635976156249eb3a0c, type: 3}
+    CameraController: {fileID: 976220904}
+    UICurrencyPrefab: {fileID: 5841248985028807150, guid: aad84d2868721402aa8c8eccf9060498, type: 3}
 --- !u!1 &1564853702
 GameObject:
   m_ObjectHideFlags: 0
