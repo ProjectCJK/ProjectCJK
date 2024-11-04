@@ -21,7 +21,7 @@ namespace Units.Stages.Controllers
     
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
     {
-        private readonly Dictionary<IHuntingZoneProperty, EActiveStatus> huntingZones = new();
+        private readonly Dictionary<IHuntingZone, EActiveStatus> huntingZones = new();
         
         private ICreatureController _creatureController;
         private IItemFactory itemFactory;
@@ -43,7 +43,7 @@ namespace Units.Stages.Controllers
 
         public void Initialize()
         {
-            foreach (KeyValuePair<IHuntingZoneProperty, EActiveStatus> obj in huntingZones)
+            foreach (KeyValuePair<IHuntingZone, EActiveStatus> obj in huntingZones)
             {
                 obj.Key.Initialize();
             }
@@ -51,14 +51,14 @@ namespace Units.Stages.Controllers
 
         private void Update()
         {
-            SendItem(); 
+            SendItem();
         }
 
         private void CreateHuntingZoneDictionary()
         {
             foreach (Transform child in transform)
             {
-                var huntingZone = child.GetComponent<HuntingZoneProperty>();
+                var huntingZone = child.GetComponent<HuntingZone>();
                 huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
                 huntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
             }

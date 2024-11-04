@@ -53,7 +53,7 @@ namespace Units.Stages.Controllers
 
                 Buildings.TryAdd(key, building);
 
-                if (building is UnlockableBuildingZoneProperty unlockableBuildingZone)
+                if (building is UnlockableBuildingZone unlockableBuildingZone)
                 {
                     BuildingActiveStatuses.TryAdd(building, unlockableBuildingZone.ActiveStatus);
 

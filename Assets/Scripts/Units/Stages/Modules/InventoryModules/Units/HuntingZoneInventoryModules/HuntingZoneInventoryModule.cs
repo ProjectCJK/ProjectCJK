@@ -1,33 +1,32 @@
 using System;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
-using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
-namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units
+namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModules
 {
-    public interface IStandInventoryModule : IBuildingInventoryModule
+    public interface IHuntingZoneInventoryModule : IBuildingInventoryModule
     {
         public event Action<int> OnMoneyReceived;
     }
     
-    public class StandInventoryModule : BuildingInventoryModule, IStandInventoryModule
+    public class HuntingZoneInventoryModule : BuildingInventoryModule, IHuntingZoneInventoryModule
     {
         public event Action<int> OnMoneyReceived;
         
-        public StandInventoryModule(
+        public HuntingZoneInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IStandStatsModule standStatsModule,
             IItemFactory itemFactory,
+            IBuildingStatsModule buildingStatsModule,
             string inputItemKey,
-            string outputItemKey)
-            : base(senderTransform, receiverTransform, itemFactory, standStatsModule, inputItemKey, outputItemKey)
+            string outputItemKey) : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
         {
         }
-        
+
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             if (Enum.TryParse(inputItemKey, out ECurrencyType currencyType))
@@ -38,14 +37,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }
-                
-                ItemFactory.ReturnItem(item);
             }
-            else
-            {
-                AddItem(inputItemKey, item.Count);
-                PushSpawnedItem(ReceiverTransform, item);
-            }
+            
+            ItemFactory.ReturnItem(item);
         }
     }
 }

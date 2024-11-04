@@ -8,5 +8,6 @@ namespace Units.Stages.Modules.UnlockModules.Interfaces
         public EUnlockZoneType UnlockZoneType { get; }
         public EActiveStatus ActiveStatus { get; }
         public int RequiredGoldForUnlock { get; }
+        public int CurrentGoldForUnlock { get; }
     }
 }

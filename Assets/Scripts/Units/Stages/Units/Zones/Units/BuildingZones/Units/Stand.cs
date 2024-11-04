@@ -13,6 +13,7 @@ using Units.Stages.Modules.UnlockModules.Interfaces;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.UI.Stands;
 using UnityEngine;
 
@@ -55,7 +56,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public EItemType OutputItemType;
     }
     
-    public class Stand : UnlockableBuildingZoneProperty, IStand
+    public class Stand : UnlockableBuildingZone, IStand
     {
         [SerializeField] private StandDefaultSetting _standDefaultSetting;
         [SerializeField] private StandCustomSetting _standCustomSetting;
@@ -77,6 +78,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private IItemFactory _itemFactory;
         private ITradeZone _tradeZonePlayer;
         private ITradeZone _tradeZoneNpc;
+        private ITradeZone _unlockZonePlayer;
 
         private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
@@ -93,7 +95,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             OutputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
 
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
-            UnlockZoneModule.RegisterReference();
+            UnlockZoneModule.RegisterReference(BuildingKey);
             
             _standStatsModule = new StandStatsModule(_standDataSo);
             _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory, _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutputItemKey);
@@ -103,12 +105,16 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
             _tradeZonePlayer = _standDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
-            _tradeZonePlayer.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            _tradeZonePlayer.RegisterReference(this, _standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
             _tradeZoneNpc = _standDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
-            _tradeZoneNpc.RegisterReference(_standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            _tradeZoneNpc.RegisterReference(this, _standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
+            
+            _unlockZonePlayer = _standDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer.RegisterReference(this, _standDefaultSetting.UnlockZone_Player, _standInventoryModule, _standInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
             
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
+            _standInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
         }
 
         public override void Initialize() { }
@@ -116,12 +122,26 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private void Update()
         {
             _standInventoryModule.Update();
+            UnlockZoneModule.UpdateViewModel();
         }
 
         private void UpdateViewModel()
         {
             var remainedProductCount = _standInventoryModule.GetItemCount(InputItemKey);
             _standViewModel.UpdateValues(remainedProductCount);
+        }
+        
+        private void HandleOnMoneyReceived(int value)
+        {
+            CurrentGoldForUnlock += value;
+            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
+            
+            UnlockZoneModule.UpdateViewModel();
+            
+            if (CurrentGoldForUnlock >= RequiredGoldForUnlock)
+            {
+                UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+            }
         }
     }
 }

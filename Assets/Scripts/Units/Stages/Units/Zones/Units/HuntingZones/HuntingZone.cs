@@ -7,6 +7,7 @@ using Units.Stages.Controllers;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModules;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
 using Units.Stages.Modules.UnlockModules.Interfaces;
@@ -15,13 +16,14 @@ using Units.Stages.Modules.UnlockModules.Units;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 namespace Units.Stages.Units.Zones.Units.HuntingZones
 {
-    public interface IHuntingZoneProperty : IRegisterReference<ICreatureController, IItemFactory, Action<IItem>>, IInitializable, IUnlockZoneProperty
+    public interface IHuntingZone : IRegisterReference<ICreatureController, IItemFactory, Action<IItem>>, IInitializable, IUnlockZoneProperty
     {
         
     }
@@ -29,11 +31,11 @@ namespace Units.Stages.Units.Zones.Units.HuntingZones
     [Serializable]
     public struct HuntingZoneDefaultSetting
     {
-        [Header("ActiveStatus UI")]
-        public UnlockZoneView unlockZoneView;
-        
         [Header("### HuntingZoneDefaultSetting ###")]
         [SerializeField, Header("MonsterSpawnPoint")] public TilemapCollider2D monsterSpawnPoint;
+        
+        [Space(10), Header("UnlockZone_Player")]
+        public Transform UnlockZone_Player;
     }
     
     [Serializable]
@@ -44,16 +46,13 @@ namespace Units.Stages.Units.Zones.Units.HuntingZones
         [SerializeField, Header("최대 몬스터 소환 개수 제한")] public int _monsterSpawnCount;
     }
     
-    public class HuntingZoneProperty : MonoBehaviour, IHuntingZoneProperty
+    public class HuntingZone : MonoBehaviour, IHuntingZone
     {
         public UnlockZoneModule UnlockZoneModule { get; private set; }
         public EUnlockZoneType UnlockZoneType => UnlockZoneModule.UnlockZoneType;
         public EActiveStatus ActiveStatus => UnlockZoneModule.ActiveStatus;
-        public int RequiredGoldForUnlock
-        {
-            get => UnlockZoneModule.RequiredGoldForUnlock;
-            set => UnlockZoneModule.RequiredGoldForUnlock = value;
-        }
+        public int RequiredGoldForUnlock => UnlockZoneModule.RequiredGoldForUnlock;
+        public int CurrentGoldForUnlock { get; set; }
 
         private event Action<IItem> OnDroppedItem;
         private event Action HandleOnPlayerEncounter;
@@ -62,32 +61,45 @@ namespace Units.Stages.Units.Zones.Units.HuntingZones
         [Space(20), SerializeField] private HuntingZoneCustomSetting huntingZoneCustomSetting;
         private readonly HashSet<IMonster> currentSpawnedMonsters = new();
 
+        private IHuntingZoneInventoryModule _huntingZoneInventoryModule;
         private ICreatureController _creatureController;
         private IItemFactory itemFactory;
-        
+
+        private string _huntingZoneKey;
         private string _itemKey;
         private bool playerEncountered;
-        private int CurrentGoldForUnlock;
-
+        
+        private ITradeZone _unlockZonePlayer;
+        
         private HuntingZoneDataSO _huntingZoneDataSo; 
         
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, Action<IItem> action)
         {
-            UnlockZoneModule = GetComponent<HuntingZoneUnlockZoneModule>();
-            
             _huntingZoneDataSo = DataManager.Instance.HuntingZoneDataSo;
             _creatureController = creatureController;
             itemFactory = itemController;
-
-            OnDroppedItem += action;
-
+            
             _itemKey = EnumParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
+
+            _huntingZoneInventoryModule = new HuntingZoneInventoryModule(HuntingZoneDefaultSetting.UnlockZone_Player, HuntingZoneDefaultSetting.UnlockZone_Player, itemController, null, string.Empty, string.Empty);
+            _huntingZoneKey = $"HuntingZone_{huntingZoneCustomSetting._materialType.ToString()}";
+            
+            UnlockZoneModule = GetComponent<HuntingZoneUnlockZoneModule>();
+            UnlockZoneModule.RegisterReference($"HuntingZone_{huntingZoneCustomSetting._materialType}");
+            
+            OnDroppedItem += action;
+            
+            _unlockZonePlayer = HuntingZoneDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer.RegisterReference(this, HuntingZoneDefaultSetting.UnlockZone_Player, _huntingZoneInventoryModule, null, _huntingZoneKey, $"{ECurrencyType.Money}");
+
+            _huntingZoneInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
         }
         
         public void Initialize()
         {
             playerEncountered = false;
             SpawnMonsters();
+            UnlockZoneModule.UpdateViewModel();
         }
 
         private void SpawnMonsters()
@@ -149,6 +161,19 @@ namespace Units.Stages.Units.Zones.Units.HuntingZones
             var randomY = Random.Range(bounds.min.y, bounds.max.y);
             
             return new Vector3(randomX, randomY, 0);
+        }
+        
+        private void HandleOnMoneyReceived(int value)
+        {
+            CurrentGoldForUnlock += value;
+            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
+            
+            UnlockZoneModule.UpdateViewModel();
+            
+            if (CurrentGoldForUnlock >= RequiredGoldForUnlock)
+            {
+                UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+            }
         }
     }
 }

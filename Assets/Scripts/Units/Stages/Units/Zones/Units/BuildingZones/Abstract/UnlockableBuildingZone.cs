@@ -11,7 +11,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Abstract
         
     }
     
-    public abstract class UnlockableBuildingZoneProperty : BuildingZone, IUnlockableBuildingZoneProperty
+    public abstract class UnlockableBuildingZone : BuildingZone, IUnlockableBuildingZoneProperty
     {
         public abstract UnlockZoneModule UnlockZoneModule { get; protected set; }
         public abstract EUnlockZoneType UnlockZoneType { get; }

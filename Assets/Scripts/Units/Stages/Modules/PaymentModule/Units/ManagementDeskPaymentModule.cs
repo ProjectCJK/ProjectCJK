@@ -58,6 +58,8 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     (EItemType?, EMaterialType?) parsedItemKey = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
                     var targetItemPrice = DataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
                     
+                    //TODO : 상품 별 가격에 따른 가격 책정
+                    
                     while (targetItemPrice > 0)
                     {
                         var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : targetItemPrice;
@@ -65,8 +67,6 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
                         targetItemPrice -= goldSendingAmount;
                     }
-                    
-                    //TODO : 상품 별 가격에 따른 가격 책정
                    
                     guest.CheckNextDestination();
 
