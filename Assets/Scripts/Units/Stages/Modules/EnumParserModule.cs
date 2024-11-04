@@ -1,8 +1,6 @@
 using System;
-using Units.Stages.Units.Buildings.Enums;
-using Units.Stages.Units.Items.Enums;
 
-namespace Units.Modules
+namespace Units.Stages.Modules
 {
     public static class EnumParserModule
     {

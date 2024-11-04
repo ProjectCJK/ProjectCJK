@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
-using Units.Modules.ProductModules.Abstract;
-using Units.Modules.StatsModules.Abstract;
-using Units.Modules.StatsModules.Units;
-using Units.Modules.StatsModules.Units.Buildings.Abstract;
-using Units.Stages.Controllers;
-using Units.Stages.Units.Items.Enums;
+using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Stages.Modules.ProductModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.ProductModules.Units
+namespace Units.Stages.Modules.ProductModules.Units
 {
     public interface IKitchenProductModule : IBuildingProductModule
     {

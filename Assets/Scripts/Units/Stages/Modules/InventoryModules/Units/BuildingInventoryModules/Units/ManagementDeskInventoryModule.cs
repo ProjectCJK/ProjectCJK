@@ -1,12 +1,10 @@
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
-using Units.Modules.StatsModules.Units.Buildings.Abstract;
-using Units.Modules.StatsModules.Units.Buildings.Units;
-using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units
+namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units
 {
     public interface IManagementDeskInventoryModule : IBuildingInventoryModule
     {

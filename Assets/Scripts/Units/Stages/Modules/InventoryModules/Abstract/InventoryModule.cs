@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Interfaces;
-using Units.Stages.Controllers;
-using Units.Stages.Units.Items.Enums;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Items.Units;
-using UnityEditor.UIElements;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Abstract
+namespace Units.Stages.Modules.InventoryModules.Abstract
 {
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
-        public void ReceiveItemNoThroughTransfer(string inputItemKey);
+        public void ReceiveItemNoThroughTransfer(string inputItemKey, int count);
         public event Action OnInventoryCountChanged;
         public IItemFactory ItemFactory { get; }
         public int MaxInventorySize { get; }
@@ -53,11 +50,11 @@ namespace Units.Modules.InventoryModules.Abstract
         
         protected abstract void OnItemReceived(string inputItemKey, IItem item);
 
-        public void ReceiveItemThroughTransfer(string inputItemKey, Vector3 currentSenderPosition)
+        public void ReceiveItemThroughTransfer(string inputItemKey, int count, Vector3 currentSenderPosition)
         {
             isItemReceiving = true;
             
-            IItem item = ItemFactory.GetItem(inputItemKey, currentSenderPosition);
+            IItem item = ItemFactory.GetItem(inputItemKey, count, currentSenderPosition);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
             item.Transfer(currentSenderPosition, ReceiverTransform, () =>
@@ -67,11 +64,11 @@ namespace Units.Modules.InventoryModules.Abstract
             });
         }
 
-        public void ReceiveItemNoThroughTransfer(string inputItemKey)
+        public void ReceiveItemNoThroughTransfer(string inputItemKey, int count)
         {
             isItemReceiving = true;
             
-            IItem item = ItemFactory.GetItem(inputItemKey, ReceiverTransform.position);
+            IItem item = ItemFactory.GetItem(inputItemKey, count, ReceiverTransform.position);
             OnItemReceived(inputItemKey, item);
             isItemReceiving = false;
         }
@@ -121,7 +118,10 @@ namespace Units.Modules.InventoryModules.Abstract
             item.Transform.SetParent(receiveTransform);
             _spawnedItemStack.Push(item);   
         }
-        
-        protected IItem PopSpawnedItem() => _spawnedItemStack.Pop();
+
+        protected IItem PopSpawnedItem()
+        {
+            return _spawnedItemStack.Count > 0 ? _spawnedItemStack.Pop() : null;
+        }
     }
 }

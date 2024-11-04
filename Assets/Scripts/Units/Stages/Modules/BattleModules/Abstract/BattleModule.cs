@@ -1,4 +1,4 @@
-namespace Units.Modules.BattleModules.Abstract
+namespace Units.Stages.Modules.BattleModules.Abstract
 {
     public interface IBattleProperty
     {

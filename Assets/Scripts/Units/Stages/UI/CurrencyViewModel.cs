@@ -5,11 +5,14 @@ namespace Units.Stages.UI
 {
     public class CurrencyViewModel : BaseViewModel
     {
+        public int GoldCount => _currencyModel.GoldCount;
+        
         private readonly CurrencyModel _currencyModel;
 
         public CurrencyViewModel(CurrencyModel currencyModel)
         {
             _currencyModel = currencyModel;
+            _currencyModel.PropertyChanged += OnModelPropertyChanged;
         }
         
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -18,9 +21,9 @@ namespace Units.Stages.UI
         }
 
         // 모델에 새로운 값을 설정하는 메서드
-        public void UpdateValues(int remainedMaterialCount, float elapsedTime, float productLeadTime)
+        public void UpdateValues(int goldCount)
         {
-            _kitchenModel.SetValues(remainedMaterialCount, elapsedTime, productLeadTime);
+            _currencyModel.SetValues(goldCount);
         }
     }
 }

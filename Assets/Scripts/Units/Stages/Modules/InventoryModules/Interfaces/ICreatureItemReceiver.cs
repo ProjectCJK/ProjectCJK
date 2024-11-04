@@ -1,9 +1,7 @@
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Enums;
-using UnityEngine;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 
-namespace Units.Modules.InventoryModules.Interfaces
+namespace Units.Stages.Modules.InventoryModules.Interfaces
 {
     public interface ICreatureItemReceiver : IItemReceiver
     {

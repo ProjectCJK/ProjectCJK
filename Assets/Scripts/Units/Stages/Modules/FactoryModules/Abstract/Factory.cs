@@ -1,4 +1,4 @@
-namespace Units.Modules.FactoryModules.Abstract
+namespace Units.Stages.Modules.FactoryModules.Abstract
 {
     public abstract class Factory
     {

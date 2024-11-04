@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using Units.Modules.CollisionModules.Abstract;
-using Units.Modules.StatsModules.Units.Creatures.Units;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Units;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
-using Units.Stages.Units.Buildings.Units;
+using Units.Stages.Modules.CollisionModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Units;
 using UnityEngine;
 
-namespace Units.Modules.CollisionModules.Units
+namespace Units.Stages.Modules.CollisionModules.Units
 {
     public interface IGuestCollisionModule
     {

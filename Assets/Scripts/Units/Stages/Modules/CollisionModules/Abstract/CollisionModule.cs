@@ -1,7 +1,6 @@
-using Interfaces;
 using UnityEngine;
 
-namespace Units.Modules.CollisionModules.Abstract
+namespace Units.Stages.Modules.CollisionModules.Abstract
 {
     public interface IInteractionProperty
     {
@@ -20,7 +19,8 @@ namespace Units.Modules.CollisionModules.Abstract
         UpgradeZone,
         HuntingZone,
         SpawnZone,
-        PaymentZone
+        PaymentZone,
+        UnlockZone
     }
     
     public class CollisionModule : ICollisionModule

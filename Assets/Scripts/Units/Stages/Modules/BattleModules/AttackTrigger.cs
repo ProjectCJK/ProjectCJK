@@ -1,13 +1,13 @@
 using System;
-using Interfaces;
-using Units.Modules.BattleModules.Abstract;
-using Units.Stages.Units.Creatures.Interfaces;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Interfaces;
 using Managers;
+using Units.Stages.Modules.BattleModules.Abstract;
+using Units.Stages.Units.Creatures.Interfaces;
+using UnityEngine;
 
-namespace Units.Modules.BattleModules
+namespace Units.Stages.Modules.BattleModules
 {
     public interface IAttackTrigger : IRegisterReference<IBattleProperty, LayerMask, List<EBattleTag>>, IInitializable<bool>
     {

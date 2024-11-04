@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Units.Modules
+namespace Units.Stages.Modules
 {
     public static class LayerMaskParserModule
     {

@@ -1,12 +1,10 @@
 using System;
 using Interfaces;
-using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
-using Units.Modules.StatsModules.Abstract;
-using Units.Modules.StatsModules.Units.Buildings.Abstract;
-using Units.Stages.Units.Items.Enums;
+using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.ProductModules.Abstract
+namespace Units.Stages.Modules.ProductModules.Abstract
 {
     public interface IProductProperty
     {
@@ -81,7 +79,7 @@ namespace Units.Modules.ProductModules.Abstract
                 {
                     if (_kitchenProductInventoryModule.CanReceiveItem())
                     {
-                        _kitchenProductInventoryModule.ReceiveItemThroughTransfer(_outputItemKey, SenderTransform.position);
+                        _kitchenProductInventoryModule.ReceiveItemThroughTransfer(_outputItemKey, 1, SenderTransform.position);
                         _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);
                     }
                     

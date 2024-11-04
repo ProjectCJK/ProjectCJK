@@ -4,39 +4,24 @@ namespace Units.Stages.UI
 {
     public class CurrencyModel : BaseModel
     {
-        private int _gold;
-        public int _dia;
+        private int _goldCount;
 
-        public int Gold
+        public int GoldCount
         {
-            get => _gold;
+            get => _goldCount;
             
             private set
             {
-                if (SetField(ref _gold, value))
-                {
-                    OnPropertyChanged();
-                }
-            }
-        }
-        
-        public int Dia
-        {
-            get => _dia;
-            
-            private set
-            {
-                if (SetField(ref _dia, value))
+                if (SetField(ref _goldCount, value))
                 {
                     OnPropertyChanged();
                 }
             }
         }
 
-        public void SetValues(int gold, int dia)
+        public void SetValues(int gold)
         {
-            _gold = gold;
-            _dia = dia;
+            GoldCount = gold;
         }
     }
 }

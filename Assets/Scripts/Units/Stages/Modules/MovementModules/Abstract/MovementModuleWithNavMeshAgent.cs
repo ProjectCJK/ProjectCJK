@@ -1,6 +1,4 @@
-using UnityEngine;
-
-namespace Units.Modules.MovementModules.Abstract
+namespace Units.Stages.Modules.MovementModules.Abstract
 {
     public interface IMovementModuleWithNavMeshAgent
     {

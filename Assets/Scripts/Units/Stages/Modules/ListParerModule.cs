@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ScriptableObjects.Scripts.Items;
-using UnityEngine;
 
-namespace Units.Modules
+namespace Units.Stages.Modules
 {
     public static class ListParerModule
     {

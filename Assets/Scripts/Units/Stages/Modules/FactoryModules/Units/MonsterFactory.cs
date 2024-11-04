@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
-using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
-using Units.Modules.FactoryModules.Abstract;
 using Units.Stages.Controllers;
+using Units.Stages.Modules.FactoryModules.Abstract;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Units.Modules.FactoryModules.Units
+namespace Units.Stages.Modules.FactoryModules.Units
 {
     public interface IMonsterFactory
     {

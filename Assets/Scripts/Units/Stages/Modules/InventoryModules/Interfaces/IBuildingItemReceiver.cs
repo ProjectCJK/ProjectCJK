@@ -1,6 +1,4 @@
-using System;
-
-namespace Units.Modules.InventoryModules.Interfaces
+namespace Units.Stages.Modules.InventoryModules.Interfaces
 {
     public interface IBuildingItemReceiver : IItemReceiver
     {

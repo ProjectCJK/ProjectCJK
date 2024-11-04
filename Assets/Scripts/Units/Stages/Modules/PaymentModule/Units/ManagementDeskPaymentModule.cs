@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using Modules.DataStructures;
-using Units.Modules.InventoryModules.Interfaces;
-using Units.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
-using Units.Modules.PaymentModule.Abstract;
-using Units.Modules.StatsModules.Units.Buildings.Units;
+using Managers;
+using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
+using Units.Stages.Modules.PaymentModule.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Creatures.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
-namespace Units.Modules.PaymentModule.Units
+namespace Units.Stages.Modules.PaymentModule.Units
 {
     public interface IManagementDeskPaymentModule
     {
@@ -53,8 +53,21 @@ namespace Units.Modules.PaymentModule.Units
                 if (_playerPaymentElapsedTime >= _playerPaymentDelay)
                 {
                     Guest guest = _customerQueue.Dequeue();
+                    Tuple<string, int> purchasedItem = guest.GetItem();
+
+                    (EItemType?, EMaterialType?) parsedItemKey = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+                    var targetItemPrice = DataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
                     
-                    _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey);
+                    while (targetItemPrice > 0)
+                    {
+                        var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : targetItemPrice;
+                        _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldSendingAmount);
+
+                        targetItemPrice -= goldSendingAmount;
+                    }
+                    
+                    //TODO : 상품 별 가격에 따른 가격 책정
+                   
                     guest.CheckNextDestination();
 
                     _playerPaymentElapsedTime = 0;

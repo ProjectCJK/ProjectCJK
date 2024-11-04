@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Items;
-using Units.Modules.FactoryModules.Abstract;
 using Units.Stages.Controllers;
+using Units.Stages.Modules.FactoryModules.Abstract;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Units.Modules.FactoryModules.Units
+namespace Units.Stages.Modules.FactoryModules.Units
 {
     public interface IItemFactory
     {
         public ItemDataSO ItemDataSo { get; }
-        public IItem GetItem(string itemType, Vector3 initializePosition);
+        public IItem GetItem(string itemType, int count, Vector3 initializePosition);
         public void ReturnItem(IItem item);
     }
     
@@ -42,7 +41,7 @@ namespace Units.Modules.FactoryModules.Units
             CreateSpriteDictionary();
         }
         
-        public IItem GetItem(string itemType, Vector3 initializePosition)
+        public IItem GetItem(string itemType, int count, Vector3 initializePosition)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
             
@@ -77,7 +76,7 @@ namespace Units.Modules.FactoryModules.Units
             if (itemSprite == null) Debug.LogError($"{itemType} is not a valid item type");
 #endif
             
-            item.Initialize(itemType, itemSprite, initializePosition);
+            item.Initialize(itemType, count, itemSprite, initializePosition);
 
             return item;
         }

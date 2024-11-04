@@ -1,25 +1,28 @@
 using System;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
+using System.Collections.Generic;
+using System.Linq;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Abstract;
+using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Units;
-using Unity.VisualScripting;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Units;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
+namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units
 {
     public interface IGuestInventoryModule : ICreatureInventoryModule
     {
-        public event Action OnTargetQuantityReceived; 
+        public Tuple<string, int> GetItem();
+        public event Action OnTargetQuantityReceived;
+        public void Reset();
     }
 
     public class GuestInventoryModule : CreatureInventoryModule, IGuestInventoryModule
     {
-        public event Action OnTargetQuantityReceived; 
+        public event Action OnTargetQuantityReceived;
+
         public override ECreatureType CreatureType { get; }
 
         public override IItemFactory ItemFactory { get; }
@@ -53,7 +56,6 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
         
         public override void RegisterItemReceiver(ITradeZone zone, bool isConnected)
         {
-            
             if (isConnected)
             {
                 RegisterZone(zone as INPCTradeZone);
@@ -88,6 +90,25 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
             {
                 Debug.Log($"{zone.BuildingKey} => {CreatureType} 도킹 해제 완료 @~@");
             }
+        }
+        
+        public void Reset()
+        {
+            Inventory.Clear();
+            
+            IItem item = PopSpawnedItem();
+            
+            if (item != null)
+            {
+                ItemFactory.ReturnItem(item);
+            }
+        }
+        
+        public Tuple<string, int> GetItem()
+        {
+            List<string> returnItems = Inventory.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key).ToList();
+            
+            return new Tuple<string, int>(returnItems[0], Inventory[returnItems[0]]);
         }
     }
 }

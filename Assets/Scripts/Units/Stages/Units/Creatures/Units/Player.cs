@@ -1,28 +1,22 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Modules;
-using ScriptableObjects.Scripts.Creatures;
 using ScriptableObjects.Scripts.Creatures.Units;
-using Units.Modules;
-using Units.Modules.BattleModules;
-using Units.Modules.CollisionModules.Units;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.FSMModules.Units;
-using Units.Modules.InventoryModules.Interfaces;
-using Units.Modules.InventoryModules.Units;
-using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
-using Units.Modules.MovementModules.Units;
-using Units.Modules.StatsModules.Units;
-using Units.Modules.StatsModules.Units.Creatures.Units;
-using Units.Stages.Controllers;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Units.Stages.Modules;
+using Units.Stages.Modules.BattleModules;
+using Units.Stages.Modules.CollisionModules.Units;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.InventoryModules.Interfaces;
+using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
+using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Units;
 using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
@@ -79,11 +73,9 @@ namespace Units.Stages.Units.Creatures.Units
             _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
             _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
             _playerCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
-
             _weapon.AttackTrigger.OnHitSuccessful += _playerMovementModule.HandleOnHit;
         }
 
-        
         public void Initialize(Vector3 position, Action action)
         {
             OnReturnPlayer = action;
@@ -107,8 +99,8 @@ namespace Units.Stages.Units.Creatures.Units
                 var temp1Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
                 var temp2Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.B);
                 
-                _playerInventoryModule.ReceiveItemThroughTransfer(temp1Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
-                _playerInventoryModule.ReceiveItemThroughTransfer(temp2Key, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItemThroughTransfer(temp1Key, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
+                _playerInventoryModule.ReceiveItemThroughTransfer(temp2Key, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
 #endif
             
@@ -138,9 +130,9 @@ namespace Units.Stages.Units.Creatures.Units
             _playerCollisionModule.OnTriggerExit2D(other);
         }
         
-        private void HandleOnTriggerTradeZone(ITradeZone zone, bool isConnected)
+        private void HandleOnTriggerTradeZone(ITradeZone zone, bool value)
         {
-            _playerInventoryModule.RegisterItemReceiver(zone, isConnected);
+            _playerInventoryModule.RegisterItemReceiver(zone, value);
         }
         
         private void HandleOnTriggerHuntingZone(bool value)

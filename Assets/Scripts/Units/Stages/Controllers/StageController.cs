@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using Units.Modules.FactoryModules.Units;
+using Units.Stages.Enums;
+using Units.Stages.Modules;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
@@ -41,7 +45,19 @@ namespace Units.Stages.Controllers
         [Header("--- 재료 타입 정의 ---")]
         public List<MaterialMapping> materialMappings;
         
-        [Header("최대 손님 수")] public int MaxGuestCount;
+        [Header("최대 손님 수")]
+        public int MaxGuestCount;
+
+        [Header("--- 해금 조건 정의 ---")]
+        public List<ActiveStatusSettings> activeStatusSettings;
+    }
+
+    [Serializable]
+    public struct ActiveStatusSettings
+    {
+        public GameObject GameObject;
+        public EActiveStatus InitialActiveStatus;
+        public int ReguiredGoldCountForUnlock;
     }
 
     public class StageController : MonoBehaviour, IStageController
@@ -60,9 +76,13 @@ namespace Units.Stages.Controllers
         private IVillageZoneController _villageZoneController => _stageDefaultSettings.stageReferences.VillageZoneController;
 
         private readonly List<EMaterialType> _currentActiveMaterials = new();
+
+        private int activeStatusSettingIndex = 0;
         
         public void RegisterReference(Joystick joystick)
         {
+            InitializeZone();
+            
             var itemFactory = new ItemFactory(transform, _stageCustomSettings.materialMappings);
             var playerFactory = new PlayerFactory(joystick, itemFactory);
             var monsterFactory = new MonsterFactory(_stageCustomSettings.materialMappings);
@@ -81,6 +101,26 @@ namespace Units.Stages.Controllers
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
             _villageZoneController.Initialize();
+        }
+
+        private void InitializeZone()
+        {
+            var firstLockZoneFounded = false;
+            for (var index = 0; index < _stageCustomSettings.activeStatusSettings.Count; index++)
+            {
+                ActiveStatusSettings activeStatus = _stageCustomSettings.activeStatusSettings[index];
+
+                if (activeStatus.InitialActiveStatus != EActiveStatus.Active && !firstLockZoneFounded)
+                {
+                    firstLockZoneFounded = true;
+                    activeStatusSettingIndex = index;
+                }
+                
+                var activeStatusModule = activeStatus.GameObject.GetComponent<UnlockZoneModule>();
+                
+                activeStatusModule.RequiredGoldForUnlock = activeStatus.ReguiredGoldCountForUnlock;
+                activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
+            }
         }
     }
 }

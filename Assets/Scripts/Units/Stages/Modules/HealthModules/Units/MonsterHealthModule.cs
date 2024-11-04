@@ -1,8 +1,8 @@
 using Interfaces;
-using Units.Modules.HealthModules.Abstract;
+using Units.Stages.Modules.HealthModules.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.HealthModules.Units
+namespace Units.Stages.Modules.HealthModules.Units
 {
     public interface IMonsterHealthModule : IInitializable
     {

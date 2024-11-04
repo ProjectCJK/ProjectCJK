@@ -1,9 +1,8 @@
-using ScriptableObjects.Scripts.Buildings.Abstract;
 using ScriptableObjects.Scripts.Buildings.Units;
-using Units.Modules.StatsModules.Units.Buildings.Abstract;
-using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 
-namespace Units.Modules.StatsModules.Units.Buildings.Units
+namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
 {
     public interface IManagementDeskStatsModule : IBuildingStatsModule
     {

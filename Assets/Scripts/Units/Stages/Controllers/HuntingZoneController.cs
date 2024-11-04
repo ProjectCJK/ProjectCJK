@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
-using Units.Modules.FactoryModules.Units;
 using Units.Stages.Enums;
+using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Units.Creatures.Units;
-using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using Units.Stages.Units.Zones.Units.HuntingZones;
 using Unity.VisualScripting;
 using UnityEngine;
 using IInitializable = Interfaces.IInitializable;
@@ -21,7 +21,7 @@ namespace Units.Stages.Controllers
     
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
     {
-        private readonly Dictionary<IHuntingZone, EActiveStatus> huntingZones = new();
+        private readonly Dictionary<IHuntingZoneProperty, EActiveStatus> huntingZones = new();
         
         private ICreatureController _creatureController;
         private IItemFactory itemFactory;
@@ -43,7 +43,7 @@ namespace Units.Stages.Controllers
 
         public void Initialize()
         {
-            foreach (KeyValuePair<IHuntingZone, EActiveStatus> obj in huntingZones)
+            foreach (KeyValuePair<IHuntingZoneProperty, EActiveStatus> obj in huntingZones)
             {
                 obj.Key.Initialize();
             }
@@ -58,7 +58,7 @@ namespace Units.Stages.Controllers
         {
             foreach (Transform child in transform)
             {
-                var huntingZone = child.GetComponent<HuntingZone>();
+                var huntingZone = child.GetComponent<HuntingZoneProperty>();
                 huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
                 huntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
             }
@@ -77,7 +77,7 @@ namespace Units.Stages.Controllers
 
                 if (Vector3.Distance(currentItemPosition, _player.Transform.position) <= _itemPickupRange)
                 {
-                    _player.PlayerInventoryModule.ReceiveItemThroughTransfer(item.Type, currentItemPosition);
+                    _player.PlayerInventoryModule.ReceiveItemThroughTransfer(item.Type, item.Count, currentItemPosition);
                     itemFactory.ReturnItem(item);
                     _droppedItems.RemoveAt(i);
                 }

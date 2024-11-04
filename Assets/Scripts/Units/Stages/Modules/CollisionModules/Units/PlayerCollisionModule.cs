@@ -1,25 +1,24 @@
 using System;
 using System.Collections.Generic;
-using Managers;
-using Units.Modules.CollisionModules.Abstract;
-using Units.Modules.StatsModules.Units;
-using Units.Modules.StatsModules.Units.Creatures.Units;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.PaymentZones.Units;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
-using Units.Stages.Units.Creatures.Abstract;
+using Units.Stages.Modules.CollisionModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.HuntingZones;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Units;
+using Units.Stages.Units.Zones.Units.HuntingZones;
 using UnityEngine;
 
-namespace Units.Modules.CollisionModules.Units
+namespace Units.Stages.Modules.CollisionModules.Units
 {
     public interface IPlayerCollisionModule
     {
         public event Action<ITradeZone, bool> OnTriggerTradeZone;
         public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
+        public event Action<IUnlockZone, bool> OnTriggerUnlockZone;
         public event Action<bool> OnTriggerHuntingZone;
         public void Update();
         public void OnTriggerEnter2D(Collider2D other);
@@ -31,6 +30,7 @@ namespace Units.Modules.CollisionModules.Units
     {
         public event Action<ITradeZone, bool> OnTriggerTradeZone;
         public event Action<IPaymentZone, bool> OnTriggerPaymentZone;
+        public event Action<IUnlockZone, bool> OnTriggerUnlockZone;
         public event Action<bool> OnTriggerHuntingZone;
         
         private readonly ECreatureType _creatureType;
@@ -85,6 +85,12 @@ namespace Units.Modules.CollisionModules.Units
                         OnTriggerPaymentZone?.Invoke(currentPaymentZone, true);                        
                     }
                     break;
+                case ECollisionType.UnlockZone:
+                    if (other.transform.TryGetComponent(out IPlayerUnlockZone currentUnlockZone))
+                    {
+                        OnTriggerUnlockZone?.Invoke(currentUnlockZone, true);                        
+                    }
+                    break;
             }
         }
 
@@ -95,7 +101,7 @@ namespace Units.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.HuntingZone:
-                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZoneProperty>();
                     if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(true);
                     break;
             }
@@ -119,7 +125,7 @@ namespace Units.Modules.CollisionModules.Units
                     break;
 
                 case ECollisionType.HuntingZone:
-                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZoneProperty>();
                     if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(false);
                     break;
                 

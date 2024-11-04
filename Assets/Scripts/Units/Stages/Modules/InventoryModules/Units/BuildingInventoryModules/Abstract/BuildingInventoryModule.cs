@@ -1,18 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Modules.DataStructures;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.InventoryModules.Interfaces;
-using Units.Modules.StatsModules.Abstract;
-using Units.Modules.StatsModules.Units.Buildings.Abstract;
-using Units.Stages.Controllers;
-using Units.Stages.Units.Items.Enums;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Abstract;
+using Units.Stages.Modules.InventoryModules.Interfaces;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
+namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
 {
     public interface IBuildingInventoryModule : IInventoryModule
     {
@@ -84,9 +79,8 @@ namespace Units.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
             {
                 IItem item = PopSpawnedItem();
+                currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
                 ItemFactory.ReturnItem(item);
-
-                currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Transform.position);
                 RemoveItem(OutputItemKey);
             }
             else

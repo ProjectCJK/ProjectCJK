@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Zones;
-using Units.Modules;
-using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Modules;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using UnityEngine;
 using Random = System.Random;
 
@@ -41,7 +41,7 @@ namespace Units.Stages.Controllers
         private float _guestSpawnElapsedTime;
         private float _guestSpawnCheckTime;
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
-        private List<EMaterialType> _currentActiveMaterials;
+        private List<EMaterialType> _currentActiveStandType;
 
         public void RegisterReference(
             ICreatureController creatureController,
@@ -56,7 +56,7 @@ namespace Units.Stages.Controllers
             
             _guestSpawnZoneDataSo = DataManager.Instance.GuestSpawnZoneDataSo;
             _stageCustomSettings = stageCustomSettings;
-            _currentActiveMaterials = currentActiveMaterials;
+            _currentActiveStandType = currentActiveMaterials;
         }
 
         public void Initialize()
@@ -78,7 +78,7 @@ namespace Units.Stages.Controllers
             }
 #endif
             
-            if (currentSpawnedGuests.Count < _guestMaxCount)
+            if (currentSpawnedGuests.Count < _guestMaxCount && _currentActiveStandType.Count > 0)
             {
                 SpawnGuests();   
             }
@@ -126,14 +126,14 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            var randomIndex = new Random().Next(_currentActiveMaterials.Count);
-            var targetKey = EnumParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveMaterials[randomIndex]);
+            var randomIndex = new Random().Next(_currentActiveStandType.Count);
+            var targetKey = EnumParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
             var managementDeskKey = EnumParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneZoneZoneZoneNpcTransform),
-                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneZoneZoneZoneNpcTransform),
+                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
+                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
                 new(string.Empty, _guestSpawnPoint)
             };
 

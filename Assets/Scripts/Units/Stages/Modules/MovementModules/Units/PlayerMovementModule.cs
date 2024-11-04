@@ -2,14 +2,13 @@ using System.Collections;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
-using Units.Modules.FSMModules.Units;
-using Units.Modules.MovementModules.Abstract;
-using Units.Modules.StatsModules.Units;
-using Units.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.MovementModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
-namespace Units.Modules.MovementModules.Units
+namespace Units.Stages.Modules.MovementModules.Units
 {
     public interface IPlayerMovementModule : IInitializable
     {

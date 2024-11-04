@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using Interfaces;
-using Units.Modules.BattleModules.Abstract;
-using Units.Stages.Units.Creatures.Interfaces;
+using Units.Stages.Modules.BattleModules.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.BattleModules
+namespace Units.Stages.Modules.BattleModules
 {
 
     public enum EBattleTag

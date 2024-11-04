@@ -1,17 +1,16 @@
 using System;
 using Managers;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Abstract;
+using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Units;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
+namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units
 {
     public interface IPlayerInventoryModule : ICreatureInventoryModule { }
 
@@ -42,12 +41,15 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Units
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
-                        CurrencyManager.Instance.Gold += 1000;
+                        CurrencyManager.Instance.AddGold(item.Count);
                         break;
                 }
             }
+            else
+            {
+                AddItem(inputItemKey);
+            }
             
-            AddItem(inputItemKey);
             ItemFactory.ReturnItem(item);
         }
         

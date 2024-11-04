@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
 using Interfaces;
-using Units.Modules.MovementModules.Abstract;
-using Units.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Modules.MovementModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Units.Modules.MovementModules.Units
+namespace Units.Stages.Modules.MovementModules.Units
 {
     public interface IGuestMovementModule : IInitializable<Vector3>
     {

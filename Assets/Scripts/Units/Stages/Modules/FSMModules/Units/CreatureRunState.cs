@@ -1,7 +1,7 @@
 using Modules.DesignPatterns.FSMs.Modules;
-using Units.Modules.FSMModules.Abstract;
+using Units.Stages.Modules.FSMModules.Abstract;
 
-namespace Units.Modules.FSMModules.Units
+namespace Units.Stages.Modules.FSMModules.Units
 {
     public class CreatureRunState : CreatureBaseState
     {

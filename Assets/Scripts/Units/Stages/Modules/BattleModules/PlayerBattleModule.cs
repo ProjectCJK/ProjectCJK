@@ -1,10 +1,9 @@
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
-using ScriptableObjects.Scripts.Creatures;
-using Units.Modules.BattleModules.Abstract;
+using Units.Stages.Modules.BattleModules.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.BattleModules
+namespace Units.Stages.Modules.BattleModules
 {
     public interface IPlayerBattleModule : IInitializable
     {

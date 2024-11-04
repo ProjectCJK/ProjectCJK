@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Units.Modules.FactoryModules.Units;
-using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.InventoryModules.Interfaces;
-using Units.Stages.Units.Buildings.Modules;
-using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Managers;
+using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Abstract;
+using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Items.Units;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using UnityEngine;
 
-namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
+namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
 {
     public interface ICreatureInventoryModule : IInventoryModule, ICreatureItemReceiver
     {
@@ -52,7 +50,7 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
             SetLastSendTime();
         }
 
-        protected void ProcessInteractionZone(ITradeZone zone)
+        private void ProcessInteractionZone(ITradeZone zone)
         {
             if (zone == null) return;
 
@@ -60,7 +58,13 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
 
             if (string.Equals(targetInputItemKey, $"{ECurrencyType.Money}"))
             {
-                zone.ReceiveItemThroughTransfer(targetInputItemKey, SenderTransform.position);
+                if (CurrencyManager.Instance.Gold > 0)
+                {
+                    var goldSendingAmount = CurrencyManager.Instance.Gold >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : CurrencyManager.Instance.Gold;
+                    zone.ReceiveItemThroughTransfer(targetInputItemKey, goldSendingAmount, SenderTransform.position);
+                    
+                    CurrencyManager.Instance.RemoveGold(goldSendingAmount);
+                }
             }
             else
             {
@@ -68,7 +72,7 @@ namespace Units.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
                 {
                     if (zone.CanReceiveItem())
                     {
-                        zone.ReceiveItemThroughTransfer(targetInputItemKey, SenderTransform.position);
+                        zone.ReceiveItemThroughTransfer(targetInputItemKey, 1, SenderTransform.position);
                         RemoveItem(targetInputItemKey);
                     }
                 }

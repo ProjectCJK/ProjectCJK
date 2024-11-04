@@ -1,15 +1,15 @@
 using ScriptableObjects.Scripts.Creatures.Units;
-using Units.Modules.BattleModules.Abstract;
-using Units.Modules.CollisionModules.Abstract;
-using Units.Modules.HealthModules.Abstract;
-using Units.Modules.InventoryModules.Abstract;
-using Units.Modules.MovementModules.Abstract;
-using Units.Modules.PaymentModule.Abstract;
-using Units.Modules.StatsModules.Abstract;
+using Units.Stages.Modules.BattleModules.Abstract;
+using Units.Stages.Modules.CollisionModules.Abstract;
+using Units.Stages.Modules.HealthModules.Abstract;
+using Units.Stages.Modules.InventoryModules.Abstract;
+using Units.Stages.Modules.MovementModules.Abstract;
+using Units.Stages.Modules.PaymentModule.Abstract;
+using Units.Stages.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 
-namespace Units.Modules.StatsModules.Units.Creatures.Units
+namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
 {
     public interface IPlayerStatsModule : ICreatureTypeProperty, IMovementProperty, IInventoryProperty, IInteractionProperty, IBattleProperty, IHealthProperty, IPaymentProperty
     {

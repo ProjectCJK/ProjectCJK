@@ -1,12 +1,12 @@
 using System.Collections;
 using Interfaces;
 using Managers;
-using Units.Modules.MovementModules.Abstract;
-using Units.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Modules.MovementModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
-namespace Units.Modules.MovementModules.Units
+namespace Units.Stages.Modules.MovementModules.Units
 {
     public interface IMonsterMovementModule : IInitializable
     {

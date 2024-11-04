@@ -1,4 +1,4 @@
-namespace Units.Modules.HealthModules.Abstract
+namespace Units.Stages.Modules.HealthModules.Abstract
 {
     public interface IHealthProperty
     {
