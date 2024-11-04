@@ -123,7 +123,7 @@ Shader "CJK Custom/RampImageEffect"
 /*ASEBEGIN
 Version=19603
 Node;AmplifyShaderEditor.TemplateShaderPropertyNode;57;-1648,96;Inherit;False;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;36;-1424,112;Inherit;True;Property;_MainTex;MainTex;1;0;Create;True;0;0;0;False;0;False;-1;5e88276f38acc5646ad8733828c3c9fd;5e88276f38acc5646ad8733828c3c9fd;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Node;AmplifyShaderEditor.SamplerNode;36;-1424,112;Inherit;True;Property;_tex;tex;1;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.RangedFloatNode;40;-976,320;Inherit;False;Constant;_Float0;Float 0;3;0;Create;True;0;0;0;False;0;False;1;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ComponentMaskNode;43;-1040,96;Inherit;True;True;False;False;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TexturePropertyNode;38;-1008,-144;Inherit;True;Property;_RampTexture;RampTexture;0;0;Create;True;0;0;0;False;0;False;887765d0c42abe44c9650b3f673f3e04;887765d0c42abe44c9650b3f673f3e04;False;white;Auto;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
@@ -141,4 +141,4 @@ WireConnection;51;0;39;5
 WireConnection;51;3;36;4
 WireConnection;56;0;51;0
 ASEEND*/
-//CHKSM=D760FD919DC6E0934E4809A44E2646D59C39975E
+//CHKSM=29D7946D8C8DB38D928D993071227EDC9F2BA63A
