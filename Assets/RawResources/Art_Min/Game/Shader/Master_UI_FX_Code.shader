@@ -145,13 +145,13 @@
                 float OUT_Main_Intensity = _Main_Intensity;
                 #endif
 
-                float mask_default = saturate(tex2D(_Mask_Texture, IN.texcoord.xy * _Mask_Texture_ST.xy + _Mask_Texture_ST.zw).r);
+                float mask_default = saturate(tex2D(_Mask_Texture, IN.texcoord.xy * _Mask_Texture_ST.xy + _Mask_Texture_ST.zw).a);
                 float mask_alpha = saturate(pow(mask_default,_Mask_Range));
                 // 첫번째 매개변수엔 텍스처 샘플러를 담아주고, 두번째 매개변수엔 UV 정보를 담아줌.
                 // ST_xy값을 곱하면 타일링, ST_zw값을 더하면 오프셋이 됨
                 // r값만 쓰는 이유는 차피 mask 텍스처들은 float1으로 이루어져 있기 때문.
 
-                float dissolve_alpha = saturate(tex2D(_Dissolve_Texture, IN.texcoord.xy * _Dissolve_Texture_ST.xy + _Dissolve_Texture_ST.zw).r + _Dissolve_Progress);
+                float dissolve_alpha = saturate(tex2D(_Dissolve_Texture, IN.texcoord.xy * _Dissolve_Texture_ST.xy + _Dissolve_Texture_ST.zw).a + OUT_Dissolve_Progress);
                 // IN.texcoord.xyzw
                 // xy -> UV값
                 // _ST.xy를 곱해주고, zw를 더해주는 것은 스케일, 타일링 정보를 넣는 것.
@@ -182,6 +182,5 @@
             ENDCG
         }
     }
-
     Fallback Off
 }
