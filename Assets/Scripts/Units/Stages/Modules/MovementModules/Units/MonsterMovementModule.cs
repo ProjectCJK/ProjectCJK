@@ -25,6 +25,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private readonly IMonsterStatsModule _monsterStatModule;
         private readonly MonsterStateMachine _monsterStateMachine;
         private readonly Transform _monsterTransform;
+        private readonly Transform _spriteTransform;
 
         private const float SlowDuration = 0.5f;
         private const float DirectionChangeInterval = 3.0f;
@@ -44,15 +45,18 @@ namespace Units.Stages.Modules.MovementModules.Units
         private Coroutine _encounterCoroutine;
         private Coroutine _waitCoroutine;
         private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f : _encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
+        private bool _isFacingRight = true;
 
         public MonsterMovementModule(
             Monster monster,
             IMonsterStatsModule monsterStatModule,
-            MonsterStateMachine monsterStateMachine)
+            MonsterStateMachine monsterStateMachine,
+            Transform spriteTransform)
         {
             _monsterStatModule = monsterStatModule;
             _monsterStateMachine = monsterStateMachine;
             _monsterTransform = monster.transform;
+            _spriteTransform = spriteTransform;
             capsuleCollider2D = monster.GetComponent<CapsuleCollider2D>();
         }
 
@@ -93,6 +97,16 @@ namespace Units.Stages.Modules.MovementModules.Units
                     else
                         SetRandomDirection();
                 }
+            }
+            
+            switch (_moveDirection.x)
+            {
+                case > 0 when !_isFacingRight:
+                    FlipSprite(true);
+                    break;
+                case < 0 when _isFacingRight:
+                    FlipSprite(false);
+                    break;
             }
         }
 
@@ -191,6 +205,14 @@ namespace Units.Stages.Modules.MovementModules.Units
             CoroutineManager.Instance.StartCoroutine(ResetSpeedAfterDelay());
         }
 
+        private void FlipSprite(bool faceRight)
+        {
+            _isFacingRight = faceRight;
+            Vector3 scale = _spriteTransform.localScale;
+            scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
+            _spriteTransform.localScale = scale;
+        }
+        
         private IEnumerator ResetSpeedAfterDelay()
         {
             yield return new WaitForSeconds(SlowDuration);
