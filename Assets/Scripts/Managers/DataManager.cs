@@ -38,6 +38,7 @@ namespace Managers
         public KitchenDataSO KitchenDataSo;
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
+        public DeliveryLodgingDataSO DeliveryLodgingDataSo;
         
         [Space(20), Header("### Zone Data ###")]
         public HuntingZoneDataSO HuntingZoneDataSo;
@@ -63,5 +64,11 @@ namespace Managers
 
             return 0;
         }
+    }
+
+    public struct PathSetting<T>
+    {
+        public 
+        public T ScriptableObject;
     }
 }

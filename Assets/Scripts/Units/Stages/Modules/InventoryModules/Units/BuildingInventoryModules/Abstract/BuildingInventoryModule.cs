@@ -4,6 +4,7 @@ using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
+using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 
@@ -76,8 +77,10 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             
             if (!Inventory.TryGetValue(OutputItemKey, out var itemCount) || itemCount <= 0) return;
 
-            if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
+            if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver))
             {
+                if (!string.Equals(OutputItemKey, $"{ECurrencyType.Money}") && !currentItemReceiver.CanReceiveItem()) return;
+           
                 IItem item = PopSpawnedItem();
                 if (item != null)
                 {

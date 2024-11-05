@@ -47,6 +47,9 @@ namespace Units.Stages.Controllers
                     case IManagementDesk managementDesk:
                         managementDesk.RegisterReference(itemFactory);
                         break;
+                    case IDeliveryLodging deliveryLodging:
+                        deliveryLodging.RegisterReference(itemFactory);
+                        break;
                 }
 
                 var key = building.BuildingKey;

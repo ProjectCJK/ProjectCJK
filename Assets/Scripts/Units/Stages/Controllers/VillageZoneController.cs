@@ -49,7 +49,7 @@ namespace Units.Stages.Controllers
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
         private List<EMaterialType> _currentActiveStandType;
 
-        private Queue<Tuple<string, Transform>> _deliveryTargetQueue = new();
+        private readonly Queue<Tuple<string, Transform>> _deliveryTargetQueue = new();
 
         public void RegisterReference(
             ICreatureController creatureController,
@@ -78,20 +78,19 @@ namespace Units.Stages.Controllers
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.E))
             {
-                // if (_currentActiveStandType.Count > 0)
-                // {
-                //     IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
-                //     guest.SetTargetPurchaseQuantity(1);
-                //     guest.SetDestinations(GetRandomDestinationForGuest());
-                //
-                //     currentSpawnedGuests.Add(guest);
-                // }
-
-                SpawnDeliveryMan();
+                if (_currentActiveStandType.Count > 0)
+                {
+                    IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
+                    guest.SetTargetPurchaseQuantity(1);
+                    guest.SetDestinations(GetRandomDestinationForGuest());
+                
+                    currentSpawnedGuests.Add(guest);
+                }
             }
 #endif
 
             SpawnGuests();
+            SpawnDeliveryMan();
             SetDeliveryManDestination();
         }
         
@@ -99,8 +98,8 @@ namespace Units.Stages.Controllers
         {
             if (currentSpawnedDeliveryMans.Count <= 0) return;
 
-            // 모든 Kitchen을 순회하며 활성 상태 및 아이템 보유 여부를 확인해 타겟 큐 업데이트
             _deliveryTargetQueue.Clear();
+            
             foreach (var building in _buildingController.Buildings)
             {
                 if (building.Value is Kitchen { ActiveStatus: EActiveStatus.Active, IsAnyItemOnInventory: true } kitchen)
@@ -113,7 +112,6 @@ namespace Units.Stages.Controllers
                 }
             }
 
-            // 타겟 큐가 비어 있을 경우 기본 위치로 이동하도록 설정
             if (_deliveryTargetQueue.Count == 0)
             {
                 foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
@@ -130,7 +128,6 @@ namespace Units.Stages.Controllers
             }
             else
             {
-                // 타겟 큐에 빌딩이 있을 경우 Standby 또는 NoOrder 상태의 배달원에게 타겟을 할당
                 foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
                 {
                     if (deliveryMan.CommandState is CommandState.NoOrder or CommandState.Standby)
@@ -142,7 +139,6 @@ namespace Units.Stages.Controllers
                 }
             }
 
-            // 배달 중인 배달원이 목적지에 도착하여 아이템을 수령했는지 확인, 수령 시 Stand로 전환
             foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
             {
                 if (deliveryMan.IsInventoryFull() && deliveryMan.CommandState == CommandState.MoveTo)
@@ -165,11 +161,12 @@ namespace Units.Stages.Controllers
 
         private void SpawnDeliveryMan()
         {
-            // TODO : 배달원 숙소 건물이 있다면
-            IDeliveryMan deliveryMan = _creatureController.GetDeliveryMan(_buildingController
-                .Buildings[$"{EBuildingType.ManagementDesk}"].gameObject.transform.position);
+            if (currentSpawnedDeliveryMans.Count < MaxDeliveryManCount())
+            {
+                IDeliveryMan deliveryMan = _creatureController.GetDeliveryMan(_buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].gameObject.transform.position);
 
-            currentSpawnedDeliveryMans.Add(deliveryMan);
+                currentSpawnedDeliveryMans.Add(deliveryMan);
+            }
         }
 
         private void SpawnPlayer()
@@ -231,6 +228,19 @@ namespace Units.Stages.Controllers
             };
 
             return destinations;
+        }
+        
+        private int MaxDeliveryManCount()
+        {
+            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.DeliveryLodging}"))
+            {
+                if (_buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"] is DeliveryLodging { ActiveStatus: EActiveStatus.Active } deliveryLodging)
+                {
+                    return deliveryLodging.MaxDeliveryManCount;
+                }
+            }
+
+            return 0;
         }
     }
 }
