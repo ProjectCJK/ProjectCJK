@@ -32,17 +32,18 @@ namespace Units.Stages.Modules.MovementModules.Units
         private const float IdleProbability = 0.3f;
 
         private readonly int _monsterCollisionLayerMask = LayerMaskParserModule.MonsterCollisionLayerMask;
+        private static readonly int Encounter = Animator.StringToHash("Encounter");
         
         private Transform _target;
         private Vector3 _moveDirection;
         private bool _isSlowed;
-        private bool encounterTrigger;
+        private bool _encounterTrigger;
         private bool _isPatrolling = true;
         private bool _isMoving; // 추가된 변수
         private float _nextDirectionChangeTime;
         private Coroutine _encounterCoroutine;
         private Coroutine _waitCoroutine;
-        private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f : encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
+        private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f : _encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
 
         public MonsterMovementModule(
             Monster monster,
@@ -66,7 +67,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             hitTrigger = false;
             _target = null;
-            encounterTrigger = false;
+            SetEncounterTrigger(false);
             _isSlowed = false;
             _isMoving = false; // 초기 상태 설정
         }
@@ -79,7 +80,7 @@ namespace Units.Stages.Modules.MovementModules.Units
                 StartSlowEffect();
                 UpdateStateMachine();
             }
-            else if (!encounterTrigger && !hitTrigger)
+            else if (!_encounterTrigger && !hitTrigger)
             {
                 if (DetectPlayer())
                 {
@@ -97,7 +98,7 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void FixedUpdate()
         {
-            if (encounterTrigger || (_isPatrolling && !hitTrigger))
+            if (_encounterTrigger || (_isPatrolling && !hitTrigger))
             {
                 Vector3 previousPosition = _monsterTransform.position;
                 MoveWithCollision(_monsterTransform, _moveDirection * (MovementSpeed * Time.fixedDeltaTime), ref _moveDirection);
@@ -162,7 +163,7 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private void StartEncounter()
         {
-            encounterTrigger = true;
+            SetEncounterTrigger(true);
             _moveDirection = (_monsterTransform.position - _target.position).normalized;
             _isMoving = true; // 도망 상태에서 움직임 활성화
             UpdateStateMachine();
@@ -178,7 +179,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private IEnumerator EncounterRoutine()
         {
             yield return new WaitForSeconds(3f);
-            encounterTrigger = false;
+            SetEncounterTrigger(false);
             SetRandomDirection();
         }
 
@@ -203,8 +204,14 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private void DrawDirectionRay()
         {
-            Color rayColor = encounterTrigger ? Color.red : Color.green;
+            Color rayColor = _encounterTrigger ? Color.red : Color.green;
             Debug.DrawRay(_monsterTransform.position, _moveDirection * 2f, rayColor, 0.1f);
+        }
+
+        private void SetEncounterTrigger(bool value)
+        {
+            _encounterTrigger = value;
+            _monsterStateMachine.Creature.Animator.SetBool(Encounter, value);   
         }
     }
 }
