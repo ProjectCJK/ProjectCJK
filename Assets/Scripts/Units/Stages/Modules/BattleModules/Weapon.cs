@@ -27,14 +27,36 @@ namespace Units.Stages.Modules.BattleModules
         [SerializeField] private LayerMask _targetLayerMask;
         [SerializeField] private List<EBattleTag> _targetTags;
         
+        private static readonly int Disable = Animator.StringToHash("Disable");
+        private bool isWeaponActivated;
+        
         public void RegisterReference(IBattleProperty battleProperty)
         {
-            _attackTrigger.RegisterReference(battleProperty, _targetLayerMask, _targetTags);
+            _attackTrigger.RegisterReference(battleProperty, _targetLayerMask, _targetTags, HandleOnInvokeAnimationEvent);
         }
 
         public void ActivateWeapon(bool value)
         {
-            _attackTrigger.Initialize(value);
+            if (isWeaponActivated != value)
+            {
+                isWeaponActivated = value;
+
+                if (value)
+                {
+                    transform.gameObject.SetActive(true);
+                    _attackTrigger.Initialize(true);
+                }
+                else
+                {
+                    _attackTrigger.Animator.SetTrigger(Disable);
+                }
+            }
+        }
+
+        private void HandleOnInvokeAnimationEvent()
+        {
+            transform.gameObject.SetActive(false);
+            _attackTrigger.Initialize(false);
         }
     }
 }

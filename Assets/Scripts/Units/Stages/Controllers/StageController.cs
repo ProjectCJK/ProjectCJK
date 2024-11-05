@@ -88,8 +88,9 @@ namespace Units.Stages.Controllers
             var playerFactory = new PlayerFactory(joystick, itemFactory);
             var monsterFactory = new MonsterFactory(_stageCustomSettings.materialMappings);
             var guestFactory = new GuestFactory(itemFactory);
+            var deliveryManFactory = new DeliveryManFactory(itemFactory);
             
-            _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory);
+            _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory, deliveryManFactory);
             _buildingController.RegisterReference(itemFactory, _currentActiveMaterials);
             _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController, _stageCustomSettings, _currentActiveMaterials);
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
@@ -128,9 +129,20 @@ namespace Units.Stages.Controllers
 
         private void HandleOnChangeActiveStatus(string targetKey, EActiveStatus activeStatus)
         {
+            if (_buildingController.Buildings.ContainsKey(targetKey))
+            {
+                _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;
+            }
+            
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
             {
                 var activeStatusModule = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex].GameObject.GetComponent<UnlockZoneModule>();
+                    
+                if (_buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
+                {
+                    _buildingController.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;
+                }
+                
                 activeStatusModule.SetCurrentState(EActiveStatus.Standby);
             }
             

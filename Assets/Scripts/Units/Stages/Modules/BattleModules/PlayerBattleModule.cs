@@ -47,12 +47,7 @@ namespace Units.Stages.Modules.BattleModules
 
         private void ActivateWeapon(bool value)
         {
-            // 무기를 활성화/비활성화
-            if (_weapon.transform.gameObject.activeInHierarchy != value)
-            {
-                _weapon.transform.gameObject.SetActive(value);
-                _weapon.ActivateWeapon(value);
-            }
+            _weapon.ActivateWeapon(value);
         }
 
         public void Update()

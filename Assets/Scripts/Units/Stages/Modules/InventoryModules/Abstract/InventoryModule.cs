@@ -36,12 +36,12 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         public int CurrentInventorySize => Inventory.Values.Sum();
         
         protected readonly Dictionary<string, int> Inventory = new();
-        protected readonly Stack<IItem> _spawnedItemStack = new();
+        protected readonly Stack<IItem> spawnedItemStack = new();
         
         private const float SendItemInterval = 0.2f;
         private float _lastSendTime;
 
-        public bool IsItemReceiving;
+        private bool IsItemReceiving;
 
         public abstract void Initialize();
         public void Update() => TrySendItem();
@@ -119,12 +119,12 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         protected void PushSpawnedItem(Transform receiveTransform, IItem item)
         {
             item.Transform.SetParent(receiveTransform);
-            _spawnedItemStack.Push(item);   
+            spawnedItemStack.Push(item);   
         }
 
         protected IItem PopSpawnedItem()
         {
-            return _spawnedItemStack.Count > 0 ? _spawnedItemStack.Pop() : null;
+            return spawnedItemStack.Count > 0 ? spawnedItemStack.Pop() : null;
         }
     }
 }

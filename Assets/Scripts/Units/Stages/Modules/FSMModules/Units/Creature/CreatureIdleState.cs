@@ -1,17 +1,17 @@
 using Modules.DesignPatterns.FSMs.Modules;
 using Units.Stages.Modules.FSMModules.Abstract;
 
-namespace Units.Stages.Modules.FSMModules.Units
+namespace Units.Stages.Modules.FSMModules.Units.Creature
 {
-    public class CreatureRunState : CreatureBaseState
+    public class CreatureIdleState : CreatureBaseState
     {
-        public CreatureRunState(CreatureStateMachine creatureStateMachine) : base(creatureStateMachine)
+        public CreatureIdleState(CreatureStateMachine creatureStateMachine) : base(creatureStateMachine)
         {
         }
 
         public override void Enter()
         {
-            StartAnimationWithBool(AnimationParameterData.RunParameterHash);
+            StartAnimationWithBool(AnimationParameterData.IdleParameterHash);
         }
 
         public override void Update() { }
@@ -22,7 +22,7 @@ namespace Units.Stages.Modules.FSMModules.Units
 
         public override void Exit()
         {
-            StopAnimationWithBool(AnimationParameterData.RunParameterHash);
+            StopAnimationWithBool(AnimationParameterData.IdleParameterHash);
         }
     }
 }
