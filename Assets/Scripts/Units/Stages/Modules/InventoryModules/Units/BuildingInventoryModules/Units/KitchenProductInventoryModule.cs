@@ -13,32 +13,21 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
     
     public class KitchenProductInventoryModule : BuildingInventoryModule, IKitchenProductInventoryModule
     {
-        private event Action<bool> OnKitchenProductExisted;
-        
         public KitchenProductInventoryModule(Transform senderTransform,
             Transform receiverTransform,
             IKitchenStatsModule kitchenStatsModule,
             IItemFactory itemFactory,
             string inputItemKey,
-            string outputItemKey, Action<bool> onKitchenProductExisted)
+            string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
-            OnKitchenProductExisted = onKitchenProductExisted;
-        }
-
-        protected override void SendItem()
-        {
-            base.SendItem();
             
-            if (CurrentInventorySize <= 0) OnKitchenProductExisted?.Invoke(false);
         }
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey, item.Count);
             PushSpawnedItem(ReceiverTransform, item);
-            
-            if (CurrentInventorySize > 0) OnKitchenProductExisted?.Invoke(true);
         }
     }
 }

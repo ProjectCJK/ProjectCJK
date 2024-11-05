@@ -122,7 +122,7 @@ namespace Units.Stages.Units.Creatures.Units
             SetActive(false);
         }
         
-        public bool IsInventoryFull() => !_deliveryManInventoryModule.CanReceiveItem();
+        public bool IsInventoryFull() => _deliveryManInventoryModule.CurrentInventorySize >= _deliveryManInventoryModule.MaxInventorySize;
         public bool HaveAnyItem() => _deliveryManInventoryModule.CurrentInventorySize > 0;
 
         public Tuple<string, Transform> GetDestination() => _destination;

@@ -104,7 +104,7 @@ namespace Units.Stages.Units.Creatures.Units
 
         private void SetSprite(Sprite sprite)
         {
-            _spriteRenderer.sprite = sprite;   
+            // _spriteRenderer.sprite = sprite;
         }
 
         public bool TakeDamage(int damage)
