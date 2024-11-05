@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -8,6 +9,7 @@ using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
 using Units.Stages.Units.Items.Enums;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Managers
@@ -48,6 +50,17 @@ namespace Managers
         public const int GoldSendingMaximum = 1000;
         public ItemDataSO ItemDataSo;
         public ItemPriceSettings ItemPriceSettings;
+        
+        public GameData ProductCostDataSo;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            var obj = ProductCostDataSo.GetData();
+            
+            Debug.Log($"{obj.Length}");
+        }
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {
@@ -64,11 +77,5 @@ namespace Managers
 
             return 0;
         }
-    }
-
-    public struct PathSetting<T>
-    {
-        public 
-        public T ScriptableObject;
     }
 }
