@@ -1,5 +1,6 @@
 using Modules.DesignPatterns.FSMs.Abstract;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Units.Creatures.Abstract;
 using UnityEngine;
 

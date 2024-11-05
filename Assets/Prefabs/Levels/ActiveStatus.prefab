@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 7139242907887277585}
   - component: {fileID: 625502118505997446}
   m_Layer: 13
-  m_Name: UI_Slider_RemainedGoldCount
+  m_Name: UI_Slider_CurrentGoldCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -788,8 +788,9 @@ GameObject:
   - component: {fileID: 3832780713232716927}
   - component: {fileID: 7277075919798186804}
   - component: {fileID: 6226780954779475793}
+  - component: {fileID: 5837244778646585919}
   m_Layer: 13
-  m_Name: UI_Canvas_StandbyView
+  m_Name: UI_Canvas_ActivaStatusView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,6 +895,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxGoldText: {fileID: 2944310117273650316}
   GoldSlider: {fileID: 625502118505997446}
+--- !u!114 &5837244778646585919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5561117438676427277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3abfb73f54db45bc88361c76234fe8a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxGoldText: {fileID: 0}
+  GoldSlider: {fileID: 625502118505997446}
 --- !u!1 &7006312194248886709
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,7 +921,7 @@ GameObject:
   - component: {fileID: 1619074005449118881}
   - component: {fileID: 2944310117273650316}
   m_Layer: 13
-  m_Name: UI_Text_RemainedGoldCount
+  m_Name: UI_Text_CurrentGoldCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

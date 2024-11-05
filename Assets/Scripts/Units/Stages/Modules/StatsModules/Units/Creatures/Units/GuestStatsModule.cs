@@ -20,8 +20,8 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
         public ENPCType NPCType => ENPCType.Guest;
         public float MovementSpeed => _guestDataSo.BaseMovementSpeed;
         public float WaitingTime => _guestDataSo.BaseInteractionStandbySecond;
+        
         private readonly GuestDataSO _guestDataSo;
-        private ENPCType _creatureType;
 
         public GuestStatModule(GuestDataSO guestDataSo)
         {

@@ -7,6 +7,8 @@ using Units.Stages.Modules.BattleModules;
 using Units.Stages.Modules.CollisionModules.Units;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
+using Units.Stages.Modules.FSMModules.Units.Player;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
 using Units.Stages.Modules.MovementModules.Units;
@@ -29,17 +31,18 @@ namespace Units.Stages.Units.Creatures.Units
 
     public class Player : Creature, IPlayer
     {
-        private event Action OnReturnPlayer;
+        // private event Action OnReturnPlayer;
+        
         [SerializeField] private Weapon _weapon;
      
         public IItemReceiver PlayerInventoryModule => _playerInventoryModule;
         public float PaymentDelay => _playerStatsModule.PaymentDelay;
 
         public override ECreatureType CreatureType => _playerStatsModule.CreatureType;
-        public override Animator Animator => _animator;
+        public override Animator Animator { get; protected set; }
         public override Transform Transform => transform;
 
-        protected override CreatureStateMachine creatureStateMachine { get; set; }
+        private PlayerStateMachine _playerStateMachine;
         
         private IPlayerInventoryModule _playerInventoryModule;
         private IPlayerStatsModule _playerStatsModule;
@@ -50,21 +53,21 @@ namespace Units.Stages.Units.Creatures.Units
         private IDamageFlashModule _damageFlashModule;
         
         private PlayerDataSO _playerDataSo;
-        private Animator _animator;
 
         public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemFactory itemFactory)
         {
+            Animator = spriteTransform.GetComponent<Animator>();
+            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
+            
             _playerDataSo = playerDataSo;
             _itemFactory = itemFactory;
             
-            _animator = spriteTransform.GetComponent<Animator>();
-            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
             
-            creatureStateMachine = new CreatureStateMachine(this);
+            _playerStateMachine = new PlayerStateMachine(this);
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
             _playerInventoryModule = new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemFactory, CreatureType);
-            _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, creatureStateMachine, joystick, spriteTransform);
+            _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, _playerStateMachine, joystick, spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule(_playerStatsModule);
 
             _damageFlashModule.RegisterReference();
@@ -78,13 +81,13 @@ namespace Units.Stages.Units.Creatures.Units
 
         public void Initialize(Vector3 position, Action action)
         {
-            OnReturnPlayer = action;
+            // OnReturnPlayer = action;
             
             _playerMovementModule.Initialize();
             _playerInventoryModule.Initialize();
             _playerBattleModule.Initialize();
             
-            creatureStateMachine.ChangeState(creatureStateMachine.CreatureIdleState);
+            _playerStateMachine.ChangeState(_playerStateMachine.PlayerIdleState);
             
             transform.position = position;
             transform.gameObject.SetActive(true);
