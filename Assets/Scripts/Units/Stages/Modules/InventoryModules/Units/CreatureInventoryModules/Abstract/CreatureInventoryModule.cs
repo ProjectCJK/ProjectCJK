@@ -74,6 +74,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
                     if (zone.CanReceiveItem())
                     {
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, 1, SenderTransform.position);
+                        if (spawnedItemStack.Count > 0) ItemFactory.ReturnItem(PopSpawnedItem());
                         RemoveItem(zone.InputItemKey);
                     }
                 }

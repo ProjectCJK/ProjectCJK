@@ -1,5 +1,6 @@
 using Interfaces;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
 
@@ -22,9 +23,7 @@ namespace Units.Stages.Units.Creatures.Abstract
         private Transform _transform;
 
         public abstract ECreatureType CreatureType { get; }
-        public abstract Animator Animator { get; }
+        public abstract Animator Animator { get; protected set; }
         public abstract Transform Transform { get; }
-        
-        protected abstract CreatureStateMachine creatureStateMachine { get; set; }
     }
 }

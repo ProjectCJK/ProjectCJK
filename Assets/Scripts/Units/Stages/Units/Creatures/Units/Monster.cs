@@ -6,6 +6,8 @@ using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
+using Units.Stages.Modules.FSMModules.Units.Monsters;
 using Units.Stages.Modules.HealthModules.Units;
 using Units.Stages.Modules.MovementModules.Units;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
@@ -26,13 +28,11 @@ namespace Units.Stages.Units.Creatures.Units
         private event Action OnGetMonster;
         private event Action OnReturnMonster;
         
-        
-        
         public override ECreatureType CreatureType => _monsterStatsModule.CreatureType;
-        public override Animator Animator => _animator;
+        public override Animator Animator { get; protected set; }
         public override Transform Transform => transform;
 
-        protected override CreatureStateMachine creatureStateMachine { get; set; }
+        private MonsterStateMachine _monsterStateMachine;
         
         private IMonsterStatsModule _monsterStatsModule;
         private IMonsterHealthModule _monsterHealthModule;
@@ -41,17 +41,17 @@ namespace Units.Stages.Units.Creatures.Units
         
         private SpriteRenderer _spriteRenderer;
         private EMaterialType _materialType;
-        private Animator _animator;
 
         public void RegisterReference(MonsterDataSO monsterDataSo)
         {
+            Animator = spriteTransform.GetComponent<Animator>();
             _spriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
             _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
             
-            creatureStateMachine = new CreatureStateMachine(this);
+            _monsterStateMachine = new MonsterStateMachine(this);
             _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
             _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
-            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule);
+            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule, _monsterStateMachine);
             
             _damageFlashModule.RegisterReference();
         }
@@ -63,6 +63,8 @@ namespace Units.Stages.Units.Creatures.Units
             
             transform.position = randomSpawnPoint;
             OnReturnMonster = action;
+
+            _monsterStateMachine.ChangeState(_monsterStateMachine.MonsterIdleState);
 
             _monsterMovementModule.Initialize();
         }

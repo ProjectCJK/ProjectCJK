@@ -32,6 +32,7 @@ namespace Managers
         public PlayerDataSO PlayerDataSo;
         public MonsterDataSO MonsterDataSo;
         public GuestDataSO GuestDataSo;
+        public DeliveryManDataSO DeliveryManDataSo;
         
         [Space(20), Header("### Building Data ###")]
         public KitchenDataSO KitchenDataSo;

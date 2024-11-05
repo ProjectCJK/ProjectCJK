@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ScriptableObjects.Scripts.Creatures.Units
 {
-    [CreateAssetMenu(fileName = "So_Guest", menuName = "Datas/Creatures/Guest")]
+    [CreateAssetMenu(fileName = "So_Guest", menuName = "Datas/Creatures/NPC/Guest")]
     public class GuestDataSO : InventoryCreatureDataSO
     {
         

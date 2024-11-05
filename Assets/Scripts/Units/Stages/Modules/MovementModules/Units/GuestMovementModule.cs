@@ -9,6 +9,7 @@ namespace Units.Stages.Modules.MovementModules.Units
 {
     public interface IGuestMovementModule : IInitializable<Vector3>
     {
+        public void Update();
         public void FixedUpdate();
         public void SetDestination(Vector3 destination);
         public void ActivateNavMeshAgent(bool value);
@@ -70,6 +71,11 @@ namespace Units.Stages.Modules.MovementModules.Units
                     }   
                 }
             }
+        }
+
+        public void Update()
+        {
+            if (Vector3.Distance(_destination, _guestTransform.position) > 0.5f) SetDestination(_destination);
         }
 
         public void FixedUpdate()

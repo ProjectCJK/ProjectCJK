@@ -1,6 +1,7 @@
 using System.Collections;
 using Interfaces;
 using Managers;
+using Units.Stages.Modules.FSMModules.Units.Monsters;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
@@ -22,6 +23,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         protected override CapsuleCollider2D capsuleCollider2D { get; }
         
         private readonly IMonsterStatsModule _monsterStatModule;
+        private readonly MonsterStateMachine _monsterStateMachine;
         private readonly Transform _monsterTransform;
 
         private const float SlowDuration = 0.5f;
@@ -36,14 +38,19 @@ namespace Units.Stages.Modules.MovementModules.Units
         private bool _isSlowed;
         private bool encounterTrigger;
         private bool _isPatrolling = true;
+        private bool _isMoving; // 추가된 변수
         private float _nextDirectionChangeTime;
         private Coroutine _encounterCoroutine;
         private Coroutine _waitCoroutine;
         private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f : encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
 
-        public MonsterMovementModule(Monster monster, IMonsterStatsModule monsterStatModule)
+        public MonsterMovementModule(
+            Monster monster,
+            IMonsterStatsModule monsterStatModule,
+            MonsterStateMachine monsterStateMachine)
         {
             _monsterStatModule = monsterStatModule;
+            _monsterStateMachine = monsterStateMachine;
             _monsterTransform = monster.transform;
             capsuleCollider2D = monster.GetComponent<CapsuleCollider2D>();
         }
@@ -52,6 +59,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             ResetState();
             SetRandomDirection();
+            UpdateStateMachine();
         }
 
         private void ResetState()
@@ -60,6 +68,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             _target = null;
             encounterTrigger = false;
             _isSlowed = false;
+            _isMoving = false; // 초기 상태 설정
         }
 
         public void Update()
@@ -68,6 +77,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             {
                 hitTrigger = false;
                 StartSlowEffect();
+                UpdateStateMachine();
             }
             else if (!encounterTrigger && !hitTrigger)
             {
@@ -89,11 +99,15 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             if (encounterTrigger || (_isPatrolling && !hitTrigger))
             {
+                Vector3 previousPosition = _monsterTransform.position;
                 MoveWithCollision(_monsterTransform, _moveDirection * (MovementSpeed * Time.fixedDeltaTime), ref _moveDirection);
+                _isMoving = _monsterTransform.position != previousPosition;
+                UpdateStateMachine(); // 상태 업데이트
             }
+            
             DrawDirectionRay();
         }
-        
+
         protected override bool HandleCollision(CapsuleCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
         {
             Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
@@ -111,13 +125,19 @@ namespace Units.Stages.Modules.MovementModules.Units
             _moveDirection = Random.insideUnitCircle.normalized;
             _nextDirectionChangeTime = Time.time + DirectionChangeInterval;
             _isPatrolling = true;
+            _isMoving = true; // 방향 설정 시 움직이는 상태로 변경
+            UpdateStateMachine();
         }
 
         private void StartWaiting()
         {
             _isPatrolling = false;
+            _isMoving = false; // 대기 상태에서는 멈춘 상태로 변경
+            UpdateStateMachine();
+
             if (_waitCoroutine != null)
                 CoroutineManager.Instance.StopCoroutine(_waitCoroutine);
+
             _waitCoroutine = CoroutineManager.Instance.StartCoroutine(WaitInPlace());
         }
 
@@ -144,6 +164,8 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             encounterTrigger = true;
             _moveDirection = (_monsterTransform.position - _target.position).normalized;
+            _isMoving = true; // 도망 상태에서 움직임 활성화
+            UpdateStateMachine();
 
             DrawDirectionRay();
 
@@ -172,6 +194,11 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             yield return new WaitForSeconds(SlowDuration);
             _isSlowed = false;
+        }
+
+        private void UpdateStateMachine()
+        {
+            _monsterStateMachine.ChangeState(_isMoving ? _monsterStateMachine.MonsterRunState : _monsterStateMachine.MonsterIdleState);
         }
 
         private void DrawDirectionRay()
