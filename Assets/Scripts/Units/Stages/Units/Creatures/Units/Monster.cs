@@ -51,7 +51,7 @@ namespace Units.Stages.Units.Creatures.Units
             _monsterStateMachine = new MonsterStateMachine(this);
             _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
             _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
-            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule, _monsterStateMachine);
+            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule, _monsterStateMachine, spriteTransform);
             
             _damageFlashModule.RegisterReference();
         }
@@ -104,7 +104,7 @@ namespace Units.Stages.Units.Creatures.Units
 
         private void SetSprite(Sprite sprite)
         {
-            _spriteRenderer.sprite = sprite;   
+            // _spriteRenderer.sprite = sprite;
         }
 
         public bool TakeDamage(int damage)

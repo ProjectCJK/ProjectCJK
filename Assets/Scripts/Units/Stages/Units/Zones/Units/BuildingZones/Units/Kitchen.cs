@@ -62,8 +62,6 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
     
     public class Kitchen : UnlockableBuildingZone, IKitchen
     {
-        public Action<string, bool> OnKitchenProductExisted;
-        
         [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
 
@@ -78,6 +76,8 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
         public override Transform TradeZoneNpcTransform => _kitchenDefaultSetting.TradeZone_NPC;
+
+        public bool IsAnyItemOnInventory => _kitchenProductInventoryModule.CurrentInventorySize > 0;
 
         private IKitchenStatsModule _kitchenStatsModule;
         private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
@@ -104,12 +104,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
             _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutputItemKey);
-            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory,
-                _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey,
-                OutputItemKey, value =>
-                {
-                    if (ActiveStatus == EActiveStatus.Active) OnKitchenProductExisted(BuildingKey, value);
-                });
+            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory, _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey, OutputItemKey);
             _kitchenProductModule = new KitchenProductModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey, OutputItemKey);
             
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
