@@ -413,6 +413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7556215525286448846}
   - component: {fileID: 2675588038943576488}
+  - component: {fileID: 2895848349080400200}
   m_Layer: 0
   m_Name: Sprite_Monster
   m_TagString: Untagged
@@ -457,6 +458,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2895848349080400200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5258536663029941406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8f41c946a9d4426b0a7dce573e4997f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.1
 --- !u!1 &6484689009719109166
 GameObject:
   m_ObjectHideFlags: 0
