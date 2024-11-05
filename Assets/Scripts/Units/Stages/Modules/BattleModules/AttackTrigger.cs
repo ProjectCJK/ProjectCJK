@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Units.Stages.Modules.BattleModules
 {
-    public interface IAttackTrigger : IRegisterReference<IBattleProperty, LayerMask, List<EBattleTag>>, IInitializable<bool>
+    public interface IAttackTrigger : IRegisterReference<IBattleProperty, LayerMask, List<EBattleTag>, Action>, IInitializable<bool>
     {
         public event Action OnHitSuccessful;
     }
@@ -17,6 +17,9 @@ namespace Units.Stages.Modules.BattleModules
     public class AttackTrigger : MonoBehaviour, IAttackTrigger
     {
         public event Action OnHitSuccessful;
+        public event Action OnInvokeAnimationEvent;
+        
+        public Animator Animator;
         
         private int _damage => _battleProperty.Damage;
         private float _attackDelay => _battleProperty.AttackDelay;
@@ -29,13 +32,16 @@ namespace Units.Stages.Modules.BattleModules
         private Coroutine _attackCoroutine;
         private bool _attackFlag;
         
-        public void RegisterReference(IBattleProperty battleProperty, LayerMask targetLayer, List<EBattleTag> targetTags)
+        public void RegisterReference(IBattleProperty battleProperty, LayerMask targetLayerMask, List<EBattleTag> targetTags, Action handleOnInvokeAnimationEvent)
         {
             _battleProperty = battleProperty;
-            _targetLayerMask = targetLayer;
+            _targetLayerMask = targetLayerMask;
             _targetTags = targetTags;
             
+            Animator = GetComponent<Animator>();
             _boxCollider2D = GetComponent<BoxCollider2D>();
+
+            OnInvokeAnimationEvent += handleOnInvokeAnimationEvent;
         }
         
         public void Initialize(bool value)
@@ -94,6 +100,11 @@ namespace Units.Stages.Modules.BattleModules
                     }
                 }
             }
+        }
+
+        public void OnAnimationEvent()
+        {
+            OnInvokeAnimationEvent?.Invoke();
         }
     }
 } 

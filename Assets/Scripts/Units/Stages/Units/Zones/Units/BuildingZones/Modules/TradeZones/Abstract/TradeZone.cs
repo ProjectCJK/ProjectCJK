@@ -53,7 +53,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstra
 
         public bool CanReceiveMoney()
         {
-            if (_building is IUnlockZoneProperty unlockZoneProperty)
+            if (_building is { } unlockZoneProperty)
             {
                 return unlockZoneProperty.CurrentGoldForUnlock < unlockZoneProperty.RequiredGoldForUnlock;
             }

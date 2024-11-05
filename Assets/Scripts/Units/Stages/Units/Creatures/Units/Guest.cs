@@ -7,6 +7,7 @@ using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Stages.Modules.CollisionModules.Units;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
 using Units.Stages.Modules.MovementModules.Units;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
@@ -31,22 +32,19 @@ namespace Units.Stages.Units.Creatures.Units
         private event Action OnReturnGuest;
         
         public override ECreatureType CreatureType => _guestStatModule.CreatureType;
-        public override Animator Animator => _animator;
         public override Transform Transform => transform;
+        public override Animator Animator { get; protected set; }
         
-        protected override CreatureStateMachine creatureStateMachine { get; set; }
+        // protected override CreatureStateMachine creatureStateMachine { get; set; }
 
         private IGuestInventoryModule _guestInventoryModule;
         private IGuestStatModule _guestStatModule;
         private IGuestMovementModule _guestMovementModule;
         private IGuestCollisionModule _guestCollisionModule;
 
+        private ENPCType NPCType => _guestStatModule.NPCType;
         private List<Tuple<string, Transform>> _destinations;
         private int _destinationIndex;
-        
-        private ENPCType NPCType => _guestStatModule.NPCType;
-        private Animator _animator;
-
         private float _elapsedTime;  // 시간 측정 변수
         private bool _waitingTrigger; // 대기 상태 여부
         private bool _returnTrigger;
@@ -82,6 +80,7 @@ namespace Units.Stages.Units.Creatures.Units
         private void Update()
         {
             _guestInventoryModule.Update();
+            _guestMovementModule.Update();
             
             if (_waitingTrigger)
             {
@@ -105,11 +104,6 @@ namespace Units.Stages.Units.Creatures.Units
         private void OnTriggerEnter2D(Collider2D other)
         {
             _guestCollisionModule.OnTriggerEnter2D(other);
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            _guestCollisionModule.OnTriggerStay2D(other);
         }
 
         private void OnTriggerExit2D(Collider2D other)

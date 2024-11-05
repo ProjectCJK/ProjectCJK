@@ -62,6 +62,8 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
     
     public class Kitchen : UnlockableBuildingZone, IKitchen
     {
+        public Action<string, bool> OnKitchenProductExisted;
+        
         [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
 
@@ -70,6 +72,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override EActiveStatus ActiveStatus => UnlockZoneModule.ActiveStatus;
         public override int RequiredGoldForUnlock => UnlockZoneModule.RequiredGoldForUnlock;
         public override int CurrentGoldForUnlock { get; set; }
+
         public EMaterialType MaterialType { get; private set; }
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
@@ -101,7 +104,12 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
             _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutputItemKey);
-            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory, _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey, OutputItemKey);
+            _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory,
+                _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey,
+                OutputItemKey, value =>
+                {
+                    if (ActiveStatus == EActiveStatus.Active) OnKitchenProductExisted(BuildingKey, value);
+                });
             _kitchenProductModule = new KitchenProductModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey, OutputItemKey);
             
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
@@ -115,7 +123,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _tradeZonePlayer.RegisterReference(this, _kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
             _tradeZoneNpc = _kitchenDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
-            _tradeZonePlayer.RegisterReference(this, _kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
+            _tradeZoneNpc.RegisterReference(this, _kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
 
             _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
             _unlockZonePlayer.RegisterReference(this, _kitchenDefaultSetting.UnlockZone_Player, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, $"{ECurrencyType.Money}");

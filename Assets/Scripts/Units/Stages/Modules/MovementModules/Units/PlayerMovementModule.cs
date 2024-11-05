@@ -3,6 +3,8 @@ using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
 using Units.Stages.Modules.FSMModules.Units;
+using Units.Stages.Modules.FSMModules.Units.Creature;
+using Units.Stages.Modules.FSMModules.Units.Player;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
@@ -22,7 +24,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         protected override CapsuleCollider2D capsuleCollider2D { get; }
         
         private readonly IMovementProperty _playerStatsModule;
-        private readonly CreatureStateMachine _creatureStateMachine;
+        private readonly PlayerStateMachine _playerStateMachine;
         private readonly Joystick _joystick;
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
@@ -36,12 +38,12 @@ namespace Units.Stages.Modules.MovementModules.Units
         public PlayerMovementModule(
             Player player,
             IPlayerStatsModule playerStatsModule,
-            CreatureStateMachine creatureStateMachine,
+            PlayerStateMachine playerStateMachine,
             Joystick joystick,
             Transform spriteTransform)
         {
             _playerStatsModule = playerStatsModule;
-            _creatureStateMachine = creatureStateMachine;
+            _playerStateMachine = playerStateMachine;
             _joystick = joystick;
             _playerTransform = player.transform;
             _spriteTransform = spriteTransform;
@@ -107,7 +109,7 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private void UpdateStateMachine()
         {
-            _creatureStateMachine.ChangeState(_isMoving ? _creatureStateMachine.CreatureRunState : _creatureStateMachine.CreatureIdleState);
+            _playerStateMachine.ChangeState(_isMoving ? _playerStateMachine.PlayerRunState : _playerStateMachine.PlayerIdleState);
         }
 
         public void HandleOnHit()
