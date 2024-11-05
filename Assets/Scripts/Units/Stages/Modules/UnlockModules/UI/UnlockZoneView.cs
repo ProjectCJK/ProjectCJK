@@ -23,7 +23,11 @@ namespace Units.Stages.Modules.UnlockModules.UI
         private void UpdateUI()
         {
             MaxGoldText.text = viewModel.MaxGold.ToString();
-            GoldSlider.value = (float) viewModel.Gold / viewModel.MaxGold;
+            
+            if (viewModel.MaxGold != 0)
+            {
+                GoldSlider.value = (float) viewModel.Gold / viewModel.MaxGold;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Controllers
@@ -57,7 +58,7 @@ namespace Units.Stages.Controllers
     {
         public GameObject GameObject;
         public EActiveStatus InitialActiveStatus;
-        public int ReguiredGoldCountForUnlock;
+        public int RequiredGoldCountForUnlock;
     }
 
     public class StageController : MonoBehaviour, IStageController
@@ -118,9 +119,23 @@ namespace Units.Stages.Controllers
                 
                 var activeStatusModule = activeStatus.GameObject.GetComponent<UnlockZoneModule>();
                 
-                activeStatusModule.RequiredGoldForUnlock = activeStatus.ReguiredGoldCountForUnlock;
+                activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
                 activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
+                
+                activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
             }
+        }
+
+        private void HandleOnChangeActiveStatus(string targetKey, EActiveStatus activeStatus)
+        {
+            if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
+            {
+                var activeStatusModule = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex].GameObject.GetComponent<UnlockZoneModule>();
+                activeStatusModule.SetCurrentState(EActiveStatus.Standby);
+            }
+            
+            (EBuildingType?, EMaterialType?) parsedKey = EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null }) _currentActiveMaterials.Add(parsedKey.Item2.Value);
         }
     }
 }

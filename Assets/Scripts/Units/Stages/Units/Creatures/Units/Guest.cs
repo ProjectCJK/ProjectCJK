@@ -19,8 +19,6 @@ using UnityEngine.AI;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-
-    
     public interface IGuest : INPC, IPoolable, IRegisterReference<GuestDataSO, IItemFactory>, IInitializable<Vector3, Action>
     {
         public void SetDestinations(List<Tuple<string, Transform>> destinations);

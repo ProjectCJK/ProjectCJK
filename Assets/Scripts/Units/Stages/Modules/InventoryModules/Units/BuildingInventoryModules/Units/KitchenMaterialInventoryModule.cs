@@ -42,7 +42,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             }
             else
             {
-                AddItem(inputItemKey);
+                AddItem(inputItemKey, item.Count);
             }
             
             ItemFactory.ReturnItem(item);

@@ -85,12 +85,12 @@ namespace Units.Stages.Modules.CollisionModules.Units
                         OnTriggerPaymentZone?.Invoke(currentPaymentZone, true);                        
                     }
                     break;
-                case ECollisionType.UnlockZone:
-                    if (other.transform.TryGetComponent(out IPlayerUnlockZone currentUnlockZone))
-                    {
-                        OnTriggerUnlockZone?.Invoke(currentUnlockZone, true);                        
-                    }
-                    break;
+                // case ECollisionType.UnlockZone:
+                //     if (other.transform.TryGetComponent(out IPlayerUnlockZone currentUnlockZone))
+                //     {
+                //         OnTriggerUnlockZone?.Invoke(currentUnlockZone, true);                        
+                //     }
+                //     break;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Units.Stages.Modules.CollisionModules.Units
                 case ECollisionType.None:
                     break;
                 case ECollisionType.HuntingZone:
-                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZoneProperty>();
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
                     if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(true);
                     break;
             }
@@ -125,7 +125,7 @@ namespace Units.Stages.Modules.CollisionModules.Units
                     break;
 
                 case ECollisionType.HuntingZone:
-                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZoneProperty>();
+                    var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
                     if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(false);
                     break;
                 

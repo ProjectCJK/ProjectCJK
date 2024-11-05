@@ -48,7 +48,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
-            AddItem(inputItemKey);
+            AddItem(inputItemKey, item.Count);
             PushSpawnedItem(ReceiverTransform, item);
             
             if (!CanReceiveItem()) OnTargetQuantityReceived?.Invoke();

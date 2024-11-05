@@ -79,9 +79,12 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver) && currentItemReceiver.CanReceiveItem())
             {
                 IItem item = PopSpawnedItem();
-                currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
-                ItemFactory.ReturnItem(item);
-                RemoveItem(OutputItemKey);
+                if (item != null)
+                {
+                    currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
+                    ItemFactory.ReturnItem(item);
+                    RemoveItem(OutputItemKey);
+                }
             }
             else
             {

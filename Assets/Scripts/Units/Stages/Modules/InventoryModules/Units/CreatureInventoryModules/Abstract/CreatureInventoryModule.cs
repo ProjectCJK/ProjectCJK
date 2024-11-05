@@ -54,26 +54,27 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
         {
             if (zone == null) return;
 
-            var targetInputItemKey = zone.InputItemKey;
-
-            if (string.Equals(targetInputItemKey, $"{ECurrencyType.Money}"))
+            if (string.Equals(zone.InputItemKey, $"{ECurrencyType.Money}"))
             {
                 if (CurrencyManager.Instance.Gold > 0)
                 {
-                    var goldSendingAmount = CurrencyManager.Instance.Gold >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : CurrencyManager.Instance.Gold;
-                    zone.ReceiveItemThroughTransfer(targetInputItemKey, goldSendingAmount, SenderTransform.position);
+                    if (zone.CanReceiveMoney())
+                    {
+                        var goldSendingAmount = CurrencyManager.Instance.Gold >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : CurrencyManager.Instance.Gold;
+                        zone.ReceiveItemThroughTransfer(zone.InputItemKey, goldSendingAmount, SenderTransform.position);
                     
-                    CurrencyManager.Instance.RemoveGold(goldSendingAmount);
+                        CurrencyManager.Instance.RemoveGold(goldSendingAmount);
+                    }
                 }
             }
             else
             {
-                if (Inventory.TryGetValue(targetInputItemKey, out var itemCount) && itemCount > 0)
+                if (Inventory.TryGetValue(zone.InputItemKey, out var itemCount) && itemCount > 0)
                 {
                     if (zone.CanReceiveItem())
                     {
-                        zone.ReceiveItemThroughTransfer(targetInputItemKey, 1, SenderTransform.position);
-                        RemoveItem(targetInputItemKey);
+                        zone.ReceiveItemThroughTransfer(zone.InputItemKey, 1, SenderTransform.position);
+                        RemoveItem(zone.InputItemKey);
                     }
                 }
             }

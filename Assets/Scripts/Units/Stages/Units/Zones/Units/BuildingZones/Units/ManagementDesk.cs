@@ -85,7 +85,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
             _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
-            _tradeZonePlayer.RegisterReference(_managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
+            _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
             
             _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<IPaymentZone>();
             _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);

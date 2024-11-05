@@ -10,7 +10,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 {
     public interface IStandInventoryModule : IBuildingInventoryModule
     {
-        
+        public event Action<int> OnMoneyReceived;
     }
     
     public class StandInventoryModule : BuildingInventoryModule, IStandInventoryModule
@@ -43,7 +43,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             }
             else
             {
-                AddItem(inputItemKey);
+                AddItem(inputItemKey, item.Count);
                 PushSpawnedItem(ReceiverTransform, item);
             }
         }

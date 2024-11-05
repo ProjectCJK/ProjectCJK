@@ -41,7 +41,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         private const float SendItemInterval = 0.2f;
         private float _lastSendTime;
 
-        private bool isItemReceiving;
+        public bool IsItemReceiving;
 
         public abstract void Initialize();
         public void Update() => TrySendItem();
@@ -52,7 +52,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
         public void ReceiveItemThroughTransfer(string inputItemKey, int count, Vector3 currentSenderPosition)
         {
-            isItemReceiving = true;
+            IsItemReceiving = true;
             
             IItem item = ItemFactory.GetItem(inputItemKey, count, currentSenderPosition);
 
@@ -60,17 +60,17 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
             item.Transfer(currentSenderPosition, ReceiverTransform, () =>
             {
                 OnItemReceived(inputItemKey, item);
-                isItemReceiving = false;
+                IsItemReceiving = false;
             });
         }
 
         public void ReceiveItemNoThroughTransfer(string inputItemKey, int count)
         {
-            isItemReceiving = true;
+            IsItemReceiving = true;
             
             IItem item = ItemFactory.GetItem(inputItemKey, count, ReceiverTransform.position);
             OnItemReceived(inputItemKey, item);
-            isItemReceiving = false;
+            IsItemReceiving = false;
         }
 
         /// <summary>
@@ -91,15 +91,18 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         /// <summary>
         /// 아이템을 추가하는 메서드
         /// </summary>
-        protected void AddItem(string itemKey)
+        protected void AddItem(string itemKey, int count)
         {
-            if (!Inventory.TryAdd(itemKey, 1)) Inventory[itemKey]++;
+            if (!Inventory.TryAdd(itemKey, count))
+            {
+                Inventory[itemKey] += count;
+            }
             
             OnInventoryCountChanged?.Invoke();
         }
 
         public bool HasMatchingItem(string inventoryKey) => Inventory.ContainsKey(inventoryKey);
-        public bool CanReceiveItem() => CurrentInventorySize + (isItemReceiving ? 2 : 1) <= MaxInventorySize;
+        public bool CanReceiveItem() => CurrentInventorySize + (IsItemReceiving ? 2 : 1) <= MaxInventorySize;
         
         protected bool IsReadyToSend() => Time.time >= _lastSendTime + SendItemInterval;
         protected void SetLastSendTime() => _lastSendTime = Time.time;
