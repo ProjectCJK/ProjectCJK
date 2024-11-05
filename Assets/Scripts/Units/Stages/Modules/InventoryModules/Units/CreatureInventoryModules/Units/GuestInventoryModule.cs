@@ -107,8 +107,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         public Tuple<string, int> GetItem()
         {
             List<string> returnItems = Inventory.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key).ToList();
-            
-            return new Tuple<string, int>(returnItems[0], Inventory[returnItems[0]]);
+
+            return returnItems.Count <= 0 ? new Tuple<string, int>(returnItems[0], Inventory[returnItems[0]]) : null;
         }
     }
 }
