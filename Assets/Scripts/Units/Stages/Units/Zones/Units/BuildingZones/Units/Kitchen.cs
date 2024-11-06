@@ -91,7 +91,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private ITradeZone _tradeZonePlayer;
         private ITradeZone _tradeZoneNpc;
         private ITradeZone _unlockZonePlayer;
-        private UpgradeZone _upgradeZonePlayer;
+        private IUpgradeZone _upgradeZonePlayer;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
@@ -128,11 +128,14 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
             _unlockZonePlayer.RegisterReference(this, _kitchenDefaultSetting.UnlockZone_Player, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
 
-            // _upgradeZonePlayer = _kitchenDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
+            _upgradeZonePlayer = _kitchenDefaultSetting.UpgradeZone_Player.GetComponent<IUpgradeZone>();
+            
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;
 
             _kitchenMaterialInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
+
+            _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
 
         public override void Initialize()
@@ -179,6 +182,12 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             {
                 UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
             }
+        }
+        
+        private void HandleOnPlayerConnected(bool value)
+        {
+            Debug.Log(value ? "플레이어 입장!!!!" : "플레이어 퇴장!!!!");
+            // UIManager.Instance.
         }
     }
 }
