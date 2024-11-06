@@ -61,13 +61,13 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         [SerializeField] private StandDefaultSetting _standDefaultSetting;
         [SerializeField] private StandCustomSetting _standCustomSetting;
 
+        public EMaterialType MaterialType { get; private set; }
+        
         public override UnlockZoneModule UnlockZoneModule { get; protected set; }
         public override EUnlockZoneType UnlockZoneType => UnlockZoneModule.UnlockZoneType;
         public override EActiveStatus ActiveStatus => UnlockZoneModule.ActiveStatus;
         public override int RequiredGoldForUnlock => UnlockZoneModule.RequiredGoldForUnlock;
-
         public override int CurrentGoldForUnlock { get; set; }
-        public EMaterialType MaterialType { get; private set; }
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
