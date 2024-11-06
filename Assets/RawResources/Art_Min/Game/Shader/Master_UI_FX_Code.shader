@@ -16,6 +16,9 @@
         _Mask_Texture("Mask_Texture", 2D) = "white" {}
         _Mask_Range("Mask_Range", Float) = 1
 
+        _LerpColor("Second Color", Color) = (1,1,1,1)
+        _LerpProgress("Second Color Progress", Range( 0 , 1)) = 0
+
         [Header(__________________________________________________________________)]
         [Space(17)]
 
@@ -115,6 +118,8 @@
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
 
+            fixed4 _LerpColor;
+            float _LerpProgress;
 
             // 버텍스 쉐이더
             v2f vert(appdata_t v) //버텍스 구조체를 가져와서 v2f 함수에 담았다.
@@ -162,6 +167,10 @@
 
                 float4 main_color = (tex2D(_MainTex, IN.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw) + _TextureSampleAdd) * IN.color;
                 float4 Out_color = saturate(pow(main_color,_Main_Range));
+
+                //Lerp 선언
+
+                Out_color.rgb = lerp(Out_color,_LerpColor, _LerpProgress);
 
                 Out_color.a *= noise;
 
