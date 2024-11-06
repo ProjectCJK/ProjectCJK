@@ -23586,7 +23586,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9217200365622316773}
+  m_Father: {fileID: 5502947841461020435}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1839735485 &6745838231606994077
@@ -63596,7 +63596,7 @@ GameObject:
   - component: {fileID: 2820492816623360951}
   - component: {fileID: 6036905710143211297}
   m_Layer: 14
-  m_Name: Inventory_ManagementDesk
+  m_Name: Collision_Inventory_ManagementDesk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63614,7 +63614,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 9217200365622316773}
+  m_Father: {fileID: 5502947841461020435}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1839735485 &1683814167875421910
@@ -63958,6 +63958,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2137394315942846057}
+  - {fileID: 2034786501504382539}
   - {fileID: 4641821667798476228}
   - {fileID: 2736078169069369639}
   - {fileID: 9217200365622316773}
@@ -70100,11 +70102,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2137394315942846057}
   - {fileID: 6000553786583421749}
   - {fileID: 3734217391382060817}
   - {fileID: 3790007887729253011}
-  - {fileID: 2034786501504382539}
   m_Father: {fileID: 5502947841461020435}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

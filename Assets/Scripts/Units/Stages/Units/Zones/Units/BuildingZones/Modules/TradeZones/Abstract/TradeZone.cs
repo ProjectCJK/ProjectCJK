@@ -14,7 +14,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstra
         public string InputItemKey { get; }
         public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
         
-        public bool CanReceiveMoney();
+        public int CanReceiveMoney();
     }
     
     [RequireComponent(typeof(TilemapCollider2D))]
@@ -51,14 +51,14 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstra
             return _buildingSenderInventoryModule.RegisterItemReceiver(itemReceiver, register);
         }
 
-        public bool CanReceiveMoney()
+        public int CanReceiveMoney()
         {
             if (_building is { } unlockZoneProperty)
             {
-                return unlockZoneProperty.CurrentGoldForUnlock < unlockZoneProperty.RequiredGoldForUnlock;
+                return unlockZoneProperty.RequiredGoldForUnlock - unlockZoneProperty.CurrentGoldForUnlock;
             }
 
-            return false;
+            return 0;
         }
 
         public void ReceiveItemThroughTransfer(string inputItemKey, int count, Vector3 currentSenderPosition)

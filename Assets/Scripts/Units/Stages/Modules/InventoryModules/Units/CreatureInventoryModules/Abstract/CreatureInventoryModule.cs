@@ -58,12 +58,20 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
             {
                 if (CurrencyManager.Instance.Gold > 0)
                 {
-                    if (zone.CanReceiveMoney())
-                    {
-                        var goldSendingAmount = CurrencyManager.Instance.Gold >= DataManager.GoldSendingMaximum ? DataManager.GoldSendingMaximum : CurrencyManager.Instance.Gold;
-                        zone.ReceiveItemThroughTransfer(zone.InputItemKey, goldSendingAmount, SenderTransform.position);
+                    var targetMoney = zone.CanReceiveMoney();
                     
-                        CurrencyManager.Instance.RemoveGold(goldSendingAmount);
+                    if (targetMoney > 0 && CurrencyManager.Instance.Gold > 0)
+                    {
+                        if (targetMoney > DataManager.GoldSendingMaximum)
+                        {
+                            targetMoney = DataManager.GoldSendingMaximum;
+                        }
+
+                        targetMoney = targetMoney >= CurrencyManager.Instance.Gold ? CurrencyManager.Instance.Gold : targetMoney;
+                        
+                        zone.ReceiveItemThroughTransfer(zone.InputItemKey, targetMoney, SenderTransform.position);
+                    
+                        CurrencyManager.Instance.RemoveGold(targetMoney);
                     }
                 }
             }

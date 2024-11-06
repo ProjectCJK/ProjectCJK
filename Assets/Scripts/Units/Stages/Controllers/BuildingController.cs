@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AmplifyShaderEditor;
 using Interfaces;
-using Modules.DesignPatterns.FSMs.Enums;
 using Units.Stages.Enums;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Units.Items.Enums;
