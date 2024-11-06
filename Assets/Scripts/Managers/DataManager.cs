@@ -48,13 +48,13 @@ namespace Managers
         public ItemDataSO ItemDataSo;
         public ItemPriceSettings ItemPriceSettings;
         
-        public GameData ProductCostDataSo;
+        public GameData ProductPriceDataSo;
 
         protected override void Awake()
         {
             base.Awake();
             
-            var obj = ProductCostDataSo.GetData();
+            var obj = ProductPriceDataSo.GetData();
             
             Debug.Log($"{obj.Length}");
         }
