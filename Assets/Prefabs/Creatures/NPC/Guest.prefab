@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7754394631877695405}
   - component: {fileID: 195334636634408076}
   - component: {fileID: 4307195271167374143}
+  - component: {fileID: 1637708908147255938}
   m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
@@ -106,6 +107,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!210 &1637708908147255938
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2928202087505525502}
+  m_Enabled: 1
+  m_SortingLayerID: -521500183
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5738758168941799948
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +227,7 @@ SortingGroup:
   m_GameObject: {fileID: 5738758168941799948}
   m_Enabled: 1
   m_SortingLayerID: -521500183
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &3686695914789512790
