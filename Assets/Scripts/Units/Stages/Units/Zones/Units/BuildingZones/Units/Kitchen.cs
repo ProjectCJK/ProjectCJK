@@ -15,6 +15,7 @@ using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UpgradeZones;
 using Units.Stages.Units.Zones.Units.BuildingZones.UI.Kitchens;
 using UnityEngine;
 
@@ -45,6 +46,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         [Space(10), Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
+        
+        [Space(10), Header("UpgradeZone_Player")]
+        public Transform UpgradeZone_Player;
     }
 
     [Serializable]
@@ -87,6 +91,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private ITradeZone _tradeZonePlayer;
         private ITradeZone _tradeZoneNpc;
         private ITradeZone _unlockZonePlayer;
+        private UpgradeZone _upgradeZonePlayer;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
@@ -122,7 +127,8 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
             _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
             _unlockZonePlayer.RegisterReference(this, _kitchenDefaultSetting.UnlockZone_Player, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
-            
+
+            // _upgradeZonePlayer = _kitchenDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;
 
