@@ -33,7 +33,7 @@ namespace Managers
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
             _currencyView.BindViewModel(_currencyViewModel);
 
-            _gold = 10000;
+            _gold = 100000;
         }
 
         public void Initialize()

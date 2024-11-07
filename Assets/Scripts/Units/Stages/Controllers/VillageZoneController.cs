@@ -91,9 +91,10 @@ namespace Units.Stages.Controllers
 
             SpawnGuests();
             SpawnDeliveryMan();
+            SpawnHunter();
             SetDeliveryManDestination();
         }
-        
+
         private void SetDeliveryManDestination()
         {
             if (currentSpawnedDeliveryMans.Count <= 0) return;
@@ -167,6 +168,16 @@ namespace Units.Stages.Controllers
 
                 currentSpawnedDeliveryMans.Add(deliveryMan);
             }
+        }
+        
+        private void SpawnHunter()
+        {
+            // if (currentSpawnedHunter.Count < MaxHunterCount())
+            // {
+            //     IHunter hunter = _creatureController.GetHunter(_buildingController.Buildings[$"{EBuildingType.WareHouse}"].gameObject.transform.position);
+            //
+            //     currentSpawnedHunter.Add(hunter);
+            // }
         }
 
         private void SpawnPlayer()
