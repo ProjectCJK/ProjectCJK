@@ -159,9 +159,19 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
                 _kitchenProductInventoryModule.ReceiveItemThroughTransfer(OutputItemKey, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Keypad1))
             {
-                _kitchenStatsModule.IncreaseCurrentKitchenProductTimeLevel();
+                _kitchenStatsModule.IncreaseCurrentKitchenLevel();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                _kitchenStatsModule.IncreaseCurrentKitchenOption1Level();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+            {
+                _kitchenStatsModule.IncreaseCurrentKitchenOption2Level();
             }
 #endif
             
@@ -196,17 +206,15 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
                     _kitchenStatsModule.KitchenName,
                     _kitchenStatsModule.KitchenProductSprite,
                     _kitchenStatsModule.KitchenProductName,
-                    $"{_kitchenStatsModule.CurrentKitchenOption1Value}",
-                    $"{_kitchenStatsModule.CurrentKitchenOption2Value}",
-                    $"{_kitchenStatsModule.CurrentKitchenLevel}",
-                    $"{_kitchenStatsModule.CurrentKitchenOption1Level}",
-                    $"{_kitchenStatsModule.CurrentKitchenOption1Value}",
-                    $"{_kitchenStatsModule.NextKitchenOption1Value}",
-                    $"{_kitchenStatsModule.RequiredGoldToUpgradeKitchenOption1Level}",
-                    $"{_kitchenStatsModule.CurrentKitchenOption2Level}",
-                    $"{_kitchenStatsModule.CurrentKitchenOption2Value}",
-                    $"{_kitchenStatsModule.NextKitchenOption2Value}",
-                    $"{_kitchenStatsModule.RequiredGoldToUpgradeOption2Level}"
+                    _kitchenStatsModule.CurrentKitchenOption1Value,
+                    _kitchenStatsModule.CurrentKitchenOption2Value,
+                    _kitchenStatsModule.CurrentKitchenLevel,
+                    _kitchenStatsModule.CurrentKitchenOption1Level,
+                    _kitchenStatsModule.NextKitchenOption1Value,
+                    _kitchenStatsModule.RequiredGoldToUpgradeOption1Level,
+                    _kitchenStatsModule.CurrentKitchenOption2Level,
+                    _kitchenStatsModule.NextKitchenOption2Value,
+                    _kitchenStatsModule.RequiredGoldToUpgradeOption2Level
                     );
             }
             else

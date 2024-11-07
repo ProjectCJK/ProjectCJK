@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb75ed22eca584de086ebe2a880533b8, type: 3}
   m_Name: So_Player
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6007322378164197779, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
+  prefab: {fileID: 4825123492445085550, guid: 3ec2731745549400fbb6b820c279f856, type: 3}
   BaseMovementSpeed: 5
   BaseInventorySize: 20
   BaseInteractionStandbySecond: 1
@@ -21,8 +21,8 @@ MonoBehaviour:
   BaseAttackDelay: 0.2
   ItemPickupRange: 2
   BasePaymentDelay: 0.5
-  CreatureSprites:
-  - Body: []
+  CreatureSprite:
+    Body: []
     Head: []
     BackHair: []
     Scarf: []
