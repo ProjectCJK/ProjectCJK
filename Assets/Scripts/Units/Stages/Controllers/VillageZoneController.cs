@@ -14,9 +14,7 @@ using Random = System.Random;
 
 namespace Units.Stages.Controllers
 {
-    public interface IVillageZoneController :
-        IRegisterReference<ICreatureController, IBuildingController, IHuntingZoneController, StageCustomSettings,
-            List<EMaterialType>>, IInitializable
+    public interface IVillageZoneController : IRegisterReference<ICreatureController, IBuildingController, IHuntingZoneController, StageCustomSettings, List<EMaterialType>>, IInitializable
     {
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
