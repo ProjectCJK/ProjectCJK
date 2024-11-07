@@ -95,7 +95,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
         private void Update()
         {
-            _wareHouseInventoryModule.Update();
+            // _wareHouseInventoryModule.Update();
         }
         
         private void HandleOnMoneyReceived(int value)
