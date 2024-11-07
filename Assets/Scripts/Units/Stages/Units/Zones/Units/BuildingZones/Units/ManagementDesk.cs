@@ -12,6 +12,7 @@ using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UpgradeZones;
 using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
@@ -35,6 +36,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         [Space(10), Header("PaymentZone_NPC")]
         public Transform PaymentZone_NPC;
+
+        [Space(10), Header("UpgradeZone_Player")]
+        public Transform UpgradeZone_Player;
     }
     
     [Serializable]
@@ -61,6 +65,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private TradeZone _tradeZonePlayer;
         private PaymentZone _paymentZonePlayer;
         private PaymentZone _paymentZoneNpc;
+        private UpgradeZone _upgradeZonePlayer;
         
         private ManagementDeskDataSO _managementDeskDataSo;
         
@@ -76,21 +81,20 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             OutputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
             
             _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
-            _managementDeskInventoryModule = new ManagementDeskInventoryModule(
-                _managementDeskDefaultSetting.managementDeskInventory,
-                _managementDeskDefaultSetting.managementDeskInventory,
-                _managementDeskStatsModule,
-                _itemFactory,
-                InputItemKey, OutputItemKey);
+            _managementDeskInventoryModule = new ManagementDeskInventoryModule(_managementDeskDefaultSetting.managementDeskInventory, _managementDeskDefaultSetting.managementDeskInventory, _managementDeskStatsModule, _itemFactory, InputItemKey, OutputItemKey);
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
             _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
             
+            _upgradeZonePlayer = _managementDeskDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
+            
             _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<PaymentZone>();
             _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
             _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<PaymentZone>();
             _paymentZoneNpc.RegisterReference(_managementDeskPaymentModule, BuildingKey);
+            
+            _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
 
         public override void Initialize() { }
@@ -107,6 +111,18 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
                 _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey, DataManager.Instance.GetItemPrice(EItemType.Product, EMaterialType.A));
             }
 #endif
+        }
+        
+        private void HandleOnPlayerConnected(bool value)
+        {
+            // if (value)
+            // {
+            //     _managementDeskStatsModule.GetUIManagementDeskEnhancement();
+            // }
+            // else
+            // {
+            //     _managementDeskStatsModule.ReturnUIManagementDeskEnhancement();
+            // }
         }
     }
 }
