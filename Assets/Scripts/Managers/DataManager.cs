@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
-using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -49,6 +49,7 @@ namespace Managers
         public ItemDataSO ItemDataSo;
         public ItemPriceSettings ItemPriceSettings;
         
+        public GameData KitchenData;
         public GameData KitchenOption1ValueData;
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;
@@ -58,13 +59,7 @@ namespace Managers
         {
             if (item1.HasValue && item2.HasValue)
             {
-                foreach (var itemPrice in ItemPriceSettings.ItemPrices)
-                {
-                    if (itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value)
-                    {
-                        return itemPrice.Price;
-                    }
-                }
+                return (from itemPrice in ItemPriceSettings.ItemPrices where itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value select itemPrice.Price).FirstOrDefault();
             }
 
             return 0;

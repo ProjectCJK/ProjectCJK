@@ -199,27 +199,13 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         private void HandleOnPlayerConnected(bool value)
         {
-            Debug.Log(value ? "플레이어 입장!!!!" : "플레이어 퇴장!!!!");
             if (value)
             {
-                UIManager.Instance.GetUIKitchenEnhancement(
-                    _kitchenStatsModule.KitchenName,
-                    _kitchenStatsModule.KitchenProductSprite,
-                    _kitchenStatsModule.KitchenProductName,
-                    _kitchenStatsModule.CurrentKitchenOption1Value,
-                    _kitchenStatsModule.CurrentKitchenOption2Value,
-                    _kitchenStatsModule.CurrentKitchenLevel,
-                    _kitchenStatsModule.CurrentKitchenOption1Level,
-                    _kitchenStatsModule.NextKitchenOption1Value,
-                    _kitchenStatsModule.RequiredGoldToUpgradeOption1Level,
-                    _kitchenStatsModule.CurrentKitchenOption2Level,
-                    _kitchenStatsModule.NextKitchenOption2Value,
-                    _kitchenStatsModule.RequiredGoldToUpgradeOption2Level
-                    );
+                _kitchenStatsModule.GetUIKitchenEnhancement();
             }
             else
             {
-                UIManager.Instance.ReturnUIKitchenEnhancement();
+                _kitchenStatsModule.ReturnUIKitchenEnhancement();
             }
         }
     }

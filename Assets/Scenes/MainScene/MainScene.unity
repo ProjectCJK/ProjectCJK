@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cc47e3f01b427eaf2f23a1b1d24986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiKitchenEnhancement: {fileID: 0}
+  uiKitchenEnhancement: {fileID: 1508858735}
 --- !u!1 &662121906
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +231,7 @@ MonoBehaviour:
     - ItemType: 1
       MaterialType: 1
       Price: 2000
+  KitchenData: {fileID: 11400000, guid: 15f3d84ad015948f3bb68f4306922f00, type: 2}
   KitchenOption1ValueData: {fileID: 11400000, guid: cdae95bb639614c0b964c00aa6c27c14, type: 2}
   KitchenOption2ValueData: {fileID: 11400000, guid: 8f99eebcf7aa14164b073ad310837460, type: 2}
   KitchenOption1CostData: {fileID: 11400000, guid: 156d775a19c2c4d58988946dea3d6395, type: 2}
@@ -796,6 +797,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 717523256399845611, guid: 81698a0ccb9c349e3bb7dbcc5c33de8e, type: 3}
   m_PrefabInstance: {fileID: 1508858733}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1508858735 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7850059717496280743, guid: 81698a0ccb9c349e3bb7dbcc5c33de8e, type: 3}
+  m_PrefabInstance: {fileID: 1508858733}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e690d06cefb94ef1a9da0ebfb733942a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564853702
 GameObject:
   m_ObjectHideFlags: 0

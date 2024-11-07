@@ -20,12 +20,14 @@ using System;
          public string KitchenProductName;
          public Sprite KitchenProductSprite;
          public int CurrentKitchenOption1Value;
-         public int NextKitchenOption1Value;
          public float CurrentKitchenOption2Value;
+         public int NextKitchenOption1Value;
          public float NextKitchenOption2Value;
-         public int RequiredGoldToUpgradeOption1Level;
-         public int RequiredGoldToUpgradeOption2Level;
-         public int RequiredKitchenLevelToUpgradeOption2Level;
+         public int MaxKitchenOption1Level;
+         public int MaxKitchenOption2Level;
+         public int RequiredGoldToUpgradeKitchenOption1;
+         public int RequiredGoldToUpgradeKitchenOption2;
+         public int RequiredKitchenLevelToUpgradeOption2;
          
          // TODO : 데이터 저장해야함!
          public int CurrentKitchenLevel;
@@ -67,33 +69,17 @@ using System;
              UpdateKitchenStatsModule();
          }
 
-         public void IncreaseCurrentKitchenLevel()
-         {
-             CurrentKitchenLevel++;
-             
-             UpdateKitchenStatsModule();
-         }
-         
-         public void IncreaseCurrentKitchenOption1Level()
-         {
-             CurrentKitchenOption1Level++;
-
-             UpdateKitchenStatsModule();
-         }
-
-         public void IncreaseCurrentKitchenOption2Level()
-         {
-             CurrentKitchenOption2Level++;
-
-             UpdateKitchenStatsModule();
-         }
-
          private void UpdateKitchenStatsModule()
          {
              KitchenProductName = $"{VolatileDataManager.Instance.MaterialMappings[MaterialType]}";
              KitchenProductSprite = DataManager.Instance.ItemDataSo.ItemSprites.FirstOrDefault(item => item.ItemType == ItemType && item.StageMaterialType == StageMaterialType).Sprite;
              
              var KitchenOption1ValueData = DataManager.Instance.KitchenOption1ValueData.GetData();
+             var KitchenOption2ValueData = DataManager.Instance.KitchenOption2ValueData.GetData();
+             var KitchenOption1CostData = DataManager.Instance.KitchenOption1CostData.GetData();
+             var KitchenOption2CostData = DataManager.Instance.KitchenOption2CostData.GetData();
+             var KitchenData = DataManager.Instance.KitchenData.GetData();
+             
              CurrentKitchenOption1Value = Enumerable.Range(0, KitchenOption1ValueData.GetLength(0))
                  .Where(i =>
                      KitchenOption1ValueData[i, 1] == $"{ItemType}_{MaterialType}" &&
@@ -102,21 +88,20 @@ using System;
                  .Select(i => ParserModule.ParseOrDefault(KitchenOption1ValueData[i, 4], CurrentKitchenOption1Value))
                  .FirstOrDefault();
              
-             NextKitchenOption1Value = Enumerable.Range(0, KitchenOption1ValueData.GetLength(0))
-                 .Where(i =>
-                     KitchenOption1ValueData[i, 1] == $"{ItemType}_{MaterialType}" &&
-                     KitchenOption1ValueData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
-                     KitchenOption1ValueData[i, 3] == (CurrentKitchenOption1Level + 1).ToString())
-                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1ValueData[i, 4], NextKitchenOption1Value))
-                 .FirstOrDefault();
-
-             var KitchenOption2ValueData = DataManager.Instance.KitchenOption2ValueData.GetData();
              CurrentKitchenOption2Value = Enumerable.Range(0, KitchenOption2ValueData.GetLength(0))
                  .Where(i =>
                      KitchenOption2ValueData[i, 1] == $"{ItemType}_{MaterialType}" &&
                      KitchenOption2ValueData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption2ValueData[i, 3] == CurrentKitchenOption2Level.ToString())
                  .Select(i => ParserModule.ParseOrDefault(KitchenOption2ValueData[i, 4], CurrentKitchenOption2Value))
+                 .FirstOrDefault();
+             
+             NextKitchenOption1Value = Enumerable.Range(0, KitchenOption1ValueData.GetLength(0))
+                 .Where(i =>
+                     KitchenOption1ValueData[i, 1] == $"{ItemType}_{MaterialType}" &&
+                     KitchenOption1ValueData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
+                     KitchenOption1ValueData[i, 3] == (CurrentKitchenOption1Level + 1).ToString())
+                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1ValueData[i, 4], NextKitchenOption1Value))
                  .FirstOrDefault();
              
              NextKitchenOption2Value = Enumerable.Range(0, KitchenOption2ValueData.GetLength(0))
@@ -127,31 +112,113 @@ using System;
                  .Select(i => ParserModule.ParseOrDefault(KitchenOption2ValueData[i, 4], NextKitchenOption2Value))
                  .FirstOrDefault();
              
-             var KitchenOption1CostData = DataManager.Instance.KitchenOption1CostData.GetData();
-             RequiredGoldToUpgradeOption1Level = Enumerable.Range(0, KitchenOption1CostData.GetLength(0))
+             RequiredGoldToUpgradeKitchenOption1 = Enumerable.Range(0, KitchenOption1CostData.GetLength(0))
                  .Where(i =>
                      KitchenOption1CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption1CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption1CostData[i, 3] == CurrentKitchenOption1Level.ToString())
-                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1CostData[i, 4], RequiredGoldToUpgradeOption1Level))
+                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1CostData[i, 4], RequiredGoldToUpgradeKitchenOption1))
                  .FirstOrDefault();
              
-             var KitchenOption2CostData = DataManager.Instance.KitchenOption2CostData.GetData();
-             RequiredGoldToUpgradeOption2Level = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
+             RequiredGoldToUpgradeKitchenOption2 = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
                  .Where(i =>
                      KitchenOption2CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption2CostData[i, 3] == CurrentKitchenOption2Level.ToString())
-                 .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 4], RequiredGoldToUpgradeOption2Level))
+                 .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 4], RequiredGoldToUpgradeKitchenOption2))
                  .FirstOrDefault();
              
-             RequiredKitchenLevelToUpgradeOption2Level = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
+             RequiredKitchenLevelToUpgradeOption2 = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
                  .Where(i =>
                      KitchenOption2CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption2CostData[i, 3] == CurrentKitchenOption2Level.ToString())
-                 .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 5], RequiredKitchenLevelToUpgradeOption2Level))
+                 .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 5], RequiredKitchenLevelToUpgradeOption2))
                  .FirstOrDefault();
+             
+             MaxKitchenOption1Level = Enumerable.Range(0, KitchenData.GetLength(0))
+                 .Where(i =>
+                     KitchenData[i, 1] == $"{BuildingType}_{MaterialType}" &&
+                     KitchenData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
+                 .Select(i => ParserModule.ParseOrDefault(KitchenData[i, 3], MaxKitchenOption1Level))
+                 .FirstOrDefault();
+             
+             MaxKitchenOption2Level = Enumerable.Range(0, KitchenData.GetLength(0))
+                 .Where(i =>
+                     KitchenData[i, 1] == $"{BuildingType}_{MaterialType}" &&
+                     KitchenData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
+                 .Select(i => ParserModule.ParseOrDefault(KitchenData[i, 4], MaxKitchenOption1Level))
+                 .FirstOrDefault();
+         }
+
+         public void OnClickUpgradeButtonForKitchenOption1()
+         {
+             if (RequiredGoldToUpgradeKitchenOption1 <= CurrencyManager.Instance.Gold)
+             {
+                 CurrencyManager.Instance.RemoveGold(RequiredGoldToUpgradeKitchenOption1);
+                 IncreaseCurrentKitchenOption1Level();
+             }
+         }
+
+         public void OnClickUpgradeButtonForKitchenOption2()
+         {
+             if (RequiredGoldToUpgradeKitchenOption2 <= CurrencyManager.Instance.Gold)
+             {
+                 CurrencyManager.Instance.RemoveGold(RequiredGoldToUpgradeKitchenOption2);
+                 IncreaseCurrentKitchenOption2Level();
+             }
+         }
+         
+         public void IncreaseCurrentKitchenLevel()
+         {
+             CurrentKitchenLevel++;
+             
+             UpdateKitchenStatsModule();
+             GetUIKitchenEnhancement();
+         }
+         
+         public void IncreaseCurrentKitchenOption1Level()
+         {
+             CurrentKitchenOption1Level++;
+
+             UpdateKitchenStatsModule();
+             GetUIKitchenEnhancement();
+         }
+
+         public void IncreaseCurrentKitchenOption2Level()
+         {
+             CurrentKitchenOption2Level++;
+
+             UpdateKitchenStatsModule();
+             GetUIKitchenEnhancement();
+         }
+         
+         public void GetUIKitchenEnhancement()
+         {
+             UIManager.Instance.GetUIKitchenEnhancement(
+                 KitchenName,
+                 KitchenProductSprite,
+                 KitchenProductName,
+                 CurrentKitchenOption1Value,
+                 CurrentKitchenOption2Value,
+                 NextKitchenOption1Value,
+                 NextKitchenOption2Value,
+                 CurrentKitchenLevel,
+                 CurrentKitchenOption1Level,
+                 CurrentKitchenOption2Level,
+                 MaxKitchenOption1Level,
+                 MaxKitchenOption2Level,
+                 RequiredGoldToUpgradeKitchenOption1,
+                 RequiredGoldToUpgradeKitchenOption2,
+                 RequiredKitchenLevelToUpgradeOption2,
+                 OnClickUpgradeButtonForKitchenOption1,
+                 OnClickUpgradeButtonForKitchenOption2
+             );
+         }
+
+         public void ReturnUIKitchenEnhancement()
+         {
+             UIManager.Instance.ReturnUIKitchenEnhancement();
          }
      }
  }
