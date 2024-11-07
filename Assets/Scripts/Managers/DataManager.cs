@@ -39,6 +39,7 @@ namespace Managers
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
+        public WareHouseDataSO WareHouseDataSo;
         
         [Space(20), Header("### Zone Data ###")]
         public HuntingZoneDataSO HuntingZoneDataSo;
