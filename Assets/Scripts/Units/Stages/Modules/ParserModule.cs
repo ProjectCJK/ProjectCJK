@@ -1,8 +1,9 @@
 using System;
+using UnityEngine;
 
 namespace Units.Stages.Modules
 {
-    public static class EnumParserModule
+    public static class ParserModule
     {
         public static (TEnum1?, TEnum2?) ParseStringToEnum<TEnum1, TEnum2>(string input)
             where TEnum1 : struct, Enum
@@ -43,6 +44,31 @@ namespace Units.Stages.Modules
         public static string ParseEnumToString<TEnum1, TEnum2>(TEnum1 enum1, TEnum2 enum2) where TEnum1 : Enum where TEnum2 : Enum
         {
             return $"{enum1}_{enum2}";
+        }
+        
+        public static T ParseOrDefault<T>(string input, T defaultValue)
+        {
+            try
+            {
+                if (typeof(T) == typeof(int) && int.TryParse(input, out var intValue))
+                {
+                    return (T)(object)intValue;
+                }
+                if (typeof(T) == typeof(float) && float.TryParse(input, out var floatValue))
+                {
+                    return (T)(object)floatValue;
+                } 
+                if (typeof(T) == typeof(bool) && bool.TryParse(input, out var boolValue))
+                {
+                    return (T)(object)boolValue;
+                }
+            }
+            catch
+            {
+                Debug.LogError($"Failed to parse {typeof(T).Name}");
+            }
+            
+            return defaultValue;
         }
     }
 }

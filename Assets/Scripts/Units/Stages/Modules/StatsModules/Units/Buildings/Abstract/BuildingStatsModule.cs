@@ -5,14 +5,13 @@ using Units.Stages.Modules.StatsModules.Abstract;
 
 namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
 {
-    public interface IBuildingStatsModule : IInventoryProperty, IProductProperty
+    public interface IBuildingStatsModule
     {
         
     }
 
     public abstract class BuildingStatsModule : StatsModule, IBuildingStatsModule
     {
-        public float BaseProductLeadTime => _buildingDataSo.BaseProductLeadTime;
         public int MaxProductInventorySize => _buildingDataSo.BaseProductInventorySize;
         
         private readonly BuildingDataSO _buildingDataSo;

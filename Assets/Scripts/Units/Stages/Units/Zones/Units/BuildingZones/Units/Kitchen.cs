@@ -3,10 +3,9 @@ using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
 using Units.Stages.Enums;
-using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
-using Units.Stages.Modules.ProductModules.Units;
+using Units.Stages.Modules.ProductModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
@@ -14,14 +13,13 @@ using Units.Stages.Modules.UnlockModules.Interfaces;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
-using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UnlockZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UpgradeZones;
 using Units.Stages.Units.Zones.Units.BuildingZones.UI.Kitchens;
 using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 {
-    public interface IKitchen : IBuildingZone, IRegisterReference<IItemFactory>, IUnlockZoneProperty
+    public interface IKitchen : IBuildingZone, IRegisterReference<ItemFactory>, IUnlockZoneProperty
     {
         
     }
@@ -83,31 +81,31 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
         public bool IsAnyItemOnInventory => _kitchenProductInventoryModule.CurrentInventorySize > 0;
 
-        private IKitchenStatsModule _kitchenStatsModule;
-        private IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
-        private IKitchenProductInventoryModule _kitchenProductInventoryModule;
-        private IKitchenProductModule _kitchenProductModule;
-        private IItemFactory _itemFactory;
-        private ITradeZone _tradeZonePlayer;
-        private ITradeZone _tradeZoneNpc;
-        private ITradeZone _unlockZonePlayer;
-        private IUpgradeZone _upgradeZonePlayer;
+        private KitchenStatsModule _kitchenStatsModule;
+        private KitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
+        private KitchenProductInventoryModule _kitchenProductInventoryModule;
+        private KitchenProductModule _kitchenProductModule;
+        private ItemFactory _itemFactory;
+        private TradeZone _tradeZonePlayer;
+        private TradeZone _tradeZoneNpc;
+        private TradeZone _unlockZonePlayer;
+        private UpgradeZone _upgradeZonePlayer;
         
         private KitchenDataSO _kitchenDataSO;
         private KitchenViewModel _kitchenViewModel;
         private KitchenModel _kitchenModel;
 
-        public void RegisterReference(IItemFactory itemController)
+        public void RegisterReference(ItemFactory itemController)
         {
-            _kitchenDataSO = DataManager.Instance.KitchenDataSo;
-            
             _itemFactory = itemController;
-            MaterialType = _kitchenCustomSetting.MaterialType;
-            BuildingKey = EnumParserModule.ParseEnumToString(_kitchenDataSO.BuildingType, _kitchenCustomSetting.MaterialType);
-            InputItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.InputItemType, _kitchenCustomSetting.MaterialType);
-            OutputItemKey = EnumParserModule.ParseEnumToString(_kitchenCustomSetting.OutputItemType, _kitchenCustomSetting.MaterialType);
-
-            _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO);
+            _kitchenDataSO = DataManager.Instance.KitchenDataSo;
+            _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO, _kitchenCustomSetting);
+            
+            MaterialType = _kitchenStatsModule.MaterialType;
+            BuildingKey = _kitchenStatsModule.BuildingKey;
+            InputItemKey = _kitchenStatsModule.InputItemKey;
+            OutputItemKey = _kitchenStatsModule.OutputItemKey;
+            
             _kitchenMaterialInventoryModule = new KitchenMaterialInventoryModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _itemFactory, InputItemKey, OutputItemKey);
             _kitchenProductInventoryModule = new KitchenProductInventoryModule(_kitchenDefaultSetting.KitchenInventory, _kitchenDefaultSetting.KitchenInventory, _kitchenStatsModule, _itemFactory, OutputItemKey, OutputItemKey);
             _kitchenProductModule = new KitchenProductModule(_kitchenDefaultSetting.KitchenFactory, _kitchenDefaultSetting.KitchenFactory, _kitchenStatsModule, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, InputItemKey, OutputItemKey);
@@ -119,16 +117,16 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _kitchenViewModel = new KitchenViewModel(_kitchenModel);
             _kitchenDefaultSetting.KitchenView.BindViewModel(_kitchenViewModel);
             
-            _tradeZonePlayer = _kitchenDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer = _kitchenDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _tradeZonePlayer.RegisterReference(this, _kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
             
-            _tradeZoneNpc = _kitchenDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
+            _tradeZoneNpc = _kitchenDefaultSetting.TradeZone_NPC.GetComponent<TradeZone>();
             _tradeZoneNpc.RegisterReference(this, _kitchenDefaultSetting.KitchenFactory, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, InputItemKey);
 
-            _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer = _kitchenDefaultSetting.UnlockZone_Player.GetComponent<TradeZone>();
             _unlockZonePlayer.RegisterReference(this, _kitchenDefaultSetting.UnlockZone_Player, _kitchenMaterialInventoryModule, _kitchenProductInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
 
-            _upgradeZonePlayer = _kitchenDefaultSetting.UpgradeZone_Player.GetComponent<IUpgradeZone>();
+            _upgradeZonePlayer = _kitchenDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
             
             _kitchenProductModule.OnProcessingChanged += OnProcessingStateChanged;
             _kitchenProductModule.OnElapsedTimeChanged += UpdateViewModel;
@@ -160,6 +158,11 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             {
                 _kitchenProductInventoryModule.ReceiveItemThroughTransfer(OutputItemKey, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _kitchenStatsModule.IncreaseCurrentKitchenProductTimeLevel();
+            }
 #endif
             
             _kitchenProductInventoryModule.Update();
@@ -187,7 +190,29 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private void HandleOnPlayerConnected(bool value)
         {
             Debug.Log(value ? "플레이어 입장!!!!" : "플레이어 퇴장!!!!");
-            // UIManager.Instance.
+            if (value)
+            {
+                UIManager.Instance.GetUIKitchenEnhancement(
+                    _kitchenStatsModule.KitchenName,
+                    _kitchenStatsModule.KitchenProductSprite,
+                    _kitchenStatsModule.KitchenProductName,
+                    $"{_kitchenStatsModule.CurrentKitchenOption1Value}",
+                    $"{_kitchenStatsModule.CurrentKitchenOption2Value}",
+                    $"{_kitchenStatsModule.CurrentKitchenLevel}",
+                    $"{_kitchenStatsModule.CurrentKitchenOption1Level}",
+                    $"{_kitchenStatsModule.CurrentKitchenOption1Value}",
+                    $"{_kitchenStatsModule.NextKitchenOption1Value}",
+                    $"{_kitchenStatsModule.RequiredGoldToUpgradeKitchenOption1Level}",
+                    $"{_kitchenStatsModule.CurrentKitchenOption2Level}",
+                    $"{_kitchenStatsModule.CurrentKitchenOption2Value}",
+                    $"{_kitchenStatsModule.NextKitchenOption2Value}",
+                    $"{_kitchenStatsModule.RequiredGoldToUpgradeOption2Level}"
+                    );
+            }
+            else
+            {
+                UIManager.Instance.ReturnUIKitchenEnhancement();
+            }
         }
     }
 }

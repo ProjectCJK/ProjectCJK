@@ -2,6 +2,7 @@ using System;
 using Interfaces;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using UnityEngine;
 
 namespace Units.Stages.Modules.ProductModules.Abstract
@@ -11,7 +12,7 @@ namespace Units.Stages.Modules.ProductModules.Abstract
         public float BaseProductLeadTime { get; }
     }
     
-    public interface IBuildingProductModule : IInitializable
+    public interface IKitchenProductModule : IInitializable
     {
         public event Action OnElapsedTimeChanged;
         public event Action<bool> OnProcessingChanged;
@@ -26,39 +27,36 @@ namespace Units.Stages.Modules.ProductModules.Abstract
         public void Product();
     }
     
-    public abstract class BuildingProductModule : IBuildingProductModule
+    public class KitchenProductModule : IKitchenProductModule
     {
         public event Action OnElapsedTimeChanged;
         public event Action<bool> OnProcessingChanged;
         
         public bool IsProcessing { get; private set; }
         public float ElapsedTime { get; private set; }
+        public float ProductLeadTime => _kitchenStatsModule.CurrentKitchenOption2Value;
 
-        public float ProductLeadTime => _productLeadTime;
-
-        private readonly IBuildingStatsModule _buildingStatsModule;
-        private readonly IKitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
-        private readonly IKitchenProductInventoryModule _kitchenProductInventoryModule;
+        private readonly KitchenStatsModule _kitchenStatsModule;
+        private readonly KitchenMaterialInventoryModule _kitchenMaterialInventoryModule;
+        private readonly KitchenProductInventoryModule _kitchenProductInventoryModule;
 
         private readonly string _inputItemKey;
         private readonly string _outputItemKey;
 
-        private float _productLeadTime => _buildingStatsModule.BaseProductLeadTime;
-
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }
 
-        protected BuildingProductModule(Transform senderTransform,
+        public KitchenProductModule(Transform senderTransform,
             Transform receiverTransform,
-            IBuildingStatsModule buildingStatsModule,
-            IKitchenMaterialInventoryModule kitchenMaterialInventoryModule,
-            IKitchenProductInventoryModule kitchenProductInventoryModule,
+            KitchenStatsModule kitchenStatsModule,
+            KitchenMaterialInventoryModule kitchenMaterialInventoryModule,
+            KitchenProductInventoryModule kitchenProductInventoryModule,
             string inputItemKey,
             string outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
-            _buildingStatsModule = buildingStatsModule;
+            _kitchenStatsModule = kitchenStatsModule;
             _kitchenMaterialInventoryModule = kitchenMaterialInventoryModule;
             _kitchenProductInventoryModule = kitchenProductInventoryModule;
             _inputItemKey = inputItemKey;
@@ -73,6 +71,7 @@ namespace Units.Stages.Modules.ProductModules.Abstract
         
         public void Product()
         {
+            Debug.Log($"{ProductLeadTime}");
             if (IsProcessing)
             {
                 if (IsProductProcessed())
@@ -107,7 +106,7 @@ namespace Units.Stages.Modules.ProductModules.Abstract
         {
             ElapsedTime += Time.deltaTime;
             OnElapsedTimeChanged?.Invoke();
-            return ElapsedTime >= _productLeadTime;
+            return ElapsedTime >= ProductLeadTime;
         }
 
         private bool HasMatchingItem() => _kitchenMaterialInventoryModule.HasMatchingItem(_inputItemKey);

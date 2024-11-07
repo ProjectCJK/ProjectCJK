@@ -2,6 +2,7 @@ using System;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
@@ -21,9 +22,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
-            IBuildingStatsModule buildingStatsModule,
+            DeliveryLodgingStatsModule deliveryLodgingStatsModule,
             string inputItemKey, string outputItemKey)
-            : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, itemFactory, deliveryLodgingStatsModule, inputItemKey, outputItemKey)
         {
         }
         
