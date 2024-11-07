@@ -18,6 +18,8 @@ MonoBehaviour:
   - "\uC2A4\uD14C\uC774\uC9C0"
   - "\uC635\uC158 1 \uCD5C\uB300 \uB808\uBCA8"
   - "\uC635\uC158 2 \uCD5C\uB300 \uB808\uBCA8"
+  - "\uAD6C\uC870\uBB3C \uB808\uBCA8"
+  - "\uD544\uC694 \uC635\uC1581 \uB808\uBCA8"
   dataRows:
   - rowData:
     - Index
@@ -25,9 +27,13 @@ MonoBehaviour:
     - Stage
     - MaxLevel_Option1
     - MaxLevel_Option2
+    - BuildingLevel
+    - Option1Level
   - rowData:
     - Int
     - String
+    - Int
+    - Int
     - Int
     - Int
     - Int
@@ -37,33 +43,205 @@ MonoBehaviour:
     - 1
     - 40
     - 3
+    - 1
+    - 2
   - rowData:
     - 170002
+    - Kitchen_A
+    - 1
+    - 40
+    - 3
+    - 2
+    - 4
+  - rowData:
+    - 170003
+    - Kitchen_A
+    - 1
+    - 40
+    - 3
+    - 3
+    - 9999999
+  - rowData:
+    - 170004
     - Kitchen_B
     - 1
     - 40
     - 3
+    - 1
+    - 2
   - rowData:
-    - 170003
+    - 170005
+    - Kitchen_B
+    - 1
+    - 40
+    - 3
+    - 2
+    - 4
+  - rowData:
+    - 170006
+    - Kitchen_B
+    - 1
+    - 40
+    - 3
+    - 3
+    - 9999999
+  - rowData:
+    - 170007
     - Kitchen_A
     - 2
     - 200
     - 5
+    - 1
+    - 2
   - rowData:
-    - 170004
+    - 170008
+    - Kitchen_A
+    - 2
+    - 200
+    - 5
+    - 2
+    - 4
+  - rowData:
+    - 170009
+    - Kitchen_A
+    - 2
+    - 200
+    - 5
+    - 3
+    - 10
+  - rowData:
+    - 170010
+    - Kitchen_A
+    - 2
+    - 200
+    - 5
+    - 4
+    - 20
+  - rowData:
+    - 170011
+    - Kitchen_A
+    - 2
+    - 200
+    - 5
+    - 5
+    - 9999999
+  - rowData:
+    - 170012
     - Kitchen_B
     - 2
     - 200
     - 5
+    - 1
+    - 2
   - rowData:
-    - 170005
+    - 170013
+    - Kitchen_B
+    - 2
+    - 200
+    - 5
+    - 2
+    - 4
+  - rowData:
+    - 170014
+    - Kitchen_B
+    - 2
+    - 200
+    - 5
+    - 3
+    - 10
+  - rowData:
+    - 170015
+    - Kitchen_B
+    - 2
+    - 200
+    - 5
+    - 4
+    - 20
+  - rowData:
+    - 170016
+    - Kitchen_B
+    - 2
+    - 200
+    - 5
+    - 5
+    - 9999999
+  - rowData:
+    - 170017
     - Kitchen_C
     - 2
     - 200
     - 5
+    - 1
+    - 2
   - rowData:
-    - 170006
+    - 170018
+    - Kitchen_C
+    - 2
+    - 200
+    - 5
+    - 2
+    - 4
+  - rowData:
+    - 170019
+    - Kitchen_C
+    - 2
+    - 200
+    - 5
+    - 3
+    - 10
+  - rowData:
+    - 170020
+    - Kitchen_C
+    - 2
+    - 200
+    - 5
+    - 4
+    - 20
+  - rowData:
+    - 170021
+    - Kitchen_C
+    - 2
+    - 200
+    - 5
+    - 5
+    - 9999999
+  - rowData:
+    - 170022
     - Kitchen_D
     - 2
     - 200
     - 5
+    - 1
+    - 2
+  - rowData:
+    - 170023
+    - Kitchen_D
+    - 2
+    - 200
+    - 5
+    - 2
+    - 4
+  - rowData:
+    - 170024
+    - Kitchen_D
+    - 2
+    - 200
+    - 5
+    - 3
+    - 10
+  - rowData:
+    - 170025
+    - Kitchen_D
+    - 2
+    - 200
+    - 5
+    - 4
+    - 20
+  - rowData:
+    - 170026
+    - Kitchen_D
+    - 2
+    - 200
+    - 5
+    - 5
+    - 9999999

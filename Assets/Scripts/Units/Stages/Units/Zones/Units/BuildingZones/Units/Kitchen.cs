@@ -158,21 +158,6 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             {
                 _kitchenProductInventoryModule.ReceiveItemThroughTransfer(OutputItemKey, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
             }
-
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-            {
-                _kitchenStatsModule.IncreaseCurrentKitchenLevel();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.Keypad2))
-            {
-                _kitchenStatsModule.IncreaseCurrentKitchenOption1Level();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.Keypad3))
-            {
-                _kitchenStatsModule.IncreaseCurrentKitchenOption2Level();
-            }
 #endif
             
             _kitchenProductInventoryModule.Update();

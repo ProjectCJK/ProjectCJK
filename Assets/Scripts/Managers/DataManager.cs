@@ -55,6 +55,11 @@ namespace Managers
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;
         public GameData KitchenOption2CostData;
+        public GameData ManagementDeskData;
+        public GameData ManagementDeskOption1ValueData;
+        public GameData ManagementDeskOption2ValueData;
+        public GameData ManagementDeskOption1CostData;
+        public GameData ManagementDeskOption2CostData;
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {

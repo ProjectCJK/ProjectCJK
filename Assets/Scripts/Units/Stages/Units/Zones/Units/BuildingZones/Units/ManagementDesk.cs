@@ -71,16 +71,16 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         // private HashSet<ICreatureItemReceiver>
 
-        public void RegisterReference(ItemFactory itemController)
+        public void RegisterReference(ItemFactory itemFactory)
         {
+            _itemFactory = itemFactory;
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
+            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
+
+            BuildingKey = _managementDeskStatsModule.BuildingKey;
+            InputItemKey = _managementDeskStatsModule.InputItemKey;
+            OutputItemKey = _managementDeskStatsModule.OutputItemKey;
             
-            _itemFactory = itemController;
-            BuildingKey = ParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
-            InputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-            OutputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-            
-            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
             _managementDeskInventoryModule = new ManagementDeskInventoryModule(_managementDeskDefaultSetting.managementDeskInventory, _managementDeskDefaultSetting.managementDeskInventory, _managementDeskStatsModule, _itemFactory, InputItemKey, OutputItemKey);
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
@@ -115,14 +115,14 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         private void HandleOnPlayerConnected(bool value)
         {
-            // if (value)
-            // {
-            //     _managementDeskStatsModule.GetUIManagementDeskEnhancement();
-            // }
-            // else
-            // {
-            //     _managementDeskStatsModule.ReturnUIManagementDeskEnhancement();
-            // }
+            if (value)
+            {
+                _managementDeskStatsModule.GetUIManagementDeskEnhancement();
+            }
+            else
+            {
+                _managementDeskStatsModule.ReturnUIManagementDeskEnhancement();
+            }
         }
     }
 }

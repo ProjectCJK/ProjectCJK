@@ -32,9 +32,9 @@ namespace Units.Stages.Modules.PaymentModule.Units
         private float _playerPaymentElapsedTime;
         private float _npcPaymentElapsedTime;
 
-        public ManagementDeskPaymentModule(IManagementDeskStatsModule managementDeskStatsModule, IManagementDeskInventoryModule managementDeskInventoryModule, string inputKey)
+        public ManagementDeskPaymentModule(ManagementDeskStatsModule managementDeskStatsModule, IManagementDeskInventoryModule managementDeskInventoryModule, string inputKey)
         {
-            _npcPaymentDelay = managementDeskStatsModule.BaseProductLeadTime;
+            _npcPaymentDelay = managementDeskStatsModule.CurrentManagementDeskOption1Value;
             _managementDeskInventoryModule = managementDeskInventoryModule;
             _inputKey = inputKey;
         }
