@@ -1,3 +1,4 @@
+using System;
 using Modules.DesignPatterns.Singletons;
 using UI;
 using UnityEngine;
@@ -11,38 +12,50 @@ namespace Managers
         [Header("=== 건물 업그레이드 패널 ===")]
         [SerializeField] private UI_KitchenEnhancement uiKitchenEnhancement;
 
-        public void ReturnUIKitchenEnhancement() => uiKitchenEnhancement.gameObject.SetActive(false);
-
         public void GetUIKitchenEnhancement(
             string kitchenName,
             Sprite kitchenProductSprite,
             string kitchenProductName,
             int currentKitchenOption1Value,
             float currentKitchenOption2Value,
+            int nextKitchenOption1Value,
+            float nextKitchenOption2Value,
             int currentKitchenLevel,
             int currentKitchenOption1Level,
-            int nextKitchenOption1Value,
-            int requiredGoldToUpgradeOption1Level,
             int currentKitchenOption2Level,
-            float nextKitchenOption2Value,
-            int requiredGoldToUpgradeOption2Level)
+            int maxKitchenOption1Level,
+            int maxKitchenOption2Level,
+            int requiredGoldToUpgradeOption1Level,
+            int requiredGoldToUpgradeOption2Level,
+            int requiredKitchenLevelToUpgradeOption2Level,
+            Action onClickUpgradeButtonForKitchenOption1,
+            Action onClickUpgradeButtonForKitchenOption2)
         {
          
-            uiKitchenEnhancement.Initialize(
+            uiKitchenEnhancement.Activate(
                 kitchenName,
                 kitchenProductSprite,
                 kitchenProductName,
                 currentKitchenOption1Value,
                 currentKitchenOption2Value,
+                nextKitchenOption1Value,
+                nextKitchenOption2Value,
                 currentKitchenLevel,
                 currentKitchenOption1Level,
-                nextKitchenOption1Value,
-                requiredGoldToUpgradeOption1Level,
                 currentKitchenOption2Level,
-                nextKitchenOption2Value,
-                requiredGoldToUpgradeOption2Level
+                maxKitchenOption1Level,
+                maxKitchenOption2Level,
+                requiredGoldToUpgradeOption1Level,
+                requiredGoldToUpgradeOption2Level,
+                requiredKitchenLevelToUpgradeOption2Level,
+                onClickUpgradeButtonForKitchenOption1,
+                onClickUpgradeButtonForKitchenOption2
                 );
-            uiKitchenEnhancement.gameObject.SetActive(true);
+        }
+
+        public void ReturnUIKitchenEnhancement()
+        {
+            uiKitchenEnhancement.Inactivate();
         }
     }
 }
