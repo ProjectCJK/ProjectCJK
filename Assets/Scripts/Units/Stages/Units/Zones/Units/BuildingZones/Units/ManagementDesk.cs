@@ -108,7 +108,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             // TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
-                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey, DataManager.Instance.GetItemPrice(EItemType.Product, EMaterialType.A));
+                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey, VolatileDataManager.Instance.GetItemPrice(EItemType.Product, EMaterialType.A));
             }
 #endif
         }

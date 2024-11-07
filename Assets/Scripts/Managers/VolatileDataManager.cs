@@ -10,10 +10,21 @@ namespace Managers
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
         
         public int CurrentStageLevel;
+        public Dictionary<string, int> ItemPrices;
         
         public void RegisterReference()
         {
          
+        }
+        
+        public int GetItemPrice(EItemType? item1, EMaterialType? item2)
+        {
+            if (item1.HasValue && item2.HasValue)
+            {
+                return ItemPrices[$"{item1.Value}_{item2.Value}"];
+            }
+
+            return 0;
         }
     }
 }

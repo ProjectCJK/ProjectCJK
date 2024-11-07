@@ -56,7 +56,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     Tuple<string, int> purchasedItem = guest.GetItem();
 
                     (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                    var targetItemPrice = DataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
+                    var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
                     
                     //TODO : 상품 별 가격에 따른 가격 책정
                     

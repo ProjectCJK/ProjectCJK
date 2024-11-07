@@ -120,12 +120,12 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
                 .Select(i => ParserModule.ParseOrDefault(ManagementDeskData[i, 6], RequiredOption1LevelToUpgradeManagementDeskLevel))
                 .FirstOrDefault();
             
-            RequiredManagementDeskLevelToUpgradeOption2 = Enumerable.Range(0, ManagementDeskData.GetLength(0))
+            RequiredManagementDeskLevelToUpgradeOption2 = Enumerable.Range(0, ManagementDeskOption2CostData.GetLength(0))
              .Where(i =>
-                 ManagementDeskData[i, 1] == $"{BuildingType}" &&
-                 ManagementDeskData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
-                 ManagementDeskData[i, 5] == CurrentManagementDeskOption2Level.ToString())
-             .Select(i => ParserModule.ParseOrDefault(ManagementDeskData[i, 6], RequiredManagementDeskLevelToUpgradeOption2))
+                 ManagementDeskOption2CostData[i, 1] == $"{BuildingType}" &&
+                 ManagementDeskOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
+                 ManagementDeskOption2CostData[i, 3] == CurrentManagementDeskOption2Level.ToString())
+             .Select(i => ParserModule.ParseOrDefault(ManagementDeskOption2CostData[i, 5], RequiredManagementDeskLevelToUpgradeOption2))
              .FirstOrDefault();
 
             MaxManagementDeskOption1Level = Enumerable.Range(0, ManagementDeskData.GetLength(0))
@@ -161,17 +161,14 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
             }
         }
          
-        public void IncreaseCurrentManagementDeskLevel()
-        {
-            CurrentManagementDeskLevel++;
-             
-            UpdateManagementDeskStatsModule();
-            GetUIManagementDeskEnhancement();
-        }
-         
         public void IncreaseCurrentManagementDeskOption1Level()
         {
             CurrentManagementDeskOption1Level++;
+            
+            if (CurrentManagementDeskOption1Level >= RequiredOption1LevelToUpgradeManagementDeskLevel)
+            {
+                CurrentManagementDeskLevel++;
+            }
 
             UpdateManagementDeskStatsModule();
             GetUIManagementDeskEnhancement();

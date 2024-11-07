@@ -20,12 +20,6 @@ namespace Managers
         public int Price;
     }
     
-    [Serializable]
-    public struct ItemPriceSettings
-    {
-        public List<ItemPrice> ItemPrices;
-    }
-
     public class DataManager : SingletonMono<DataManager>
     {
         [Header("### Unit Data ###")]
@@ -48,7 +42,6 @@ namespace Managers
         [Space(20), Header("### Item Data ###")]
         public const int GoldSendingMaximum = 1000;
         public ItemDataSO ItemDataSo;
-        public ItemPriceSettings ItemPriceSettings;
         
         public GameData KitchenData;
         public GameData KitchenOption1ValueData;
@@ -60,15 +53,5 @@ namespace Managers
         public GameData ManagementDeskOption2ValueData;
         public GameData ManagementDeskOption1CostData;
         public GameData ManagementDeskOption2CostData;
-
-        public int GetItemPrice(EItemType? item1, EMaterialType? item2)
-        {
-            if (item1.HasValue && item2.HasValue)
-            {
-                return (from itemPrice in ItemPriceSettings.ItemPrices where itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value select itemPrice.Price).FirstOrDefault();
-            }
-
-            return 0;
-        }
     }
 }
