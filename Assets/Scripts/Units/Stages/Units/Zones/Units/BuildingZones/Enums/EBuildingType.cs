@@ -5,6 +5,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Enums
         Kitchen,
         Stand,
         ManagementDesk,
-        DeliveryLodging
+        DeliveryLodging,
+        WareHouse
     }
 }

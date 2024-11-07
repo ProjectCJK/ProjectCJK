@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -38,6 +39,7 @@ namespace Managers
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
+        public WareHouseDataSO WareHouseDataSo;
         
         [Space(20), Header("### Zone Data ###")]
         public HuntingZoneDataSO HuntingZoneDataSo;
@@ -48,28 +50,17 @@ namespace Managers
         public ItemDataSO ItemDataSo;
         public ItemPriceSettings ItemPriceSettings;
         
-        public GameData ProductCostDataSo;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            
-            var obj = ProductCostDataSo.GetData();
-            
-            Debug.Log($"{obj.Length}");
-        }
+        public GameData KitchenData;
+        public GameData KitchenOption1ValueData;
+        public GameData KitchenOption2ValueData;
+        public GameData KitchenOption1CostData;
+        public GameData KitchenOption2CostData;
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {
             if (item1.HasValue && item2.HasValue)
             {
-                foreach (var itemPrice in ItemPriceSettings.ItemPrices)
-                {
-                    if (itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value)
-                    {
-                        return itemPrice.Price;
-                    }
-                }
+                return (from itemPrice in ItemPriceSettings.ItemPrices where itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value select itemPrice.Price).FirstOrDefault();
             }
 
             return 0;

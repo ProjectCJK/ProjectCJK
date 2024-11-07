@@ -15,7 +15,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
     {
         public KitchenProductInventoryModule(Transform senderTransform,
             Transform receiverTransform,
-            IKitchenStatsModule kitchenStatsModule,
+            KitchenStatsModule kitchenStatsModule,
             IItemFactory itemFactory,
             string inputItemKey,
             string outputItemKey)

@@ -12,19 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17287c75fd7f461eb222417696df095e, type: 3}
   m_Name: So_Monster
   m_EditorClassIdentifier: 
-  prefab: {fileID: 948783869296736964, guid: fae129e2424114e029aeaedd08bb6e10, type: 3}
+  prefab: {fileID: 3013795665935407657, guid: fae129e2424114e029aeaedd08bb6e10, type: 3}
   BaseMovementSpeed: 1
   MonsterSprites:
   - StageMaterialType: 0
     EmotionIdleSprite: {fileID: 0}
     EmotionScaredSprite: {fileID: 0}
+    EmotionDeathSprite: {fileID: 0}
     BodySprite: {fileID: 0}
+    BodyDeathSprite: {fileID: 0}
+    HairDeathSprite: {fileID: 0}
     LegLeftSprite: {fileID: 0}
     LegRightSprite: {fileID: 0}
   - StageMaterialType: 1
     EmotionIdleSprite: {fileID: 0}
     EmotionScaredSprite: {fileID: 0}
+    EmotionDeathSprite: {fileID: 0}
     BodySprite: {fileID: 0}
+    BodyDeathSprite: {fileID: 0}
+    HairDeathSprite: {fileID: 0}
     LegLeftSprite: {fileID: 0}
     LegRightSprite: {fileID: 0}
   BaseHealth: 100

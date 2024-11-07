@@ -99,8 +99,8 @@ namespace Units.Stages.Units.Creatures.Units
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                var temp1Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
-                var temp2Key = EnumParserModule.ParseEnumToString(EItemType.Material, EMaterialType.B);
+                var temp1Key = ParserModule.ParseEnumToString(EItemType.Material, EMaterialType.A);
+                var temp2Key = ParserModule.ParseEnumToString(EItemType.Material, EMaterialType.B);
                 
                 _playerInventoryModule.ReceiveItemThroughTransfer(temp1Key, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));
                 _playerInventoryModule.ReceiveItemThroughTransfer(temp2Key, 1, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z));

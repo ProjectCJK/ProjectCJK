@@ -11,6 +11,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 {
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
+        public bool IsItemReceiving { get; set; }
         public void ReceiveItemNoThroughTransfer(string inputItemKey, int count);
         public event Action OnInventoryCountChanged;
         public IItemFactory ItemFactory { get; }
@@ -41,7 +42,8 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         private const float SendItemInterval = 0.2f;
         private float _lastSendTime;
 
-        private bool IsItemReceiving;
+        public bool IsItemReceiving { get; set; }
+        private bool _isItemReceiving;
 
         public abstract void Initialize();
         public void Update() => TrySendItem();

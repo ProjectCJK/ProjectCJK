@@ -24,7 +24,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
-        private readonly IBuildingStatsModule _buildingStatsModule;
+        private readonly BuildingStatsModule _buildingStatsModule;
         protected readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
         public string InputItemKey { get; }
@@ -34,7 +34,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
-            IBuildingStatsModule buildingStatsModule,
+            BuildingStatsModule buildingStatsModule,
             string inputItemKey,
             string outputItemKey)
         {

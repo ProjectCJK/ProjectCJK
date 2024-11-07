@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a31c1c1c43a49b9b14e7d1992c302b5, type: 3}
   m_Name: So_Guest
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5738758168941799948, guid: c010c702ad4ab4dda999866aecb75de5, type: 3}
-  type: 1
+  prefab: {fileID: 4706689283287929071, guid: c010c702ad4ab4dda999866aecb75de5, type: 3}
   BaseMovementSpeed: 5
   BaseInventorySize: 0
   BaseInteractionStandbySecond: 2
+  CreatureSprites:
+  - Body: []
+    Head: []
+    BackHair: []
+    Scarf: []
+    Hat: []
+    Leg_Left: []
+    Leg_Right: []

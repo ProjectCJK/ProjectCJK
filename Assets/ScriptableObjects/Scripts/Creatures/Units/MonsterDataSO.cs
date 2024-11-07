@@ -15,7 +15,10 @@ namespace ScriptableObjects.Scripts.Creatures.Units
         [Space(10), Header("--- 이미지 타입 ---")]
         public Sprite EmotionIdleSprite;
         public Sprite EmotionScaredSprite;
+        public Sprite EmotionDeathSprite;
         public Sprite BodySprite;
+        public Sprite BodyDeathSprite;
+        public Sprite HairDeathSprite;
         public Sprite LegLeftSprite;
         public Sprite LegRightSprite;
     }

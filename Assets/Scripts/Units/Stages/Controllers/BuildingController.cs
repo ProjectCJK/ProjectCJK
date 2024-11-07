@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AmplifyShaderEditor;
 using Interfaces;
-using Modules.DesignPatterns.FSMs.Enums;
 using Units.Stages.Enums;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Units.Items.Enums;
@@ -14,7 +12,7 @@ using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IBuildingController : IRegisterReference<IItemFactory,List<EMaterialType>>, IInitializable
+    public interface IBuildingController : IRegisterReference<ItemFactory,List<EMaterialType>>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
         public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; }
@@ -28,7 +26,7 @@ namespace Units.Stages.Controllers
         private List<EMaterialType> _materials;
         private List<EMaterialType> _currentActiveMaterials;
 
-        public void RegisterReference(IItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
+        public void RegisterReference(ItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
         {
             _currentActiveMaterials = currentActiveMaterials;
             
@@ -49,6 +47,9 @@ namespace Units.Stages.Controllers
                         break;
                     case IDeliveryLodging deliveryLodging:
                         deliveryLodging.RegisterReference(itemFactory);
+                        break;
+                    case IWareHouse wareHouse:
+                        wareHouse.RegisterReference(itemFactory);
                         break;
                 }
 

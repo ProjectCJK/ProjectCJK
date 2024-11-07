@@ -2,8 +2,6 @@ using System.Collections;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
-using Units.Stages.Modules.FSMModules.Units;
-using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.FSMModules.Units.Player;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
@@ -21,7 +19,7 @@ namespace Units.Stages.Modules.MovementModules.Units
 
     public class PlayerMovementModule : MovementModuleWithoutNavMeshAgent, IPlayerMovementModule
     {
-        protected override CapsuleCollider2D capsuleCollider2D { get; }
+        protected override BoxCollider2D BoxCollider2D { get; }
         
         private readonly IMovementProperty _playerStatsModule;
         private readonly PlayerStateMachine _playerStateMachine;
@@ -48,7 +46,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             _playerTransform = player.transform;
             _spriteTransform = spriteTransform;
             
-            capsuleCollider2D = _playerTransform.GetComponent<CapsuleCollider2D>();
+            BoxCollider2D = _playerTransform.GetComponent<BoxCollider2D>();
         }
 
         public void Initialize()
@@ -79,7 +77,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             HandleStateUpdate();
         }
         
-        protected override bool HandleCollision(CapsuleCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
         {
             Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
             RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized, move.magnitude, collisionLayerMask);
