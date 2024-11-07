@@ -48,6 +48,9 @@ namespace Units.Stages.Controllers
                     case IDeliveryLodging deliveryLodging:
                         deliveryLodging.RegisterReference(itemFactory);
                         break;
+                    case IWareHouse wareHouse:
+                        wareHouse.RegisterReference(itemFactory);
+                        break;
                 }
 
                 var key = building.BuildingKey;
