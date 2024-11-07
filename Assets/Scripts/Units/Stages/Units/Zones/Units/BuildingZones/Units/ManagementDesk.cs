@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 {
-    public interface IManagementDesk : IBuildingZone, IRegisterReference<IItemFactory>
+    public interface IManagementDesk : IBuildingZone, IRegisterReference<ItemFactory>
     {
         
     }
@@ -54,26 +54,26 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override string OutputItemKey { get; protected set; }
         public override Transform TradeZoneNpcTransform => _managementDeskDefaultSetting.PaymentZone_NPC;
 
-        private IManagementDeskStatsModule _managementDeskStatsModule;
-        private IManagementDeskPaymentModule _managementDeskPaymentModule;
-        private IManagementDeskInventoryModule _managementDeskInventoryModule;
-        private IItemFactory _itemFactory;
-        private ITradeZone _tradeZonePlayer;
-        private IPaymentZone _paymentZonePlayer;
-        private IPaymentZone _paymentZoneNpc;
+        private ManagementDeskStatsModule _managementDeskStatsModule;
+        private ManagementDeskPaymentModule _managementDeskPaymentModule;
+        private ManagementDeskInventoryModule _managementDeskInventoryModule;
+        private ItemFactory _itemFactory;
+        private TradeZone _tradeZonePlayer;
+        private PaymentZone _paymentZonePlayer;
+        private PaymentZone _paymentZoneNpc;
         
         private ManagementDeskDataSO _managementDeskDataSo;
         
         // private HashSet<ICreatureItemReceiver>
 
-        public void RegisterReference(IItemFactory itemController)
+        public void RegisterReference(ItemFactory itemController)
         {
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
             
             _itemFactory = itemController;
-            BuildingKey = EnumParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
-            InputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-            OutputItemKey = EnumParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
+            BuildingKey = ParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
+            InputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
+            OutputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
             
             _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
             _managementDeskInventoryModule = new ManagementDeskInventoryModule(
@@ -84,12 +84,12 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
                 InputItemKey, OutputItemKey);
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
-            _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
             
-            _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<IPaymentZone>();
+            _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<PaymentZone>();
             _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
-            _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<IPaymentZone>();
+            _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<PaymentZone>();
             _paymentZoneNpc.RegisterReference(_managementDeskPaymentModule, BuildingKey);
         }
 

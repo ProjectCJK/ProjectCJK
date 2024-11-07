@@ -21,7 +21,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModule
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
-            IBuildingStatsModule buildingStatsModule,
+            BuildingStatsModule buildingStatsModule,
             string inputItemKey,
             string outputItemKey) : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
         {

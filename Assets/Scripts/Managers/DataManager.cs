@@ -6,6 +6,7 @@ using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
+using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -48,16 +49,10 @@ namespace Managers
         public ItemDataSO ItemDataSo;
         public ItemPriceSettings ItemPriceSettings;
         
-        public GameData ProductPriceDataSo;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            
-            var obj = ProductPriceDataSo.GetData();
-            
-            Debug.Log($"{obj.Length}");
-        }
+        public GameData KitchenOption1ValueData;
+        public GameData KitchenOption2ValueData;
+        public GameData KitchenOption1CostData;
+        public GameData KitchenOption2CostData;
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {

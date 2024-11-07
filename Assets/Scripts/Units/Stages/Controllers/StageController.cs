@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Managers;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
@@ -43,6 +44,9 @@ namespace Units.Stages.Controllers
     [Serializable]
     public struct StageCustomSettings
     {
+        [Header("--- 스테이지 레벨 정의 ---")]
+        public int StageLevel;
+        
         [Header("--- 재료 타입 정의 ---")]
         public List<MaterialMapping> materialMappings;
         
@@ -78,11 +82,12 @@ namespace Units.Stages.Controllers
 
         private readonly List<EMaterialType> _currentActiveMaterials = new();
 
-        private int activeStatusSettingIndex = 0;
+        private int activeStatusSettingIndex;
         
         public void RegisterReference(Joystick joystick)
         {
             InitializeZone();
+            InitializeManager();
             
             var itemFactory = new ItemFactory(transform, _stageCustomSettings.materialMappings);
             var playerFactory = new PlayerFactory(joystick, itemFactory);
@@ -97,7 +102,19 @@ namespace Units.Stages.Controllers
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
         }
-        
+
+        private void InitializeManager()
+        {
+            var materialMappings = new Dictionary<EMaterialType, EStageMaterialType>();
+            foreach (var materialMapping in _stageCustomSettings.materialMappings)
+            {
+                materialMappings.TryAdd(materialMapping.MaterialType, materialMapping.StageMaterialType);
+            }
+
+            VolatileDataManager.Instance.MaterialMappings = materialMappings;
+            VolatileDataManager.Instance.CurrentStageLevel = _stageCustomSettings.StageLevel;
+        }
+
         public void Initialize()
         {
             _buildingController.Initialize();
@@ -146,7 +163,7 @@ namespace Units.Stages.Controllers
                 activeStatusModule.SetCurrentState(EActiveStatus.Standby);
             }
             
-            (EBuildingType?, EMaterialType?) parsedKey = EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
             if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null }) _currentActiveMaterials.Add(parsedKey.Item2.Value);
         }
     }

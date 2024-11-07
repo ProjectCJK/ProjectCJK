@@ -3,9 +3,11 @@ using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
 using Modules.DesignPatterns.Singletons;
+using UI;
 using Units.Stages.Controllers;
 using Units.Stages.UI;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Units.Stages.Managers
 {
@@ -13,7 +15,7 @@ namespace Units.Stages.Managers
     public struct MainSceneDefaultSetting
     {
         [Header("Stage Settings")]
-        public Canvas Canvas;
+        public RootCanvas Canvas;
         public GameObject JoystickPrefab;
         public GameObject StagePrefab;
         public CameraController CameraController;
@@ -55,7 +57,7 @@ namespace Units.Stages.Managers
         
         private void InstantiateJoystick()
         {
-            GameObject obj = Instantiate(_mainSceneDefaultSetting.JoystickPrefab, _mainSceneDefaultSetting.Canvas.transform);
+            GameObject obj = Instantiate(_mainSceneDefaultSetting.JoystickPrefab, _mainSceneDefaultSetting.Canvas.Canvas_Joystick.transform);
             _joystick = obj.GetComponent<Joystick>();
         }
 
@@ -67,6 +69,7 @@ namespace Units.Stages.Managers
         
         private void RegisterReference()
         {
+            VolatileDataManager.Instance.RegisterReference();
             CurrencyManager.Instance.RegisterReference(_currencyView);
             
             _stageController.RegisterReference(_joystick);

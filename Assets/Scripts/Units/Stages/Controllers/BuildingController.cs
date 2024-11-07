@@ -12,7 +12,7 @@ using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IBuildingController : IRegisterReference<IItemFactory,List<EMaterialType>>, IInitializable
+    public interface IBuildingController : IRegisterReference<ItemFactory,List<EMaterialType>>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
         public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; }
@@ -26,7 +26,7 @@ namespace Units.Stages.Controllers
         private List<EMaterialType> _materials;
         private List<EMaterialType> _currentActiveMaterials;
 
-        public void RegisterReference(IItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
+        public void RegisterReference(ItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
         {
             _currentActiveMaterials = currentActiveMaterials;
             

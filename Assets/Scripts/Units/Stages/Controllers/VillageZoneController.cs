@@ -144,7 +144,7 @@ namespace Units.Stages.Controllers
                 if (deliveryMan.IsInventoryFull() && deliveryMan.CommandState == CommandState.MoveTo)
                 {
                     Tuple<string, Transform> destination = deliveryMan.GetDestination();
-                    (EBuildingType?, EMaterialType?) parsedKey = EnumParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
+                    (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
 
                     var standKey = $"{EBuildingType.Stand}_{parsedKey.Item2}";
                     var standDestination = new Tuple<string, Transform>(standKey, _buildingController.Buildings[standKey].gameObject.transform);
@@ -217,8 +217,8 @@ namespace Units.Stages.Controllers
         {
             var randomIndex = new Random().Next(_currentActiveStandType.Count);
             var targetKey =
-                EnumParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
-            var managementDeskKey = EnumParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
+                ParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
+            var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
 
             var destinations = new List<Tuple<string, Transform>>
             {

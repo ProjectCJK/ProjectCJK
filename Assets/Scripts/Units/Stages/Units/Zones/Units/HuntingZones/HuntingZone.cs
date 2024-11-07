@@ -79,7 +79,7 @@ namespace Units.Stages.Units.Zones.Units.HuntingZones
             _creatureController = creatureController;
             itemFactory = itemController;
             
-            _itemKey = EnumParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
+            _itemKey = ParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
 
             _huntingZoneInventoryModule = new HuntingZoneInventoryModule(HuntingZoneDefaultSetting.UnlockZone_Player, HuntingZoneDefaultSetting.UnlockZone_Player, itemController, null, string.Empty, string.Empty);
             _huntingZoneKey = $"HuntingZone_{huntingZoneCustomSetting._materialType.ToString()}";

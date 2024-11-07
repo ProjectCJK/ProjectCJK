@@ -57,7 +57,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
             }
             else
             {
-                (EItemType? _itemType, EMaterialType? _materialType) = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(itemType);
+                (EItemType? _itemType, EMaterialType? _materialType) = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(itemType);
             
                 if (_itemType != null && _materialType != null)
                 {
@@ -109,7 +109,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
             
             foreach (ItemSprite data in itemSprites)
             {
-                var dicKey = EnumParserModule.ParseEnumToString(data.ItemType, data.StageMaterialType);
+                var dicKey = ParserModule.ParseEnumToString(data.ItemType, data.StageMaterialType);
                 _itemSprites.TryAdd(dicKey, data.Sprite);
             }
             
@@ -118,7 +118,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
             
             foreach (CurrencySprite data in currencySprites)
             {
-                var dicKey = EnumParserModule.ParseEnumToString(data.CurrencyType);
+                var dicKey = ParserModule.ParseEnumToString(data.CurrencyType);
                 _currencySprites.TryAdd(dicKey, data.Sprite);
             }
         }

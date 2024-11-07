@@ -20,7 +20,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         public StandInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IStandStatsModule standStatsModule,
+            StandStatsModule standStatsModule,
             IItemFactory itemFactory,
             string inputItemKey,
             string outputItemKey)
