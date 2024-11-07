@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 {
-    public interface IStand : IRegisterReference<IItemFactory>, IUnlockZoneProperty
+    public interface IStand : IRegisterReference<ItemFactory>, IUnlockZoneProperty
     {
         
     }
@@ -73,26 +73,26 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override string OutputItemKey { get; protected set; }
         public override Transform TradeZoneNpcTransform => _standDefaultSetting.TradeZone_NPC;
 
-        private IStandStatsModule _standStatsModule;
-        private IStandInventoryModule _standInventoryModule;
-        private IItemFactory _itemFactory;
-        private ITradeZone _tradeZonePlayer;
-        private ITradeZone _tradeZoneNpc;
-        private ITradeZone _unlockZonePlayer;
+        private StandStatsModule _standStatsModule;
+        private StandInventoryModule _standInventoryModule;
+        private ItemFactory _itemFactory;
+        private TradeZone _tradeZonePlayer;
+        private TradeZone _tradeZoneNpc;
+        private TradeZone _unlockZonePlayer;
 
         private StandDataSO _standDataSo;
         private StandViewModel _standViewModel;
         private StandModel _standModel;
         
-        public void RegisterReference(IItemFactory itemFactory)
+        public void RegisterReference(ItemFactory itemFactory)
         {
             _standDataSo = DataManager.Instance.StandDataSo;
             
             _itemFactory = itemFactory;
             MaterialType = _standCustomSetting.MaterialType;
-            BuildingKey = EnumParserModule.ParseEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
-            InputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
-            OutputItemKey = EnumParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
+            BuildingKey = ParserModule.ParseEnumToString(_standDataSo.BuildingType, _standCustomSetting.MaterialType);
+            InputItemKey = ParserModule.ParseEnumToString(_standCustomSetting.InputItemType, _standCustomSetting.MaterialType);
+            OutputItemKey = ParserModule.ParseEnumToString(_standCustomSetting.OutputItemType, _standCustomSetting.MaterialType);
 
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
             UnlockZoneModule.RegisterReference(BuildingKey);
@@ -104,13 +104,13 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _standViewModel = new StandViewModel(_standModel);
             _standDefaultSetting.standView.BindViewModel(_standViewModel);
 
-            _tradeZonePlayer = _standDefaultSetting.TradeZone_Player.GetComponent<ITradeZone>();
+            _tradeZonePlayer = _standDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _tradeZonePlayer.RegisterReference(this, _standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
-            _tradeZoneNpc = _standDefaultSetting.TradeZone_NPC.GetComponent<ITradeZone>();
+            _tradeZoneNpc = _standDefaultSetting.TradeZone_NPC.GetComponent<TradeZone>();
             _tradeZoneNpc.RegisterReference(this, _standInventoryModule.ReceiverTransform, _standInventoryModule, _standInventoryModule, BuildingKey, InputItemKey);
             
-            _unlockZonePlayer = _standDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer = _standDefaultSetting.UnlockZone_Player.GetComponent<TradeZone>();
             _unlockZonePlayer.RegisterReference(this, _standDefaultSetting.UnlockZone_Player, _standInventoryModule, _standInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
             
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;

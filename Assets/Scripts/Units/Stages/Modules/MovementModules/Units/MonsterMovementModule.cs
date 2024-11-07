@@ -20,7 +20,7 @@ namespace Units.Stages.Modules.MovementModules.Units
     {
         public bool hitTrigger { get; set; }
         
-        protected override CapsuleCollider2D capsuleCollider2D { get; }
+        protected override BoxCollider2D BoxCollider2D { get; }
         
         private readonly IMonsterStatsModule _monsterStatModule;
         private readonly MonsterStateMachine _monsterStateMachine;
@@ -57,7 +57,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             _monsterStateMachine = monsterStateMachine;
             _monsterTransform = monster.transform;
             _spriteTransform = spriteTransform;
-            capsuleCollider2D = monster.GetComponent<CapsuleCollider2D>();
+            BoxCollider2D = monster.GetComponent<BoxCollider2D>();
         }
 
         public void Initialize()
@@ -123,7 +123,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             DrawDirectionRay();
         }
 
-        protected override bool HandleCollision(CapsuleCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
         {
             Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
             RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized, move.magnitude, _monsterCollisionLayerMask | collisionLayerMask);
@@ -165,7 +165,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private bool DetectPlayer()
         {
             Vector3 direction = _monsterTransform.position + _monsterTransform.right * DetectionRange;
-            RaycastHit2D hit = Physics2D.CircleCast(_monsterTransform.position, capsuleCollider2D.size.y * 4, direction.normalized, DetectionRange, LayerMaskParserModule.UnitLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(_monsterTransform.position, BoxCollider2D.size.y * 4, direction.normalized, DetectionRange, LayerMaskParserModule.UnitLayerMask);
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {

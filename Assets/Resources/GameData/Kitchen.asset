@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
+  m_Name: Kitchen
+  m_EditorClassIdentifier: 
+  columnNames:
+  - "\uC778\uB371\uC2A4"
+  - "\uC774\uB984"
+  - "\uC2A4\uD14C\uC774\uC9C0"
+  - "\uC635\uC158 1 \uCD5C\uB300 \uB808\uBCA8"
+  - "\uC635\uC158 2 \uCD5C\uB300 \uB808\uBCA8"
+  dataRows:
+  - rowData:
+    - Index
+    - Name
+    - Stage
+    - MaxLevel_Option1
+    - MaxLevel_Option2
+  - rowData:
+    - Int
+    - String
+    - Int
+    - Int
+    - Int
+  - rowData:
+    - 170001
+    - Kitchen_A
+    - 1
+    - 40
+    - 3
+  - rowData:
+    - 170002
+    - Kitchen_B
+    - 1
+    - 40
+    - 3
+  - rowData:
+    - 170003
+    - Kitchen_A
+    - 2
+    - 200
+    - 5
+  - rowData:
+    - 170004
+    - Kitchen_B
+    - 2
+    - 200
+    - 5
+  - rowData:
+    - 170005
+    - Kitchen_C
+    - 2
+    - 200
+    - 5
+  - rowData:
+    - 170006
+    - Kitchen_D
+    - 2
+    - 200
+    - 5

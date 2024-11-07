@@ -21,11 +21,11 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         public KitchenMaterialInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IKitchenStatsModule inventoryProperty,
+            KitchenStatsModule kitchenStatsModule,
             IItemFactory itemFactory,
             string inputItemKey,
             string outputItemKey)
-            : base(senderTransform, receiverTransform, itemFactory, inventoryProperty, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
         }
 

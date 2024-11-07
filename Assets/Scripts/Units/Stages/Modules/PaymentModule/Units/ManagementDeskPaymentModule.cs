@@ -55,7 +55,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     Guest guest = _customerQueue.Dequeue();
                     Tuple<string, int> purchasedItem = guest.GetItem();
 
-                    (EItemType?, EMaterialType?) parsedItemKey = EnumParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+                    (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
                     var targetItemPrice = DataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
                     
                     //TODO : 상품 별 가격에 따른 가격 책정

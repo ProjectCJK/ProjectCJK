@@ -15,7 +15,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         public ManagementDeskInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
-            IManagementDeskStatsModule buildingStatsModule,
+            ManagementDeskStatsModule buildingStatsModule,
             IItemFactory itemFactory,
             string inputItemKey, string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)

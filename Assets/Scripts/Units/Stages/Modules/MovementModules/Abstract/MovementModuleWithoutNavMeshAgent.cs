@@ -9,7 +9,7 @@ namespace Units.Stages.Modules.MovementModules.Abstract
     
     public abstract class MovementModuleWithoutNavMeshAgent : MovementModule, IMovementModuleWithoutNavMeshAgent
     {
-        protected abstract CapsuleCollider2D capsuleCollider2D { get; }
+        protected abstract BoxCollider2D BoxCollider2D { get; }
 
         protected readonly int collisionLayerMask = LayerMaskParserModule.CollisionLayerMask;
         
@@ -19,14 +19,14 @@ namespace Units.Stages.Modules.MovementModules.Abstract
             var moveX = new Vector3(move.x, 0, 0);
             var moveY = new Vector3(0, move.y, 0);
 
-            if (HandleCollision(capsuleCollider2D, originalPosition, ref moveX, ref direction))
+            if (HandleCollision(BoxCollider2D, originalPosition, ref moveX, ref direction))
                 transform.position += moveX;
 
-            if (HandleCollision(capsuleCollider2D, originalPosition, ref moveY, ref direction))
+            if (HandleCollision(BoxCollider2D, originalPosition, ref moveY, ref direction))
                 transform.position += moveY;
         }
 
-        protected abstract bool HandleCollision(CapsuleCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction);
+        protected abstract bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction);
 
 #if UNITY_EDITOR
         protected static void DebugDrawCircle(Vector3 position, float radius, Color color)

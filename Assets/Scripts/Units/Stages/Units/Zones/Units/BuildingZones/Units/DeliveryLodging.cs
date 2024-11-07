@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 {
-    public interface IDeliveryLodging : IRegisterReference<IItemFactory>, IUnlockZoneProperty
+    public interface IDeliveryLodging : IRegisterReference<ItemFactory>, IUnlockZoneProperty
     {
         
     }
@@ -47,14 +47,14 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
         public int MaxDeliveryManCount => _deliveryLodgingStatsModule.BaseMaxDeliveryManCount;
 
-        private IDeliveryLodgingStatsModule _deliveryLodgingStatsModule;
-        private IDeliveryLodgingInventoryModule _deliveryLodgingInventoryModule;
-        private IItemFactory _itemFactory;
-        private ITradeZone _unlockZonePlayer;
+        private DeliveryLodgingStatsModule _deliveryLodgingStatsModule;
+        private DeliveryLodgingInventoryModule _deliveryLodgingInventoryModule;
+        private ItemFactory _itemFactory;
+        private TradeZone _unlockZonePlayer;
         
         private DeliveryLodgingDataSO _deliveryLodgingDataSo;
 
-        public void RegisterReference(IItemFactory itemFactory)
+        public void RegisterReference(ItemFactory itemFactory)
         {
             _deliveryLodgingDataSo = DataManager.Instance.DeliveryLodgingDataSo;
             
@@ -67,7 +67,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _deliveryLodgingStatsModule = new DeliveryLodgingStatsModule(_deliveryLodgingDataSo);
             _deliveryLodgingInventoryModule = new DeliveryLodgingInventoryModule(null, _deliveryLodgingDefaultSetting.UnlockZone_Player, _itemFactory, _deliveryLodgingStatsModule, null, null);
             
-            _unlockZonePlayer = _deliveryLodgingDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
+            _unlockZonePlayer = _deliveryLodgingDefaultSetting.UnlockZone_Player.GetComponent<TradeZone>();
             _unlockZonePlayer.RegisterReference(this, _deliveryLodgingDefaultSetting.UnlockZone_Player, _deliveryLodgingInventoryModule, _deliveryLodgingInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
             
             _deliveryLodgingInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
