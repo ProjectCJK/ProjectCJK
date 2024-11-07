@@ -2228,7 +2228,7 @@ GameObject:
   - component: {fileID: 7664986918703967208}
   - component: {fileID: 7850059717496280743}
   m_Layer: 5
-  m_Name: Bottom_Sheet
+  m_Name: UI_Panel_UpgradePanel_Kitchen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2309,17 +2309,19 @@ MonoBehaviour:
   _text_Kitchen: {fileID: 5931765857156925654}
   _image_KitchenProduct: {fileID: 592630645994012846}
   _text_KitchenProduct: {fileID: 4328041948881305247}
-  _text_CurrentKitchenProductPrice: {fileID: 613596072964478979}
-  _text_CurrentKitchenProductTime: {fileID: 8406747686313555751}
+  _text_CurrentKitchenOption1Value: {fileID: 613596072964478979}
+  _text_CurrentKitchenOption2Value: {fileID: 8406747686313555751}
   _text_CurrentKitchenLevel: {fileID: 2836527651742966284}
-  _text_CurrentKitchenProductPriceLevel: {fileID: 5224540238307985303}
-  _text_CurrentKitchenProductPrice2: {fileID: 7262636208662510296}
-  _text_NextKitchenProductPrice: {fileID: 1694257822832571037}
-  _text_RequiredGoldToUpgradeProductPrice: {fileID: 8126642702944439028}
-  _text_CurrentKitchenProductTimeLevel: {fileID: 2345949926165045324}
-  _text_CurrentKitchenProductTime2: {fileID: 3060688505656405481}
-  _text_NextKitchenProductTime: {fileID: 2876788452184869080}
-  _text_RequiredGoldToUpgradeProductTime: {fileID: 4461085609384858505}
+  _text_CurrentKitchenOption1Level: {fileID: 5224540238307985303}
+  _text_CurrentKitchenOption1Value2: {fileID: 7262636208662510296}
+  _text_NextKitchenOption1Value: {fileID: 1694257822832571037}
+  _text_RequiredGoldToUpgradeKitchenOption1Level: {fileID: 8126642702944439028}
+  _button_RequiredGoldToUpgradeKitchenOption1: {fileID: 2363573749951782709}
+  _text_CurrentKitchenOption2Level: {fileID: 2345949926165045324}
+  _text_CurrentKitchenOption2Value2: {fileID: 3060688505656405481}
+  _text_NextKitchenOption2Value: {fileID: 2876788452184869080}
+  _text_RequiredGoldToUpgradeKitchenOption2Level: {fileID: 4461085609384858505}
+  _button_RequiredGoldToUpgradeKitchenOption2: {fileID: 6237662917509290588}
 --- !u!1 &4176004709600881169
 GameObject:
   m_ObjectHideFlags: 0

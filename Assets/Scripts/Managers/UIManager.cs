@@ -11,43 +11,38 @@ namespace Managers
         [Header("=== 건물 업그레이드 패널 ===")]
         [SerializeField] private UI_KitchenEnhancement uiKitchenEnhancement;
 
+        public void ReturnUIKitchenEnhancement() => uiKitchenEnhancement.gameObject.SetActive(false);
+
         public void GetUIKitchenEnhancement(
-            string textKitchen,
-            Sprite imageKitchenProduct,
-            string textKitchenProduct,
-            string textCurrentKitchenProductPrice,
-            string textCurrentKitchenProductTime,
-            string textCurrentKitchenLevel,
-            string textCurrentKitchenProductPriceLevel,
-            string textCurrentKitchenProductPrice2,
-            string textNextKitchenProductPrice,
-            string textRequiredGoldToUpgradeProductPrice,
-            string textCurrentKitchenProductTimeLevel,
-            string textCurrentKitchenProductTime2,
-            string textNextKitchenProductTime,
-            string textRequiredGoldToUpgradeProductTime
-        )
+            string kitchenName,
+            Sprite kitchenProductSprite,
+            string kitchenProductName,
+            int currentKitchenOption1Value,
+            float currentKitchenOption2Value,
+            int currentKitchenLevel,
+            int currentKitchenOption1Level,
+            int nextKitchenOption1Value,
+            int requiredGoldToUpgradeOption1Level,
+            int currentKitchenOption2Level,
+            float nextKitchenOption2Value,
+            int requiredGoldToUpgradeOption2Level)
         {
+         
             uiKitchenEnhancement.Initialize(
-                textKitchen,
-                imageKitchenProduct,
-                textKitchenProduct,
-                textCurrentKitchenProductPrice,
-                textCurrentKitchenProductTime,
-                textCurrentKitchenLevel,
-                textCurrentKitchenProductPriceLevel,
-                textCurrentKitchenProductPrice2,
-                textNextKitchenProductPrice,
-                textRequiredGoldToUpgradeProductPrice,
-                textCurrentKitchenProductTimeLevel,
-                textCurrentKitchenProductTime2,
-                textNextKitchenProductTime,
-                textRequiredGoldToUpgradeProductTime
-            );
-            
+                kitchenName,
+                kitchenProductSprite,
+                kitchenProductName,
+                currentKitchenOption1Value,
+                currentKitchenOption2Value,
+                currentKitchenLevel,
+                currentKitchenOption1Level,
+                nextKitchenOption1Value,
+                requiredGoldToUpgradeOption1Level,
+                currentKitchenOption2Level,
+                nextKitchenOption2Value,
+                requiredGoldToUpgradeOption2Level
+                );
             uiKitchenEnhancement.gameObject.SetActive(true);
         }
-
-        public void ReturnUIKitchenEnhancement() => uiKitchenEnhancement.gameObject.SetActive(false);
     }
 }

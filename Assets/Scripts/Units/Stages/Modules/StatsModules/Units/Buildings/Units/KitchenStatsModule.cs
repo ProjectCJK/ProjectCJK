@@ -23,7 +23,7 @@ using System;
          public int NextKitchenOption1Value;
          public float CurrentKitchenOption2Value;
          public float NextKitchenOption2Value;
-         public int RequiredGoldToUpgradeKitchenOption1Level;
+         public int RequiredGoldToUpgradeOption1Level;
          public int RequiredGoldToUpgradeOption2Level;
          public int RequiredKitchenLevelToUpgradeOption2Level;
          
@@ -67,7 +67,21 @@ using System;
              UpdateKitchenStatsModule();
          }
 
-         public void IncreaseCurrentKitchenProductTimeLevel()
+         public void IncreaseCurrentKitchenLevel()
+         {
+             CurrentKitchenLevel++;
+             
+             UpdateKitchenStatsModule();
+         }
+         
+         public void IncreaseCurrentKitchenOption1Level()
+         {
+             CurrentKitchenOption1Level++;
+
+             UpdateKitchenStatsModule();
+         }
+
+         public void IncreaseCurrentKitchenOption2Level()
          {
              CurrentKitchenOption2Level++;
 
@@ -114,18 +128,18 @@ using System;
                  .FirstOrDefault();
              
              var KitchenOption1CostData = DataManager.Instance.KitchenOption1CostData.GetData();
-             RequiredGoldToUpgradeKitchenOption1Level = Enumerable.Range(0, KitchenOption1CostData.GetLength(0))
+             RequiredGoldToUpgradeOption1Level = Enumerable.Range(0, KitchenOption1CostData.GetLength(0))
                  .Where(i =>
                      KitchenOption1CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption1CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption1CostData[i, 3] == CurrentKitchenOption1Level.ToString())
-                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1CostData[i, 4], RequiredGoldToUpgradeKitchenOption1Level))
+                 .Select(i => ParserModule.ParseOrDefault(KitchenOption1CostData[i, 4], RequiredGoldToUpgradeOption1Level))
                  .FirstOrDefault();
              
              var KitchenOption2CostData = DataManager.Instance.KitchenOption2CostData.GetData();
              RequiredGoldToUpgradeOption2Level = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
                  .Where(i =>
-                     KitchenOption2CostData[i, 1] == $"{ItemType}_{MaterialType}" &&
+                     KitchenOption2CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption2CostData[i, 3] == CurrentKitchenOption2Level.ToString())
                  .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 4], RequiredGoldToUpgradeOption2Level))
@@ -133,7 +147,7 @@ using System;
              
              RequiredKitchenLevelToUpgradeOption2Level = Enumerable.Range(0, KitchenOption2CostData.GetLength(0))
                  .Where(i =>
-                     KitchenOption2CostData[i, 1] == $"{ItemType}_{MaterialType}" &&
+                     KitchenOption2CostData[i, 1] == $"{BuildingType}_{MaterialType}" &&
                      KitchenOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      KitchenOption2CostData[i, 3] == CurrentKitchenOption2Level.ToString())
                  .Select(i => ParserModule.ParseOrDefault(KitchenOption2CostData[i, 5], RequiredKitchenLevelToUpgradeOption2Level))
