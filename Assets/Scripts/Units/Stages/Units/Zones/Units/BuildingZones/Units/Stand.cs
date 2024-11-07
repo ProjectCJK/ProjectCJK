@@ -41,9 +41,6 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         [Space(10), Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
-        
-        [Space(10), Header("UpgradeZone_Player")]
-        public Transform UpgradeZone_Player;
     }
     
     [Serializable]
