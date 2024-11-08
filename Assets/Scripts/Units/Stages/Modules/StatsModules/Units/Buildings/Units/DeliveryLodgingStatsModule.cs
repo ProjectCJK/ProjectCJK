@@ -18,7 +18,8 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
     }
     
     public class DeliveryLodgingStatsModule : BuildingStatsModule, IDeliveryLodgingStatsModule
-    { public string DeliveryLodgingName => $"DeliveryLodging";
+    {
+        public string DeliveryLodgingName => $"DeliveryLodging";
         public string DeliveryLodgingProductName;
         public Sprite DeliveryLodgingProductSprite;
         public float CurrentDeliveryLodgingOption1Value;

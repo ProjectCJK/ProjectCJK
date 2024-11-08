@@ -12,6 +12,7 @@ namespace Units.Stages.Units.Creatures.Units
     {
         
     }
+    
     public class Hunter : Creature, IHunter
     {
         public override ECreatureType CreatureType { get; }
@@ -27,7 +28,7 @@ namespace Units.Stages.Units.Creatures.Units
 
         public void Initialize(Vector3 instance1)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

@@ -308,6 +308,7 @@ GameObject:
   - component: {fileID: 8613276211695175258}
   - component: {fileID: 4441222005441847681}
   - component: {fileID: 2690594927782884909}
+  - component: {fileID: 1170317279118097000}
   m_Layer: 10
   m_Name: Sprite_Creature
   m_TagString: Untagged
@@ -379,6 +380,26 @@ SortingGroup:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &1170317279118097000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425499224170583929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f46f9fa9b0e7460bad84488b742a9729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _body: {fileID: 0}
+  _bag: {fileID: 0}
+  _head: {fileID: 0}
+  _backHair: {fileID: 0}
+  _scarf: {fileID: 0}
+  _hat: {fileID: 0}
+  _legLeft: {fileID: 0}
+  _legRight: {fileID: 0}
 --- !u!1 &4788629247701492745
 GameObject:
   m_ObjectHideFlags: 0

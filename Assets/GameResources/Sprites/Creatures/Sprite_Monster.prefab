@@ -667,6 +667,7 @@ GameObject:
   - component: {fileID: 7556215525286448846}
   - component: {fileID: 2675588038943576488}
   - component: {fileID: 2895848349080400200}
+  - component: {fileID: 2495869506165543314}
   m_Layer: 0
   m_Name: Sprite_Monster
   m_TagString: Untagged
@@ -726,6 +727,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+--- !u!114 &2495869506165543314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5258536663029941406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dfcd8ca8fa844b58ba0e83a0df277b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _emotionIdleSprite: {fileID: 0}
+  _emotionScaredSprite: {fileID: 0}
+  _emotionDeathSprite: {fileID: 0}
+  _bodySprite: {fileID: 0}
+  _bodyDeathSprite: {fileID: 0}
+  _hairDeathSprite: {fileID: 0}
+  _legLeftSprite: {fileID: 0}
+  _legRightSprite: {fileID: 0}
 --- !u!1 &5387993161060745002
 GameObject:
   m_ObjectHideFlags: 0

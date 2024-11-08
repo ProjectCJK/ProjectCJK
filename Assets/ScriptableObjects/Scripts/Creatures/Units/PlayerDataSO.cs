@@ -9,6 +9,7 @@ namespace ScriptableObjects.Scripts.Creatures.Units
     public struct CreatureSprite
     {
         public List<Sprite> Body;
+        public List<Sprite> Bag;
         public List<Sprite> Head;
         public List<Sprite> BackHair;
         public List<Sprite> Scarf;
