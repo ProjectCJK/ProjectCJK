@@ -224,14 +224,6 @@ MonoBehaviour:
   HuntingZoneDataSo: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
   GuestSpawnZoneDataSo: {fileID: 11400000, guid: dc962c01ce4cd4e2e8dfa155cdaea5e2, type: 2}
   ItemDataSo: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
-  ItemPriceSettings:
-    ItemPrices:
-    - ItemType: 1
-      MaterialType: 0
-      Price: 1500
-    - ItemType: 1
-      MaterialType: 1
-      Price: 2000
   KitchenData: {fileID: 11400000, guid: 15f3d84ad015948f3bb68f4306922f00, type: 2}
   KitchenOption1ValueData: {fileID: 11400000, guid: cdae95bb639614c0b964c00aa6c27c14, type: 2}
   KitchenOption2ValueData: {fileID: 11400000, guid: 8f99eebcf7aa14164b073ad310837460, type: 2}
@@ -242,6 +234,11 @@ MonoBehaviour:
   ManagementDeskOption2ValueData: {fileID: 11400000, guid: b2997acd0531846268bb7a8be4ab98a0, type: 2}
   ManagementDeskOption1CostData: {fileID: 11400000, guid: 5413b269a214643558ac4d1b727bad05, type: 2}
   ManagementDeskOption2CostData: {fileID: 11400000, guid: 77ac426ee984042b0a043e3cc2bf4ad7, type: 2}
+  DeliveryLodgingData: {fileID: 11400000, guid: ac732dc810db2407c8dee98f0f7ec0af, type: 2}
+  DeliveryLodgingOption1ValueData: {fileID: 11400000, guid: 99622580ed67c4b40947cf72990844de, type: 2}
+  DeliveryLodgingOption2ValueData: {fileID: 11400000, guid: 567a93817d1b8479e80624fb12fab485, type: 2}
+  DeliveryLodgingOption1CostData: {fileID: 11400000, guid: 85da0eb9fe4594c3f84bf69a8e722f29, type: 2}
+  DeliveryLodgingOption2CostData: {fileID: 11400000, guid: 72a45502097dd470887019a69297a985, type: 2}
 --- !u!1 &910518067
 GameObject:
   m_ObjectHideFlags: 0
