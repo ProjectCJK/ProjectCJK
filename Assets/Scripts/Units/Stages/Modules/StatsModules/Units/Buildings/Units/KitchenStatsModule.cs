@@ -178,7 +178,7 @@ using System;
              }
          }
          
-         public void IncreaseCurrentKitchenOption1Level()
+         private void IncreaseCurrentKitchenOption1Level()
          {
              CurrentKitchenOption1Level++;
 
@@ -191,7 +191,7 @@ using System;
              GetUIKitchenEnhancement();
          }
 
-         public void IncreaseCurrentKitchenOption2Level()
+         private void IncreaseCurrentKitchenOption2Level()
          {
              CurrentKitchenOption2Level++;
 

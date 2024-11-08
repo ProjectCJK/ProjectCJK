@@ -160,8 +160,8 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
                 IncreaseCurrentManagementDeskOption2Level();
             }
         }
-         
-        public void IncreaseCurrentManagementDeskOption1Level()
+
+        private void IncreaseCurrentManagementDeskOption1Level()
         {
             CurrentManagementDeskOption1Level++;
             
@@ -174,7 +174,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
             GetUIManagementDeskEnhancement();
         }
 
-        public void IncreaseCurrentManagementDeskOption2Level()
+        private void IncreaseCurrentManagementDeskOption2Level()
         {
             CurrentManagementDeskOption2Level++;
 
