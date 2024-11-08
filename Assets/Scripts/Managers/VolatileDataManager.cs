@@ -10,6 +10,7 @@ namespace Managers
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
         
         public int CurrentStageLevel;
+        public float CurrentDeliveryManMoveSpeed;
         
         public readonly Dictionary<string, int> ItemPrices = new ();
         

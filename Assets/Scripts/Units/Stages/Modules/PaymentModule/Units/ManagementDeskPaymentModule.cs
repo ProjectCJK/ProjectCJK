@@ -37,7 +37,6 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         public ManagementDeskPaymentModule(ManagementDeskStatsModule managementDeskStatsModule, IManagementDeskInventoryModule managementDeskInventoryModule, string inputKey)
         {
-            
             _npcPaymentDelay = managementDeskStatsModule.CurrentManagementDeskOption1Value;
             _managementDeskInventoryModule = managementDeskInventoryModule;
             _inputKey = inputKey;

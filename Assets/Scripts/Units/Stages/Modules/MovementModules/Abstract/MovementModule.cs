@@ -4,7 +4,7 @@ namespace Units.Stages.Modules.MovementModules.Abstract
 
     public interface IMovementProperty
     {
-        float MovementSpeed { get; }
+        float MovementSpeed { get; set; }
     }
 
     public abstract class MovementModule : IMovementModule
