@@ -11,6 +11,6 @@ namespace ScriptableObjects.Scripts.Creatures.Abstract
         [Header("상호 작용 시간 (단위 : 초)")] public float BaseInteractionStandbySecond;
         
         [Space(20), Header("=== Sprites 세팅 ===")]
-        [Header("타입별 Sprite")] public List<CreatureSprite> CreatureSprites;
+        [Header("타입별 Sprite")] public CreatureSprite CreatureSprites;
     }
 }
