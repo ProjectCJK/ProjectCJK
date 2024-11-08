@@ -15,7 +15,14 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
     public class MonsterStatsModule : StatsModule, IMonsterStatsModule
     {
         public ECreatureType CreatureType => ECreatureType.Monster;
-        public float MovementSpeed => _monsterDataSo.BaseMovementSpeed;
+        
+        public float MovementSpeed
+        {
+            get => movementSpeed;
+            set => movementSpeed += value;
+        }
+
+
         public int MaxHealth => _monsterDataSo.BaseHealth;
 
         private readonly MonsterDataSO _monsterDataSo;
@@ -23,6 +30,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
         public MonsterStatsModule(MonsterDataSO monsterDataSo)
         {
             _monsterDataSo = monsterDataSo;
+            movementSpeed = _monsterDataSo.BaseMovementSpeed;
         }
     }
 }

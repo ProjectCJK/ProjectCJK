@@ -7,6 +7,7 @@ using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
+using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Units;
 using UnityEngine;
@@ -158,11 +159,9 @@ namespace Units.Stages.Controllers
 
         private void SpawnDeliveryMan()
         {
-            if (currentSpawnedDeliveryMans.Count < MaxDeliveryManCount())
+            if (_buildingController.Buildings.TryGetValue($"{EBuildingType.DeliveryLodging}", out BuildingZone buildingZone))
             {
-                IDeliveryMan deliveryMan = _creatureController.GetDeliveryMan(_buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].gameObject.transform.position);
-
-                currentSpawnedDeliveryMans.Add(deliveryMan);
+                if (buildingZone is DeliveryLodging deliveryLodging) deliveryLodging.SpawnDeliveryMan(_creatureController, currentSpawnedDeliveryMans);
             }
         }
 
@@ -225,19 +224,6 @@ namespace Units.Stages.Controllers
             };
 
             return destinations;
-        }
-        
-        private int MaxDeliveryManCount()
-        {
-            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.DeliveryLodging}"))
-            {
-                if (_buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"] is DeliveryLodging { ActiveStatus: EActiveStatus.Active } deliveryLodging)
-                {
-                    return deliveryLodging.MaxDeliveryManCount;
-                }
-            }
-
-            return 0;
         }
     }
 }

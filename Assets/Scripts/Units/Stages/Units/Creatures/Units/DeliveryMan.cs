@@ -31,6 +31,7 @@ namespace Units.Stages.Units.Creatures.Units
         public bool IsInventoryFull();
         public bool HaveAnyItem();
         public Tuple<string, Transform> GetDestination();
+        public void SetMovementSpeed(float currentDeliveryLodgingOption1Value);
     }
     
     public class DeliveryMan : NPC, IDeliveryMan
@@ -126,6 +127,8 @@ namespace Units.Stages.Units.Creatures.Units
         public bool HaveAnyItem() => _deliveryManInventoryModule.CurrentInventorySize > 0;
 
         public Tuple<string, Transform> GetDestination() => _destination;
+
+        public void SetMovementSpeed(float currentDeliveryLodgingOption1Value) => _deliveryManStatsModule.MovementSpeed = currentDeliveryLodgingOption1Value;
 
         private void SetActive(bool value)
         {

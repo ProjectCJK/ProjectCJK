@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Abstract;
@@ -5,6 +6,7 @@ using ScriptableObjects.Scripts.Buildings.Units;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Enums;
+using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using UnityEngine;
 
@@ -16,8 +18,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
     }
     
     public class DeliveryLodgingStatsModule : BuildingStatsModule, IDeliveryLodgingStatsModule
-    {
-        public string DeliveryLodgingName => $"DeliveryLodging";
+    { public string DeliveryLodgingName => $"DeliveryLodging";
         public string DeliveryLodgingProductName;
         public Sprite DeliveryLodgingProductSprite;
         public float CurrentDeliveryLodgingOption1Value;
@@ -37,10 +38,15 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
         public int CurrentDeliveryLodgingOption2Level;
         
         public readonly EBuildingType BuildingType;
+        private readonly HashSet<IDeliveryMan> _currentSpawnedDeliveryMans;
         public readonly string BuildingKey;
         
-        public DeliveryLodgingStatsModule(DeliveryLodgingDataSO deliveryLodgingDataSo) : base(deliveryLodgingDataSo)
+        public DeliveryLodgingStatsModule(
+            DeliveryLodgingDataSO deliveryLodgingDataSo,
+            HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
+            : base(deliveryLodgingDataSo)
         {
+            _currentSpawnedDeliveryMans = currentSpawnedDeliveryMans;
             BuildingType = deliveryLodgingDataSo.BuildingType;
             
             BuildingKey = ParserModule.ParseEnumToString(BuildingType);
@@ -137,6 +143,16 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
                      DeliveryLodgingData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
                  .Select(i => ParserModule.ParseOrDefault(DeliveryLodgingData[i, 4], MaxDeliveryLodgingOption1Level))
                  .FirstOrDefault();
+             
+             UpdateDeliveryManMoveSpeed();
+         }
+
+         private void UpdateDeliveryManMoveSpeed()
+         {
+             foreach (var deliveryMan in _currentSpawnedDeliveryMans)
+             {
+                 deliveryMan.SetMovementSpeed(CurrentDeliveryLodgingOption1Value);
+             }
          }
 
          private void OnClickUpgradeButtonForDeliveryLodgingOption1()
