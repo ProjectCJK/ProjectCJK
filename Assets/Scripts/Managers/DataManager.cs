@@ -53,5 +53,10 @@ namespace Managers
         public GameData ManagementDeskOption2ValueData;
         public GameData ManagementDeskOption1CostData;
         public GameData ManagementDeskOption2CostData;
+        public GameData DeliveryLodgingData;
+        public GameData DeliveryLodgingOption1ValueData;
+        public GameData DeliveryLodgingOption2ValueData;
+        public GameData DeliveryLodgingOption1CostData;
+        public GameData DeliveryLodgingOption2CostData;
     }
 }

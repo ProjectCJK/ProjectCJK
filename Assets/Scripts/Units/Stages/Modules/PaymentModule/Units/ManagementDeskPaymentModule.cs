@@ -37,7 +37,6 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         public ManagementDeskPaymentModule(ManagementDeskStatsModule managementDeskStatsModule, IManagementDeskInventoryModule managementDeskInventoryModule, string inputKey)
         {
-            
             _npcPaymentDelay = managementDeskStatsModule.CurrentManagementDeskOption1Value;
             _managementDeskInventoryModule = managementDeskInventoryModule;
             _inputKey = inputKey;
@@ -108,7 +107,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                    
                         guest.CheckNextDestination();
 
-                        _playerPaymentElapsedTime = 0;
+                        CashierPaymentDelay[i] = 0;
                     }
                 }
             }

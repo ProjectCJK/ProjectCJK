@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
+using Units.Stages.Controllers;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
@@ -10,10 +12,12 @@ using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
 using Units.Stages.Modules.UnlockModules.Interfaces;
+using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UpgradeZones;
 using Units.Stages.Units.Zones.Units.BuildingZones.UI.Stands;
 using UnityEngine;
 
@@ -29,6 +33,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
     {
         [Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
+        
+        [Space(10), Header("UpgradeZone_Player")]
+        public Transform UpgradeZone_Player;
     }
     
     public class DeliveryLodging : UnlockableBuildingZone, IDeliveryLodging
@@ -45,32 +52,36 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override string OutputItemKey { get; protected set; }
         public override Transform TradeZoneNpcTransform { get; }
 
-        public int MaxDeliveryManCount => _deliveryLodgingStatsModule.BaseMaxDeliveryManCount;
-
         private DeliveryLodgingStatsModule _deliveryLodgingStatsModule;
         private DeliveryLodgingInventoryModule _deliveryLodgingInventoryModule;
         private ItemFactory _itemFactory;
         private TradeZone _unlockZonePlayer;
+        private UpgradeZone _upgradeZonePlayer;
         
         private DeliveryLodgingDataSO _deliveryLodgingDataSo;
 
+        private readonly HashSet<IDeliveryMan> _currentSpawnedDeliveryMans = new();
+
         public void RegisterReference(ItemFactory itemFactory)
         {
-            _deliveryLodgingDataSo = DataManager.Instance.DeliveryLodgingDataSo;
-            
             _itemFactory = itemFactory;
-            BuildingKey = $"{EBuildingType.DeliveryLodging}";
+            _deliveryLodgingDataSo = DataManager.Instance.DeliveryLodgingDataSo;
+            _deliveryLodgingStatsModule = new DeliveryLodgingStatsModule(_deliveryLodgingDataSo, _currentSpawnedDeliveryMans);
             
-            UnlockZoneModule = GetComponent<UnlockZoneModule>();
-            UnlockZoneModule.RegisterReference(BuildingKey);
-
-            _deliveryLodgingStatsModule = new DeliveryLodgingStatsModule(_deliveryLodgingDataSo);
+            BuildingKey = _deliveryLodgingStatsModule.BuildingKey;
+            
             _deliveryLodgingInventoryModule = new DeliveryLodgingInventoryModule(null, _deliveryLodgingDefaultSetting.UnlockZone_Player, _itemFactory, _deliveryLodgingStatsModule, null, null);
             
+            UnlockZoneModule = GetComponent<UnlockZoneModule>();
+            _upgradeZonePlayer = _deliveryLodgingDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
             _unlockZonePlayer = _deliveryLodgingDefaultSetting.UnlockZone_Player.GetComponent<TradeZone>();
+            
+            UnlockZoneModule.RegisterReference(BuildingKey);
             _unlockZonePlayer.RegisterReference(this, _deliveryLodgingDefaultSetting.UnlockZone_Player, _deliveryLodgingInventoryModule, _deliveryLodgingInventoryModule, BuildingKey, $"{ECurrencyType.Money}");
             
             _deliveryLodgingInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
+            
+            _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
 
         public override void Initialize() { }
@@ -79,6 +90,18 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         {
             UnlockZoneModule.UpdateViewModel();
         }
+        
+        public void SpawnDeliveryMan(ICreatureController creatureController, HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
+        {
+            if (_currentSpawnedDeliveryMans.Count < (int)_deliveryLodgingStatsModule.CurrentDeliveryLodgingOption2Value)
+            {
+                IDeliveryMan deliveryMan = creatureController.GetDeliveryMan(transform.position);
+
+                _currentSpawnedDeliveryMans.Add(deliveryMan);
+                currentSpawnedDeliveryMans.Add(deliveryMan);
+            }
+        }
+
         
         private void HandleOnMoneyReceived(int value)
         {
@@ -90,6 +113,18 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             if (CurrentGoldForUnlock >= RequiredGoldForUnlock)
             {
                 UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+            }
+        }
+        
+        private void HandleOnPlayerConnected(bool value)
+        {
+            if (value)
+            {
+                _deliveryLodgingStatsModule.GetUIDeliveryLodgingEnhancement();
+            }
+            else
+            {
+                _deliveryLodgingStatsModule.ReturnUIDeliveryLodgingEnhancement();
             }
         }
     }

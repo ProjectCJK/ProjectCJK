@@ -78,7 +78,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _itemFactory = itemFactory;
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
             _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
-
+            
             BuildingKey = _managementDeskStatsModule.BuildingKey;
             InputItemKey = _managementDeskStatsModule.InputItemKey;
             OutputItemKey = _managementDeskStatsModule.OutputItemKey;
@@ -87,14 +87,13 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
             _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
-            _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
-            
             _upgradeZonePlayer = _managementDeskDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
-            
             _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<PaymentZone>();
-            _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
             _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<PaymentZone>();
+            
+            _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
             _paymentZoneNpc.RegisterReference(_managementDeskPaymentModule, BuildingKey);
+            _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
             
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
@@ -130,7 +129,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                 {
-                    if (_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
+                    if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
                     {
                         _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
                     }
