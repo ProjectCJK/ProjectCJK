@@ -9,14 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9093006660469964130}
-  - component: {fileID: 1302908231866285826}
   m_Layer: 10
   m_Name: Cashier
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9093006660469964130
 Transform:
   m_ObjectHideFlags: 0
@@ -32,20 +31,8 @@ Transform:
   - {fileID: 6264903034275296231}
   - {fileID: 385400239325933796}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1302908231866285826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515698731101433470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 731f50869840412d85fe72ff2d9fcac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2993543349633603373
 GameObject:
   m_ObjectHideFlags: 0

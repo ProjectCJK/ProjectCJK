@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -46,6 +47,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
     {
         [Header("재화 타입")]
         public ECurrencyType CurrencyType;
+        
+        [Header("계산원")]
+        public List<GameObject> Cashier;
     }
     
     public class ManagementDesk : BuildingZone, IManagementDesk
@@ -68,8 +72,6 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private UpgradeZone _upgradeZonePlayer;
         
         private ManagementDeskDataSO _managementDeskDataSo;
-        
-        // private HashSet<ICreatureItemReceiver>
 
         public void RegisterReference(ItemFactory itemFactory)
         {
@@ -103,6 +105,8 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         {
             _managementDeskPaymentModule.Update();
             _managementDeskInventoryModule.Update();
+
+            SpawnCashier();
             
 #if UNITY_EDITOR
             // TODO : Test Scripts
@@ -112,7 +116,28 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
             }
 #endif
         }
-        
+
+        private void SpawnCashier()
+        {
+            if (_managementDeskStatsModule.CurrentManagementDeskOption2Value > _managementDeskPaymentModule.CurrentSpawnedCashierCount)
+            {
+                _managementDeskPaymentModule.CurrentSpawnedCashierCount = (int) _managementDeskStatsModule.CurrentManagementDeskOption2Value;
+                
+                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount - _managementDeskPaymentModule.CashierPaymentDelay.Count; i++)
+                {
+                    _managementDeskPaymentModule.CashierPaymentDelay.Add(0);
+                }
+
+                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                {
+                    if (_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
+                    {
+                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)

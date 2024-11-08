@@ -10,7 +10,8 @@ namespace Managers
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
         
         public int CurrentStageLevel;
-        public Dictionary<string, int> ItemPrices;
+        
+        public readonly Dictionary<string, int> ItemPrices = new ();
         
         public void RegisterReference()
         {

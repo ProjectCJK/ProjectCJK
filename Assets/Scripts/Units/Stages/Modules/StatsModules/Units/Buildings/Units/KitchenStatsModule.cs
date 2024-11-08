@@ -158,6 +158,9 @@ using System;
                      KitchenData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
                  .Select(i => ParserModule.ParseOrDefault(KitchenData[i, 4], MaxKitchenOption1Level))
                  .FirstOrDefault();
+
+
+             UpdateProductPrice();
          }
 
          private void OnClickUpgradeButtonForKitchenOption1()
@@ -225,6 +228,18 @@ using System;
          public void ReturnUIKitchenEnhancement()
          {
              UIManager.Instance.ReturnPanelBuildingEnhancement();
+         }
+         
+         private void UpdateProductPrice()
+         {
+             if (VolatileDataManager.Instance.ItemPrices.ContainsKey(OutputItemKey))
+             {
+                 VolatileDataManager.Instance.ItemPrices[OutputItemKey] = (int)CurrentKitchenOption1Value;
+             }
+             else
+             {
+                 VolatileDataManager.Instance.ItemPrices.TryAdd(OutputItemKey, (int)CurrentKitchenOption1Value);
+             }
          }
      }
  }
