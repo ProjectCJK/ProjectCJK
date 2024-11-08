@@ -101,7 +101,6 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
                 currentSpawnedDeliveryMans.Add(deliveryMan);
             }
         }
-
         
         private void HandleOnMoneyReceived(int value)
         {

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
-  m_Name: DeliveryLodging
+  m_Name: WareHouse
   m_EditorClassIdentifier: 
   columnNames:
   - "\uC778\uB371\uC2A4"
@@ -38,26 +38,50 @@ MonoBehaviour:
     - Int
     - Int
   - rowData:
-    - 170201
-    - DeliveryLodging
-    - 2
-    - 100
+    - 170301
+    - WareHouse
+    - 1
+    - 50
     - 3
     - 1
     - 3
   - rowData:
-    - 170202
-    - DeliveryLodging
-    - 2
-    - 100
+    - 170302
+    - WareHouse
+    - 1
+    - 50
     - 3
     - 2
     - 4
   - rowData:
-    - 170203
-    - DeliveryLodging
+    - 170303
+    - WareHouse
+    - 1
+    - 50
+    - 3
+    - 3
+    - 9999999
+  - rowData:
+    - 170304
+    - WareHouse
     - 2
-    - 100
+    - 50
+    - 3
+    - 1
+    - 3
+  - rowData:
+    - 170305
+    - WareHouse
+    - 2
+    - 50
+    - 3
+    - 2
+    - 4
+  - rowData:
+    - 170306
+    - WareHouse
+    - 2
+    - 50
     - 3
     - 3
     - 9999999

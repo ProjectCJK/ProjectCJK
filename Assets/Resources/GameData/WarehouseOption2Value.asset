@@ -10,54 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
-  m_Name: DeliveryLodging
+  m_Name: WarehouseOption2Value
   m_EditorClassIdentifier: 
   columnNames:
   - "\uC778\uB371\uC2A4"
   - "\uC774\uB984"
   - "\uC2A4\uD14C\uC774\uC9C0"
-  - "\uC635\uC158 1 \uCD5C\uB300 \uB808\uBCA8"
-  - "\uC635\uC158 2 \uCD5C\uB300 \uB808\uBCA8"
-  - "\uAD6C\uC870\uBB3C \uB808\uBCA8"
-  - "\uD544\uC694 \uC635\uC1581 \uB808\uBCA8"
+  - "\uC635\uC1582_\uB808\uBCA8"
+  - "\uC0AC\uB0E5\uAFBC \uC218"
   dataRows:
   - rowData:
     - Index
     - Name
     - Stage
-    - MaxLevel_Option1
-    - MaxLevel_Option2
-    - BuildingLevel
-    - Option1Level
+    - Level
+    - WorkerCount
   - rowData:
     - Int
     - String
     - Int
     - Int
     - Int
-    - Int
-    - Int
   - rowData:
-    - 170201
-    - DeliveryLodging
+    - 160001
+    - WareHouse
+    - 1
+    - 1
+    - 1
+  - rowData:
+    - 160002
+    - WareHouse
+    - 1
     - 2
-    - 100
-    - 3
+    - 1
+  - rowData:
+    - 160003
+    - WareHouse
     - 1
     - 3
+    - 1
   - rowData:
-    - 170202
-    - DeliveryLodging
+    - 160004
+    - WareHouse
     - 2
-    - 100
-    - 3
-    - 2
-    - 4
+    - 1
+    - 1
   - rowData:
-    - 170203
-    - DeliveryLodging
+    - 160005
+    - WareHouse
     - 2
-    - 100
+    - 2
+    - 1
+  - rowData:
+    - 160006
+    - WareHouse
+    - 2
     - 3
-    - 3
-    - 9999999
+    - 1

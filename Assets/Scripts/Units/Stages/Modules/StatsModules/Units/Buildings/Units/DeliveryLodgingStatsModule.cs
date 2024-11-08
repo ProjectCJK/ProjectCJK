@@ -30,7 +30,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
         public int MaxDeliveryLodgingOption2Level;
         public int RequiredGoldToUpgradeDeliveryLodgingOption1;
         public int RequiredGoldToUpgradeDeliveryLodgingOption2;
-        public int RequiredOption1LevelToUpgradeDeliveryLodgingDeskLevel;
+        public int RequiredOption1LevelToUpgradeDeliveryLodgingLevel;
         public int RequiredDeliveryLodgingLevelToUpgradeOption2;
          
         // TODO : 데이터 저장해야함!
@@ -115,12 +115,12 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
                  .Select(i => ParserModule.ParseOrDefault(DeliveryLodgingOption2CostData[i, 4], RequiredGoldToUpgradeDeliveryLodgingOption2))
                  .FirstOrDefault();
              
-             RequiredOption1LevelToUpgradeDeliveryLodgingDeskLevel = Enumerable.Range(0, DeliveryLodgingData.GetLength(0))
+             RequiredOption1LevelToUpgradeDeliveryLodgingLevel = Enumerable.Range(0, DeliveryLodgingData.GetLength(0))
                  .Where(i =>
                      DeliveryLodgingData[i, 1] == $"{BuildingKey}" &&
                      DeliveryLodgingData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                      DeliveryLodgingData[i, 5] == CurrentDeliveryLodgingLevel.ToString())
-                 .Select(i => ParserModule.ParseOrDefault(DeliveryLodgingData[i, 6], RequiredOption1LevelToUpgradeDeliveryLodgingDeskLevel))
+                 .Select(i => ParserModule.ParseOrDefault(DeliveryLodgingData[i, 6], RequiredOption1LevelToUpgradeDeliveryLodgingLevel))
                  .FirstOrDefault();
              
              RequiredDeliveryLodgingLevelToUpgradeOption2 = Enumerable.Range(0, DeliveryLodgingOption2CostData.GetLength(0))
@@ -178,7 +178,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
          {
              CurrentDeliveryLodgingOption1Level++;
 
-             if (CurrentDeliveryLodgingOption1Level >= RequiredOption1LevelToUpgradeDeliveryLodgingDeskLevel)
+             if (CurrentDeliveryLodgingOption1Level >= RequiredOption1LevelToUpgradeDeliveryLodgingLevel)
              {
                  CurrentDeliveryLodgingLevel++;
              }

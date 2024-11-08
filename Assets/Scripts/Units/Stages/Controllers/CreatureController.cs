@@ -19,6 +19,7 @@ namespace Units.Stages.Controllers
         public IMonster GetMonster(Vector3 randomSpawnPoint, EMaterialType materialType, Action<IMonster> onReturn);
         public IGuest GetGuest(Vector3 startPosition, Action<IGuest> onReturn);
         public IDeliveryMan GetDeliveryMan(Vector3 startPosition);
+        public IHunter GetHunter(Vector3 transformPosition);
     }
     
     public class CreatureController : MonoBehaviour, ICreatureController
@@ -29,7 +30,8 @@ namespace Units.Stages.Controllers
         private IMonsterFactory _monsterFactory;
         private IGuestFactory _guestFactory;
         private IDeliveryManFactory _deliveryManFactory;
-        
+        // private IHunterFactory _hunterManFactory;
+
         public void RegisterReference(PlayerFactory playerFactory, MonsterFactory monsterFactory, GuestFactory guestFactory, DeliveryManFactory deliveryManFactory)
         {
             _playerFactory = playerFactory;
@@ -64,6 +66,15 @@ namespace Units.Stages.Controllers
             IDeliveryMan deliveryMan = _deliveryManFactory.GetDeliveryMan(startPosition);
 
             return deliveryMan;
+        }
+
+        public IHunter GetHunter(Vector3 startPosition)
+        {
+            // IHunter hunter = _hunterManFactory.GetHunter(startPosition);
+            //
+            // return hunter;
+
+            return null;
         }
     }
 }

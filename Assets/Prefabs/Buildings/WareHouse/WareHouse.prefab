@@ -16467,6 +16467,7 @@ MonoBehaviour:
     wareHouseInventory: {fileID: 4162150205905442879}
     TradeZone_NPC: {fileID: 3487242001983984922}
     UnlockZone_Player: {fileID: 6256915867672762750}
+    UpgradeZone_Player: {fileID: 2752911142549174323}
 --- !u!114 &6223478581122722479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16908,7 +16909,6 @@ GameObject:
   - component: {fileID: 4620544714635017779}
   - component: {fileID: 8067026562633249977}
   - component: {fileID: 5190101954728086639}
-  - component: {fileID: 5624154759135442800}
   m_Layer: 14
   m_Name: Collision_Inventory_WareHouse
   m_TagString: Untagged
@@ -17208,22 +17208,6 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 7962377017827083719}
---- !u!114 &5624154759135442800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7962377017827083719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1001 &7641002748944825734
 PrefabInstance:
   m_ObjectHideFlags: 0

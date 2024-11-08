@@ -43,6 +43,8 @@ namespace Managers
         public const int GoldSendingMaximum = 1000;
         public ItemDataSO ItemDataSo;
         
+        [Space(20), Header("### GameData ###")]
+        
         public GameData KitchenData;
         public GameData KitchenOption1ValueData;
         public GameData KitchenOption2ValueData;
@@ -58,5 +60,10 @@ namespace Managers
         public GameData DeliveryLodgingOption2ValueData;
         public GameData DeliveryLodgingOption1CostData;
         public GameData DeliveryLodgingOption2CostData;
+        public GameData WareHouseData;
+        public GameData WareHouseOption1ValueData;
+        public GameData WareHouseOption2ValueData;
+        public GameData WareHouseOption1CostData;
+        public GameData WareHouseOption2CostData;
     }
 }
