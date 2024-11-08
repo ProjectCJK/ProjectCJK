@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
-using Units.Stages.Controllers;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -20,12 +20,6 @@ namespace Managers
         public int Price;
     }
     
-    [Serializable]
-    public struct ItemPriceSettings
-    {
-        public List<ItemPrice> ItemPrices;
-    }
-
     public class DataManager : SingletonMono<DataManager>
     {
         [Header("### Unit Data ###")]
@@ -39,6 +33,7 @@ namespace Managers
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
+        public WareHouseDataSO WareHouseDataSo;
         
         [Space(20), Header("### Zone Data ###")]
         public HuntingZoneDataSO HuntingZoneDataSo;
@@ -47,27 +42,21 @@ namespace Managers
         [Space(20), Header("### Item Data ###")]
         public const int GoldSendingMaximum = 1000;
         public ItemDataSO ItemDataSo;
-        public ItemPriceSettings ItemPriceSettings;
         
+        public GameData KitchenData;
         public GameData KitchenOption1ValueData;
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;
         public GameData KitchenOption2CostData;
-
-        public int GetItemPrice(EItemType? item1, EMaterialType? item2)
-        {
-            if (item1.HasValue && item2.HasValue)
-            {
-                foreach (var itemPrice in ItemPriceSettings.ItemPrices)
-                {
-                    if (itemPrice.ItemType == item1.Value && itemPrice.MaterialType == item2.Value)
-                    {
-                        return itemPrice.Price;
-                    }
-                }
-            }
-
-            return 0;
-        }
+        public GameData ManagementDeskData;
+        public GameData ManagementDeskOption1ValueData;
+        public GameData ManagementDeskOption2ValueData;
+        public GameData ManagementDeskOption1CostData;
+        public GameData ManagementDeskOption2CostData;
+        public GameData DeliveryLodgingData { get; set; }
+        public GameData DeliveryLodgingOption1ValueData { get; set; }
+        public GameData DeliveryLodgingOption2ValueData { get; set; }
+        public GameData DeliveryLodgingOption1CostData { get; set; }
+        public GameData DeliveryLodgingOption2CostData { get; set; }
     }
 }

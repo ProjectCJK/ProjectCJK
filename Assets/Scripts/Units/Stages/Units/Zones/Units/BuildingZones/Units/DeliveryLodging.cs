@@ -45,7 +45,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         public override string OutputItemKey { get; protected set; }
         public override Transform TradeZoneNpcTransform { get; }
 
-        public int MaxDeliveryManCount => _deliveryLodgingStatsModule.BaseMaxDeliveryManCount;
+        public int MaxDeliveryManCount => (int)_deliveryLodgingStatsModule.CurrentDeliveryLodgingOption2Value;
 
         private DeliveryLodgingStatsModule _deliveryLodgingStatsModule;
         private DeliveryLodgingInventoryModule _deliveryLodgingInventoryModule;
@@ -77,6 +77,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
         private void Update()
         {
+            
             UnlockZoneModule.UpdateViewModel();
         }
         

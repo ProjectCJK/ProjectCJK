@@ -11,9 +11,21 @@ namespace Managers
         
         public int CurrentStageLevel;
         
+        public readonly Dictionary<string, int> ItemPrices = new ();
+        
         public void RegisterReference()
         {
          
+        }
+        
+        public int GetItemPrice(EItemType? item1, EMaterialType? item2)
+        {
+            if (item1.HasValue && item2.HasValue)
+            {
+                return ItemPrices[$"{item1.Value}_{item2.Value}"];
+            }
+
+            return 0;
         }
     }
 }

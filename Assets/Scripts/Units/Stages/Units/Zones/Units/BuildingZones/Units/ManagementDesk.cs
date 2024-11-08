@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -12,6 +13,7 @@ using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.PaymentZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Zones.Units.BuildingZones.Modules.UpgradeZones;
 using UnityEngine;
 
 namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
@@ -35,6 +37,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         
         [Space(10), Header("PaymentZone_NPC")]
         public Transform PaymentZone_NPC;
+
+        [Space(10), Header("UpgradeZone_Player")]
+        public Transform UpgradeZone_Player;
     }
     
     [Serializable]
@@ -42,6 +47,9 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
     {
         [Header("재화 타입")]
         public ECurrencyType CurrencyType;
+        
+        [Header("계산원")]
+        public List<GameObject> Cashier;
     }
     
     public class ManagementDesk : BuildingZone, IManagementDesk
@@ -61,36 +69,34 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         private TradeZone _tradeZonePlayer;
         private PaymentZone _paymentZonePlayer;
         private PaymentZone _paymentZoneNpc;
+        private UpgradeZone _upgradeZonePlayer;
         
         private ManagementDeskDataSO _managementDeskDataSo;
-        
-        // private HashSet<ICreatureItemReceiver>
 
-        public void RegisterReference(ItemFactory itemController)
+        public void RegisterReference(ItemFactory itemFactory)
         {
+            _itemFactory = itemFactory;
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
+            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
+
+            BuildingKey = _managementDeskStatsModule.BuildingKey;
+            InputItemKey = _managementDeskStatsModule.InputItemKey;
+            OutputItemKey = _managementDeskStatsModule.OutputItemKey;
             
-            _itemFactory = itemController;
-            BuildingKey = ParserModule.ParseEnumToString(_managementDeskDataSo.BuildingType);
-            InputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-            OutputItemKey = ParserModule.ParseEnumToString(_managementDeskCustomSetting.CurrencyType);
-            
-            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo);
-            _managementDeskInventoryModule = new ManagementDeskInventoryModule(
-                _managementDeskDefaultSetting.managementDeskInventory,
-                _managementDeskDefaultSetting.managementDeskInventory,
-                _managementDeskStatsModule,
-                _itemFactory,
-                InputItemKey, OutputItemKey);
+            _managementDeskInventoryModule = new ManagementDeskInventoryModule(_managementDeskDefaultSetting.managementDeskInventory, _managementDeskDefaultSetting.managementDeskInventory, _managementDeskStatsModule, _itemFactory, InputItemKey, OutputItemKey);
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule, _managementDeskInventoryModule, InputItemKey);
             
             _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _tradeZonePlayer.RegisterReference(null, _managementDeskInventoryModule.ReceiverTransform, _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
             
+            _upgradeZonePlayer = _managementDeskDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
+            
             _paymentZonePlayer = _managementDeskDefaultSetting.PaymentZone_Player.GetComponent<PaymentZone>();
             _paymentZonePlayer.RegisterReference(_managementDeskPaymentModule, BuildingKey);
             _paymentZoneNpc = _managementDeskDefaultSetting.PaymentZone_NPC.GetComponent<PaymentZone>();
             _paymentZoneNpc.RegisterReference(_managementDeskPaymentModule, BuildingKey);
+            
+            _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
 
         public override void Initialize() { }
@@ -99,14 +105,49 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
         {
             _managementDeskPaymentModule.Update();
             _managementDeskInventoryModule.Update();
+
+            SpawnCashier();
             
 #if UNITY_EDITOR
             // TODO : Test Scripts
             if (Input.GetKeyDown(KeyCode.W))
             {
-                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey, DataManager.Instance.GetItemPrice(EItemType.Product, EMaterialType.A));
+                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey, VolatileDataManager.Instance.GetItemPrice(EItemType.Product, EMaterialType.A));
             }
 #endif
+        }
+
+        private void SpawnCashier()
+        {
+            if (_managementDeskStatsModule.CurrentManagementDeskOption2Value > _managementDeskPaymentModule.CurrentSpawnedCashierCount)
+            {
+                _managementDeskPaymentModule.CurrentSpawnedCashierCount = (int) _managementDeskStatsModule.CurrentManagementDeskOption2Value;
+                
+                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount - _managementDeskPaymentModule.CashierPaymentDelay.Count; i++)
+                {
+                    _managementDeskPaymentModule.CashierPaymentDelay.Add(0);
+                }
+
+                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                {
+                    if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
+                    {
+                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+
+        private void HandleOnPlayerConnected(bool value)
+        {
+            if (value)
+            {
+                _managementDeskStatsModule.GetUIManagementDeskEnhancement();
+            }
+            else
+            {
+                _managementDeskStatsModule.ReturnUIManagementDeskEnhancement();
+            }
         }
     }
 }

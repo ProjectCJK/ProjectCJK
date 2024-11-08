@@ -7,7 +7,6 @@ using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
 using Units.Stages.Units.Zones.Units.BuildingZones.Enums;
 using Units.Stages.Units.Zones.Units.BuildingZones.Units;
 using UnityEngine;
@@ -15,9 +14,7 @@ using Random = System.Random;
 
 namespace Units.Stages.Controllers
 {
-    public interface IVillageZoneController :
-        IRegisterReference<ICreatureController, IBuildingController, IHuntingZoneController, StageCustomSettings,
-            List<EMaterialType>>, IInitializable
+    public interface IVillageZoneController : IRegisterReference<ICreatureController, IBuildingController, IHuntingZoneController, StageCustomSettings, List<EMaterialType>>, IInitializable
     {
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }

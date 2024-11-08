@@ -1,3 +1,4 @@
+using System;
 using Modules.DesignPatterns.Singletons;
 using UI;
 using UnityEngine;
@@ -9,40 +10,52 @@ namespace Managers
     public class UIManager : SingletonMono<UIManager>
     {
         [Header("=== 건물 업그레이드 패널 ===")]
-        [SerializeField] private UI_KitchenEnhancement uiKitchenEnhancement;
+        [SerializeField] private UI_BuildingEnhancement uiBuildingEnhancement;
 
-        public void ReturnUIKitchenEnhancement() => uiKitchenEnhancement.gameObject.SetActive(false);
-
-        public void GetUIKitchenEnhancement(
-            string kitchenName,
-            Sprite kitchenProductSprite,
-            string kitchenProductName,
-            int currentKitchenOption1Value,
-            float currentKitchenOption2Value,
-            int currentKitchenLevel,
-            int currentKitchenOption1Level,
-            int nextKitchenOption1Value,
+        public void GetPanelBuildingEnhancement(
+            string buildingName,
+            Sprite buildingProductSprite,
+            string buildingProductName,
+            float currentBuildingOption1Value,
+            float currentBuildingOption2Value,
+            float nextBuildingOption1Value,
+            float nextBuildingOption2Value,
+            int currentBuildingLevel,
+            int currentBuildingOption1Level,
+            int currentBuildingOption2Level,
+            int maxBuildingOption1Level,
+            int maxBuildingOption2Level,
             int requiredGoldToUpgradeOption1Level,
-            int currentKitchenOption2Level,
-            float nextKitchenOption2Value,
-            int requiredGoldToUpgradeOption2Level)
+            int requiredGoldToUpgradeOption2Level,
+            int requiredBuildingLevelToUpgradeOption2Level,
+            Action onClickUpgradeButtonForBuildingOption1,
+            Action onClickUpgradeButtonForBuildingOption2)
         {
          
-            uiKitchenEnhancement.Initialize(
-                kitchenName,
-                kitchenProductSprite,
-                kitchenProductName,
-                currentKitchenOption1Value,
-                currentKitchenOption2Value,
-                currentKitchenLevel,
-                currentKitchenOption1Level,
-                nextKitchenOption1Value,
+            uiBuildingEnhancement.Activate(
+                buildingName,
+                buildingProductSprite,
+                buildingProductName,
+                currentBuildingOption1Value,
+                currentBuildingOption2Value,
+                nextBuildingOption1Value,
+                nextBuildingOption2Value,
+                currentBuildingLevel,
+                currentBuildingOption1Level,
+                currentBuildingOption2Level,
+                maxBuildingOption1Level,
+                maxBuildingOption2Level,
                 requiredGoldToUpgradeOption1Level,
-                currentKitchenOption2Level,
-                nextKitchenOption2Value,
-                requiredGoldToUpgradeOption2Level
+                requiredGoldToUpgradeOption2Level,
+                requiredBuildingLevelToUpgradeOption2Level,
+                onClickUpgradeButtonForBuildingOption1,
+                onClickUpgradeButtonForBuildingOption2
                 );
-            uiKitchenEnhancement.gameObject.SetActive(true);
+        }
+
+        public void ReturnPanelBuildingEnhancement()
+        {
+            uiBuildingEnhancement.Inactivate();
         }
     }
 }
