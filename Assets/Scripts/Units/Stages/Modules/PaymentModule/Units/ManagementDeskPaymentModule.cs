@@ -108,7 +108,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                    
                         guest.CheckNextDestination();
 
-                        _playerPaymentElapsedTime = 0;
+                        CashierPaymentDelay[i] = 0;
                     }
                 }
             }

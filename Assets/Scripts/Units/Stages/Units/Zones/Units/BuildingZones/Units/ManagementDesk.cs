@@ -130,7 +130,7 @@ namespace Units.Stages.Units.Zones.Units.BuildingZones.Units
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                 {
-                    if (_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
+                    if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
                     {
                         _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
                     }
