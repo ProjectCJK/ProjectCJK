@@ -16,23 +16,32 @@ MonoBehaviour:
   BaseMovementSpeed: 1
   MonsterSprites:
   - StageMaterialType: 0
-    EmotionIdleSprite: {fileID: 0}
-    EmotionScaredSprite: {fileID: 0}
-    EmotionDeathSprite: {fileID: 0}
-    BodySprite: {fileID: 0}
-    BodyDeathSprite: {fileID: 0}
-    HairDeathSprite: {fileID: 0}
-    LegLeftSprite: {fileID: 0}
-    LegRightSprite: {fileID: 0}
+    EmotionIdleSprite: {fileID: 21300000, guid: e686a4543d8aa6348920aa511058a163, type: 3}
+    EmotionScaredSprite: {fileID: 21300000, guid: ad15d25512fc44e44ad3485a7f8ca6e3, type: 3}
+    EmotionDeathSprite: {fileID: 21300000, guid: b8c63fa2f54074f4b847c84bc9858a75, type: 3}
+    BodySprite: {fileID: 21300000, guid: 62f8157196b0879429cca762a1885212, type: 3}
+    BodyDeathSprite: {fileID: 21300000, guid: 832b5ce21db7b724fa2203196abfc7c2, type: 3}
+    HairDeathSprite: {fileID: 21300000, guid: 5942857beeb9ee848849f04ec5e43543, type: 3}
+    LegLeftSprite: {fileID: 21300000, guid: 4c6b714ff7f10114d9c625de43a994b0, type: 3}
+    LegRightSprite: {fileID: 21300000, guid: 4c6b714ff7f10114d9c625de43a994b0, type: 3}
   - StageMaterialType: 1
-    EmotionIdleSprite: {fileID: 0}
-    EmotionScaredSprite: {fileID: 0}
-    EmotionDeathSprite: {fileID: 0}
-    BodySprite: {fileID: 0}
-    BodyDeathSprite: {fileID: 0}
+    EmotionIdleSprite: {fileID: 21300000, guid: a922545765699a849ba436399c9a8c62, type: 3}
+    EmotionScaredSprite: {fileID: 21300000, guid: b47360b8a79b8ee40bc6894c4fb166e5, type: 3}
+    EmotionDeathSprite: {fileID: 21300000, guid: a79070dafe68b5a4aa3c71cb411a15d3, type: 3}
+    BodySprite: {fileID: 21300000, guid: a922545765699a849ba436399c9a8c62, type: 3}
+    BodyDeathSprite: {fileID: 21300000, guid: 4056b1992c59b704faced7a5aee803e3, type: 3}
     HairDeathSprite: {fileID: 0}
-    LegLeftSprite: {fileID: 0}
-    LegRightSprite: {fileID: 0}
+    LegLeftSprite: {fileID: 21300000, guid: 972c4dd820b9e0e44923a857a12b93be, type: 3}
+    LegRightSprite: {fileID: 21300000, guid: 972c4dd820b9e0e44923a857a12b93be, type: 3}
+  - StageMaterialType: 2
+    EmotionIdleSprite: {fileID: 21300000, guid: 5964df5322b38064ba66fb391d91beb6, type: 3}
+    EmotionScaredSprite: {fileID: 21300000, guid: 52aa9d3e9d9fadc43a274f68cb73ce5f, type: 3}
+    EmotionDeathSprite: {fileID: 21300000, guid: f552e164f4a36a84fb2d4ad412cde9c9, type: 3}
+    BodySprite: {fileID: 21300000, guid: 9dcb112dc0b6ccd458e123427b910b12, type: 3}
+    BodyDeathSprite: {fileID: 21300000, guid: 3f6de2e833e3d4644a86324bedf13952, type: 3}
+    HairDeathSprite: {fileID: 0}
+    LegLeftSprite: {fileID: 21300000, guid: 7e0ac96454e8cc0489f1e7e2aeebbae0, type: 3}
+    LegRightSprite: {fileID: 21300000, guid: 7e0ac96454e8cc0489f1e7e2aeebbae0, type: 3}
   BaseHealth: 100
   BaseDamage: 10
   BaseAttackSpeed: 1
