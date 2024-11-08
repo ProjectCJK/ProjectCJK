@@ -17,10 +17,28 @@ MonoBehaviour:
   BaseInventorySize: 0
   BaseInteractionStandbySecond: 2
   CreatureSprites:
-  - Body: []
-    Head: []
-    BackHair: []
+    Body:
+    - {fileID: 21300000, guid: 214a2b6072d8f95418778003f532901f, type: 3}
+    - {fileID: 21300000, guid: 7ad0529a4d856d24582d34a20409b554, type: 3}
+    - {fileID: 21300000, guid: 4a837759f40d5b64eb36f0c90c11e661, type: 3}
+    - {fileID: 21300000, guid: e8f11a775f423e948b7499d9b21450c5, type: 3}
+    Head:
+    - {fileID: 21300000, guid: df718ea8e101e234cb32cd75b52b8768, type: 3}
+    - {fileID: 21300000, guid: f3ce0276b98d7d34fafa128e9755f088, type: 3}
+    - {fileID: 21300000, guid: 55722ff00ebf44b4280f41311c5c127f, type: 3}
+    - {fileID: 21300000, guid: f4b488a18878f564f831538a4f3d0ab5, type: 3}
+    BackHair:
+    - {fileID: 21300000, guid: ee75b21da0b2358449729ee10206ca93, type: 3}
+    - {fileID: 21300000, guid: 0ecc49d4602f89f40b94bbb8ab1094d0, type: 3}
     Scarf: []
     Hat: []
-    Leg_Left: []
-    Leg_Right: []
+    Leg_Left:
+    - {fileID: 21300000, guid: f5d66934a62503648b1120899f226789, type: 3}
+    - {fileID: 21300000, guid: e745d74b8d5648749af7ee87bd115eb0, type: 3}
+    - {fileID: 21300000, guid: a7233f28df237364ea76ed790573f935, type: 3}
+    - {fileID: 21300000, guid: 33c5bba1691aabb44bb844c034269043, type: 3}
+    Leg_Right:
+    - {fileID: 21300000, guid: f5d66934a62503648b1120899f226789, type: 3}
+    - {fileID: 21300000, guid: e745d74b8d5648749af7ee87bd115eb0, type: 3}
+    - {fileID: 21300000, guid: a7233f28df237364ea76ed790573f935, type: 3}
+    - {fileID: 21300000, guid: 33c5bba1691aabb44bb844c034269043, type: 3}

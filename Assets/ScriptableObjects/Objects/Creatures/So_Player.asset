@@ -16,16 +16,20 @@ MonoBehaviour:
   BaseMovementSpeed: 5
   BaseInventorySize: 20
   BaseInteractionStandbySecond: 1
-  BaseHealth: 100
-  BaseDamage: 10
-  BaseAttackDelay: 0.2
-  ItemPickupRange: 2
-  BasePaymentDelay: 0.5
-  CreatureSprite:
-    Body: []
+  CreatureSprites:
+    Body:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     Head: []
     BackHair: []
     Scarf: []
     Hat: []
     Leg_Left: []
     Leg_Right: []
+  BaseHealth: 100
+  BaseDamage: 10
+  BaseAttackDelay: 0.2
+  ItemPickupRange: 2
+  BasePaymentDelay: 0.5
