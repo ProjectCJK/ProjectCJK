@@ -28,8 +28,5 @@ namespace ScriptableObjects.Scripts.Creatures.Units
         
         [Space(20), Header("=== 결제 세팅 ===")]
         public float BasePaymentDelay;
-        
-        [Space(20), Header("=== Sprites 세팅 ===")]
-        [Header("타입별 Sprite")] public CreatureSprite CreatureSprite;
     }
 }
