@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
+using TMPro;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Managers
 {
@@ -47,7 +50,7 @@ namespace Managers
         [Space(20), Header("### GameData ###")]
         [Header("=== Quest GameData ===")]
         public GameData QuestData;
-        [Header("=== Building GameData ===")]
+        [Space(20), Header("=== Building GameData ===")]
         [Header("--- Kitchen GameData ---")]
         public GameData KitchenData;
         public GameData KitchenOption1ValueData;
@@ -66,14 +69,61 @@ namespace Managers
         public GameData DeliveryLodgingOption2ValueData;
         public GameData DeliveryLodgingOption1CostData;
         public GameData DeliveryLodgingOption2CostData;
-        [Header("--- WareHouse GameData ---")]
+        [Space(20), Header("--- WareHouse GameData ---")]
         public GameData WareHouseData;
         public GameData WareHouseOption1ValueData;
         public GameData WareHouseOption2ValueData;
         public GameData WareHouseOption1CostData;
         public GameData WareHouseOption2CostData;
+
+        [Space(20), Header("### TMP_SpriteAssets ###")]
+        public readonly Dictionary<string, TMP_SpriteAsset> TMP_SpriteAssets = new();
         
-        // [Space(20)] [Header("### Building Data ###")]
-        // public GameData Building
+        public TMP_SpriteAsset TMP_SpriteAssets_Costumes;
+        public TMP_SpriteAsset TMP_SpriteAssets_Goods;
+        public TMP_SpriteAsset TMP_SpriteAssets_Materials;
+        public TMP_SpriteAsset TMP_SpriteAssets_Products;
+        public TMP_SpriteAsset TMP_SpriteAssets_Monsters;
+        public TMP_SpriteAsset TMP_SpriteAssets_Others;
+        
+        [Space(20), Header("### SpriteAssets ###")]
+        public readonly Dictionary<string, Texture2D> SpriteAssets = new();
+        
+        public Texture2D SpriteAssets_Costumes;
+        public Texture2D SpriteAssets_Goods;
+        public Texture2D SpriteAssets_Materials;
+        public Texture2D SpriteAssets_Products;
+        public Texture2D SpriteAssets_Monsters;
+        public Texture2D SpriteAssets_Others;
+        
+        [Space(20)] [Header("### UI ###")]
+        [Space(20), Header("--- BuildingUpgradePanel GameData ---")]
+        public GameData BuildingUpgradePanel;
+        
+        protected override void Awake()
+        {
+            CreateTMPSpriteAssetsDictionary();
+            CreateSpriteAssetsDictionary();
+        }
+        
+        private void CreateTMPSpriteAssetsDictionary()
+        {
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Costumes), TMP_SpriteAssets_Costumes);
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Goods), TMP_SpriteAssets_Goods);
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Materials), TMP_SpriteAssets_Materials);
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Products), TMP_SpriteAssets_Products);
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Monsters), TMP_SpriteAssets_Monsters);
+            TMP_SpriteAssets.TryAdd(nameof(TMP_SpriteAssets_Others), TMP_SpriteAssets_Others);
+        }
+        
+        private void CreateSpriteAssetsDictionary()
+        {
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Costumes), SpriteAssets_Costumes);
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Goods), SpriteAssets_Goods);
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Materials), SpriteAssets_Materials);
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Products), SpriteAssets_Products);
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Monsters), SpriteAssets_Monsters);
+            SpriteAssets.TryAdd(nameof(SpriteAssets_Others), SpriteAssets_Others);
+        }
     }
 }
