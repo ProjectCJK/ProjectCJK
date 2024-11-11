@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using Interfaces;
 using Units.Stages.Enums;
 using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.Buildings.Units;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Zones.Units.BuildingZones.Abstract;
-using Units.Stages.Units.Zones.Units.BuildingZones.Units;
 using UnityEngine;
-using EBuildingType = Units.Stages.Units.Zones.Units.BuildingZones.Enums.EBuildingType;
+using EBuildingType = Units.Stages.Units.Buildings.Enums.EBuildingType;
 using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
-    public interface IBuildingController : IRegisterReference<ItemFactory,List<EMaterialType>>, IInitializable
+    public interface IBuildingController : IRegisterReference<ItemFactory, List<EMaterialType>>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
         public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; }
@@ -20,20 +20,20 @@ namespace Units.Stages.Controllers
 
     public class BuildingController : MonoBehaviour, IBuildingController
     {
-        public Dictionary<string, BuildingZone> Buildings { get; } = new();
-        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; } = new();
+        private List<EMaterialType> _currentActiveMaterials;
 
         private List<EMaterialType> _materials;
-        private List<EMaterialType> _currentActiveMaterials;
+        public Dictionary<string, BuildingZone> Buildings { get; } = new();
+        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; } = new();
 
         public void RegisterReference(ItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
         {
             _currentActiveMaterials = currentActiveMaterials;
-            
+
             foreach (Transform buildingTransform in transform)
             {
                 var building = buildingTransform.GetComponent<BuildingZone>();
-                
+
                 switch (building)
                 {
                     case IKitchen kitchen:
@@ -66,15 +66,10 @@ namespace Units.Stages.Controllers
                         var splits = building.BuildingKey.Split('_');
 
                         if (Enum.TryParse(splits[0], out EBuildingType buildingType) && splits.Length > 1)
-                        {
-                            if (Enum.TryParse(splits[1], out EMaterialType materialType) && buildingType == EBuildingType.Stand)
-                            {
+                            if (Enum.TryParse(splits[1], out EMaterialType materialType) &&
+                                buildingType == EBuildingType.Stand)
                                 if (!_currentActiveMaterials.Contains(materialType))
-                                {
                                     _currentActiveMaterials.Add(materialType);
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -82,10 +77,7 @@ namespace Units.Stages.Controllers
 
         public void Initialize()
         {
-            foreach (KeyValuePair<string, BuildingZone> building in Buildings)
-            {
-                building.Value.Initialize();
-            }
+            foreach (KeyValuePair<string, BuildingZone> building in Buildings) building.Value.Initialize();
         }
     }
 }

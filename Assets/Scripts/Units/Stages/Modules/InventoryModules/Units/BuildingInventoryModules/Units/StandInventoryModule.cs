@@ -12,11 +12,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
     {
         public event Action<int> OnMoneyReceived;
     }
-    
+
     public class StandInventoryModule : BuildingInventoryModule, IStandInventoryModule
     {
-        public event Action<int> OnMoneyReceived;
-        
         public StandInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -27,7 +25,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             : base(senderTransform, receiverTransform, itemFactory, standStatsModule, inputItemKey, outputItemKey)
         {
         }
-        
+
+        public event Action<int> OnMoneyReceived;
+
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             if (Enum.TryParse(inputItemKey, out ECurrencyType currencyType))
@@ -38,7 +38,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }
-                
+
                 ItemFactory.ReturnItem(item);
             }
             else

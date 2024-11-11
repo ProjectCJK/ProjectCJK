@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using Interfaces;
-using Modules;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures.Units;
 using Units.Stages.Modules;
-using Units.Stages.Modules.FSMModules.Units;
 using Units.Stages.Modules.FSMModules.Units.Creature;
-using Units.Stages.Modules.FSMModules.Units.Monsters;
 using Units.Stages.Modules.HealthModules.Units;
 using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.SpriteModules;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
@@ -19,55 +16,24 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>, IInitializable<Vector3, List<Sprite>, Action>, ITakeDamage
+    public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>,
+        IInitializable<Vector3, MonsterSprite, Action>, ITakeDamage
     {
     }
 
     public class Monster : Creature, IMonster
     {
-        private event Action OnGetMonster;
-        private event Action OnReturnMonster;
-        
-        public override ECreatureType CreatureType => _monsterStatsModule.CreatureType;
-        public override Animator Animator { get; protected set; }
-        public override Transform Transform => transform;
-
-        private MonsterStateMachine _monsterStateMachine;
-        
-        private IMonsterStatsModule _monsterStatsModule;
+        private CreatureStateMachine _creatureStateMachine;
+        private IDamageFlashModule _damageFlashModule;
+        private EMaterialType _materialType;
         private IMonsterHealthModule _monsterHealthModule;
         private IMonsterMovementModule _monsterMovementModule;
-        private IDamageFlashModule _damageFlashModule;
-        
+
+        private MonsterSpriteModule _monsterSpriteModule;
+
+        private IMonsterStatsModule _monsterStatsModule;
         private SpriteRenderer _spriteRenderer;
-        private EMaterialType _materialType;
-
-        public void RegisterReference(MonsterDataSO monsterDataSo)
-        {
-            Animator = spriteTransform.GetComponent<Animator>();
-            _spriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
-            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
-            
-            _monsterStateMachine = new MonsterStateMachine(this);
-            _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
-            _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
-            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule, _monsterStateMachine, spriteTransform);
-            
-            _damageFlashModule.RegisterReference();
-        }
-        
-        public void Initialize(Vector3 randomSpawnPoint, List<Sprite> monsterSprites, Action action)
-        {
-            // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
-            // _spriteRenderer.sprite = monsterSprite;
-            
-            transform.position = randomSpawnPoint;
-            OnReturnMonster = action;
-
-            _monsterStateMachine.ChangeState(_monsterStateMachine.MonsterIdleState);
-
-            _monsterMovementModule.Initialize();
-        }
+        public override Animator Animator { get; protected set; }
 
         private void Update()
         {
@@ -79,6 +45,39 @@ namespace Units.Stages.Units.Creatures.Units
             _monsterMovementModule.FixedUpdate();
         }
 
+        public override ECreatureType CreatureType => _monsterStatsModule.CreatureType;
+        public override Transform Transform => transform;
+
+        public void RegisterReference(MonsterDataSO monsterDataSo)
+        {
+            Animator = spriteTransform.GetComponent<Animator>();
+            _spriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
+            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
+            _monsterSpriteModule = spriteTransform.GetComponent<MonsterSpriteModule>();
+
+            _creatureStateMachine = new CreatureStateMachine(this);
+            _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
+            _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
+            _monsterMovementModule =
+                new MonsterMovementModule(this, _monsterStatsModule, _creatureStateMachine, spriteTransform);
+
+            _damageFlashModule.RegisterReference();
+        }
+
+        public void Initialize(Vector3 randomSpawnPoint, MonsterSprite monsterSprites, Action action)
+        {
+            // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
+            // _spriteRenderer.sprite = monsterSprite;
+            _monsterSpriteModule.SetSprites(monsterSprites);
+
+            transform.position = randomSpawnPoint;
+            OnReturnMonster = action;
+
+            _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
+
+            _monsterMovementModule.Initialize();
+        }
+
         public void Create()
         {
             SetActive(false);
@@ -87,7 +86,7 @@ namespace Units.Stages.Units.Creatures.Units
         public void GetFromPool()
         {
             _monsterHealthModule.Initialize();
-            
+
             SetActive(true);
         }
 
@@ -95,16 +94,6 @@ namespace Units.Stages.Units.Creatures.Units
         {
             SetActive(false);
             SetSprite(null);
-        }
-        
-        private void SetActive(bool value)
-        {
-            if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
-        }
-
-        private void SetSprite(Sprite sprite)
-        {
-            // _spriteRenderer.sprite = sprite;
         }
 
         public bool TakeDamage(int damage)
@@ -118,6 +107,19 @@ namespace Units.Stages.Units.Creatures.Units
 
             OnReturnMonster?.Invoke();
             return false;
+        }
+
+        private event Action OnGetMonster;
+        private event Action OnReturnMonster;
+
+        private void SetActive(bool value)
+        {
+            if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
+        }
+
+        private void SetSprite(Sprite sprite)
+        {
+            // _spriteRenderer.sprite = sprite;
         }
     }
 }

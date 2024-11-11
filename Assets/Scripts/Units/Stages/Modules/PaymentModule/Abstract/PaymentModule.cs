@@ -4,14 +4,12 @@ namespace Units.Stages.Modules.PaymentModule.Abstract
     {
         public float PaymentDelay { get; }
     }
-    
+
     public interface IPaymentModule
     {
-        
     }
-    
+
     public abstract class PaymentModule : IPaymentModule
     {
-        
     }
 }

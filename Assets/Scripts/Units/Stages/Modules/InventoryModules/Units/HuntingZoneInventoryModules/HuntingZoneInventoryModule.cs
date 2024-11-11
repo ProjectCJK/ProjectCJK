@@ -12,33 +12,32 @@ namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModule
     {
         public event Action<int> OnMoneyReceived;
     }
-    
+
     public class HuntingZoneInventoryModule : BuildingInventoryModule, IHuntingZoneInventoryModule
     {
-        public event Action<int> OnMoneyReceived;
-        
         public HuntingZoneInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
             BuildingStatsModule buildingStatsModule,
             string inputItemKey,
-            string outputItemKey) : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
+            string outputItemKey) : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule,
+            inputItemKey, outputItemKey)
         {
         }
+
+        public event Action<int> OnMoneyReceived;
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             if (Enum.TryParse(inputItemKey, out ECurrencyType currencyType))
-            {
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }
-            }
-            
+
             ItemFactory.ReturnItem(item);
         }
     }

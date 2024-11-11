@@ -1,9 +1,7 @@
 using System;
 using Interfaces;
-using JetBrains.Annotations;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Items;
-using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Modules;
 using UnityEngine;
 
@@ -14,8 +12,9 @@ namespace Units.Stages.Units.Items.Units
         public void Transfer(Vector3 pointA, Vector3 pointB, Action onArrived);
         public void Transfer(Vector3 pointA, Transform pointB, Action onArrived);
     }
-    
-    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<string, int, Sprite, Vector3>, IPoolable, IItemTransfer
+
+    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<string, int, Sprite, Vector3>, IPoolable,
+        IItemTransfer
     {
         public string Type { get; }
         public int Count { get; }
@@ -24,13 +23,30 @@ namespace Units.Stages.Units.Items.Units
 
     public class Item : MonoBehaviour, IItem
     {
+        private BezierCurveMover _bezierCurveMover;
+        private bool _isInitialized;
+        private SpriteRenderer _spriteRenderer;
+
+        private void Reset()
+        {
+            SetSprite(null);
+            SetActive(false);
+            Type = null;
+            Count = 0;
+            _isInitialized = false;
+        }
+
+        private void Update()
+        {
+            if (!_isInitialized) return;
+
+            _bezierCurveMover.Transfer();
+        }
+
         public string Type { get; private set; }
         public int Count { get; private set; }
 
         public Transform Transform => transform;
-        private SpriteRenderer _spriteRenderer;
-        private BezierCurveMover _bezierCurveMover;
-        private bool _isInitialized;
 
         public void RegisterReference(ItemDataSO _itemDataSo)
         {
@@ -58,13 +74,6 @@ namespace Units.Stages.Units.Items.Units
             _bezierCurveMover.Transfer(pointA, pointBTransform, onArrived);
         }
 
-        private void Update()
-        {
-            if (!_isInitialized) return;
-            
-            _bezierCurveMover.Transfer();
-        }
-
         public void Create()
         {
             Reset();
@@ -80,15 +89,6 @@ namespace Units.Stages.Units.Items.Units
             Reset();
         }
 
-        private void Reset()
-        {
-            SetSprite(null);
-            SetActive(false);
-            Type = null;
-            Count = 0;
-            _isInitialized = false;
-        }
-        
         private void SetActive(bool value)
         {
             if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);

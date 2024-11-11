@@ -17,22 +17,23 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
     public class PlayerFactory : Factory, IPlayerFactory
     {
-        public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerDataSo;
-        public Transform PlayerTransform => _player.Transform;
+        private readonly IItemFactory _itemFactory;
 
         private readonly Joystick _joystick;
-        private readonly IItemFactory _itemFactory;
-        
+
         private IPlayer _player;
-        
+
         public PlayerFactory(Joystick joystick, IItemFactory itemFactory)
         {
             _joystick = joystick;
             _itemFactory = itemFactory;
-            
+
             InstantiatePlayer();
         }
-        
+
+        public PlayerDataSO PlayerDataSo => DataManager.Instance.PlayerDataSo;
+        public Transform PlayerTransform => _player.Transform;
+
         public IPlayer GetPlayer()
         {
             return _player;
@@ -41,7 +42,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
         private void InstantiatePlayer()
         {
             GameObject obj = Object.Instantiate(PlayerDataSo.prefab);
-            
+
             _player = obj.GetComponent<IPlayer>();
             _player.Transform.gameObject.SetActive(false);
             _player?.RegisterReference(PlayerDataSo, _joystick, _itemFactory);

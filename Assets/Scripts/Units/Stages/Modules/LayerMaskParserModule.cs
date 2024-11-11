@@ -7,7 +7,7 @@ namespace Units.Stages.Modules
         private const string monsterCollisionLayer = "MonsterCollision";
         private const string unitLayer = "Unit";
         private const string collisionLayer = "Collision";
-        
+
         public static readonly int CollisionLayerMask = LayerMask.GetMask(collisionLayer);
         public static readonly int MonsterCollisionLayerMask = LayerMask.GetMask(monsterCollisionLayer);
         public static readonly int UnitLayerMask = LayerMask.GetMask(unitLayer);

@@ -13,10 +13,7 @@ namespace Modules.DataStructures
         // 항목을 우선순위에 따라 큐에 추가
         public void Enqueue(T item, int priority)
         {
-            if (!_queue.ContainsKey(priority))
-            {
-                _queue[priority] = new Queue<T>();
-            }
+            if (!_queue.ContainsKey(priority)) _queue[priority] = new Queue<T>();
 
             _queue[priority].Enqueue(item);
             Count++;
@@ -30,10 +27,7 @@ namespace Modules.DataStructures
             KeyValuePair<int, Queue<T>> firstPair = _queue.First();
             T item = firstPair.Value.Dequeue();
 
-            if (firstPair.Value.Count == 0)
-            {
-                _queue.Remove(firstPair.Key);
-            }
+            if (firstPair.Value.Count == 0) _queue.Remove(firstPair.Key);
 
             Count--;
             return item;
@@ -68,6 +62,7 @@ namespace Modules.DataStructures
                 item = _queue.First().Value.Peek();
                 return true;
             }
+
             item = default;
             return false;
         }
@@ -80,10 +75,7 @@ namespace Modules.DataStructures
                 KeyValuePair<int, Queue<T>> firstPair = _queue.First();
                 item = firstPair.Value.Dequeue();
 
-                if (firstPair.Value.Count == 0)
-                {
-                    _queue.Remove(firstPair.Key);
-                }
+                if (firstPair.Value.Count == 0) _queue.Remove(firstPair.Key);
 
                 Count--;
                 return true;
@@ -92,7 +84,7 @@ namespace Modules.DataStructures
             item = default;
             return false;
         }
-        
+
         public bool Remove(T item)
         {
             foreach (var priority in _queue.Keys.ToList()) // 우선순위를 반복하기 위해 키를 목록으로 복사합니다.
@@ -104,18 +96,15 @@ namespace Modules.DataStructures
                     // 항목을 제거한 새로운 큐를 만들어 기존 큐를 대체
                     var newQueue = new Queue<T>(queue.Where(x => !x.Equals(item)));
                     if (newQueue.Count > 0)
-                    {
                         _queue[priority] = newQueue; // 수정된 큐로 대체
-                    }
                     else
-                    {
                         _queue.Remove(priority); // 큐가 비어있으면 우선순위 키 제거
-                    }
 
                     Count--;
                     return true;
                 }
             }
+
             return false;
         }
     }

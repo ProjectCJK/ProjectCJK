@@ -1,5 +1,6 @@
 using System;
 using Units.Stages.Modules.FactoryModules.Units;
+using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Enums;
@@ -12,11 +13,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
     {
         public event Action<int> OnMoneyReceived;
     }
-    
+
     public class WareHouseInventoryModule : BuildingInventoryModule, IWareHouseInventoryModule
     {
-        public event Action<int> OnMoneyReceived;
-        
         public WareHouseInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -26,6 +25,29 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
         {
+        }
+
+        public event Action<int> OnMoneyReceived;
+
+        public void SendItem(ICreatureItemReceiver itemReceiver, EMaterialType materialType)
+        {
+            if (!IsReadyToSend()) return;
+
+            var outputItemKey = $"{EItemType.Material}_{materialType}";
+
+            if (!Inventory.TryGetValue(outputItemKey, out var itemCount) || itemCount <= 0) return;
+
+            if (!itemReceiver.CanReceiveItem()) return;
+
+            IItem item = PopSpawnedItem();
+            if (item != null)
+            {
+                itemReceiver.ReceiveItemThroughTransfer(outputItemKey, item.Count, item.Transform.position);
+                ItemFactory.ReturnItem(item);
+                RemoveItem(outputItemKey);
+            }
+
+            SetLastSendTime();
         }
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
@@ -38,7 +60,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }
-                
+
                 ItemFactory.ReturnItem(item);
             }
             else

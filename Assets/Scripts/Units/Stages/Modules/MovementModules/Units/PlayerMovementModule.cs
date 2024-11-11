@@ -2,7 +2,7 @@ using System.Collections;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
-using Units.Stages.Modules.FSMModules.Units.Player;
+using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
@@ -19,15 +19,12 @@ namespace Units.Stages.Modules.MovementModules.Units
 
     public class PlayerMovementModule : MovementModuleWithoutNavMeshAgent, IPlayerMovementModule
     {
-        protected override BoxCollider2D BoxCollider2D { get; }
-        
-        private readonly IMovementProperty _playerStatsModule;
-        private readonly PlayerStateMachine _playerStateMachine;
+        private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
+
+        private readonly IMovementProperty _playerStatsModule;
         private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
-        
-        private float _movementSpeed => _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
         private bool _isFacingRight = true;
         private bool _isMoving;
         private bool _isSlowed;
@@ -36,18 +33,23 @@ namespace Units.Stages.Modules.MovementModules.Units
         public PlayerMovementModule(
             Player player,
             IPlayerStatsModule playerStatsModule,
-            PlayerStateMachine playerStateMachine,
+            CreatureStateMachine creatureStateMachine,
             Joystick joystick,
             Transform spriteTransform)
         {
             _playerStatsModule = playerStatsModule;
-            _playerStateMachine = playerStateMachine;
+            _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
             _playerTransform = player.transform;
             _spriteTransform = spriteTransform;
-            
+
             BoxCollider2D = _playerTransform.GetComponent<BoxCollider2D>();
         }
+
+        protected override BoxCollider2D BoxCollider2D { get; }
+
+        private float _movementSpeed =>
+            _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
 
         public void Initialize()
         {
@@ -58,7 +60,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         public void Update()
         {
             Vector2 direction = _joystick.direction;
-            
+
             switch (direction.x)
             {
                 case > 0 when !_isFacingRight:
@@ -76,16 +78,26 @@ namespace Units.Stages.Modules.MovementModules.Units
             MoveWithCollision(_playerTransform, moveDirection, ref moveDirection);
             HandleStateUpdate();
         }
-        
-        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+
+        public void HandleOnHit()
+        {
+            if (_slowCoroutine != null)
+                CoroutineManager.Instance.StopCoroutine(_slowCoroutine);
+            _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
+        }
+
+        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move,
+            ref Vector3 direction)
         {
             Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized, move.magnitude, collisionLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized,
+                move.magnitude, collisionLayerMask);
             if (hit.collider != null)
             {
                 direction = Vector3.Reflect(direction, hit.normal);
                 return false;
             }
+
             return true;
         }
 
@@ -103,18 +115,16 @@ namespace Units.Stages.Modules.MovementModules.Units
             UpdateStateMachine();
         }
 
-        private void UpdateMovementFlag() => _isMoving = _joystick.direction != Vector2.zero;
+        private void UpdateMovementFlag()
+        {
+            _isMoving = _joystick.direction != Vector2.zero;
+        }
 
         private void UpdateStateMachine()
         {
-            _playerStateMachine.ChangeState(_isMoving ? _playerStateMachine.PlayerRunState : _playerStateMachine.PlayerIdleState);
-        }
-
-        public void HandleOnHit()
-        {
-            if (_slowCoroutine != null)
-                CoroutineManager.Instance.StopCoroutine(_slowCoroutine);
-            _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
+            _creatureStateMachine.ChangeState(_isMoving
+                ? _creatureStateMachine.CreatureRunState
+                : _creatureStateMachine.CreatureIdleState);
         }
 
         private IEnumerator SlowDownTemporarily()

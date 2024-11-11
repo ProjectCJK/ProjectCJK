@@ -1,6 +1,8 @@
 namespace Units.Stages.Modules.MovementModules.Abstract
 {
-    public interface IMovementModule { }
+    public interface IMovementModule
+    {
+    }
 
     public interface IMovementProperty
     {
@@ -9,6 +11,5 @@ namespace Units.Stages.Modules.MovementModules.Abstract
 
     public abstract class MovementModule : IMovementModule
     {
-
     }
 }

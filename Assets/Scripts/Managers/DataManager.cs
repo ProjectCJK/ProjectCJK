@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -19,33 +17,36 @@ namespace Managers
         public EMaterialType MaterialType;
         public int Price;
     }
-    
+
     public class DataManager : SingletonMono<DataManager>
     {
-        [Header("### Unit Data ###")]
-        public PlayerDataSO PlayerDataSo;
+        [Space(20)] [Header("### Item Data ###")]
+        public const int GoldSendingMaximum = 1000;
+
+        [Header("### Unit Data ###")] public PlayerDataSO PlayerDataSo;
+
         public MonsterDataSO MonsterDataSo;
         public GuestDataSO GuestDataSo;
         public DeliveryManDataSO DeliveryManDataSo;
-        
-        [Space(20), Header("### Building Data ###")]
+        public HunterDataSO HunterDataSo;
+
+        [Space(20)] [Header("### Building Data ###")]
         public KitchenDataSO KitchenDataSo;
+
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
         public WareHouseDataSO WareHouseDataSo;
-        
-        [Space(20), Header("### Zone Data ###")]
+
+        [Space(20)] [Header("### Zone Data ###")]
         public HuntingZoneDataSO HuntingZoneDataSo;
+
         public GuestSpawnZoneDataSo GuestSpawnZoneDataSo;
-        
-        [Space(20), Header("### Item Data ###")]
-        public const int GoldSendingMaximum = 1000;
         public ItemDataSO ItemDataSo;
-        
-        [Space(20), Header("### GameData ###")]
-        
+
+        [Space(20)] [Header("### GameData ###")]
         public GameData KitchenData;
+
         public GameData KitchenOption1ValueData;
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;

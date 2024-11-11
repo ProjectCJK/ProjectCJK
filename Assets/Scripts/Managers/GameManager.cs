@@ -4,10 +4,9 @@ namespace Managers
 {
     public interface IGameManager
     {
-        
     }
+
     public class GameManager : SingletonMono<GameManager>, IGameManager
     {
-        
     }
 }

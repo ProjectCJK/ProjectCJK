@@ -8,8 +8,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 {
     public interface IManagementDeskInventoryModule : IBuildingInventoryModule
     {
-        
     }
+
     public class ManagementDeskInventoryModule : BuildingInventoryModule, IManagementDeskInventoryModule
     {
         public ManagementDeskInventoryModule(

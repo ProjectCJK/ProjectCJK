@@ -12,9 +12,9 @@ namespace Units.Stages.Units.Items.Enums
         Cucumber,
         Bean
     }
-    
+
     public enum EStageItemType
     {
-        Can,
+        Can
     }
 }

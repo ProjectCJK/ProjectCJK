@@ -2,15 +2,13 @@ using System;
 using Modules.DesignPatterns.Singletons;
 using UI;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 
 namespace Managers
 {
     public class UIManager : SingletonMono<UIManager>
     {
-        [Header("=== 건물 업그레이드 패널 ===")]
-        [SerializeField] private UI_BuildingEnhancement uiBuildingEnhancement;
+        [Header("=== 건물 업그레이드 패널 ===")] [SerializeField]
+        private UI_BuildingEnhancement uiBuildingEnhancement;
 
         public void GetPanelBuildingEnhancement(
             string buildingName,
@@ -31,7 +29,6 @@ namespace Managers
             Action onClickUpgradeButtonForBuildingOption1,
             Action onClickUpgradeButtonForBuildingOption2)
         {
-         
             uiBuildingEnhancement.Activate(
                 buildingName,
                 buildingProductSprite,
@@ -50,7 +47,7 @@ namespace Managers
                 requiredBuildingLevelToUpgradeOption2Level,
                 onClickUpgradeButtonForBuildingOption1,
                 onClickUpgradeButtonForBuildingOption2
-                );
+            );
         }
 
         public void ReturnPanelBuildingEnhancement()

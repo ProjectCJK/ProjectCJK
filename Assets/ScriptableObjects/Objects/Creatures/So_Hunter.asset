@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01a4f136cbc348e9b9953c8fe938906a, type: 3}
+  m_Name: So_Hunter
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3719895507266736500, guid: da35eeac191c54714a6dd1782a6ce574, type: 3}
+  BaseMovementSpeed: 5
+  BaseInventorySize: 1
+  BaseInteractionStandbySecond: 0
+  CreatureSprites:
+    Body:
+    - {fileID: 21300000, guid: fd939c85592fe2f4186e7a9390312607, type: 3}
+    Bag: []
+    Head:
+    - {fileID: 21300000, guid: 29778573ede693c46a8a9a3f7331607f, type: 3}
+    BackHair: []
+    Scarf:
+    - {fileID: 21300000, guid: 0582fc4a6a1aa7b4fa567231ebc58c52, type: 3}
+    Hat:
+    - {fileID: 21300000, guid: c4f2b08e56d3a7a41887d6086a7c3cbe, type: 3}
+    Leg_Left:
+    - {fileID: 21300000, guid: e6409fbf2e1263f49a8c01f3a990677d, type: 3}
+    Leg_Right:
+    - {fileID: 21300000, guid: e6409fbf2e1263f49a8c01f3a990677d, type: 3}
+  BaseHealth: 100
+  BaseDamage: 10
+  BaseAttackDelay: 0.2
+  ItemPickupRange: 5

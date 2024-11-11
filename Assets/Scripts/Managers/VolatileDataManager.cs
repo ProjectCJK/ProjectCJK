@@ -1,30 +1,25 @@
 using System.Collections.Generic;
 using Interfaces;
+using Modules.DesignPatterns.Singletons;
 using Units.Stages.Units.Items.Enums;
-using Unity.VisualScripting;
 
 namespace Managers
 {
-    public class VolatileDataManager : Modules.DesignPatterns.Singletons.Singleton<VolatileDataManager>, IRegisterReference
+    public class VolatileDataManager : Singleton<VolatileDataManager>, IRegisterReference
     {
-        public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
-        
-        public int CurrentStageLevel;
+        public readonly Dictionary<string, int> ItemPrices = new();
         public float CurrentDeliveryManMoveSpeed;
-        
-        public readonly Dictionary<string, int> ItemPrices = new ();
-        
+
+        public int CurrentStageLevel;
+        public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
+
         public void RegisterReference()
         {
-         
         }
-        
+
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {
-            if (item1.HasValue && item2.HasValue)
-            {
-                return ItemPrices[$"{item1.Value}_{item2.Value}"];
-            }
+            if (item1.HasValue && item2.HasValue) return ItemPrices[$"{item1.Value}_{item2.Value}"];
 
             return 0;
         }

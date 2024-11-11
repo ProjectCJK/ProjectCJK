@@ -5,8 +5,6 @@ namespace Units.Stages.UI
 {
     public class CurrencyViewModel : BaseViewModel
     {
-        public int GoldCount => _currencyModel.GoldCount;
-        
         private readonly CurrencyModel _currencyModel;
 
         public CurrencyViewModel(CurrencyModel currencyModel)
@@ -14,7 +12,9 @@ namespace Units.Stages.UI
             _currencyModel = currencyModel;
             _currencyModel.PropertyChanged += OnModelPropertyChanged;
         }
-        
+
+        public int GoldCount => _currencyModel.GoldCount;
+
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(e.PropertyName); // 변경된 프로퍼티를 UI에 알림

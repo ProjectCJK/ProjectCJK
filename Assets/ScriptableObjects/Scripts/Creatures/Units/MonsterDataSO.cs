@@ -18,7 +18,7 @@ namespace ScriptableObjects.Scripts.Creatures.Units
         public Sprite EmotionDeathSprite;
         public Sprite BodySprite;
         public Sprite BodyDeathSprite;
-        public Sprite HairDeathSprite;
+        public Sprite HairSprite;
         public Sprite LegLeftSprite;
         public Sprite LegRightSprite;
     }

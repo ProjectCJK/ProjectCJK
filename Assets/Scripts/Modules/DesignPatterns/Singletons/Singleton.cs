@@ -10,12 +10,11 @@ namespace Modules.DesignPatterns.Singletons
             get
             {
                 if (_instance == null)
-                {
                     lock (_lock)
                     {
                         _instance ??= new T();
                     }
-                }
+
                 return _instance;
             }
         }

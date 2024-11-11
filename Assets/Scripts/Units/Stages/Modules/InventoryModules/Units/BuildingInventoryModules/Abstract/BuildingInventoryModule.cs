@@ -19,16 +19,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
 
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
-        public override int MaxInventorySize => _buildingStatsModule.MaxProductInventorySize;
-        public override IItemFactory ItemFactory { get; }
-        public override Transform SenderTransform { get; }
-        public override Transform ReceiverTransform { get; }
-
         private readonly BuildingStatsModule _buildingStatsModule;
         protected readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
-
-        public string InputItemKey { get; }
-        public string OutputItemKey { get; }
 
         protected BuildingInventoryModule(
             Transform senderTransform,
@@ -46,6 +38,13 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             OutputItemKey = outputItemKey;
         }
 
+        public string InputItemKey { get; }
+        public string OutputItemKey { get; }
+        public override int MaxInventorySize => _buildingStatsModule.MaxProductInventorySize;
+        public override IItemFactory ItemFactory { get; }
+        public override Transform SenderTransform { get; }
+        public override Transform ReceiverTransform { get; }
+
         public override void Initialize()
         {
             _itemReceiverQueue.Clear();
@@ -62,6 +61,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
                         _itemReceiverQueue.Enqueue(itemReceiver, (int)itemReceiver.CreatureType);
                         return true;
                     }
+
                     return false;
                 case false:
                     _itemReceiverQueue.Remove(itemReceiver);
@@ -69,18 +69,22 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             }
         }
 
-        public int GetItemCount(string key) => Inventory.GetValueOrDefault(key, 0);
+        public int GetItemCount(string key)
+        {
+            return Inventory.GetValueOrDefault(key, 0);
+        }
 
         protected override void SendItem()
         {
             if (_itemReceiverQueue.Count == 0 || !IsReadyToSend()) return;
-            
+
             if (!Inventory.TryGetValue(OutputItemKey, out var itemCount) || itemCount <= 0) return;
 
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver))
             {
-                if (!string.Equals(OutputItemKey, $"{ECurrencyType.Money}") && !currentItemReceiver.CanReceiveItem()) return;
-           
+                if (!string.Equals(OutputItemKey, $"{ECurrencyType.Money}") &&
+                    !currentItemReceiver.CanReceiveItem()) return;
+
                 IItem item = PopSpawnedItem();
                 if (item != null)
                 {

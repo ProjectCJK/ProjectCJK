@@ -4,14 +4,12 @@ namespace Units.Stages.Modules.HealthModules.Abstract
     {
         public int MaxHealth { get; }
     }
-    
+
     public interface IHealthModule
     {
-    
     }
-    
+
     public abstract class HealthModule : IHealthModule
     {
-        
     }
 }

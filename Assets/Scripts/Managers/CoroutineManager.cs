@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Modules;
 using Modules.DesignPatterns.Singletons;
 using UnityEngine;
 
@@ -19,7 +18,7 @@ namespace Managers
         {
             StopCoroutine(coroutine);
         }
-        
+
         public static IEnumerator Timer(float seconds, Action<bool> callback)
         {
             yield return new WaitForSeconds(seconds);

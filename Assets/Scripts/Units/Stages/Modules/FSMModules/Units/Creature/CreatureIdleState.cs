@@ -14,11 +14,17 @@ namespace Units.Stages.Modules.FSMModules.Units.Creature
             StartAnimationWithBool(AnimationParameterData.IdleParameterHash);
         }
 
-        public override void Update() { }
+        public override void Update()
+        {
+        }
 
-        public override void FixedUpdate() { }
+        public override void FixedUpdate()
+        {
+        }
 
-        public override void LateUpdate() { }
+        public override void LateUpdate()
+        {
+        }
 
         public override void Exit()
         {

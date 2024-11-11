@@ -12,7 +12,6 @@ namespace Modules.DesignPatterns.Singletons
             get
             {
                 if (_instance == null)
-                {
                     lock (_lock)
                     {
                         _instance = FindObjectOfType<T>();
@@ -23,7 +22,7 @@ namespace Modules.DesignPatterns.Singletons
                             DontDestroyOnLoad(singletonObject); // 씬 전환 시 파괴되지 않도록
                         }
                     }
-                }
+
                 return _instance;
             }
         }

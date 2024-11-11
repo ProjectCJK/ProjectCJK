@@ -12,7 +12,6 @@ namespace Modules.DesignPatterns.Singletons
             get
             {
                 if (_instance == null)
-                {
                     lock (_lock)
                     {
                         _instance = FindObjectOfType<T>();
@@ -22,7 +21,7 @@ namespace Modules.DesignPatterns.Singletons
                             _instance = singletonObject.AddComponent<T>();
                         }
                     }
-                }
+
                 return _instance;
             }
         }
@@ -30,13 +29,8 @@ namespace Modules.DesignPatterns.Singletons
         private void Awake()
         {
             if (_instance == null)
-            {
                 _instance = this as T;
-            }
-            else if (_instance != this)
-            {
-                Destroy(gameObject); // 이미 인스턴스가 존재하면 새로운 객체 파괴
-            }
+            else if (_instance != this) Destroy(gameObject); // 이미 인스턴스가 존재하면 새로운 객체 파괴
         }
     }
 }

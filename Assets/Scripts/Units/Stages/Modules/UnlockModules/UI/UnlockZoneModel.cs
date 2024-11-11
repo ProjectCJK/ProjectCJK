@@ -10,26 +10,20 @@ namespace Units.Stages.Modules.UnlockModules.UI
         public int GoldCount
         {
             get => _goldCount;
-            
+
             private set
             {
-                if (SetField(ref _goldCount, value))
-                {
-                    OnPropertyChanged();
-                }
+                if (SetField(ref _goldCount, value)) OnPropertyChanged();
             }
         }
-        
+
         public int MaxGoldCount
         {
             get => _maxGoldCount;
-            
+
             private set
             {
-                if (SetField(ref _maxGoldCount, value))
-                {
-                    OnPropertyChanged();
-                }
+                if (SetField(ref _maxGoldCount, value)) OnPropertyChanged();
             }
         }
 

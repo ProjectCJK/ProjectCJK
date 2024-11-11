@@ -7,7 +7,7 @@ namespace Units.Stages.UI
     public class CurrencyView : BaseView<CurrencyViewModel>
     {
         public TextMeshProUGUI GoldText;
-        
+
         protected override void BindUIElements()
         {
             UpdateUI();
@@ -17,7 +17,7 @@ namespace Units.Stages.UI
         {
             UpdateUI();
         }
-        
+
         private void UpdateUI()
         {
             GoldText.text = viewModel.GoldCount.ToString();

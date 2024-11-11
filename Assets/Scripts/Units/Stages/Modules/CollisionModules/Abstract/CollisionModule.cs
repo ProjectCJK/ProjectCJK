@@ -6,12 +6,11 @@ namespace Units.Stages.Modules.CollisionModules.Abstract
     {
         public float WaitingTime { get; }
     }
-    
+
     public interface ICollisionModule
     {
-    
     }
-    
+
     public enum ECollisionType
     {
         None,
@@ -22,7 +21,7 @@ namespace Units.Stages.Modules.CollisionModules.Abstract
         PaymentZone,
         UnlockZone
     }
-    
+
     public class CollisionModule : ICollisionModule
     {
         private const string tradeZoneLayer = "TradeZone";
@@ -30,13 +29,13 @@ namespace Units.Stages.Modules.CollisionModules.Abstract
         private const string HuntingZoneLayer = "HuntingZone";
         private const string SpawnZoneLayer = "SpawnZone";
         private const string PaymentZoneLayer = "PaymentZone";
+        private readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
+        private readonly int PaymentZoneLayerMask = LayerMask.NameToLayer(PaymentZoneLayer);
+        private readonly int spawnZoneLayerMask = LayerMask.NameToLayer(SpawnZoneLayer);
 
         private readonly int tradeZoneLayerMask = LayerMask.NameToLayer(tradeZoneLayer);
         private readonly int upgradeZoneLayerMask = LayerMask.NameToLayer(upgradeZoneLayer);
-        private readonly int huntingZoneLayerMask = LayerMask.NameToLayer(HuntingZoneLayer);
-        private readonly int spawnZoneLayerMask = LayerMask.NameToLayer(SpawnZoneLayer);
-        private readonly int PaymentZoneLayerMask = LayerMask.NameToLayer(PaymentZoneLayer);
-        
+
         protected ECollisionType CheckLayer(int layer)
         {
             return layer switch

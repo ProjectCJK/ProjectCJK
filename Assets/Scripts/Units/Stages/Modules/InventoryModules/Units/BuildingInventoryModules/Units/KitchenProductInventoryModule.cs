@@ -1,4 +1,3 @@
-using System;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
@@ -10,7 +9,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
     public interface IKitchenProductInventoryModule : IBuildingInventoryModule
     {
     }
-    
+
     public class KitchenProductInventoryModule : BuildingInventoryModule, IKitchenProductInventoryModule
     {
         public KitchenProductInventoryModule(Transform senderTransform,
@@ -21,7 +20,6 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
-            
         }
 
         protected override void OnItemReceived(string inputItemKey, IItem item)

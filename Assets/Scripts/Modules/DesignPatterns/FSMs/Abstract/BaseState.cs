@@ -1,5 +1,4 @@
 using Modules.DesignPatterns.FSMs.Interfaces;
-using Modules.DesignPatterns.FSMs.Modules;
 using UnityEngine;
 
 namespace Modules.DesignPatterns.FSMs.Abstract

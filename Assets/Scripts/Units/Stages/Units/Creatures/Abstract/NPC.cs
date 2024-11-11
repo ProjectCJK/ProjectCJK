@@ -9,11 +9,9 @@ namespace Units.Stages.Units.Creatures.Abstract
 
     public interface INPC : ICreature
     {
-        
     }
-    
+
     public abstract class NPC : Creature, INPC
     {
-        
     }
 }

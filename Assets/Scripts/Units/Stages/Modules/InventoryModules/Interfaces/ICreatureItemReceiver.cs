@@ -1,5 +1,5 @@
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 
 namespace Units.Stages.Modules.InventoryModules.Interfaces
 {

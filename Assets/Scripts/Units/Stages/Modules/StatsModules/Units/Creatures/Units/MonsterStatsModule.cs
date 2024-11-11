@@ -9,13 +9,20 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
 {
     public interface IMonsterStatsModule : ICreatureTypeProperty, IMovementProperty, IHealthProperty
     {
-        
     }
 
     public class MonsterStatsModule : StatsModule, IMonsterStatsModule
     {
+        private readonly MonsterDataSO _monsterDataSo;
+
+        public MonsterStatsModule(MonsterDataSO monsterDataSo)
+        {
+            _monsterDataSo = monsterDataSo;
+            movementSpeed = _monsterDataSo.BaseMovementSpeed;
+        }
+
         public ECreatureType CreatureType => ECreatureType.Monster;
-        
+
         public float MovementSpeed
         {
             get => movementSpeed;
@@ -24,13 +31,5 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
 
 
         public int MaxHealth => _monsterDataSo.BaseHealth;
-
-        private readonly MonsterDataSO _monsterDataSo;
-        
-        public MonsterStatsModule(MonsterDataSO monsterDataSo)
-        {
-            _monsterDataSo = monsterDataSo;
-            movementSpeed = _monsterDataSo.BaseMovementSpeed;
-        }
     }
 }

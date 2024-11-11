@@ -1,16 +1,17 @@
 using System;
-using System.Collections.Generic;
 using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures.Units;
+using Units.Stages.Modules.CollisionModules.Units;
 using Units.Stages.Modules.FactoryModules.Units;
-using Units.Stages.Modules.FSMModules.Units;
 using Units.Stages.Modules.FSMModules.Units.Creature;
+using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
+using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.SpriteModules;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
-using Units.Stages.Units.Items.Units;
-using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,8 +24,9 @@ namespace Units.Stages.Units.Creatures.Units
         MoveTo,
         Deliver
     }
-    
-    public interface IDeliveryMan : IPoolable, IRegisterReference<DeliveryManDataSO, IItemFactory>, IInitializable<Vector3>
+
+    public interface IDeliveryMan : IPoolable, IRegisterReference<DeliveryManDataSO, IItemFactory>,
+        IInitializable<Vector3, CreatureSprite>
     {
         public CommandState CommandState { get; set; }
         public void SetDestinations(Tuple<string, Transform> destinations);
@@ -33,45 +35,28 @@ namespace Units.Stages.Units.Creatures.Units
         public Tuple<string, Transform> GetDestination();
         public void SetMovementSpeed(float currentDeliveryLodgingOption1Value);
     }
-    
+
     public class DeliveryMan : NPC, IDeliveryMan
     {
-        public CommandState CommandState { get; set; }
-        
+        private CreatureSpriteModule _creatureSpriteModule;
+
+        private CreatureStateMachine _creatureStateMachine;
+        private IDeliveryManCollisionModule _deliveryManCollisionModule;
+
+        private IDeliveryManInventoryModule _deliveryManInventoryModule;
+        private IDeliveryManMovementModule _deliveryManMovementModule;
+        private IDeliveryManStatsModule _deliveryManStatsModule;
+
+        private Tuple<string, Transform> _destination;
+
         public override ECreatureType CreatureType => _deliveryManStatsModule.CreatureType;
         public override Transform Transform => transform;
         public override Animator Animator { get; protected set; }
-        
-        // protected override CreatureStateMachine creatureStateMachine { get; set; }
-
-        private IDeliveryManInventoryModule _deliveryManInventoryModule;
-        private IDeliveryManStatsModule _deliveryManStatsModule;
-        private IDeliveryManMovementModule _deliveryManMovementModule;
-        private IDeliveryManCollisionModule _deliveryManCollisionModule;
-
-        private Tuple<string, Transform> _destination;
         private ENPCType NPCType => _deliveryManStatsModule.NPCType;
-        
-        public void RegisterReference(DeliveryManDataSO deliveryManDataSo, IItemFactory itemFactory)
+
+        private void Reset()
         {
-            var navMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshAgent.updateRotation = false;
-            navMeshAgent.updateUpAxis = false;
-            
-            _deliveryManStatsModule = new DeliveryManStatsModule(deliveryManDataSo);
-            _deliveryManMovementModule = new DeliveryManMovementModule(this, _deliveryManStatsModule);
-            _deliveryManCollisionModule = new DeliveryManCollisionModule(_deliveryManStatsModule);
-            _deliveryManInventoryModule = new DeliveryManInventoryModule(transform, transform, _deliveryManStatsModule, itemFactory, CreatureType, NPCType);
-            
-            _deliveryManCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;
-            _deliveryManCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
-        }
-        
-        public void Initialize(Vector3 startPosition)
-        {
-            SetActive(true);
-            CommandState = CommandState.NoOrder;
-            _deliveryManMovementModule.Initialize(startPosition);
+            SetActive(false);
         }
 
         private void Update()
@@ -84,7 +69,7 @@ namespace Units.Stages.Units.Creatures.Units
         {
             _deliveryManMovementModule.FixedUpdate();
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             _deliveryManCollisionModule.OnTriggerEnter2D(other);
@@ -95,10 +80,41 @@ namespace Units.Stages.Units.Creatures.Units
             _deliveryManCollisionModule.OnTriggerExit2D(other);
         }
 
+        public CommandState CommandState { get; set; }
+
+        public void RegisterReference(DeliveryManDataSO deliveryManDataSo, IItemFactory itemFactory)
+        {
+            Animator = spriteTransform.GetComponent<Animator>();
+            _creatureSpriteModule = spriteTransform.GetComponent<CreatureSpriteModule>();
+
+            var navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.updateRotation = false;
+            navMeshAgent.updateUpAxis = false;
+
+            _creatureStateMachine = new CreatureStateMachine(this);
+            _deliveryManStatsModule = new DeliveryManStatsModule(deliveryManDataSo);
+            _deliveryManMovementModule = new DeliveryManMovementModule(this, _deliveryManStatsModule,
+                _creatureStateMachine, spriteTransform);
+            _deliveryManCollisionModule = new DeliveryManCollisionModule(_deliveryManStatsModule);
+            _deliveryManInventoryModule = new DeliveryManInventoryModule(transform, transform, _deliveryManStatsModule,
+                itemFactory, CreatureType, NPCType);
+
+            _deliveryManCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;
+            _deliveryManCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
+        }
+
+        public void Initialize(Vector3 startPosition, CreatureSprite randomSprites)
+        {
+            _creatureSpriteModule.SetSprites(randomSprites);
+            SetActive(true);
+            CommandState = CommandState.NoOrder;
+            _deliveryManMovementModule.Initialize(startPosition);
+        }
+
         public void SetDestinations(Tuple<string, Transform> destination)
         {
             if (Equals(destination, _destination)) return;
-            
+
             _destination = destination;
             _deliveryManMovementModule.SetDestination(destination.Item2.position);
         }
@@ -117,24 +133,32 @@ namespace Units.Stages.Units.Creatures.Units
         {
             Reset();
         }
-        
-        private void Reset()
+
+        public bool IsInventoryFull()
         {
-            SetActive(false);
+            return _deliveryManInventoryModule.CurrentInventorySize >= _deliveryManInventoryModule.MaxInventorySize;
         }
-        
-        public bool IsInventoryFull() => _deliveryManInventoryModule.CurrentInventorySize >= _deliveryManInventoryModule.MaxInventorySize;
-        public bool HaveAnyItem() => _deliveryManInventoryModule.CurrentInventorySize > 0;
 
-        public Tuple<string, Transform> GetDestination() => _destination;
+        public bool HaveAnyItem()
+        {
+            return _deliveryManInventoryModule.CurrentInventorySize > 0;
+        }
 
-        public void SetMovementSpeed(float currentDeliveryLodgingOption1Value) => _deliveryManStatsModule.MovementSpeed = currentDeliveryLodgingOption1Value;
+        public Tuple<string, Transform> GetDestination()
+        {
+            return _destination;
+        }
+
+        public void SetMovementSpeed(float currentDeliveryLodgingOption1Value)
+        {
+            _deliveryManStatsModule.MovementSpeed = currentDeliveryLodgingOption1Value;
+        }
 
         private void SetActive(bool value)
         {
             if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
         }
-        
+
         private bool HandleOnCompareWithTarget(string buildingKey)
         {
             if (string.Equals(buildingKey, _destination.Item1))
@@ -145,10 +169,10 @@ namespace Units.Stages.Units.Creatures.Units
 
             return false;
         }
-        
+
         private void HandleOnTriggerTradeZone(ITradeZone zone, bool isConnected)
         {
-            _deliveryManInventoryModule.RegisterItemReceiver(zone, isConnected); 
+            _deliveryManInventoryModule.RegisterItemReceiver(zone, isConnected);
         }
     }
 }

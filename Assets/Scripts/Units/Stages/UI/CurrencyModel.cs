@@ -9,13 +9,10 @@ namespace Units.Stages.UI
         public int GoldCount
         {
             get => _goldCount;
-            
+
             private set
             {
-                if (SetField(ref _goldCount, value))
-                {
-                    OnPropertyChanged();
-                }
+                if (SetField(ref _goldCount, value)) OnPropertyChanged();
             }
         }
 

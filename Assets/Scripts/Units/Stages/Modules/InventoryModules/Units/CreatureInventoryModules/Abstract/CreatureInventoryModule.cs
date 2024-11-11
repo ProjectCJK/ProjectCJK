@@ -4,26 +4,20 @@ using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
 using Units.Stages.Modules.InventoryModules.Interfaces;
+using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Items.Enums;
-using Units.Stages.Units.Zones.Units.BuildingZones.Modules.TradeZones.Abstract;
 using UnityEngine;
 
 namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract
 {
     public interface ICreatureInventoryModule : IInventoryModule, ICreatureItemReceiver
     {
-        
     }
 
     public abstract class CreatureInventoryModule : InventoryModule, ICreatureInventoryModule
     {
-        public abstract ECreatureType CreatureType { get; }
-        public abstract override IItemFactory ItemFactory { get; }
-        public abstract override Transform SenderTransform { get; }
-        public abstract override Transform ReceiverTransform { get; }
-        public override int MaxInventorySize => InventoryProperty.MaxProductInventorySize;
-
         protected readonly HashSet<ITradeZone> interactionTradeZones = new();
 
         private readonly IInventoryProperty InventoryProperty;
@@ -33,19 +27,24 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
             InventoryProperty = inventoryProperty;
         }
 
+        public abstract ECreatureType CreatureType { get; }
+        public abstract override IItemFactory ItemFactory { get; }
+        public abstract override Transform SenderTransform { get; }
+        public abstract override Transform ReceiverTransform { get; }
+        public override int MaxInventorySize => InventoryProperty.MaxProductInventorySize;
+
         public override void Initialize()
         {
             Inventory.Clear();
         }
 
+        public abstract void RegisterItemReceiver(ITradeZone zone, bool isConnected);
+
         protected override void SendItem()
         {
             if (!IsReadyToSend() || interactionTradeZones.Count == 0) return;
 
-            foreach (ITradeZone targetZone in interactionTradeZones.ToList())
-            {
-                ProcessInteractionZone(targetZone);
-            }
+            foreach (ITradeZone targetZone in interactionTradeZones.ToList()) ProcessInteractionZone(targetZone);
 
             SetLastSendTime();
         }
@@ -59,36 +58,43 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
                 if (CurrencyManager.Instance.Gold > 0)
                 {
                     var targetMoney = zone.CanReceiveMoney();
-                    
+
                     if (targetMoney > 0 && CurrencyManager.Instance.Gold > 0)
                     {
-                        if (targetMoney > DataManager.GoldSendingMaximum)
-                        {
-                            targetMoney = DataManager.GoldSendingMaximum;
-                        }
+                        if (targetMoney > DataManager.GoldSendingMaximum) targetMoney = DataManager.GoldSendingMaximum;
 
-                        targetMoney = targetMoney >= CurrencyManager.Instance.Gold ? CurrencyManager.Instance.Gold : targetMoney;
-                        
+                        targetMoney = targetMoney >= CurrencyManager.Instance.Gold
+                            ? CurrencyManager.Instance.Gold
+                            : targetMoney;
+
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, targetMoney, SenderTransform.position);
-                    
+
                         CurrencyManager.Instance.RemoveGold(targetMoney);
                     }
                 }
             }
+            else if (string.Equals(zone.BuildingKey, $"{EBuildingType.WareHouse}"))
+            {
+                if (Inventory.Count > 0)
+                    if (zone.CanReceiveItem())
+                        foreach (KeyValuePair<string, int> item in Inventory)
+                        {
+                            zone.ReceiveItemThroughTransfer(item.Key, 1, SenderTransform.position);
+                            RemoveItem(item.Key);
+
+                            break;
+                        }
+            }
             else
             {
                 if (Inventory.TryGetValue(zone.InputItemKey, out var itemCount) && itemCount > 0)
-                {
                     if (zone.CanReceiveItem())
                     {
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, 1, SenderTransform.position);
                         if (spawnedItemStack.Count > 0) ItemFactory.ReturnItem(PopSpawnedItem());
                         RemoveItem(zone.InputItemKey);
                     }
-                }
             }
         }
-
-        public abstract void RegisterItemReceiver(ITradeZone zone, bool isConnected);
     }
 }

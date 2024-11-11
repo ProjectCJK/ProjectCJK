@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GoogleSheets
 {
-    [System.Serializable]
+    [Serializable]
     public class SerializableRow
     {
         public List<string> rowData = new();
     }
 
-    [System.Serializable]
+    [Serializable]
     public class GameData : ScriptableObject
     {
         public string[] columnNames;
@@ -22,14 +23,11 @@ namespace GoogleSheets
         {
             columnNames = newColumnNames;
             dataRows.Clear();
-            
+
             for (var i = 0; i < newData.GetLength(0); i++)
             {
                 var row = new SerializableRow();
-                for (var j = 0; j < newData.GetLength(1); j++)
-                {
-                    row.rowData.Add(newData[i, j]);
-                }
+                for (var j = 0; j < newData.GetLength(1); j++) row.rowData.Add(newData[i, j]);
                 dataRows.Add(row);
             }
 
@@ -49,14 +47,10 @@ namespace GoogleSheets
 
             // 새 배열을 생성하고 캐시에 저장
             cachedData = new string[dataRows.Count, columnNames.Length];
-            
+
             for (var i = 0; i < dataRows.Count; i++)
-            {
-                for (var j = 0; j < columnNames.Length; j++)
-                {
-                    cachedData[i, j] = dataRows[i].rowData[j];
-                }
-            }
+            for (var j = 0; j < columnNames.Length; j++)
+                cachedData[i, j] = dataRows[i].rowData[j];
 
             return cachedData;
         }

@@ -1,7 +1,7 @@
 using System.Collections;
 using Interfaces;
 using Managers;
-using Units.Stages.Modules.FSMModules.Units.Monsters;
+using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Creatures.Units;
@@ -18,62 +18,55 @@ namespace Units.Stages.Modules.MovementModules.Units
 
     public class MonsterMovementModule : MovementModuleWithoutNavMeshAgent, IMonsterMovementModule
     {
-        public bool hitTrigger { get; set; }
-        
-        protected override BoxCollider2D BoxCollider2D { get; }
-        
-        private readonly IMonsterStatsModule _monsterStatModule;
-        private readonly MonsterStateMachine _monsterStateMachine;
-        private readonly Transform _monsterTransform;
-        private readonly Transform _spriteTransform;
-
         private const float SlowDuration = 0.5f;
         private const float DirectionChangeInterval = 3.0f;
         private const float DetectionRange = 2.0f;
         private const float IdleProbability = 0.3f;
+        private static readonly int Encounter = Animator.StringToHash("Encounter");
+        private readonly CreatureStateMachine _creatureStateMachine;
 
         private readonly int _monsterCollisionLayerMask = LayerMaskParserModule.MonsterCollisionLayerMask;
-        private static readonly int Encounter = Animator.StringToHash("Encounter");
-        
-        private Transform _target;
-        private Vector3 _moveDirection;
-        private bool _isSlowed;
-        private bool _encounterTrigger;
-        private bool _isPatrolling = true;
-        private bool _isMoving; // 추가된 변수
-        private float _nextDirectionChangeTime;
+
+        private readonly IMonsterStatsModule _monsterStatModule;
+        private readonly Transform _monsterTransform;
+        private readonly Transform _spriteTransform;
         private Coroutine _encounterCoroutine;
-        private Coroutine _waitCoroutine;
-        private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f : _encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
+        private bool _encounterTrigger;
         private bool _isFacingRight = true;
+        private bool _isMoving; // 추가된 변수
+        private bool _isPatrolling = true;
+        private bool _isSlowed;
+        private Vector3 _moveDirection;
+        private float _nextDirectionChangeTime;
+
+        private Transform _target;
+        private Coroutine _waitCoroutine;
 
         public MonsterMovementModule(
             Monster monster,
             IMonsterStatsModule monsterStatModule,
-            MonsterStateMachine monsterStateMachine,
+            CreatureStateMachine monsterStateMachine,
             Transform spriteTransform)
         {
             _monsterStatModule = monsterStatModule;
-            _monsterStateMachine = monsterStateMachine;
+            _creatureStateMachine = monsterStateMachine;
             _monsterTransform = monster.transform;
             _spriteTransform = spriteTransform;
             BoxCollider2D = monster.GetComponent<BoxCollider2D>();
         }
+
+        protected override BoxCollider2D BoxCollider2D { get; }
+
+        private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f :
+            _encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
+
+        public bool hitTrigger { get; set; }
 
         public void Initialize()
         {
             ResetState();
             SetRandomDirection();
             UpdateStateMachine();
-        }
-
-        private void ResetState()
-        {
-            hitTrigger = false;
-            _target = null;
-            SetEncounterTrigger(false);
-            _isSlowed = false;
-            _isMoving = false; // 초기 상태 설정
         }
 
         public void Update()
@@ -98,7 +91,7 @@ namespace Units.Stages.Modules.MovementModules.Units
                         SetRandomDirection();
                 }
             }
-            
+
             switch (_moveDirection.x)
             {
                 case > 0 when !_isFacingRight:
@@ -115,23 +108,36 @@ namespace Units.Stages.Modules.MovementModules.Units
             if (_encounterTrigger || (_isPatrolling && !hitTrigger))
             {
                 Vector3 previousPosition = _monsterTransform.position;
-                MoveWithCollision(_monsterTransform, _moveDirection * (MovementSpeed * Time.fixedDeltaTime), ref _moveDirection);
+                MoveWithCollision(_monsterTransform, _moveDirection * (MovementSpeed * Time.fixedDeltaTime),
+                    ref _moveDirection);
                 _isMoving = _monsterTransform.position != previousPosition;
                 UpdateStateMachine(); // 상태 업데이트
             }
-            
+
             DrawDirectionRay();
         }
 
-        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+        private void ResetState()
+        {
+            hitTrigger = false;
+            _target = null;
+            SetEncounterTrigger(false);
+            _isSlowed = false;
+            _isMoving = false; // 초기 상태 설정
+        }
+
+        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move,
+            ref Vector3 direction)
         {
             Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized, move.magnitude, _monsterCollisionLayerMask | collisionLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized,
+                move.magnitude, _monsterCollisionLayerMask | collisionLayerMask);
             if (hit.collider != null)
             {
                 direction = Vector3.Reflect(direction, hit.normal);
                 return false;
             }
+
             return true;
         }
 
@@ -165,13 +171,15 @@ namespace Units.Stages.Modules.MovementModules.Units
         private bool DetectPlayer()
         {
             Vector3 direction = _monsterTransform.position + _monsterTransform.right * DetectionRange;
-            RaycastHit2D hit = Physics2D.CircleCast(_monsterTransform.position, BoxCollider2D.size.y * 4, direction.normalized, DetectionRange, LayerMaskParserModule.UnitLayerMask);
+            RaycastHit2D hit = Physics2D.CircleCast(_monsterTransform.position, BoxCollider2D.size.y * 4,
+                direction.normalized, DetectionRange, LayerMaskParserModule.UnitLayerMask);
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
                 _target = hit.collider.transform;
                 return true;
             }
+
             return false;
         }
 
@@ -212,7 +220,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
             _spriteTransform.localScale = scale;
         }
-        
+
         private IEnumerator ResetSpeedAfterDelay()
         {
             yield return new WaitForSeconds(SlowDuration);
@@ -221,7 +229,9 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private void UpdateStateMachine()
         {
-            _monsterStateMachine.ChangeState(_isMoving ? _monsterStateMachine.MonsterRunState : _monsterStateMachine.MonsterIdleState);
+            _creatureStateMachine.ChangeState(_isMoving
+                ? _creatureStateMachine.CreatureRunState
+                : _creatureStateMachine.CreatureIdleState);
         }
 
         private void DrawDirectionRay()
@@ -233,7 +243,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private void SetEncounterTrigger(bool value)
         {
             _encounterTrigger = value;
-            _monsterStateMachine.Creature.Animator.SetBool(Encounter, value);   
+            _creatureStateMachine.Creature.Animator.SetBool(Encounter, value);
         }
     }
 }

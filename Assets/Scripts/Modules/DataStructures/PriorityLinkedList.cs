@@ -4,14 +4,14 @@ namespace Modules.DataStructures
 {
     public class Node<T>
     {
-        public T Data { get; set; }
-        public Node<T> Next { get; set; }
-
         public Node(T data)
         {
             Data = data;
             Next = null;
         }
+
+        public T Data { get; set; }
+        public Node<T> Next { get; set; }
     }
 
     public class PriorityLinkedList<T>
@@ -32,10 +32,7 @@ namespace Modules.DataStructures
                 Node<T> current = head;
 
                 // 우선순위가 같은 경우 혹은 더 낮은 경우 적절한 위치를 찾음
-                while (current.Next != null && priority >= GetPriority(current.Next.Data))
-                {
-                    current = current.Next;
-                }
+                while (current.Next != null && priority >= GetPriority(current.Next.Data)) current = current.Next;
 
                 newNode.Next = current.Next;
                 current.Next = newNode;

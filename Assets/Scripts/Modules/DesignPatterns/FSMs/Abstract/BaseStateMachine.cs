@@ -24,7 +24,7 @@ namespace Modules.DesignPatterns.FSMs.Abstract
         {
             _currentState?.FixedUpdate();
         }
-        
+
         public void LateUpdate()
         {
             _currentState?.LateUpdate();

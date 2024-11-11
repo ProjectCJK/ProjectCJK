@@ -1,14 +1,17 @@
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
 using Units.Stages.UI;
-using Unity.IO.LowLevel.Unsafe;
 
 namespace Managers
 {
     public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<CurrencyView>, IInitializable
     {
+        private CurrencyModel _currencyModel;
+        private CurrencyView _currencyView;
+        private CurrencyViewModel _currencyViewModel;
         private int _gold;
-        public int Gold 
+
+        public int Gold
         {
             get => _gold;
             private set
@@ -17,18 +20,19 @@ namespace Managers
                 UpdateViewModel();
             }
         }
-        
+
         public float Diamond { get; set; } = 0;
         public float Cookie { get; set; } = 0;
 
-        private CurrencyModel _currencyModel;
-        private CurrencyViewModel _currencyViewModel;
-        private CurrencyView _currencyView;
+        public void Initialize()
+        {
+            _currencyViewModel.UpdateValues(Gold);
+        }
 
         public void RegisterReference(CurrencyView currencyView)
         {
             _currencyView = currencyView;
-            
+
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
             _currencyView.BindViewModel(_currencyViewModel);
@@ -36,11 +40,6 @@ namespace Managers
             _gold = 100000;
         }
 
-        public void Initialize()
-        {
-            _currencyViewModel.UpdateValues(Gold);
-        }
-        
         public void AddGold(int value)
         {
             Gold += value;

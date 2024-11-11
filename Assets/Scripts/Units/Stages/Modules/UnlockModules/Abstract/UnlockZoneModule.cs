@@ -13,26 +13,25 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         public void SetCurrentState(EActiveStatus state);
         public void UpdateViewModel();
     }
-    
+
     public abstract class UnlockZoneModule : MonoBehaviour, IUnlockZoneModule
     {
-        public abstract event Action<string, EActiveStatus> OnChangeActiveStatus; 
         [SerializeField] private UnlockZoneView _unlockZoneView;
-        
-        public abstract EUnlockZoneType UnlockZoneType { get; }
+
+        public GameObject StandbyObject;
+        public GameObject LockObject;
+
+        private UnlockZoneModel _unlockZoneModel;
+        private UnlockZoneViewModel _unlockZoneViewModel;
         public string TargetKey { get; private set; }
+
+        public abstract EUnlockZoneType UnlockZoneType { get; }
         public EActiveStatus ActiveStatus { get; protected set; }
         public int CurrentGoldForUnlock { get; set; }
         public int RequiredGoldForUnlock { get; set; }
-        
-        public GameObject StandbyObject;
-        public GameObject LockObject;
-        
-        private UnlockZoneModel _unlockZoneModel;
-        private UnlockZoneViewModel _unlockZoneViewModel;
 
         public abstract void SetCurrentState(EActiveStatus state);
-        
+
         public void RegisterReference(string targetKey)
         {
             TargetKey = targetKey;
@@ -45,5 +44,7 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         {
             _unlockZoneViewModel.UpdateValues(CurrentGoldForUnlock, RequiredGoldForUnlock);
         }
+
+        public abstract event Action<string, EActiveStatus> OnChangeActiveStatus;
     }
 }
