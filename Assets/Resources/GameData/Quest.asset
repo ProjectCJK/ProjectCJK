@@ -47,7 +47,7 @@ MonoBehaviour:
     - Int
     - Int
     - Int
-    - Strign
+    - Int
     - String
     - String
     - Enum
@@ -62,11 +62,11 @@ MonoBehaviour:
     - 110001
     - 1
     - 1
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 1"
+    - 1
     - St_110001
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 5
     - Star
     - 1
@@ -77,7 +77,7 @@ MonoBehaviour:
     - 110002
     - 1
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 2"
+    - 2
     - St_110002
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -92,11 +92,11 @@ MonoBehaviour:
     - 110003
     - 1
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 3"
+    - 3
     - St_110003
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 10
     - Star
     - 1
@@ -107,7 +107,7 @@ MonoBehaviour:
     - 110004
     - 1
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 4"
+    - 4
     - St_110004
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -122,7 +122,7 @@ MonoBehaviour:
     - 110005
     - 1
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 5"
+    - 5
     - St_110005
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC74\uC124"
     - Build
@@ -137,7 +137,7 @@ MonoBehaviour:
     - 110006
     - 1
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 6"
+    - 6
     - St_110006
     - "\uC9C4\uC5F4\uB300 B \uAC74\uC124"
     - Build
@@ -152,7 +152,7 @@ MonoBehaviour:
     - 110007
     - 1
     - 4
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 7"
+    - 7
     - St_110007
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -167,7 +167,7 @@ MonoBehaviour:
     - 110008
     - 1
     - 4
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 8"
+    - 8
     - St_110008
     - "\uC624\uC774 \uC218\uD655"
     - Get
@@ -182,7 +182,7 @@ MonoBehaviour:
     - 110009
     - 1
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 9"
+    - 9
     - St_110009
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -197,7 +197,7 @@ MonoBehaviour:
     - 110010
     - 1
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 10"
+    - 10
     - St_110010
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -212,11 +212,11 @@ MonoBehaviour:
     - 110011
     - 1
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 11"
+    - 11
     - St_110011
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 5
     - Star
     - 1
@@ -227,7 +227,7 @@ MonoBehaviour:
     - 110012
     - 1
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 12"
+    - 12
     - St_110012
     - "\uC624\uC774 \uC218\uD655"
     - Get
@@ -242,7 +242,7 @@ MonoBehaviour:
     - 110013
     - 1
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 13"
+    - 13
     - St_110013
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -257,11 +257,11 @@ MonoBehaviour:
     - 110014
     - 1
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 14"
+    - 14
     - St_110014
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 20
     - Star
     - 1
@@ -272,11 +272,11 @@ MonoBehaviour:
     - 110015
     - 1
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 15"
+    - 15
     - St_110015
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 10
     - Star
     - 1
@@ -287,7 +287,7 @@ MonoBehaviour:
     - 110016
     - 1
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 16"
+    - 16
     - St_110016
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -302,7 +302,7 @@ MonoBehaviour:
     - 110017
     - 1
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 17"
+    - 17
     - St_110017
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -317,7 +317,7 @@ MonoBehaviour:
     - 110018
     - 1
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 18"
+    - 18
     - St_110018
     - "\uB3C8 \uC218\uC9D1"
     - Get
@@ -332,11 +332,11 @@ MonoBehaviour:
     - 110019
     - 1
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 19"
+    - 19
     - St_110019
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 30
     - Star
     - 1
@@ -347,11 +347,11 @@ MonoBehaviour:
     - 110020
     - 1
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 20"
+    - 20
     - St_110020
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 20
     - Star
     - 1
@@ -362,11 +362,11 @@ MonoBehaviour:
     - 110021
     - 1
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 21"
+    - 21
     - St_110021
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 10
     - Star
     - 1
@@ -377,7 +377,7 @@ MonoBehaviour:
     - 110022
     - 2
     - 1
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 22"
+    - 22
     - St_110022
     - "\uD1A0\uB9C8\uD1A0 \uC218\uD655"
     - Get
@@ -392,7 +392,7 @@ MonoBehaviour:
     - 110023
     - 2
     - 1
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 23"
+    - 23
     - St_110023
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -407,7 +407,7 @@ MonoBehaviour:
     - 110024
     - 2
     - 1
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 24"
+    - 24
     - St_110024
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -422,11 +422,11 @@ MonoBehaviour:
     - 110025
     - 2
     - 1
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 25"
+    - 25
     - St_110025
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 5
     - Star
     - 1
@@ -437,7 +437,7 @@ MonoBehaviour:
     - 110026
     - 2
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 26"
+    - 26
     - St_110026
     - "\uB3C8 \uC218\uC9D1"
     - Get
@@ -452,11 +452,11 @@ MonoBehaviour:
     - 110027
     - 2
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 27"
+    - 27
     - St_110027
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 5
     - Star
     - 1
@@ -467,7 +467,7 @@ MonoBehaviour:
     - 110028
     - 2
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 28"
+    - 28
     - St_110028
     - "\uD1A0\uB9C8\uD1A0 \uC218\uD559"
     - Get
@@ -482,7 +482,7 @@ MonoBehaviour:
     - 110029
     - 2
     - 2
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 29"
+    - 29
     - St_110029
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -497,11 +497,11 @@ MonoBehaviour:
     - 110030
     - 2
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 30"
+    - 30
     - St_110030
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 10
     - Star
     - 1
@@ -512,7 +512,7 @@ MonoBehaviour:
     - 110031
     - 2
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 31"
+    - 31
     - St_110031
     - "\uB3C8 \uC218\uC9D1"
     - Get
@@ -527,7 +527,7 @@ MonoBehaviour:
     - 110032
     - 2
     - 3
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 32"
+    - 32
     - St_110032
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -542,7 +542,7 @@ MonoBehaviour:
     - 110033
     - 2
     - 4
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 33"
+    - 33
     - St_110033
     - "\uD1A0\uB9C8\uD1A0 \uC218\uD655"
     - Get
@@ -557,7 +557,7 @@ MonoBehaviour:
     - 110034
     - 2
     - 4
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 34"
+    - 34
     - St_110034
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC74\uC124"
     - Build
@@ -572,7 +572,7 @@ MonoBehaviour:
     - 110035
     - 2
     - 4
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 35"
+    - 35
     - St_110035
     - "\uC9C4\uC5F4\uB300 B \uAC74\uC124"
     - Build
@@ -587,7 +587,7 @@ MonoBehaviour:
     - 110036
     - 2
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 36"
+    - 36
     - St_110036
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -602,11 +602,11 @@ MonoBehaviour:
     - 110037
     - 2
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 37"
+    - 37
     - St_110037
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 10
     - Star
     - 1
@@ -617,7 +617,7 @@ MonoBehaviour:
     - 110038
     - 2
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 38"
+    - 38
     - St_110038
     - "\uC624\uC774 \uC218\uD655"
     - Get
@@ -632,7 +632,7 @@ MonoBehaviour:
     - 110039
     - 2
     - 5
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 39"
+    - 39
     - St_110039
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -647,7 +647,7 @@ MonoBehaviour:
     - 110040
     - 2
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 40"
+    - 40
     - St_110040
     - "\uBC30\uB2EC\uC6D0 \uC219\uC18C \uAC74\uC124"
     - Build
@@ -662,11 +662,11 @@ MonoBehaviour:
     - 110041
     - 2
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 41"
+    - 41
     - St_110041
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 20
     - Star
     - 1
@@ -677,11 +677,11 @@ MonoBehaviour:
     - 110042
     - 2
     - 6
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 42"
+    - 42
     - St_110042
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 10
     - Star
     - 1
@@ -692,12 +692,12 @@ MonoBehaviour:
     - 110043
     - 2
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 43"
+    - 43
     - St_110043
-    - "\uC2E0\uADDC \uC601\uC5ED \uD574\uAE08"
-    - Zone_Open
-    - Zone_Open
-    - 2
+    - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
+    - Selling
+    - Kitchen_A
+    - 10
     - Star
     - 1
     - Dia
@@ -707,7 +707,7 @@ MonoBehaviour:
     - 110044
     - 2
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 44"
+    - 44
     - St_110044
     - "\uBC30\uB2EC\uC6D0 \uC774\uB3D9 \uC18D\uB3C4 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -722,11 +722,11 @@ MonoBehaviour:
     - 110045
     - 2
     - 7
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 45"
+    - 45
     - St_110045
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 15
     - Star
     - 1
@@ -737,7 +737,7 @@ MonoBehaviour:
     - 110046
     - 2
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 46"
+    - 46
     - St_110046
     - "\uCC3D\uACE0 A \uAC74\uC124"
     - Build
@@ -752,7 +752,7 @@ MonoBehaviour:
     - 110047
     - 2
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 47"
+    - 47
     - St_110047
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -767,11 +767,11 @@ MonoBehaviour:
     - 110048
     - 2
     - 8
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 48"
+    - 48
     - St_110048
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 20
     - Star
     - 1
@@ -782,11 +782,11 @@ MonoBehaviour:
     - 110049
     - 2
     - 9
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 49"
+    - 49
     - St_110049
     - "\uCE94\uB2DD\uBA38\uC2E0 C \uAC74\uC124"
     - Build
-    - KitchenC
+    - Kitchen_C
     - 1
     - Star
     - 1
@@ -797,7 +797,7 @@ MonoBehaviour:
     - 110050
     - 2
     - 9
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 50"
+    - 50
     - St_110050
     - "\uC9C4\uC5F4\uB300 C \uAC74\uC124"
     - Build
@@ -812,7 +812,7 @@ MonoBehaviour:
     - 110051
     - 2
     - 9
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 51"
+    - 51
     - St_110051
     - "\uCC3D\uACE0 A \uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -827,11 +827,11 @@ MonoBehaviour:
     - 110052
     - 2
     - 9
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 52"
+    - 52
     - St_110052
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 30
     - Star
     - 1
@@ -842,11 +842,11 @@ MonoBehaviour:
     - 110053
     - 2
     - 10
-    - "\uBA54\uC778 \uD018\uC2A4\uD2B8 53"
+    - 53
     - St_110053
     - "\uCE94\uB2DD\uBA38\uC2E0 C \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenC
+    - Kitchen_C
     - 10
     - Star
     - 1
@@ -857,7 +857,7 @@ MonoBehaviour:
     - 110054
     - 2
     - 10
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 54"
+    - 54
     - St_110054
     - "\uCF69 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -872,12 +872,12 @@ MonoBehaviour:
     - 110055
     - 2
     - 10
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 55"
+    - 55
     - St_110055
-    - "\uC2E0\uADDC \uC601\uC5ED \uD574\uAE08"
-    - Zone_Open
-    - Zone_Open
-    - 3
+    - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
+    - Selling
+    - Product_A
+    - 15
     - Star
     - 1
     - Dia
@@ -887,7 +887,7 @@ MonoBehaviour:
     - 110056
     - 2
     - 10
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 56"
+    - 56
     - St_110056
     - "\uCF69 \uC218\uD655"
     - Get
@@ -902,7 +902,7 @@ MonoBehaviour:
     - 110057
     - 2
     - 11
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 57"
+    - 57
     - St_110057
     - "\uCC3D\uACE0 A \uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -917,11 +917,11 @@ MonoBehaviour:
     - 110058
     - 2
     - 11
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 58"
+    - 58
     - St_110058
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 40
     - Star
     - 1
@@ -932,11 +932,11 @@ MonoBehaviour:
     - 110059
     - 2
     - 11
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 59"
+    - 59
     - St_110059
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 20
     - Star
     - 1
@@ -947,7 +947,7 @@ MonoBehaviour:
     - 110060
     - 2
     - 11
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 60"
+    - 60
     - St_110060
     - "\uBC30\uB2EC\uC6D0 \uC774\uB3D9 \uC18D\uB3C4 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -962,7 +962,7 @@ MonoBehaviour:
     - 110061
     - 2
     - 12
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 61"
+    - 61
     - St_110061
     - "\uCC3D\uACE0 A \uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -977,7 +977,7 @@ MonoBehaviour:
     - 110062
     - 2
     - 12
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 62"
+    - 62
     - St_110062
     - "\uC2A4\uD29C \uB0C4\uBE44 \uAC74\uC124"
     - Build
@@ -992,7 +992,7 @@ MonoBehaviour:
     - 110063
     - 2
     - 12
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 63"
+    - 63
     - St_110063
     - "\uC2A4\uD29C \uC9C4\uC5F4\uB300 \uAC74\uC124"
     - Build
@@ -1007,12 +1007,12 @@ MonoBehaviour:
     - 110064
     - 2
     - 13
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 64"
+    - 64
     - St_110064
-    - "\uC2E0\uADDC \uC601\uC5ED \uD574\uAE08"
-    - Zone_Open
-    - Zone_Open
-    - 4
+    - "\uCF69 \uC218\uD655"
+    - Get
+    - Material_C
+    - 10
     - Star
     - 1
     - Dia
@@ -1022,7 +1022,7 @@ MonoBehaviour:
     - 110065
     - 2
     - 13
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 65"
+    - 65
     - St_110065
     - "\uD1A0\uB9C8\uD1A0 \uC2A4\uD29C \uC0DD\uC0B0"
     - Product
@@ -1037,7 +1037,7 @@ MonoBehaviour:
     - 110066
     - 2
     - 13
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 66"
+    - 66
     - St_110066
     - "\uD1A0\uB9C8\uD1A0 \uC2A4\uD29C \uD310\uB9E4"
     - Selling
@@ -1052,11 +1052,11 @@ MonoBehaviour:
     - 110067
     - 2
     - 14
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 67"
+    - 67
     - St_110067
     - "\uC2A4\uD29C \uB0C4\uBE44 \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenD
+    - Kitchen_D
     - 10
     - Star
     - 1
@@ -1067,11 +1067,11 @@ MonoBehaviour:
     - 110068
     - 2
     - 14
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 68"
+    - 68
     - St_110068
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 30
     - Star
     - 1
@@ -1082,7 +1082,7 @@ MonoBehaviour:
     - 110069
     - 2
     - 14
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 69"
+    - 69
     - St_110069
     - "\uC624\uC774 \uC218\uD655"
     - Get
@@ -1097,11 +1097,11 @@ MonoBehaviour:
     - 110070
     - 2
     - 14
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 70"
+    - 70
     - St_110070
     - "\uCE94\uB2DD\uBA38\uC2E0 C \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenC
+    - Kitchen_C
     - 20
     - Star
     - 1
@@ -1112,7 +1112,7 @@ MonoBehaviour:
     - 110071
     - 2
     - 15
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 71"
+    - 71
     - St_110071
     - "\uCC3D\uACE0 A \uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -1127,7 +1127,7 @@ MonoBehaviour:
     - 110072
     - 2
     - 15
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 72"
+    - 72
     - St_110072
     - "\uCF69 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -1142,7 +1142,7 @@ MonoBehaviour:
     - 110073
     - 2
     - 15
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 73"
+    - 73
     - St_110073
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -1157,7 +1157,7 @@ MonoBehaviour:
     - 110074
     - 2
     - 15
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 74"
+    - 74
     - St_110074
     - "\uD1A0\uB9C8\uD1A0 \uC2A4\uD29C \uC0DD\uC0B0"
     - Product
@@ -1172,7 +1172,7 @@ MonoBehaviour:
     - 110075
     - 2
     - 16
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 75"
+    - 75
     - St_110075
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -1187,11 +1187,11 @@ MonoBehaviour:
     - 110076
     - 2
     - 16
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 76"
+    - 76
     - St_110076
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 50
     - Star
     - 1
@@ -1202,11 +1202,11 @@ MonoBehaviour:
     - 110077
     - 2
     - 16
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 77"
+    - 77
     - St_110077
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - Management
+    - ManagementDesk
     - 30
     - Star
     - 1
@@ -1217,7 +1217,7 @@ MonoBehaviour:
     - 110078
     - 2
     - 17
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 78"
+    - 78
     - St_110078
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -1232,7 +1232,7 @@ MonoBehaviour:
     - 110079
     - 2
     - 17
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 79"
+    - 79
     - St_110079
     - "\uBC30\uB2EC\uC6D0 \uC774\uB3D9 \uC18D\uB3C4 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -1247,11 +1247,11 @@ MonoBehaviour:
     - 110080
     - 2
     - 17
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 80"
+    - 80
     - St_110080
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 40
     - Star
     - 1
@@ -1262,7 +1262,7 @@ MonoBehaviour:
     - 110081
     - 2
     - 17
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 81"
+    - 81
     - St_110081
     - "\uB3C8 \uC218\uC9D1"
     - Get
@@ -1277,11 +1277,11 @@ MonoBehaviour:
     - 110082
     - 2
     - 18
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 82"
+    - 82
     - St_110082
     - "\uC2A4\uD29C \uB0C4\uBE44 \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenD
+    - Kitchen_D
     - 20
     - Star
     - 1
@@ -1292,11 +1292,11 @@ MonoBehaviour:
     - 110083
     - 2
     - 18
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 83"
+    - 83
     - St_110083
     - "\uCE94\uB2DD\uBA38\uC2E0 C \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenC
+    - Kitchen_C
     - 30
     - Star
     - 1
@@ -1307,7 +1307,7 @@ MonoBehaviour:
     - 110084
     - 2
     - 18
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 84"
+    - 84
     - St_110084
     - "\uCF69 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
@@ -1322,7 +1322,7 @@ MonoBehaviour:
     - 110085
     - 2
     - 18
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 85"
+    - 85
     - St_110085
     - "\uCC3D\uACE0 A \uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
@@ -1337,11 +1337,11 @@ MonoBehaviour:
     - 110086
     - 2
     - 19
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 86"
+    - 86
     - St_110086
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenA
+    - Kitchen_A
     - 60
     - Star
     - 1
@@ -1352,7 +1352,7 @@ MonoBehaviour:
     - 110087
     - 2
     - 19
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 87"
+    - 87
     - St_110087
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -1367,7 +1367,7 @@ MonoBehaviour:
     - 110088
     - 2
     - 19
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 88"
+    - 88
     - St_110088
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
@@ -1382,11 +1382,11 @@ MonoBehaviour:
     - 110089
     - 2
     - 19
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 89"
+    - 89
     - St_110089
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
-    - KitchenB
+    - Kitchen_B
     - 50
     - Star
     - 1
@@ -1397,7 +1397,7 @@ MonoBehaviour:
     - 110090
     - 2
     - 20
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 90"
+    - 90
     - St_110090
     - "\uB3C8 \uC218\uC9D1"
     - Get
@@ -1412,7 +1412,7 @@ MonoBehaviour:
     - 110091
     - 2
     - 20
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 91"
+    - 91
     - St_110091
     - "\uD1A0\uB9C8\uD1A0 \uC2A4\uD29C \uD310\uB9E4"
     - Selling
@@ -1427,7 +1427,7 @@ MonoBehaviour:
     - 110092
     - 2
     - 20
-    - "\uBC18\uBCF5 \uD018\uC2A4\uD2B8 92"
+    - 92
     - St_110092
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling

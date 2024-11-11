@@ -185,9 +185,9 @@ namespace Units.Stages.Units.Buildings.Units
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)
-                _kitchenStatsModule.GetUIKitchenEnhancement();
+                _kitchenStatsModule.GetUIBuildingEnhancement();
             else
-                _kitchenStatsModule.ReturnUIKitchenEnhancement();
+                _kitchenStatsModule.ReturnUIBuildingEnhancement();
         }
     }
 }

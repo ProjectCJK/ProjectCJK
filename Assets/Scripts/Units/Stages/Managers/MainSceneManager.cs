@@ -12,21 +12,26 @@ namespace Units.Stages.Managers
     [Serializable]
     public struct MainSceneDefaultSetting
     {
-        [Header("Stage Settings")] public RootCanvas Canvas;
+        [Header("### Stage Settings ###")]
+        [Header("=== UI Settings ===")]
+        public RootCanvas Canvas;
+        public GameObject UICurrencyPrefab;
+        public GameObject UIBuildingUpgradePanelPrefab;
         public GameObject JoystickPrefab;
         public GameObject StagePrefab;
         public CameraController CameraController;
-        public GameObject UICurrencyPrefab;
     }
 
     public class MainSceneManager : SceneSingleton<MainSceneManager>
     {
         [SerializeField] private MainSceneDefaultSetting _mainSceneDefaultSetting;
-        private CurrencyView _currencyView;
-
-        private Joystick _joystick;
-
+        
         private IStageController _stageController;
+        
+        private Joystick _joystick;
+        
+        private UI_Currency _uiCurrencyPrefab;
+        private UI_BuildingEnhancement _upgradePanelPrefab;
 
         private void Awake()
         {
@@ -53,9 +58,12 @@ namespace Units.Stages.Managers
 
         private void InstantiateUI()
         {
-            GameObject obj = Instantiate(_mainSceneDefaultSetting.UICurrencyPrefab,
-                _mainSceneDefaultSetting.Canvas.transform);
-            _currencyView = obj.GetComponent<CurrencyView>();
+            GameObject currencyPrefab = Instantiate(_mainSceneDefaultSetting.UICurrencyPrefab, _mainSceneDefaultSetting.Canvas.transform);
+            _uiCurrencyPrefab = currencyPrefab.GetComponent<UI_Currency>();
+            
+            GameObject upgradePanelPrefab = Instantiate(_mainSceneDefaultSetting.UIBuildingUpgradePanelPrefab, _mainSceneDefaultSetting.Canvas.transform);
+            _upgradePanelPrefab = upgradePanelPrefab.GetComponent<UI_BuildingEnhancement>();
+            UIManager.Instance.UIBuildingEnhancement = _upgradePanelPrefab;
         }
 
         private void InstantiateJoystick()
@@ -74,7 +82,7 @@ namespace Units.Stages.Managers
         private void RegisterReference()
         {
             VolatileDataManager.Instance.RegisterReference();
-            CurrencyManager.Instance.RegisterReference(_currencyView);
+            CurrencyManager.Instance.RegisterReference(_uiCurrencyPrefab);
 
             _stageController.RegisterReference(_joystick);
 

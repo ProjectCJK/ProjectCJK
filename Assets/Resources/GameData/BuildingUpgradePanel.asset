@@ -12,5 +12,194 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
   m_Name: BuildingUpgradePanel
   m_EditorClassIdentifier: 
-  columnNames: []
-  dataRows: []
+  columnNames:
+  - "\uC778\uB371\uC2A4"
+  - "\uC774\uB984"
+  - "UI \uD0C0\uC774\uD2C0"
+  - "\uC2AC\uB86F1 \uD0C0\uC774\uD2C0"
+  - "\uC2AC\uB86F1 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uC2AC\uB86F 1 \uCE74\uD14C\uACE0\uB9AC \uD0C0\uC774\uD2C01"
+  - "\uC2AC\uB86F 1 \uCE74\uD14C\uACE0\uB9AC \uD0C0\uC774\uD2C02"
+  - "\uC2AC\uB86F2 \uD0C0\uC774\uD2C0"
+  - "\uC2AC\uB86F2 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uC2AC\uB86F3 \uD0C0\uC774\uD2C0"
+  - "\uC2AC\uB86F3 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uC635\uC1581 \uD14D\uC2A4\uD2B8 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uC635\uC1582 \uD14D\uC2A4\uD2B8 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uC2AC\uB86F1 \uC124\uBA851"
+  - "\uC2AC\uB86F1 \uC124\uBA852"
+  - "\uACE8\uB4DC \uD14D\uC2A4\uD2B8 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uB808\uB4DC\uC82C \uD14D\uC2A4\uD2B8 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  - "\uBE4C\uB529 \uB808\uBCA8 \uD14D\uC2A4\uD2B8 \uC544\uC774\uCF58 \uC778\uB371\uC2A4"
+  dataRows:
+  - rowData:
+    - Index
+    - Name
+    - PanelTitle
+    - Slot1Title
+    - Slot1IconIndex
+    - Slot1Category1Title
+    - Slot1Category2Title
+    - Slot2Title
+    - Slot2IconIndex
+    - Slot3Title
+    - Slot3IconIndex
+    - Option1TextIconIndex
+    - Option2TextIconIndex
+    - Text_Slot1_Category1
+    - Text_Slot1_Category2
+    - RequiredGoldTextIconIndex
+    - RequiredRedGemTextIconIndex
+    - RequiredBuildingLevelTextIconIndex
+  - rowData:
+    - Int
+    - String
+    - String
+    - String
+    - Int
+    - String
+    - String
+    - String
+    - Int
+    - String
+    - Int
+    - Int
+    - Int
+    - String
+    - String
+    - Int
+    - Int
+    - Int
+  - rowData:
+    - 1
+    - Kitchen_A
+    - Kitchen A
+    - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC"
+    - 8
+    - "\uAC00\uACA9:"
+    - "\uC2DC\uAC04:"
+    - "\uC0DD\uC0B0\uD488 \uAC00\uACA9"
+    - 0
+    - "\uC0DD\uC0B0 \uC18D\uB3C4"
+    - 3
+    - 0
+    - 3
+    - ProductPrice
+    - ProductTime
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 2
+    - Kitchen_B
+    - Kitchen B
+    - "\uC624\uC774 \uD1B5\uC870\uB9BC"
+    - 9
+    - "\uAC00\uACA9:"
+    - "\uC2DC\uAC04:"
+    - "\uC0DD\uC0B0\uD488 \uAC00\uACA9"
+    - 0
+    - "\uC0DD\uC0B0 \uC18D\uB3C4"
+    - 3
+    - 0
+    - 3
+    - ProductPrice
+    - ProductTime
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 3
+    - Kitchen_C
+    - Kitchen C
+    - "\uCF69 \uD1B5\uC870\uB9BC"
+    - 10
+    - "\uAC00\uACA9:"
+    - "\uC2DC\uAC04:"
+    - "\uC0DD\uC0B0\uD488 \uAC00\uACA9"
+    - 0
+    - "\uC0DD\uC0B0 \uC18D\uB3C4"
+    - 3
+    - 0
+    - 3
+    - ProductPrice
+    - ProductTime
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 4
+    - Kitchen_D
+    - Kitchen D
+    - "\uD1A0\uB9C8\uD1A0 \uC2A4\uD29C"
+    - 8
+    - "\uAC00\uACA9:"
+    - "\uC2DC\uAC04:"
+    - "\uC0DD\uC0B0\uD488 \uAC00\uACA9"
+    - 0
+    - "\uC0DD\uC0B0 \uC18D\uB3C4"
+    - 3
+    - 0
+    - 3
+    - ProductPrice
+    - ProductTime
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 5
+    - ManagementDesk
+    - ManagementDesk
+    - "\uAD00\uB9AC \uB370\uC2A4\uD06C"
+    - 38
+    - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960:"
+    - "\uACC4\uC0B0\uC6D0"
+    - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960"
+    - 40
+    - "\uACC4\uC0B0\uC6D0"
+    - 41
+    - 3
+    - 39
+    - MangerSpeed
+    - ManagerCount
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 6
+    - DeliveryLodging
+    - DeliveryLodging
+    - "\uBC30\uB2EC\uC6D0 \uC219\uC18C"
+    - 42
+    - "\uBC30\uB2EC\uC6D0 \uC18D\uB3C4:"
+    - "\uBC30\uB2EC\uC6D0"
+    - "\uBC30\uB2EC\uC6D0 \uC18D\uB3C4"
+    - 44
+    - "\uBC30\uB2EC\uC6D0"
+    - 45
+    - 54
+    - 43
+    - DeliverySpeed
+    - DeliveryCount
+    - 0
+    - 4
+    - 56
+  - rowData:
+    - 7
+    - WareHouse
+    - WareHouse
+    - "\uCC3D\uACE0"
+    - 46
+    - "\uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825:"
+    - "\uC0AC\uB0E5\uAFBC"
+    - "\uC0AC\uB0E5\uAFBC \uACF5\uACA9\uB825"
+    - 48
+    - "\uC0AC\uB0E5\uAFBC"
+    - 49
+    - 34
+    - 47
+    - HunterAtt
+    - HunterCount
+    - 0
+    - 4
+    - 56

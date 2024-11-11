@@ -61,7 +61,7 @@ namespace Units.Stages.Modules.ProductModules
 
         public bool IsProcessing { get; private set; }
         public float ElapsedTime { get; private set; }
-        public float ProductLeadTime => _kitchenStatsModule.CurrentKitchenOption2Value;
+        public float ProductLeadTime => _kitchenStatsModule.CurrentBuildingOption2Value;
 
         public Transform SenderTransform { get; }
         public Transform ReceiverTransform { get; }

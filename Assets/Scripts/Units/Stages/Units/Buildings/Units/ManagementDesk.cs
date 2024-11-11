@@ -119,11 +119,11 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void SpawnCashier()
         {
-            if (_managementDeskStatsModule.CurrentManagementDeskOption2Value >
+            if (_managementDeskStatsModule.CurrentBuildingOption2Value >
                 _managementDeskPaymentModule.CurrentSpawnedCashierCount)
             {
                 _managementDeskPaymentModule.CurrentSpawnedCashierCount =
-                    (int)_managementDeskStatsModule.CurrentManagementDeskOption2Value;
+                    (int)_managementDeskStatsModule.CurrentBuildingOption2Value;
 
                 for (var i = 0;
                      i < _managementDeskPaymentModule.CurrentSpawnedCashierCount -
@@ -139,9 +139,9 @@ namespace Units.Stages.Units.Buildings.Units
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)
-                _managementDeskStatsModule.GetUIManagementDeskEnhancement();
+                _managementDeskStatsModule.GetUIBuildingEnhancement();
             else
-                _managementDeskStatsModule.ReturnUIManagementDeskEnhancement();
+                _managementDeskStatsModule.ReturnUIBuildingEnhancement();
         }
     }
 }
