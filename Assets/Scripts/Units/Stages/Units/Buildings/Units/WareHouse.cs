@@ -85,9 +85,15 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void Update()
         {
-            if (isSendingItemToPlayer) _wareHouseInventoryModule.SendItem(player, sendingItemType);
-            if (!_wareHouseInventoryModule.HasMatchingItem($"{EItemType.Material}_{sendingItemType}") ||
-                !player.CanReceiveItem()) isSendingItemToPlayer = false;
+            if (isSendingItemToPlayer)
+            {
+                _wareHouseInventoryModule.SendItem(player, sendingItemType);
+
+                if (!_wareHouseInventoryModule.HasMatchingItem($"{EItemType.Material}_{sendingItemType}") || !player.CanReceiveItem())
+                {
+                    isSendingItemToPlayer = false;   
+                }
+            }
 
             if (isPlayerInCollision) _wareHouseViewModel.UpdateButtonData();
         }
@@ -136,6 +142,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         public override void Initialize()
         {
+            isSendingItemToPlayer = false;
         }
 
         public void SpawnHunter(ICreatureController creatureController, HashSet<IHunter> currentSpawnedHunters)
