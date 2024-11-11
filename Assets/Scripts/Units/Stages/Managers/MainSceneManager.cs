@@ -94,5 +94,25 @@ namespace Units.Stages.Managers
             CurrencyManager.Instance.Initialize();
             _stageController.Initialize();
         }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                CurrencyManager.Instance.AddDiamond(100);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                CurrencyManager.Instance.AddRedGem(100);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                CurrencyManager.Instance.AddGold(100);
+            }
+#endif
+        }
     }
 }

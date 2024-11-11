@@ -43,13 +43,6 @@ namespace Managers
             }
         }
 
-        public void Initialize()
-        {
-            _gold = 100000;
-            
-            _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
-        }
-
         public void RegisterReference(UI_Currency uiCurrency)
         {
             _uiCurrency = uiCurrency;
@@ -57,6 +50,13 @@ namespace Managers
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
             _uiCurrency.BindViewModel(_currencyViewModel);
+        }
+        
+        public void Initialize()
+        {
+            _gold = 100000;
+            
+            _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
 
         public void AddGold(int value)
