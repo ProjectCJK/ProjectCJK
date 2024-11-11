@@ -8,5 +8,10 @@ namespace Managers
         {
             
         }
+
+        private void UpdateQuest()
+        {
+            
+        }
     }
 }

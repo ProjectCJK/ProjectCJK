@@ -29,9 +29,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _text_Slot1_Category2Value;
         [SerializeField] private TextMeshProUGUI _text_Slot1_Level;
 
-        [Header("=== 슬롯 2 ===")] [SerializeField]
-        private Image _image_Slot2_Icon;
-
+        [Header("=== 슬롯 2 ===")]
+        [SerializeField] private Image _image_Slot2_Icon;
         [SerializeField] private TextMeshProUGUI _text_Slot2_Title;
         [SerializeField] private TextMeshProUGUI _text_Slot2_Level;
         [SerializeField] private TextMeshProUGUI _text_Slot2_CurrentValue;
@@ -42,8 +41,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _text_Slot2_NotEnoughButton_RequiredValue;
         [SerializeField] private Button _button_Slot2_MaxLevelButton;
 
-        [Header("빌딩 쿠키 강화")] [SerializeField] private Image _image_Slot3_Icon;
-
+        [Header("=== 슬롯 3 ===")]
+        [SerializeField] private Image _image_Slot3_Icon;
         [SerializeField] private TextMeshProUGUI _text_Slot3_Title;
         [SerializeField] private TextMeshProUGUI _text_Slot3_Level;
         [SerializeField] private TextMeshProUGUI _text_Slot3_CurrentValue;
@@ -90,28 +89,18 @@ namespace UI
             _image_Slot1_Icon.sprite = buildingProductSprite;
             _text_Slot1_Title.text = $"{buildingProductName}";
 
-            _text_Slot1_Category1Value.text =
-                $"{_text_Slot1_Category1Value.text.Substring(0, _text_Slot1_Category1Value.text.IndexOf(' ') + 1)}{currentBuildingOption1Value}";
-            _text_Slot1_Category2Value.text =
-                $"{_text_Slot1_Category2Value.text.Substring(0, _text_Slot1_Category2Value.text.IndexOf(' ') + 1)}{currentBuildingOption2Value}";
-            _text_Slot1_Level.text =
-                $"{_text_Slot1_Level.text.Substring(0, _text_Slot1_Level.text.IndexOf(' ') + 1)}{currentBuildingLevel}";
+            _text_Slot1_Category1Value.text = $"{_text_Slot1_Category1Value.text.Substring(0, _text_Slot1_Category1Value.text.IndexOf(' ') + 1)}{currentBuildingOption1Value}";
+            _text_Slot1_Category2Value.text = $"{_text_Slot1_Category2Value.text.Substring(0, _text_Slot1_Category2Value.text.IndexOf(' ') + 1)}{currentBuildingOption2Value}";
+            _text_Slot1_Level.text = $"{_text_Slot1_Level.text.Substring(0, _text_Slot1_Level.text.IndexOf(' ') + 1)}{currentBuildingLevel}";
 
-            _text_Slot2_Level.text =
-                $"{_text_Slot2_Level.text.Substring(0, _text_Slot2_Level.text.IndexOf(' ') + 1)}{currentBuildingOption1Level}";
-            _text_Slot2_CurrentValue.text =
-                $"{_text_Slot2_CurrentValue.text.Substring(0, _text_Slot2_CurrentValue.text.IndexOf(' ') + 1)}{currentBuildingOption1Value}";
-            _text_Slot2_NextValue.text =
-                $"{_text_Slot2_NextValue.text.Substring(0, _text_Slot2_NextValue.text.IndexOf(' ') + 1)}{nextBuildingOption1Value}";
-            _text_Slot2_UpgradeButton_RequiredValue.text =
-                $"{_text_Slot2_UpgradeButton_RequiredValue.text.Substring(0, _text_Slot2_UpgradeButton_RequiredValue.text.IndexOf(' ') + 1)}{requiredGoldToUpgradeBuildingOption1}";
+            _text_Slot2_Level.text = $"{_text_Slot2_Level.text.Substring(0, _text_Slot2_Level.text.IndexOf(' ') + 1)}{currentBuildingOption1Level}";
+            _text_Slot2_CurrentValue.text = $"{_text_Slot2_CurrentValue.text.Substring(0, _text_Slot2_CurrentValue.text.IndexOf(' ') + 1)}{currentBuildingOption1Value}";
+            _text_Slot2_NextValue.text = $"{_text_Slot2_NextValue.text.Substring(0, _text_Slot2_NextValue.text.IndexOf(' ') + 1)}{nextBuildingOption1Value}";
+            _text_Slot2_UpgradeButton_RequiredValue.text = $"{_text_Slot2_UpgradeButton_RequiredValue.text.Substring(0, _text_Slot2_UpgradeButton_RequiredValue.text.IndexOf(' ') + 1)}{requiredGoldToUpgradeBuildingOption1}";
 
-            _text_Slot3_Level.text =
-                $"{_text_Slot3_Level.text.Substring(0, _text_Slot3_Level.text.IndexOf(' ') + 1)}{currentBuildingOption2Level}";
-            _text_Slot3_CurrentValue.text =
-                $"{_text_Slot3_CurrentValue.text.Substring(0, _text_Slot3_CurrentValue.text.IndexOf(' ') + 1)}{currentBuildingOption2Value}";
-            _text_Slot3_NextValue.text =
-                $"{_text_Slot3_NextValue.text.Substring(0, _text_Slot3_NextValue.text.IndexOf(' ') + 1)}{nextBuildingOption2Value}";
+            _text_Slot3_Level.text = $"{_text_Slot3_Level.text.Substring(0, _text_Slot3_Level.text.IndexOf(' ') + 1)}{currentBuildingOption2Level}";
+            _text_Slot3_CurrentValue.text = $"{_text_Slot3_CurrentValue.text.Substring(0, _text_Slot3_CurrentValue.text.IndexOf(' ') + 1)}{currentBuildingOption2Value}";
+            _text_Slot3_NextValue.text = $"{_text_Slot3_NextValue.text.Substring(0, _text_Slot3_NextValue.text.IndexOf(' ') + 1)}{nextBuildingOption2Value}";
 
             if (currentBuildingOption1Level >= maxBuildingOption1Level)
             {

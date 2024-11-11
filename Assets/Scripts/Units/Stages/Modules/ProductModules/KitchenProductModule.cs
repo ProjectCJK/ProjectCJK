@@ -74,7 +74,6 @@ namespace Units.Stages.Modules.ProductModules
 
         public void Product()
         {
-            Debug.Log($"{ProductLeadTime}");
             if (IsProcessing)
             {
                 if (IsProductProcessed())

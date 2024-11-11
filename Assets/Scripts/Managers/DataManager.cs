@@ -44,23 +44,29 @@ namespace Managers
         public GuestSpawnZoneDataSo GuestSpawnZoneDataSo;
         public ItemDataSO ItemDataSo;
 
-        [Space(20)] [Header("### GameData ###")]
+        [Space(20), Header("### GameData ###")]
+        [Header("=== Quest GameData ===")]
+        public GameData QuestData;
+        [Header("=== Building GameData ===")]
+        [Header("--- Kitchen GameData ---")]
         public GameData KitchenData;
-
         public GameData KitchenOption1ValueData;
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;
         public GameData KitchenOption2CostData;
+        [Space(20), Header("--- ManagementDesk GameData ---")]
         public GameData ManagementDeskData;
         public GameData ManagementDeskOption1ValueData;
         public GameData ManagementDeskOption2ValueData;
         public GameData ManagementDeskOption1CostData;
         public GameData ManagementDeskOption2CostData;
+        [Space(20), Header("--- DeliveryLodging GameData ---")]
         public GameData DeliveryLodgingData;
         public GameData DeliveryLodgingOption1ValueData;
         public GameData DeliveryLodgingOption2ValueData;
         public GameData DeliveryLodgingOption1CostData;
         public GameData DeliveryLodgingOption2CostData;
+        [Header("--- WareHouse GameData ---")]
         public GameData WareHouseData;
         public GameData WareHouseOption1ValueData;
         public GameData WareHouseOption2ValueData;
