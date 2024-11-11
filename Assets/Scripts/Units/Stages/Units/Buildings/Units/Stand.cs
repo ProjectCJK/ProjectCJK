@@ -11,6 +11,7 @@ using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
 using Units.Stages.Modules.UnlockModules.Interfaces;
 using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.UI.Stands;
 using Units.Stages.Units.Items.Enums;
@@ -25,16 +26,22 @@ namespace Units.Stages.Units.Buildings.Units
     [Serializable]
     public struct StandDefaultSetting
     {
-        [Header("Stand UI")] public StandView standView;
+        [Header("Stand UI")]
+        public StandView standView;
+        
+        [Space(10), Header("Animator")]
+        public Animator Animator;
 
-        [Space(10)] [Header("아이템 보관 장소")] public Transform standInventory;
+        [Space(10), Header("아이템 보관 장소")]
+        public Transform standInventory;
 
-        [Space(10)] [Header("TradeZone_Player")]
+        [Space(10), Header("TradeZone_Player")]
         public Transform TradeZone_Player;
 
-        [Space(10)] [Header("TradeZone_NPC")] public Transform TradeZone_NPC;
+        [Space(10), Header("TradeZone_NPC")]
+        public Transform TradeZone_NPC;
 
-        [Space(10)] [Header("UnlockZone_Player")]
+        [Space(10), Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
     }
 
@@ -140,6 +147,11 @@ namespace Units.Stages.Units.Buildings.Units
             UnlockZoneModule.UpdateViewModel();
 
             if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+        }
+        
+        public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
+        {
+            _standDefaultSetting.Animator.SetTrigger($"{animatorParameter}");
         }
     }
 }
