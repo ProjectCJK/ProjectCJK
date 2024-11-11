@@ -72,5 +72,8 @@ namespace Managers
         public GameData WareHouseOption2ValueData;
         public GameData WareHouseOption1CostData;
         public GameData WareHouseOption2CostData;
+        
+        [Space(20)] [Header("### Building Data ###")]
+        public GameData Building
     }
 }
