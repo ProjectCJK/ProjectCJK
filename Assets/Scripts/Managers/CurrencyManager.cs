@@ -4,13 +4,24 @@ using Units.Stages.UI;
 
 namespace Managers
 {
-    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<CurrencyView>, IInitializable
+    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Currency>, IInitializable
     {
         private CurrencyModel _currencyModel;
-        private CurrencyView _currencyView;
+        private UI_Currency _uiCurrency;
         private CurrencyViewModel _currencyViewModel;
-        private int _gold;
 
+        private int _redGem;
+        public int RedGem
+        {
+            get => _redGem;
+            private set
+            {
+                _redGem = value;
+                UpdateViewModel();
+            }
+        }
+        
+        private int _gold;
         public int Gold
         {
             get => _gold;
@@ -21,23 +32,31 @@ namespace Managers
             }
         }
 
-        public float Diamond { get; set; } = 0;
-        public float Cookie { get; set; } = 0;
-
-        public void Initialize()
+        private int _diamond;
+        public int Diamond
         {
-            _currencyViewModel.UpdateValues(Gold);
+            get => _diamond;
+            private set
+            {
+                _diamond = value;
+                UpdateViewModel();
+            }
         }
 
-        public void RegisterReference(CurrencyView currencyView)
+        public void RegisterReference(UI_Currency uiCurrency)
         {
-            _currencyView = currencyView;
+            _uiCurrency = uiCurrency;
 
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
-            _currencyView.BindViewModel(_currencyViewModel);
-
+            _uiCurrency.BindViewModel(_currencyViewModel);
+        }
+        
+        public void Initialize()
+        {
             _gold = 100000;
+            
+            _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
 
         public void AddGold(int value)
@@ -49,10 +68,30 @@ namespace Managers
         {
             Gold -= value;
         }
+        
+        public void AddRedGem(int value)
+        {
+            RedGem += value;
+        }
+        
+        public void RemoveRedGed(int value)
+        {
+            RedGem -= value;
+        }
+        
+        public void AddDiamond(int value)
+        {
+            Diamond += value;
+        }
+                
+        public void RemoveDiamond(int value)
+        {
+            Diamond -= value;
+        }
 
         private void UpdateViewModel()
         {
-            _currencyViewModel.UpdateValues(Gold);
+            _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
     }
 }

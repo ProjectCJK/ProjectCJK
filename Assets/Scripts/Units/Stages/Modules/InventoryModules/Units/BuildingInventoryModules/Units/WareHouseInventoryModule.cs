@@ -20,10 +20,10 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
-            BuildingStatsModule buildingStatsModule,
+            UpgradableBuildingStatsModule upgradableBuildingStatsModule,
             string inputItemKey,
             string outputItemKey)
-            : base(senderTransform, receiverTransform, itemFactory, buildingStatsModule, inputItemKey, outputItemKey)
+            : base(senderTransform, receiverTransform, itemFactory, upgradableBuildingStatsModule, inputItemKey, outputItemKey)
         {
         }
 

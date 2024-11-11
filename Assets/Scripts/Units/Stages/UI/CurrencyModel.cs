@@ -4,7 +4,29 @@ namespace Units.Stages.UI
 {
     public class CurrencyModel : BaseModel
     {
+        private int _diamondCount;
+        private int _redGemCount;
         private int _goldCount;
+        
+        public int DiamondCount
+        {
+            get => _diamondCount;
+
+            private set
+            {
+                if (SetField(ref _diamondCount, value)) OnPropertyChanged();
+            }
+        }
+        
+        public int RedGemCount
+        {
+            get => _redGemCount;
+
+            private set
+            {
+                if (SetField(ref _redGemCount, value)) OnPropertyChanged();
+            }
+        }
 
         public int GoldCount
         {
@@ -16,9 +38,11 @@ namespace Units.Stages.UI
             }
         }
 
-        public void SetValues(int gold)
+        public void SetValues(int diamondCount, int redGemCount, int goldCount)
         {
-            GoldCount = gold;
+            DiamondCount = diamondCount;
+            RedGemCount = redGemCount;
+            GoldCount = goldCount;
         }
     }
 }

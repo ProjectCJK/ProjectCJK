@@ -20,27 +20,27 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
         private readonly BuildingStatsModule _buildingStatsModule;
-        protected readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
+        private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
         protected BuildingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             IItemFactory itemFactory,
-            BuildingStatsModule buildingStatsModule,
+            BuildingStatsModule upgradableBuildingStatsModule,
             string inputItemKey,
             string outputItemKey)
         {
             SenderTransform = senderTransform;
             ReceiverTransform = receiverTransform;
             ItemFactory = itemFactory;
-            _buildingStatsModule = buildingStatsModule;
+            _buildingStatsModule = upgradableBuildingStatsModule;
             InputItemKey = inputItemKey;
             OutputItemKey = outputItemKey;
         }
 
         public string InputItemKey { get; }
         public string OutputItemKey { get; }
-        public override int MaxInventorySize => _buildingStatsModule.MaxProductInventorySize;
+        public override int MaxInventorySize => _buildingStatsModule.MaxInventorySize;
         public override IItemFactory ItemFactory { get; }
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
