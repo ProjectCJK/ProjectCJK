@@ -29,15 +29,30 @@ namespace Units.Stages.Modules
             return (parsedA, parsedB);
         }
 
-        public static string ParseEnumToString<TEnum1>(TEnum1 enum1) where TEnum1 : Enum
+        public static TEnum1? ParseStringToEnum<TEnum1>(string input)
+            where TEnum1 : struct, Enum
         {
-            return $"{enum1}";
+            if (string.IsNullOrEmpty(input)) return null;
+
+            TEnum1? parsedA = null;
+
+            // 첫 번째 부분을 TEnum1으로 파싱 시도
+            if (Enum.TryParse(input, out TEnum1 resultA))
+                parsedA = resultA;
+            
+            return parsedA;
         }
 
         public static string ParseEnumToString<TEnum1, TEnum2>(TEnum1 enum1, TEnum2 enum2)
             where TEnum1 : Enum where TEnum2 : Enum
         {
             return $"{enum1}_{enum2}";
+        }
+        
+        public static string ParseEnumToString<TEnum1>(TEnum1 enum1)
+            where TEnum1 : Enum
+        {
+            return $"{enum1}";
         }
 
         public static T ParseOrDefault<T>(string input, T defaultValue)
