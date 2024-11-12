@@ -3,7 +3,9 @@ namespace Units.Stages.Units.Items.Enums
     public enum EMaterialType
     {
         A,
-        B
+        B,
+        C,
+        D
     }
 
     public enum EStageMaterialType
