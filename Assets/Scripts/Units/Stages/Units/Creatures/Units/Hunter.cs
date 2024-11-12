@@ -166,7 +166,7 @@ namespace Units.Stages.Units.Creatures.Units
 
         private bool HandleOnCompareWithTarget(string buildingKey)
         {
-            if (string.Equals(buildingKey, _destination.Item1))
+            if (_destination != null && string.Equals(buildingKey, _destination.Item1))
             {
                 _hunterMovementModule.ActivateNavMeshAgent(false);
                 return true;

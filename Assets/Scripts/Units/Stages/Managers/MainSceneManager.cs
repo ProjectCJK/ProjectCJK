@@ -83,6 +83,7 @@ namespace Units.Stages.Managers
         {
             VolatileDataManager.Instance.RegisterReference();
             CurrencyManager.Instance.RegisterReference(_uiCurrencyPrefab);
+            QuestManager.Instance.RegisterReference();
 
             _stageController.RegisterReference(_joystick);
 

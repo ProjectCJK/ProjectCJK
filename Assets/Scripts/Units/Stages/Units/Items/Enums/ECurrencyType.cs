@@ -2,6 +2,8 @@ namespace Units.Stages.Units.Items.Enums
 {
     public enum ECurrencyType
     {
-        Money
+        Money,
+        Diamond,
+        RedGem
     }
 }

@@ -21,9 +21,8 @@ namespace Units.Stages.Modules.MovementModules.Units
     {
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
-
         private readonly IMovementProperty _playerStatsModule;
-        private readonly Transform _playerTransform;
+        private readonly Rigidbody2D _rigidbody2D;
         private readonly Transform _spriteTransform;
         private bool _isFacingRight = true;
         private bool _isMoving;
@@ -40,16 +39,14 @@ namespace Units.Stages.Modules.MovementModules.Units
             _playerStatsModule = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
-            _playerTransform = player.transform;
+            _rigidbody2D = player.GetComponent<Rigidbody2D>();
             _spriteTransform = spriteTransform;
-
-            BoxCollider2D = _playerTransform.GetComponent<BoxCollider2D>();
+            BoxCollider2D = _rigidbody2D.GetComponent<BoxCollider2D>();
         }
 
         protected override BoxCollider2D BoxCollider2D { get; }
 
-        private float _movementSpeed =>
-            _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
+        private float MovementSpeed => _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
 
         public void Initialize()
         {
@@ -74,9 +71,11 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void FixedUpdate()
         {
-            Vector3 moveDirection = _joystick.direction.normalized * (_movementSpeed * Time.deltaTime);
-            MoveWithCollision(_playerTransform, moveDirection, ref moveDirection);
-            HandleStateUpdate();
+            Vector2 moveDirection = _joystick.direction.normalized * (MovementSpeed * Time.fixedDeltaTime);
+            MoveWithCollision(_rigidbody2D, moveDirection, ref moveDirection);
+    
+            UpdateMovementFlag();
+            UpdateStateMachine();
         }
 
         public void HandleOnHit()
@@ -86,33 +85,12 @@ namespace Units.Stages.Modules.MovementModules.Units
             _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
         }
 
-        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move,
-            ref Vector3 direction)
-        {
-            Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized,
-                move.magnitude, collisionLayerMask);
-            if (hit.collider != null)
-            {
-                direction = Vector3.Reflect(direction, hit.normal);
-                return false;
-            }
-
-            return true;
-        }
-
         private void FlipSprite(bool faceRight)
         {
             _isFacingRight = faceRight;
             Vector3 scale = _spriteTransform.localScale;
             scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
             _spriteTransform.localScale = scale;
-        }
-
-        private void HandleStateUpdate()
-        {
-            UpdateMovementFlag();
-            UpdateStateMachine();
         }
 
         private void UpdateMovementFlag()
