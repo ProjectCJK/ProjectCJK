@@ -86,8 +86,7 @@ namespace Units.Stages.Units.Buildings.Units
         {
             _itemFactory = itemFactory;
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
-            _managementDeskStatsModule =
-                new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
+            _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
 
             BuildingKey = _managementDeskStatsModule.BuildingKey;
             InputItemKey = _managementDeskStatsModule.InputItemKey;

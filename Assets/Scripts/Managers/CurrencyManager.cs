@@ -4,10 +4,10 @@ using Units.Stages.UI;
 
 namespace Managers
 {
-    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Currency>, IInitializable
+    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Panel_Currency>, IInitializable
     {
         private CurrencyModel _currencyModel;
-        private UI_Currency _uiCurrency;
+        private UI_Panel_Currency _uiPanelCurrency;
         private CurrencyViewModel _currencyViewModel;
 
         private int _redGem;
@@ -43,13 +43,13 @@ namespace Managers
             }
         }
 
-        public void RegisterReference(UI_Currency uiCurrency)
+        public void RegisterReference(UI_Panel_Currency uiPanelCurrency)
         {
-            _uiCurrency = uiCurrency;
+            _uiPanelCurrency = uiPanelCurrency;
 
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
-            _uiCurrency.BindViewModel(_currencyViewModel);
+            _uiPanelCurrency.BindViewModel(_currencyViewModel);
         }
         
         public void Initialize()

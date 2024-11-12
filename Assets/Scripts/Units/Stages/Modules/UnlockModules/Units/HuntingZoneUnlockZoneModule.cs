@@ -19,8 +19,7 @@ namespace Units.Stages.Modules.UnlockModules.Units
                 case EActiveStatus.Active:
                     ActiveStatus = state;
                     OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
-                    if (_playerCollision != null && _playerCollision.activeInHierarchy)
-                        _playerCollision.SetActive(false);
+                    if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.SetActive(false);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
                     break;
