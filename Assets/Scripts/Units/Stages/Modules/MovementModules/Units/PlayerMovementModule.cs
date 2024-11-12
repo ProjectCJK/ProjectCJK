@@ -73,9 +73,11 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void FixedUpdate()
         {
-            Vector2 moveDirection = _joystick.direction.normalized * (MovementSpeed * Time.fixedDeltaTime);
-            MoveWithCollision(_rigidbody2D, moveDirection, ref moveDirection);
-    
+            Vector2 direction = _joystick.direction.normalized; // 조이스틱 방향
+            Vector2 move = direction * (MovementSpeed * Time.fixedDeltaTime); // deltaTime이 곱해진 실제 이동 벡터
+
+            MoveWithCollision(_rigidbody2D, move, ref direction); // 순수한 방향 벡터를 ref direction으로 전달
+
             UpdateMovementFlag();
             UpdateStateMachine();
         }

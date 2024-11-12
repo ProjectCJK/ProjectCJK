@@ -9,7 +9,7 @@ namespace Units.Stages.Modules.MovementModules.Abstract
     public abstract class MovementModuleWithoutNavMeshAgent : MovementModule, IMovementModuleWithoutNavMeshAgent
     {
         protected abstract BoxCollider2D BoxCollider2D { get; }
-        
+
         protected int CollisionLayerMask { get; private set; }
 
         // 충돌 레이어 마스크 설정 메서드
@@ -21,17 +21,29 @@ namespace Units.Stages.Modules.MovementModules.Abstract
         protected void MoveWithCollision(Rigidbody2D rigidbody2D, Vector2 move, ref Vector2 direction)
         {
             Vector2 originalPosition = rigidbody2D.position;
-            bool collisionDetected = HandleCollision(BoxCollider2D, originalPosition, move, ref direction);
+            Vector2 remainingMove = move;
 
-            if (!collisionDetected)
+            // 한 축씩 나누어 충돌 검사
+            Vector2 adjustedMoveX = new Vector2(remainingMove.x, 0);
+            Vector2 adjustedMoveY = new Vector2(0, remainingMove.y);
+
+            // X축 방향 충돌 검사
+            if (HandleCollision(BoxCollider2D, originalPosition, adjustedMoveX, ref direction))
             {
-                rigidbody2D.MovePosition(originalPosition + move); // 충돌이 없을 경우 전체 이동 허용
+                // X축 충돌이 발생하면 X축 이동 차단
+                adjustedMoveX = Vector2.zero;
             }
-            // else
-            // {
-            //     Vector2 adjustedMove = AdjustMoveForCollision(move, direction);
-            //     rigidbody2D.MovePosition(originalPosition + adjustedMove); // 충돌 시 남은 축으로만 이동
-            // }
+
+            // Y축 방향 충돌 검사
+            if (HandleCollision(BoxCollider2D, originalPosition + adjustedMoveX, adjustedMoveY, ref direction))
+            {
+                // Y축 충돌이 발생하면 Y축 이동 차단
+                adjustedMoveY = Vector2.zero;
+            }
+
+            // 최종 이동 벡터 적용
+            Vector2 finalMove = adjustedMoveX + adjustedMoveY;
+            rigidbody2D.MovePosition(originalPosition + finalMove);
         }
 
         private bool HandleCollision(BoxCollider2D collider, Vector2 originalPosition, Vector2 move, ref Vector2 direction)
@@ -42,19 +54,9 @@ namespace Units.Stages.Modules.MovementModules.Abstract
             if (hit.collider != null)
             {
                 direction = Vector2.Reflect(direction, hit.normal);
-                return true;
+                return true; // 충돌 발생
             }
-            return false;
-        }
-
-        private Vector2 AdjustMoveForCollision(Vector2 move, Vector2 collisionNormal)
-        {
-            // 충돌면의 수직 벡터로 이동 벡터를 투영하여 벽을 따라 이동하도록 조정
-            Vector2 perpendicularToCollision = Vector2.Perpendicular(collisionNormal);
-            float projectionMagnitude = Vector2.Dot(move, perpendicularToCollision);
-
-            // 충돌면을 기준으로 이동 벡터를 투영한 결과를 반환
-            return perpendicularToCollision.normalized * projectionMagnitude;
+            return false; // 충돌 없음
         }
     }
 }
