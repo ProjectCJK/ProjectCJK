@@ -113,6 +113,26 @@ namespace Units.Stages.Managers
             {
                 CurrencyManager.Instance.AddGold(100);
             }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.LevelUpOption1, EQuestType2.Kitchen_A);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Product, EQuestType2.Product_A);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Build, EQuestType2.Kitchen_B);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Build, EQuestType2.Stand_B);
+            }
 #endif
         }
     }
