@@ -19,11 +19,13 @@ namespace Units.Stages.Modules.MovementModules.Units
 
     public class PlayerMovementModule : MovementModuleWithoutNavMeshAgent, IPlayerMovementModule
     {
+        protected override BoxCollider2D BoxCollider2D { get; }
+        
         private readonly CreatureStateMachine _creatureStateMachine;
         private readonly Joystick _joystick;
+        private readonly Rigidbody2D _rigidbody2D;
 
         private readonly IMovementProperty _playerStatsModule;
-        private readonly Transform _playerTransform;
         private readonly Transform _spriteTransform;
         private bool _isFacingRight = true;
         private bool _isMoving;
@@ -40,13 +42,16 @@ namespace Units.Stages.Modules.MovementModules.Units
             _playerStatsModule = playerStatsModule;
             _creatureStateMachine = creatureStateMachine;
             _joystick = joystick;
-            _playerTransform = player.transform;
+            _rigidbody2D = player.GetComponent<Rigidbody2D>();
             _spriteTransform = spriteTransform;
 
-            BoxCollider2D = _playerTransform.GetComponent<BoxCollider2D>();
+            BoxCollider2D = _rigidbody2D.GetComponent<BoxCollider2D>();
         }
-
-        protected override BoxCollider2D BoxCollider2D { get; }
+        
+        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move, ref Vector3 direction)
+        {
+            throw new System.NotImplementedException();
+        }
 
         private float _movementSpeed =>
             _isSlowed ? _playerStatsModule.MovementSpeed * 0.2f : _playerStatsModule.MovementSpeed;
@@ -74,8 +79,9 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void FixedUpdate()
         {
-            Vector3 moveDirection = _joystick.direction.normalized * (_movementSpeed * Time.deltaTime);
-            MoveWithCollision(_playerTransform, moveDirection, ref moveDirection);
+            Vector3 moveDirection = _joystick.direction.normalized * (_movementSpeed * Time.fixedDeltaTime);
+            Vector2 newPosition = _rigidbody2D.position + (Vector2)moveDirection;
+            _rigidbody2D.MovePosition(newPosition);
             HandleStateUpdate();
         }
 
@@ -84,21 +90,6 @@ namespace Units.Stages.Modules.MovementModules.Units
             if (_slowCoroutine != null)
                 CoroutineManager.Instance.StopCoroutine(_slowCoroutine);
             _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
-        }
-
-        protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move,
-            ref Vector3 direction)
-        {
-            Vector3 colliderPosition = originalPosition + (Vector3)collider.offset;
-            RaycastHit2D hit = Physics2D.CircleCast(colliderPosition, collider.size.y / 2, move.normalized,
-                move.magnitude, collisionLayerMask);
-            if (hit.collider != null)
-            {
-                direction = Vector3.Reflect(direction, hit.normal);
-                return false;
-            }
-
-            return true;
         }
 
         private void FlipSprite(bool faceRight)
