@@ -23,43 +23,44 @@ namespace Units.Stages.Modules.MovementModules.Units
         private const float DetectionRange = 2.0f;
         private const float IdleProbability = 0.3f;
         private static readonly int Encounter = Animator.StringToHash("Encounter");
-
         private readonly CreatureStateMachine _creatureStateMachine;
-        private readonly Rigidbody2D _rigidbody2D;
-        private readonly int _monsterCollisionLayerMask = LayerMaskParserModule.MonsterCollisionLayerMask;
-        private readonly IMonsterStatsModule _monsterStatModule;
-        private readonly Transform _spriteTransform;
 
+        private readonly int _monsterCollisionLayerMask = LayerMaskParserModule.MonsterCollisionLayerMask;
+
+        private readonly IMonsterStatsModule _monsterStatModule;
+        private readonly Transform _monsterTransform;
+        private readonly Transform _spriteTransform;
         private Coroutine _encounterCoroutine;
-        private Coroutine _waitCoroutine;
         private bool _encounterTrigger;
         private bool _isFacingRight = true;
-        private bool _isMoving;
+        private bool _isMoving; // 추가된 변수
         private bool _isPatrolling = true;
         private bool _isSlowed;
         private Vector3 _moveDirection;
         private float _nextDirectionChangeTime;
-        private Transform _target;
 
-        public bool hitTrigger { get; set; }
+        private Transform _target;
+        private Coroutine _waitCoroutine;
 
         public MonsterMovementModule(
             Monster monster,
             IMonsterStatsModule monsterStatModule,
-            CreatureStateMachine creatureStateMachine,
+            CreatureStateMachine monsterStateMachine,
             Transform spriteTransform)
         {
             _monsterStatModule = monsterStatModule;
-            _creatureStateMachine = creatureStateMachine;
-            _rigidbody2D = monster.GetComponent<Rigidbody2D>();
+            _creatureStateMachine = monsterStateMachine;
+            _monsterTransform = monster.transform;
             _spriteTransform = spriteTransform;
-            BoxCollider2D = _rigidbody2D.GetComponent<BoxCollider2D>();
+            BoxCollider2D = monster.GetComponent<BoxCollider2D>();
         }
 
         protected override BoxCollider2D BoxCollider2D { get; }
 
         private float MovementSpeed => _isSlowed ? _monsterStatModule.MovementSpeed * 0.2f :
             _encounterTrigger ? _monsterStatModule.MovementSpeed * 2f : _monsterStatModule.MovementSpeed;
+
+        public bool hitTrigger { get; set; }
 
         public void Initialize()
         {
@@ -106,9 +107,11 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             if (_encounterTrigger || (_isPatrolling && !hitTrigger))
             {
-                Vector2 movePosition = _rigidbody2D.position + (Vector2)(_moveDirection * (MovementSpeed * Time.fixedDeltaTime));
-                _rigidbody2D.MovePosition(movePosition);
-                UpdateStateMachine();
+                Vector3 previousPosition = _monsterTransform.position;
+                MoveWithCollision(_monsterTransform, _moveDirection * (MovementSpeed * Time.fixedDeltaTime),
+                    ref _moveDirection);
+                _isMoving = _monsterTransform.position != previousPosition;
+                UpdateStateMachine(); // 상태 업데이트
             }
 
             DrawDirectionRay();
@@ -120,7 +123,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             _target = null;
             SetEncounterTrigger(false);
             _isSlowed = false;
-            _isMoving = false;
+            _isMoving = false; // 초기 상태 설정
         }
 
         protected override bool HandleCollision(BoxCollider2D collider, Vector3 originalPosition, ref Vector3 move,
@@ -143,14 +146,14 @@ namespace Units.Stages.Modules.MovementModules.Units
             _moveDirection = Random.insideUnitCircle.normalized;
             _nextDirectionChangeTime = Time.time + DirectionChangeInterval;
             _isPatrolling = true;
-            _isMoving = true;
+            _isMoving = true; // 방향 설정 시 움직이는 상태로 변경
             UpdateStateMachine();
         }
 
         private void StartWaiting()
         {
             _isPatrolling = false;
-            _isMoving = false;
+            _isMoving = false; // 대기 상태에서는 멈춘 상태로 변경
             UpdateStateMachine();
 
             if (_waitCoroutine != null)
@@ -167,8 +170,8 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private bool DetectPlayer()
         {
-            Vector3 direction = (Vector3)_rigidbody2D.position + _rigidbody2D.transform.right * DetectionRange;
-            RaycastHit2D hit = Physics2D.CircleCast(_rigidbody2D.position, BoxCollider2D.size.y * 4,
+            Vector3 direction = _monsterTransform.position + _monsterTransform.right * DetectionRange;
+            RaycastHit2D hit = Physics2D.CircleCast(_monsterTransform.position, BoxCollider2D.size.y * 4,
                 direction.normalized, DetectionRange, LayerMaskParserModule.UnitLayerMask);
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
@@ -183,9 +186,10 @@ namespace Units.Stages.Modules.MovementModules.Units
         private void StartEncounter()
         {
             SetEncounterTrigger(true);
-            _moveDirection = (_rigidbody2D.position - (Vector2)_target.position).normalized;
-            _isMoving = true;
+            _moveDirection = (_monsterTransform.position - _target.position).normalized;
+            _isMoving = true; // 도망 상태에서 움직임 활성화
             UpdateStateMachine();
+
             DrawDirectionRay();
 
             if (_encounterCoroutine != null)
@@ -233,7 +237,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private void DrawDirectionRay()
         {
             Color rayColor = _encounterTrigger ? Color.red : Color.green;
-            Debug.DrawRay(_rigidbody2D.position, _moveDirection * 2f, rayColor, 0.1f);
+            Debug.DrawRay(_monsterTransform.position, _moveDirection * 2f, rayColor, 0.1f);
         }
 
         private void SetEncounterTrigger(bool value)

@@ -119,7 +119,7 @@ namespace Units.Stages.Controllers
                 materialMappings.TryAdd(materialMapping.MaterialType, materialMapping.StageMaterialType);
 
             VolatileDataManager.Instance.MaterialMappings = materialMappings;
-            VolatileDataManager.Instance.CurrentStageLevel = _stageCustomSettings.StageLevel;
+            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
         }
 
         private void InitializeZone()
