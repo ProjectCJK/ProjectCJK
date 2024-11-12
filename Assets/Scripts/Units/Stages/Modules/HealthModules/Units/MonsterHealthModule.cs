@@ -12,14 +12,14 @@ namespace Units.Stages.Modules.HealthModules.Units
     public class MonsterHealthModule : HealthModule, IMonsterHealthModule
     {
         private readonly IHealthProperty _monsterStatModule;
+        
         private int _currentHealth;
+        private int _maxHealth => _monsterStatModule.MaxHealth;
 
         public MonsterHealthModule(IHealthProperty monsterStatModule)
         {
             _monsterStatModule = monsterStatModule;
         }
-
-        private int _maxHealth => _monsterStatModule.MaxHealth;
 
         public void Initialize()
         {
@@ -29,8 +29,6 @@ namespace Units.Stages.Modules.HealthModules.Units
         public bool TakeDamage(int damage)
         {
             var tempHealth = _currentHealth - damage;
-
-            Debug.Log($"아야! {damage}, {tempHealth}");
 
             if (tempHealth < 0)
             {
