@@ -15,8 +15,6 @@ namespace Units.Stages.Managers
         [Header("### Stage Settings ###")]
         [Header("=== UI Settings ===")]
         public RootCanvas Canvas;
-        public GameObject UICurrencyPrefab;
-        public GameObject UIBuildingUpgradePanelPrefab;
         public GameObject JoystickPrefab;
         public GameObject StagePrefab;
         public CameraController CameraController;
@@ -30,8 +28,9 @@ namespace Units.Stages.Managers
         
         private Joystick _joystick;
         
-        private UI_Currency _uiCurrencyPrefab;
-        private UI_BuildingEnhancement _upgradePanelPrefab;
+        private UI_Panel_Currency _uiPanelCurrencyPrefab;
+        private UI_Panel_BuildingEnhancement _upgradePanelPrefab;
+        private UI_Panel_Quest _questPanelPrefab;
 
         private void Awake()
         {
@@ -51,25 +50,13 @@ namespace Units.Stages.Managers
 
         private void InstantiatePrefabs()
         {
-            InstantiateUI();
             InstantiateJoystick();
             InstantiateStage();
         }
 
-        private void InstantiateUI()
-        {
-            GameObject currencyPrefab = Instantiate(_mainSceneDefaultSetting.UICurrencyPrefab, _mainSceneDefaultSetting.Canvas.transform);
-            _uiCurrencyPrefab = currencyPrefab.GetComponent<UI_Currency>();
-            
-            GameObject upgradePanelPrefab = Instantiate(_mainSceneDefaultSetting.UIBuildingUpgradePanelPrefab, _mainSceneDefaultSetting.Canvas.transform);
-            _upgradePanelPrefab = upgradePanelPrefab.GetComponent<UI_BuildingEnhancement>();
-            UIManager.Instance.UIBuildingEnhancement = _upgradePanelPrefab;
-        }
-
         private void InstantiateJoystick()
         {
-            GameObject obj = Instantiate(_mainSceneDefaultSetting.JoystickPrefab,
-                _mainSceneDefaultSetting.Canvas.Canvas_Joystick.transform);
+            GameObject obj = Instantiate(_mainSceneDefaultSetting.JoystickPrefab, _mainSceneDefaultSetting.Canvas.Canvas_Joystick.transform);
             _joystick = obj.GetComponent<Joystick>();
         }
 
@@ -82,8 +69,8 @@ namespace Units.Stages.Managers
         private void RegisterReference()
         {
             VolatileDataManager.Instance.RegisterReference();
-            CurrencyManager.Instance.RegisterReference(_uiCurrencyPrefab);
-            QuestManager.Instance.RegisterReference();
+            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
+            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
 
             _stageController.RegisterReference(_joystick);
 
@@ -116,22 +103,22 @@ namespace Units.Stages.Managers
 
             if (Input.GetKeyDown(KeyCode.U))
             {
-                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.LevelUpOption1, EQuestType2.Kitchen_A);
+                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.LevelUpOption1, $"{EQuestType2.Kitchen_A}");
             }
             
             if (Input.GetKeyDown(KeyCode.I))
             {
-                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Product, EQuestType2.Product_A);
+                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Product, $"{EQuestType2.ProductA_A}");
             }
             
             if (Input.GetKeyDown(KeyCode.O))
             {
-                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Build, EQuestType2.Kitchen_B);
+                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, $"{EQuestType2.Kitchen_B}");
             }
             
             if (Input.GetKeyDown(KeyCode.P))
             {
-                QuestManager.Instance.OnUpdateCurrentQuestProgress.Invoke(EQuestType1.Build, EQuestType2.Stand_B);
+                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, $"{EQuestType2.Stand_B}");
             }
 #endif
         }

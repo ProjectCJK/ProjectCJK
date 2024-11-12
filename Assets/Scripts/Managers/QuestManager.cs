@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
+using UI;
 using Units.Stages.Modules;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -28,10 +29,14 @@ namespace Managers
         Material_A,
         Material_B,
         Material_C,
-        Product_A,
-        Product_B,
-        Product_C,
-        Product_D,
+        ProductA_A,
+        ProductA_B,
+        ProductA_C,
+        ProductA_D,
+        ProductB_A,
+        ProductB_B,
+        ProductB_C,
+        ProductB_D,
         Stand_B,
         Stand_C,
         Stand_D,
@@ -67,7 +72,7 @@ namespace Managers
 
     public class QuestManager : Singleton<QuestManager>
     {
-        public Action<EQuestType1, EQuestType2> OnUpdateCurrentQuestProgress;
+        private event Action<EQuestType1, EQuestType2> OnUpdateCurrentQuestProgress;
 
         private string[,] _gameData;
         private QuestData _questData;
@@ -78,8 +83,12 @@ namespace Managers
 
         private int _maxSubIndexForStage;
 
-        public void RegisterReference()
+        private UI_Panel_Quest _uiPanelQuest;
+
+        public void RegisterReference(UI_Panel_Quest uiPanelQuest)
         {
+            _uiPanelQuest = uiPanelQuest;
+            
             _gameData = DataManager.Instance.QuestData.GetData();
 
             CurrentQuestMainIndex = 1;
@@ -119,9 +128,10 @@ namespace Managers
                 };
 
                 // 수동으로 Dictionary에 데이터를 추가하여 QuestNumber를 키로 사용
-                foreach (var row in questData)
+                foreach (List<string> row in questData)
                 {
-                    int questNumber = int.Parse(row[3]); // QuestNumber
+                    var questNumber = int.Parse(row[3]); // QuestNumber
+                    
                     if (!_questData.Datas.ContainsKey(questNumber))
                     {
                         _questData.Datas.Add(questNumber, new Data()
@@ -199,6 +209,16 @@ namespace Managers
             else
             {
                 Debug.Log("QuestManager: All quests for the current stage are complete!");
+            }
+        }
+
+        public void UpdateCurrentQuestProgress(EQuestType1 questType1, string questType2)
+        {
+            EQuestType2? parsedQuestType2 = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
+
+            if (parsedQuestType2 != null)
+            {
+                OnUpdateCurrentQuestProgress?.Invoke(questType1, parsedQuestType2.Value);   
             }
         }
     }

@@ -234,8 +234,12 @@ namespace Units.Stages.Controllers
         private void SpawnHunter()
         {
             if (_buildingController.Buildings.TryGetValue($"{EBuildingType.WareHouse}", out BuildingZone buildingZone))
+            {
                 if (buildingZone is WareHouse wareHouse)
-                    wareHouse.SpawnHunter(_creatureController, currentSpawnedHunters);
+                {
+                    wareHouse.SpawnHunter(_creatureController, currentSpawnedHunters);                    
+                }
+            }
         }
 
         private void SpawnMonster()
@@ -288,8 +292,7 @@ namespace Units.Stages.Controllers
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
             var randomIndex = new Random().Next(_currentActiveStandType.Count);
-            var targetKey =
-                ParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
 
             var destinations = new List<Tuple<string, Transform>>
@@ -300,13 +303,6 @@ namespace Units.Stages.Controllers
             };
 
             return destinations;
-        }
-
-        public void RegisterReference(ICreatureController instance1, IBuildingController instance2,
-            IHuntingZoneController instance3,
-            StageCustomSettings instance4, List<EMaterialType> instance5)
-        {
-            throw new NotImplementedException();
         }
     }
 }

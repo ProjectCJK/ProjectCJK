@@ -147,16 +147,23 @@ namespace Units.Stages.Controllers
         private void HandleOnChangeActiveStatus(string targetKey, EActiveStatus activeStatus)
         {
             if (_buildingController.Buildings.ContainsKey(targetKey))
-                _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;
+            {
+                if (activeStatus == EActiveStatus.Active)
+                {
+                    QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, targetKey);
+                }
+                
+                _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;   
+            }
 
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
             {
-                var activeStatusModule = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex]
-                    .GameObject.GetComponent<UnlockZoneModule>();
+                var activeStatusModule = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex].GameObject.GetComponent<UnlockZoneModule>();
 
                 if (_buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
-                    _buildingController.BuildingActiveStatuses[
-                        _buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;
+                {
+                    _buildingController.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;   
+                }
 
                 activeStatusModule.SetCurrentState(EActiveStatus.Standby);
             }

@@ -54,7 +54,10 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
                         break;
                 }
             else
+            {
+                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Get, inputItemKey);
                 AddItem(inputItemKey, item.Count);
+            }
 
             ItemFactory.ReturnItem(item);
         }

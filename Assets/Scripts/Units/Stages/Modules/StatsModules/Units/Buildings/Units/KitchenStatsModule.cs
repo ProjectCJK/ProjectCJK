@@ -68,8 +68,8 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
         protected override void IncreaseCurrentBuildingOption1Level()
         {
             base.IncreaseCurrentBuildingOption1Level();
-            
-            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption1, ParserModule.ParseStringToEnum<EQuestType2>(BuildingKey).Value);
+
+            QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.LevelUpOption1, BuildingKey);
         }
 
         protected override void IncreaseCurrentBuildingOption2Level()
