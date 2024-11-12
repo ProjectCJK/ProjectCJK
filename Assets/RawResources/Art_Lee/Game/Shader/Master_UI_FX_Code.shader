@@ -16,6 +16,9 @@
         _Mask_Texture("Mask_Texture", 2D) = "white" {}
         _Mask_Range("Mask_Range", Float) = 1
 
+        [Header(__________________________________________________________________)]
+        [Space(17)]
+
         _LerpColor("Second Color", Color) = (1,1,1,1)
         _LerpProgress("Second Color Progress", Range( 0 , 1)) = 0
 

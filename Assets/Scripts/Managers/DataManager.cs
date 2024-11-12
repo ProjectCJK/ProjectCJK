@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
 using ScriptableObjects.Scripts.Zones;
+using TMPro;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Managers
 {
@@ -47,7 +50,7 @@ namespace Managers
         [Space(20), Header("### GameData ###")]
         [Header("=== Quest GameData ===")]
         public GameData QuestData;
-        [Header("=== Building GameData ===")]
+        [Space(20), Header("=== Building GameData ===")]
         [Header("--- Kitchen GameData ---")]
         public GameData KitchenData;
         public GameData KitchenOption1ValueData;
@@ -66,14 +69,21 @@ namespace Managers
         public GameData DeliveryLodgingOption2ValueData;
         public GameData DeliveryLodgingOption1CostData;
         public GameData DeliveryLodgingOption2CostData;
-        [Header("--- WareHouse GameData ---")]
+        [Space(20), Header("--- WareHouse GameData ---")]
         public GameData WareHouseData;
         public GameData WareHouseOption1ValueData;
         public GameData WareHouseOption2ValueData;
         public GameData WareHouseOption1CostData;
         public GameData WareHouseOption2CostData;
+
+        [Space(20), Header("### TMP_SpriteAssets ###")]
+        public TMP_SpriteAsset TMP_SpriteDatas;
         
-        // [Space(20)] [Header("### Building Data ###")]
-        // public GameData Building
+        [Space(20), Header("### SpriteAssets ###")]
+        public Sprite[] SpriteDatas;
+        
+        [Space(20)] [Header("### UI ###")]
+        [Header("--- BuildingUpgradePanel GameData ---")]
+        public GameData BuildingUpgradePanel;
     }
 }

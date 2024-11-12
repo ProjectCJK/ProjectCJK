@@ -68,7 +68,7 @@ namespace Units.Stages.Units.Buildings.Units
             _itemFactory = itemFactory;
             _deliveryLodgingDataSo = DataManager.Instance.DeliveryLodgingDataSo;
             _deliveryLodgingStatsModule =
-                new DeliveryLodgingStatsModule(_deliveryLodgingDataSo, _currentSpawnedDeliveryMans);
+                new DeliveryLodgingStatsModule(_deliveryLodgingDataSo);
 
             BuildingKey = _deliveryLodgingStatsModule.BuildingKey;
 
@@ -97,7 +97,7 @@ namespace Units.Stages.Units.Buildings.Units
         public void SpawnDeliveryMan(ICreatureController creatureController,
             HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
         {
-            if (_currentSpawnedDeliveryMans.Count < (int)_deliveryLodgingStatsModule.CurrentDeliveryLodgingOption2Value)
+            if (_currentSpawnedDeliveryMans.Count < (int)_deliveryLodgingStatsModule.CurrentBuildingOption2Value)
             {
                 IDeliveryMan deliveryMan = creatureController.GetDeliveryMan(transform.position);
 
@@ -119,9 +119,9 @@ namespace Units.Stages.Units.Buildings.Units
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)
-                _deliveryLodgingStatsModule.GetUIDeliveryLodgingEnhancement();
+                _deliveryLodgingStatsModule.GetUIBuildingEnhancement();
             else
-                _deliveryLodgingStatsModule.ReturnUIDeliveryLodgingEnhancement();
+                _deliveryLodgingStatsModule.ReturnUIBuildingEnhancement();
         }
     }
 }

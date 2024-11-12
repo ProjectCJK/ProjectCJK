@@ -147,7 +147,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         public void SpawnHunter(ICreatureController creatureController, HashSet<IHunter> currentSpawnedHunters)
         {
-            if (_currentSpawnedHunters.Count < (int)_wareHouseStatsModule.CurrentWareHouseOption2Value)
+            if (_currentSpawnedHunters.Count < (int)_wareHouseStatsModule.CurrentBuildingOption2Value)
             {
                 IHunter hunter = creatureController.GetHunter(transform.position);
 
@@ -169,9 +169,9 @@ namespace Units.Stages.Units.Buildings.Units
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)
-                _wareHouseStatsModule.GetUIWareHouseEnhancement();
+                _wareHouseStatsModule.GetUIBuildingEnhancement();
             else
-                _wareHouseStatsModule.ReturnUIWareHouseEnhancement();
+                _wareHouseStatsModule.ReturnUIBuildingEnhancement();
         }
 
         private void HandleOnTriggerStay2D(Collider2D col)
