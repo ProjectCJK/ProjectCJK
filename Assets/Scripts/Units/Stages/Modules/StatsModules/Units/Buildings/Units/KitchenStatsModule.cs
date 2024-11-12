@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -62,6 +63,20 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
             {
                 VolatileDataManager.Instance.ItemPrices.TryAdd(OutputItemKey, (int)CurrentBuildingOption1Value);   
             }
+        }
+        
+        protected override void IncreaseCurrentBuildingOption1Level()
+        {
+            base.IncreaseCurrentBuildingOption1Level();
+            
+            
+        }
+
+        protected override void IncreaseCurrentBuildingOption2Level()
+        {
+            base.IncreaseCurrentBuildingOption2Level();
+            
+            
         }
     }
 }

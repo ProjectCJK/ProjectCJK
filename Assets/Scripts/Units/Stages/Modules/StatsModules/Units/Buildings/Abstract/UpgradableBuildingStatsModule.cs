@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Managers;
@@ -247,7 +248,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             }
         }
         
-        private void IncreaseCurrentBuildingOption1Level()
+        protected virtual void IncreaseCurrentBuildingOption1Level()
         {
             CurrentBuildingOption1Level++;
 
@@ -255,14 +256,18 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
 
             UpdateBuildingStatsModule();
             GetUIBuildingEnhancement();
+
+            OnTriggerBuildingAnimation?.Invoke(EBuildingAnimatorParameter.Upgrade_Coin);
         }
 
-        private void IncreaseCurrentBuildingOption2Level()
+        protected virtual  void IncreaseCurrentBuildingOption2Level()
         {
             CurrentBuildingOption2Level++;
 
             UpdateBuildingStatsModule();
             GetUIBuildingEnhancement();
+            
+            OnTriggerBuildingAnimation?.Invoke(EBuildingAnimatorParameter.Upgrade_Cookie);
         }
     }
 }

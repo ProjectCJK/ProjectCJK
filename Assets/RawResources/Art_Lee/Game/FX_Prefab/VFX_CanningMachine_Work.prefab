@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 7004563382430625830}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6315549661002342103
 ParticleSystem:
@@ -6336,7 +6336,7 @@ ParticleSystem:
   UVModule:
     serializedVersion: 2
     enabled: 1
-    mode: 0
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -6454,7 +6454,10 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: 1290680776, guid: a3f6ae7afd7d135439f16f7d3f3a46ca, type: 3}
+    - sprite: {fileID: -1940978952, guid: a3f6ae7afd7d135439f16f7d3f3a46ca, type: 3}
+    - sprite: {fileID: 1873611189, guid: a3f6ae7afd7d135439f16f7d3f3a46ca, type: 3}
+    - sprite: {fileID: 1066147371, guid: a3f6ae7afd7d135439f16f7d3f3a46ca, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -9744,7 +9747,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7810c71f22fc1784ba114434520cac4d, type: 2}
+  - {fileID: 2100000, guid: e1bb890b355ba9245bcf4764c0d4d0be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

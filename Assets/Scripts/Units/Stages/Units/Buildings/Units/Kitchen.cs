@@ -11,6 +11,7 @@ using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
 using Units.Stages.Modules.UnlockModules.Interfaces;
 using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.UpgradeZones;
 using Units.Stages.Units.Buildings.UI.Kitchens;
@@ -26,21 +27,27 @@ namespace Units.Stages.Units.Buildings.Units
     [Serializable]
     public struct KitchenDefaultSetting
     {
-        [Header("Kitchen UI")] public KitchenView KitchenView;
+        [Header("Kitchen UI")]
+        public KitchenView KitchenView;
+        
+        [Space(10), Header("Animator")]
+        public Animator Animator;
 
-        [Space(10)] [Header("아이템 생성 장소")] public Transform KitchenFactory;
+        [Space(10), Header("아이템 생성 장소")]
+        public Transform KitchenFactory;
 
-        [Space(10)] [Header("아이템 보관 장소")] public Transform KitchenInventory;
+        [Space(10), Header("아이템 보관 장소")]
+        public Transform KitchenInventory;
 
-        [Space(10)] [Header("Factory Animator")]
+        [Space(10), Header("Factory Animator")]
         public Animator FactoryAnimator;
 
-        [Space(10)] [Header("TradeZone_Player")]
+        [Space(10), Header("TradeZone_Player")]
         public Transform TradeZone_Player;
 
-        [Space(10)] [Header("TradeZone_NPC")] public Transform TradeZone_NPC;
+        [Space(10), Header("TradeZone_NPC")] public Transform TradeZone_NPC;
 
-        [Space(10)] [Header("UnlockZone_Player")]
+        [Space(10), Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
 
         [Space(10)] [Header("UpgradeZone_Player")]
@@ -151,6 +158,8 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenMaterialInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
 
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
+
+            _kitchenStatsModule.OnTriggerBuildingAnimation += HandleOnTriggerBuildingAnimation;
         }
 
         public override void Initialize()
@@ -188,6 +197,11 @@ namespace Units.Stages.Units.Buildings.Units
                 _kitchenStatsModule.GetUIBuildingEnhancement();
             else
                 _kitchenStatsModule.ReturnUIBuildingEnhancement();
+        }
+
+        public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
+        {
+            _kitchenDefaultSetting.Animator.SetTrigger($"{animatorParameter}");
         }
     }
 }
