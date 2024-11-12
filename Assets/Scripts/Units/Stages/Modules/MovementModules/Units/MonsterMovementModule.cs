@@ -54,6 +54,8 @@ namespace Units.Stages.Modules.MovementModules.Units
             _rigidbody2D = monster.GetComponent<Rigidbody2D>();
             _spriteTransform = spriteTransform;
             BoxCollider2D = _rigidbody2D.GetComponent<BoxCollider2D>();
+            
+            SetCollisionLayerMask(LayerMaskParserModule.CollisionLayerMask | LayerMaskParserModule.MonsterCollisionLayerMask);
         }
 
         protected override BoxCollider2D BoxCollider2D { get; }

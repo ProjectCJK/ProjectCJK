@@ -42,6 +42,8 @@ namespace Units.Stages.Modules.MovementModules.Units
             _rigidbody2D = player.GetComponent<Rigidbody2D>();
             _spriteTransform = spriteTransform;
             BoxCollider2D = _rigidbody2D.GetComponent<BoxCollider2D>();
+            
+            SetCollisionLayerMask(LayerMaskParserModule.CollisionLayerMask);
         }
 
         protected override BoxCollider2D BoxCollider2D { get; }
