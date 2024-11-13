@@ -91,19 +91,20 @@ namespace Managers
     {
         public Action<EQuestType1, string, int> OnUpdateCurrentQuestProgress;
 
+        public Dictionary<int, bool> IsQuestClear;
+        
         private string[,] _gameData;
         private QuestData _questData;
-        public int CurrentQuestMainIndex;
-        public int CurrentQuestSubIndex;
-        public Dictionary<int, bool> IsQuestClear;
-        private int _maxSubIndexForStage;
+        
         private UI_Panel_Quest _uiPanelQuest;
+        
+        private int CurrentQuestSubIndex;
+        private int _maxSubIndexForStage;
 
         public void RegisterReference(UI_Panel_Quest uiPanelQuest)
         {
             _uiPanelQuest = uiPanelQuest;
             _gameData = DataManager.Instance.QuestData.GetData();
-            CurrentQuestMainIndex = VolatileDataManager.Instance.CurrentStageLevel;
             CurrentQuestSubIndex = 1;
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             Debug.Log("QuestManager: RegisterReference completed.");
@@ -112,12 +113,12 @@ namespace Managers
         public void InitializeQuestData()
         {
             _maxSubIndexForStage = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == CurrentQuestMainIndex.ToString())
+                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
                 .Select(i => int.Parse(_gameData[i, 2]))
                 .Max();
 
             var questData = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == CurrentQuestMainIndex.ToString() && _gameData[i, 2] == CurrentQuestSubIndex.ToString())
+                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString() && _gameData[i, 2] == CurrentQuestSubIndex.ToString())
                 .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();
 
