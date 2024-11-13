@@ -41,7 +41,7 @@ namespace UI
 
         public void EnableRewardButton()
         {
-            Button_Reward.gameObject.SetActive(true);
+            Button_Reward.interactable = true;
         }
 
         public void SetAdvanceQuestAction(Action advanceQuestAction)
@@ -50,7 +50,7 @@ namespace UI
             Button_Reward.onClick.AddListener(() => 
             {
                 advanceQuestAction();
-                Button_Reward.gameObject.SetActive(false);
+                Button_Reward.interactable = false;
             });
         }
     }
