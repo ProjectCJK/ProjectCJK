@@ -7,6 +7,7 @@ using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -152,8 +153,10 @@ namespace Units.Stages.Controllers
                 {
                     QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Build, targetKey);
                 }
-                
-                _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;   
+
+                BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
+                targetBuilding.HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter.Birth);
+                _buildingController.BuildingActiveStatuses[targetBuilding] = activeStatus;   
             }
 
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
@@ -168,10 +171,12 @@ namespace Units.Stages.Controllers
                 activeStatusModule.SetCurrentState(EActiveStatus.Standby);
             }
 
-            (EBuildingType?, EMaterialType?) parsedKey =
-                ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            
             if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
-                _currentActiveMaterials.Add(parsedKey.Item2.Value);
+            {
+             _currentActiveMaterials.Add(parsedKey.Item2.Value);   
+            }
         }
     }
 }

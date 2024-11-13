@@ -36,6 +36,8 @@ namespace Units.Stages.Units.Buildings.Units
 
         [Space(10)] [Header("UpgradeZone_Player")]
         public Transform UpgradeZone_Player;
+
+        public Animator Animator;
     }
 
     [Serializable]
@@ -80,6 +82,7 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
+        public override Animator Animator => _managementDeskDefaultSetting.Animator;
         public override Transform TradeZoneNpcTransform => _managementDeskDefaultSetting.PaymentZone_NPC;
 
         public void RegisterReference(ItemFactory itemFactory)
@@ -87,7 +90,8 @@ namespace Units.Stages.Units.Buildings.Units
             _itemFactory = itemFactory;
             _managementDeskDataSo = DataManager.Instance.ManagementDeskDataSo;
             _managementDeskStatsModule = new ManagementDeskStatsModule(_managementDeskDataSo, _managementDeskCustomSetting);
-
+            VolatileDataManager.Instance.ManagementDeskStatsModule = _managementDeskStatsModule;
+            
             BuildingKey = _managementDeskStatsModule.BuildingKey;
             InputItemKey = _managementDeskStatsModule.InputItemKey;
             OutputItemKey = _managementDeskStatsModule.OutputItemKey;

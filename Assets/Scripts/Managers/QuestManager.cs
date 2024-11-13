@@ -5,6 +5,7 @@ using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using UI;
 using Units.Stages.Modules;
+using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -143,6 +144,25 @@ namespace Managers
                             Reward2Type = questData[i][11],
                             Reward2Count = int.Parse(questData[i][12])
                         });
+
+                        var parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[i].QuestType2);
+                        
+                        if (parsedEnum.Item1 != EBuildingType.Kitchen)
+                        {
+                            _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
+                        }
+                        else if (parsedEnum.Item1 != EBuildingType.ManagementDesk)
+                        {
+                            _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
+                        }
+                        else if (parsedEnum.Item1 != EBuildingType.WareHouse)
+                        {
+                            _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
+                        }
+                        else if (parsedEnum.Item1 != EBuildingType.DeliveryLodging)
+                        {
+                            _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
+                        }
                     }
                 }
                 

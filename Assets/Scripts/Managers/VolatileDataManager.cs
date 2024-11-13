@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Items.Enums;
 
 namespace Managers
@@ -12,6 +13,11 @@ namespace Managers
 
         public int CurrentStageLevel { get; private set; }
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
+        public Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
+        public Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
+        public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
+        public ManagementDeskStatsModule ManagementDeskStatsModule;
+        public WareHouseStatsModule WareHouseStatsModule;
 
         public void RegisterReference() { }
 
