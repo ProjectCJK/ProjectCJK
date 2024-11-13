@@ -111,6 +111,9 @@ namespace Units.Stages.Controllers
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
             _villageZoneController.Initialize();
+            
+            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
+            QuestManager.Instance.InitializeQuestData();
         }
 
         private void InitializeManager()
@@ -120,7 +123,6 @@ namespace Units.Stages.Controllers
                 materialMappings.TryAdd(materialMapping.MaterialType, materialMapping.StageMaterialType);
 
             VolatileDataManager.Instance.MaterialMappings = materialMappings;
-            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
         }
 
         private void InitializeZone()

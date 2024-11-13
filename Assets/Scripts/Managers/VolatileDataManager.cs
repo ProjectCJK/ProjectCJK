@@ -13,8 +13,8 @@ namespace Managers
 
         public int CurrentStageLevel { get; private set; }
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
-        public Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
-        public Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
+        public readonly Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
+        public readonly Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
         public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
         public ManagementDeskStatsModule ManagementDeskStatsModule;
         public WareHouseStatsModule WareHouseStatsModule;
@@ -31,8 +31,6 @@ namespace Managers
         public void SetCurrentStageLevel(int stageLevel)
         {
             CurrentStageLevel = stageLevel;
-            
-            QuestManager.Instance.InitializeQuestData();
         }
     }
 }

@@ -68,12 +68,12 @@ namespace Units.Stages.Managers
 
         private void RegisterReference()
         {
+            _stageController.RegisterReference(_joystick);
+            
             VolatileDataManager.Instance.RegisterReference();
             CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
             QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
-
-            _stageController.RegisterReference(_joystick);
-
+            
             _mainSceneDefaultSetting.CameraController.RegisterReference(_stageController.PlayerTransform);
         }
 
