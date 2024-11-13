@@ -51,16 +51,17 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey, item.Count);
                         CurrencyManager.Instance.AddGold(item.Count);
                         break;
                 }
             }
             else
             {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey, 1);
                 AddItem(inputItemKey, item.Count);
             }
-
-            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey);
+            
             ItemFactory.ReturnItem(item);
         }
 

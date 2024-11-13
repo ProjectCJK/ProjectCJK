@@ -258,7 +258,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             GetUIBuildingEnhancement();
 
             OnTriggerBuildingAnimation?.Invoke(EBuildingAnimatorParameter.Upgrade_Coin);
-            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption1, BuildingKey);
+            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption1, BuildingKey, 1);
         }
 
         private void IncreaseCurrentBuildingOption2Level()

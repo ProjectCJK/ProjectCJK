@@ -89,7 +89,7 @@ namespace Managers
 
     public class QuestManager : Singleton<QuestManager>
     {
-        public Action<EQuestType1, string> OnUpdateCurrentQuestProgress;
+        public Action<EQuestType1, string, int> OnUpdateCurrentQuestProgress;
 
         private string[,] _gameData;
         private QuestData _questData;
@@ -167,21 +167,40 @@ namespace Managers
             {
                 (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
 
-                if (parsedEnum.Item1 == EBuildingType.Kitchen)
+                switch (parsedEnum.Item1)
                 {
-                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
-                }
-                else if (parsedEnum.Item1 == EBuildingType.ManagementDesk)
-                {
-                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
-                }
-                else if (parsedEnum.Item1 == EBuildingType.WareHouse)
-                {
-                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
-                }
-                else if (parsedEnum.Item1 == EBuildingType.DeliveryLodging)
-                {
-                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
+                    case EBuildingType.Kitchen:
+                    {
+                        var value = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
+                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
+                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            : value;
+                        break;
+                    }
+                    case EBuildingType.ManagementDesk:
+                    {
+                        var value= VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
+                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
+                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            : value;
+                        break;
+                    }
+                    case EBuildingType.WareHouse:
+                    {
+                        var value = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
+                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
+                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            : value;
+                        break;
+                    }
+                    case EBuildingType.DeliveryLodging:
+                    {
+                        var value = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
+                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
+                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            : value;
+                        break;
+                    }
                 }
             }
             else if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[questIndex].QuestType1) == EQuestType1.Build)
@@ -251,7 +270,7 @@ namespace Managers
             _uiPanelQuest.UpdateQuestPanel(questDataBundle);
         }
 
-        private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2)
+        private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2, int value)
         {
             var parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
 
@@ -259,13 +278,19 @@ namespace Managers
             {
                 bool questUpdated = false;
 
-                foreach (var (subIndex, data) in _questData.Datas)
+                foreach (var (_, data) in _questData.Datas)
                 {
-                    if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2.ToString())
+                    if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2)
                     {
                         if (data.CurrentTargetGoal < data.MaxTargetGoal)
                         {
-                            data.CurrentTargetGoal++;
+                            data.CurrentTargetGoal += value;
+
+                            if (data.CurrentTargetGoal >= data.MaxTargetGoal)
+                            {
+                                data.CurrentTargetGoal = data.MaxTargetGoal;
+                            }
+                            
                             questUpdated = true;
                         }
                     }

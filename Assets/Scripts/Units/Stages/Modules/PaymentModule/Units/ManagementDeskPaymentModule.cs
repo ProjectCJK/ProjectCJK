@@ -101,7 +101,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
                     for (var i = 0; i < purchasedItem.Item2; i++)
                     {
-                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1);
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
                     }
 
                     while (targetItemPrice > 0)
@@ -132,7 +132,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     {
                         Guest guest = _customerQueue.Dequeue();
                         Tuple<string, int> purchasedItem = guest.GetItem();
-                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1);
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
                         (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
                         var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
 
