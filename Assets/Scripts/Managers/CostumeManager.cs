@@ -9,7 +9,7 @@ namespace Managers
         
         public void RegisterReference()
         {
-            // _gameData = DataManager.Instance.;
+            _gameData = DataManager.Instance.CostumeData.GetData();
         }
     }
 }

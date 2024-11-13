@@ -47,18 +47,20 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             if (Enum.TryParse(inputItemKey, out ECurrencyType currencyType))
+            {
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
                         CurrencyManager.Instance.AddGold(item.Count);
                         break;
                 }
+            }
             else
             {
-                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey);
                 AddItem(inputItemKey, item.Count);
             }
 
+            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey);
             ItemFactory.ReturnItem(item);
         }
 

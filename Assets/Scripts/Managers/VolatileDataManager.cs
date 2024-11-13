@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Enums;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Enums;
 
 namespace Managers
@@ -18,6 +20,7 @@ namespace Managers
         public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
         public ManagementDeskStatsModule ManagementDeskStatsModule;
         public WareHouseStatsModule WareHouseStatsModule;
+        public readonly Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
 
         public void RegisterReference() { }
 

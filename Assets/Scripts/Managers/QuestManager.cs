@@ -4,7 +4,9 @@ using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using UI;
+using Units.Stages.Enums;
 using Units.Stages.Modules;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -145,27 +147,7 @@ namespace Managers
                             Reward2Count = int.Parse(questData[i][12])
                         });
                         
-                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1)
-                        {
-                            (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[i].QuestType2);
-                            
-                            if (parsedEnum.Item1 == EBuildingType.Kitchen)
-                            {
-                                _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
-                            }
-                            else if (parsedEnum.Item1 == EBuildingType.ManagementDesk)
-                            {
-                                _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
-                            }
-                            else if (parsedEnum.Item1 == EBuildingType.WareHouse)
-                            {
-                                _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
-                            }
-                            else if (parsedEnum.Item1 == EBuildingType.DeliveryLodging)
-                            {
-                                _questData.Datas[i].CurrentTargetGoal = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
-                            }
-                        }
+                        SetLevelUpOption1Goal(i);
                     }
                 }
                 
@@ -176,6 +158,47 @@ namespace Managers
             else
             {
                 Debug.LogWarning("QuestManager: No quest data found.");
+            }
+        }
+
+        private void SetLevelUpOption1Goal(int questIndex)
+        {
+            if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[questIndex].QuestType1) == EQuestType1.LevelUpOption1)
+            {
+                (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
+
+                if (parsedEnum.Item1 == EBuildingType.Kitchen)
+                {
+                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
+                }
+                else if (parsedEnum.Item1 == EBuildingType.ManagementDesk)
+                {
+                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
+                }
+                else if (parsedEnum.Item1 == EBuildingType.WareHouse)
+                {
+                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
+                }
+                else if (parsedEnum.Item1 == EBuildingType.DeliveryLodging)
+                {
+                    _questData.Datas[questIndex].CurrentTargetGoal = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
+                }
+            }
+            else if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[questIndex].QuestType1) == EQuestType1.Build)
+            {
+                (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
+
+                foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
+                {
+                    if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                    {
+                        _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                    }
+                    else
+                    {
+                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                    }
+                }
             }
         }
 
@@ -213,36 +236,19 @@ namespace Managers
                     MaxProgressCount = kvp.Value.MaxTargetGoal
                 }).ToList();
 
-            var questDataBundle = new QuestDataBundle();
-            
-            if (smallestUnclearedQuest.Value != null)
+            var questDataBundle = new QuestDataBundle
             {
-                questDataBundle = new QuestDataBundle
-                {
-                    ClearedCount = clearedCount,
-                    TotalCount = totalCount,
-                    ProgressRatio = progressRatio,
-                    RewardCount = _questData.ListRewardCount,
-                    ThumbnailDescription = thumbnailDescription,
-                    ThumbnailCurrentGoal = thumbnailCurrentGoal,
-                    ThumbnailMaxGoal = thumbnailMaxGoal,
-                    QuestInfoItems = questInfoItems,
-                    AdvanceToNextQuestAction = AdvanceToNextQuest
-                };
-            }
-            else
-            {
-                questDataBundle = new QuestDataBundle
-                {
-                    ClearedCount = clearedCount,
-                    TotalCount = totalCount,
-                    ProgressRatio = progressRatio,
-                    RewardCount = _questData.ListRewardCount,
-                    QuestInfoItems = questInfoItems,
-                    AdvanceToNextQuestAction = AdvanceToNextQuest
-                };
-            }
-            
+                ClearedCount = clearedCount,
+                TotalCount = totalCount,
+                ProgressRatio = progressRatio,
+                RewardCount = _questData.ListRewardCount,
+                ThumbnailDescription = thumbnailDescription,
+                ThumbnailCurrentGoal = thumbnailCurrentGoal,
+                ThumbnailMaxGoal = thumbnailMaxGoal,
+                QuestInfoItems = questInfoItems,
+                AdvanceToNextQuestAction = AdvanceToNextQuest
+            };
+
             _uiPanelQuest.UpdateQuestPanel(questDataBundle);
         }
 
@@ -305,4 +311,4 @@ namespace Managers
             }
         }
     }
-    }
+}

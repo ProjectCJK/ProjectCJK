@@ -38,7 +38,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         public float NextBuildingOption1Value;
         public float NextBuildingOption2Value;
         public int RequiredGoldToUpgradeBuildingOption1;
-        public int RequiredRedGemToUpgradeBuildingOption2;
+        public int RequiredGoldToUpgradeBuildingOption2;
         public int RequiredBuildingLevelToUpgradeOption2Level;
         public int RequiredBuildingOption1LevelToUpgradeBuildingLevel;
 
@@ -141,13 +141,13 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
                     ParserModule.ParseOrDefault(BuildingOption1CostData[i, 4], RequiredGoldToUpgradeBuildingOption1))
                 .FirstOrDefault();
 
-            RequiredRedGemToUpgradeBuildingOption2 = Enumerable.Range(0, BuildingOption2CostData.GetLength(0))
+            RequiredGoldToUpgradeBuildingOption2 = Enumerable.Range(0, BuildingOption2CostData.GetLength(0))
                 .Where(i =>
                     BuildingOption2CostData[i, 1] == $"{BuildingKey}" &&
                     BuildingOption2CostData[i, 2] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
                     BuildingOption2CostData[i, 3] == CurrentBuildingOption2Level.ToString())
                 .Select(i =>
-                    ParserModule.ParseOrDefault(BuildingOption2CostData[i, 4], RequiredRedGemToUpgradeBuildingOption2))
+                    ParserModule.ParseOrDefault(BuildingOption2CostData[i, 4], RequiredGoldToUpgradeBuildingOption2))
                 .FirstOrDefault();
 
             RequiredBuildingOption1LevelToUpgradeBuildingLevel = Enumerable.Range(0, BuildingData.GetLength(0))
@@ -214,7 +214,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
                 MaxBuildingOption1Level = MaxBuildingOption1Level,
                 MaxBuildingOption2Level = MaxBuildingOption2Level,
                 RequiredGoldToUpgradeOption1Level = RequiredGoldToUpgradeBuildingOption1,
-                RequiredRedGemToUpgradeOption2Level = RequiredRedGemToUpgradeBuildingOption2,
+                RequiredRedGemToUpgradeOption2Level = RequiredGoldToUpgradeBuildingOption2,
                 RequiredBuildingLevelToUpgradeOption2Level = RequiredBuildingLevelToUpgradeOption2Level,
                 OnClickUpgradeButtonForBuildingOption1 = OnClickUpgradeButtonForBuildingOption1,
                 OnClickUpgradeButtonForBuildingOption2 = OnClickUpgradeButtonForBuildingOption2
@@ -241,14 +241,14 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
 
         private void OnClickUpgradeButtonForBuildingOption2()
         {
-            if (RequiredRedGemToUpgradeBuildingOption2 <= CurrencyManager.Instance.Gold)
+            if (RequiredGoldToUpgradeBuildingOption2 <= CurrencyManager.Instance.Gold)
             {
-                CurrencyManager.Instance.RemoveRedGem(RequiredRedGemToUpgradeBuildingOption2);
+                CurrencyManager.Instance.RemoveGold(RequiredGoldToUpgradeBuildingOption2);
                 IncreaseCurrentBuildingOption2Level();
             }
         }
-        
-        protected virtual void IncreaseCurrentBuildingOption1Level()
+
+        private void IncreaseCurrentBuildingOption1Level()
         {
             CurrentBuildingOption1Level++;
 
@@ -258,9 +258,10 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             GetUIBuildingEnhancement();
 
             OnTriggerBuildingAnimation?.Invoke(EBuildingAnimatorParameter.Upgrade_Coin);
+            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption1, BuildingKey);
         }
 
-        protected virtual  void IncreaseCurrentBuildingOption2Level()
+        private void IncreaseCurrentBuildingOption2Level()
         {
             CurrentBuildingOption2Level++;
 

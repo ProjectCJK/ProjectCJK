@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interfaces;
+using Managers;
 using Units.Stages.Enums;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Units.Buildings.Abstract;
@@ -15,7 +16,6 @@ namespace Units.Stages.Controllers
     public interface IBuildingController : IRegisterReference<ItemFactory, List<EMaterialType>>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
-        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; }
     }
 
     public class BuildingController : MonoBehaviour, IBuildingController
@@ -24,7 +24,6 @@ namespace Units.Stages.Controllers
 
         private List<EMaterialType> _materials;
         public Dictionary<string, BuildingZone> Buildings { get; } = new();
-        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses { get; } = new();
 
         public void RegisterReference(ItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
         {
@@ -59,7 +58,7 @@ namespace Units.Stages.Controllers
 
                 if (building is UnlockableBuildingZone unlockableBuildingZone)
                 {
-                    BuildingActiveStatuses.TryAdd(building, unlockableBuildingZone.ActiveStatus);
+                    VolatileDataManager.Instance.BuildingActiveStatuses.TryAdd(building, unlockableBuildingZone.ActiveStatus);
 
                     if (unlockableBuildingZone.ActiveStatus == EActiveStatus.Active)
                     {
