@@ -150,7 +150,7 @@ namespace Units.Stages.Controllers
             {
                 if (activeStatus == EActiveStatus.Active)
                 {
-                    QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, targetKey);
+                    QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Build, targetKey);
                 }
                 
                 _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;   

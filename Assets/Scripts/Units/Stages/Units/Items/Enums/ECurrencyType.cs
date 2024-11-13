@@ -4,6 +4,7 @@ namespace Units.Stages.Units.Items.Enums
     {
         Money,
         Diamond,
-        RedGem
+        RedGem,
+        Gold
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5868060687846481549}
   - component: {fileID: 1850361440257402984}
   - component: {fileID: 8051466189393307208}
+  - component: {fileID: 2062080512141833555}
   m_Layer: 14
   m_Name: Collision_Stand
   m_TagString: Untagged
@@ -2938,6 +2939,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &2062080512141833555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202426649821330631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1451990080865615535
 GameObject:
   m_ObjectHideFlags: 0
@@ -3507,6 +3520,7 @@ GameObject:
   - component: {fileID: 9191181598799526023}
   - component: {fileID: 202980050532128132}
   - component: {fileID: 4827242417961426687}
+  - component: {fileID: 5808233475343461071}
   m_Layer: 13
   m_Name: Collision_Inventory
   m_TagString: Untagged
@@ -6412,6 +6426,18 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 5204195291579280648}
+--- !u!114 &5808233475343461071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204195291579280648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7317199834281427064
 GameObject:
   m_ObjectHideFlags: 0
@@ -6575,6 +6601,7 @@ GameObject:
   - component: {fileID: 7892440463700851713}
   - component: {fileID: 8290178910943092179}
   - component: {fileID: 6129414319711728726}
+  - component: {fileID: 9031379529048688512}
   m_Layer: 16
   m_Name: TradeZone_Player_Stand
   m_TagString: Untagged
@@ -22748,6 +22775,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessPlayer: 1
   _outputAccessPlayer: 0
+--- !u!114 &9031379529048688512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8091084006211440058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8259069591618417145
 GameObject:
   m_ObjectHideFlags: 0
@@ -22796,6 +22835,7 @@ GameObject:
   - component: {fileID: 6406732039210387672}
   - component: {fileID: 8664328059487541897}
   - component: {fileID: 6208639955465654472}
+  - component: {fileID: 6043697565951588620}
   m_Layer: 16
   m_Name: TradeZone_NPC_Stand
   m_TagString: Untagged
@@ -28365,6 +28405,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessNPCTypes: 01000000
   _outAccessNPCTypes: 00000000
+--- !u!114 &6043697565951588620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8883150544781489973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3435523974888863184
 PrefabInstance:
   m_ObjectHideFlags: 0

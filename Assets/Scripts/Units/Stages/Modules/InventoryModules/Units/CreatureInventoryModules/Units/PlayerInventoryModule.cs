@@ -55,7 +55,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
                 }
             else
             {
-                QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Get, inputItemKey);
+                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey);
                 AddItem(inputItemKey, item.Count);
             }
 
