@@ -241,7 +241,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
 
         private void OnClickUpgradeButtonForBuildingOption2()
         {
-            if (RequiredRedGemToUpgradeBuildingOption2 <= CurrencyManager.Instance.RedGem)
+            if (RequiredRedGemToUpgradeBuildingOption2 <= CurrencyManager.Instance.Gold)
             {
                 CurrencyManager.Instance.RemoveRedGem(RequiredRedGemToUpgradeBuildingOption2);
                 IncreaseCurrentBuildingOption2Level();
