@@ -193,11 +193,10 @@ namespace Managers
                     if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
                     {
                         _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                        break;
                     }
-                    else
-                    {
-                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
-                    }
+
+                    _questData.Datas[questIndex].CurrentTargetGoal = 0;
                 }
             }
         }
