@@ -1,26 +1,9 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UI;
+using Managers;
 
 namespace UI
 {
-    [Serializable]
-    public class UIQuestItem
-    {
-        public Sprite QuestIconBackgroundImage;
-        public Sprite QuestIconImage;
-        public string QuestDescriptionText;
-        public string Reward1CountText;
-        public string Reward2CountText;
-        public string QuestProgressText;
-
-        public int CurrentProgressCount;
-        public int MaxProgressCount;
-        
-        public List<UIQuestInfoItem> UIQuestInfoItems;
-    }
-    
     public class UI_Panel_Quest : MonoBehaviour
     {
         [SerializeField] private UI_QuestThumnail _thumbnailQuest;
@@ -29,14 +12,22 @@ namespace UI
         public UI_QuestThumnail ThumbnailQuest => _thumbnailQuest;
         public UI_QuestMain MainQuest => _mainQuest;
         
-        public void Activate(UIQuestItem uiQuestItem)
+        public void UpdateQuestPanel(QuestDataBundle questDataBundle)
         {
-            
-        }
-        
-        public void Inactivate()
-        {
-            
+            _thumbnailQuest.UpdateThumbnailQuest(
+                questDataBundle.ThumbnailDescription,
+                questDataBundle.ThumbnailCurrentGoal,
+                questDataBundle.ThumbnailMaxGoal
+            );
+
+            _mainQuest.UpdateMainQuestProgress(
+                questDataBundle.ClearedCount,
+                questDataBundle.TotalCount,
+                questDataBundle.ProgressRatio
+            );
+
+            _mainQuest.UpdateQuestInfoItems(questDataBundle.QuestInfoItems);
+            _mainQuest.SetAdvanceQuestAction(questDataBundle.AdvanceToNextQuestAction);
         }
     }
 }

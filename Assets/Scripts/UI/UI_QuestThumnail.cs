@@ -8,16 +8,29 @@ namespace UI
     {
         [SerializeField] private Image currentTargetQuestImage;
         [SerializeField] private TextMeshProUGUI currentTargetQuestDescriptionText;
-        [SerializeField] private TextMeshProUGUI currentTargetQuestDescriptionProgressTest;
+        [SerializeField] private TextMeshProUGUI currentTargetQuestDescriptionProgressText;
+        [SerializeField] private TextMeshProUGUI currentMainQuestClearText;
 
-        public void Activate()
+        public void UpdateThumbnailQuest(string description, int currentGoal, int maxGoal)
         {
-            
-        }
-        
-        public void Inactivate()
-        {
-            
+            if (currentGoal >= maxGoal)
+            {
+                currentMainQuestClearText.text = "모든 퀘스트 클리어!";
+                currentMainQuestClearText.gameObject.SetActive(true);
+                currentTargetQuestImage.gameObject.SetActive(false);
+                currentTargetQuestDescriptionText.gameObject.SetActive(false);
+                currentTargetQuestDescriptionProgressText.gameObject.SetActive(false);
+            }
+            else
+            {
+                currentMainQuestClearText.gameObject.SetActive(false);
+                currentTargetQuestImage.gameObject.SetActive(true);
+                currentTargetQuestDescriptionText.gameObject.SetActive(true);
+                currentTargetQuestDescriptionProgressText.gameObject.SetActive(true);
+
+                currentTargetQuestDescriptionText.text = description;
+                currentTargetQuestDescriptionProgressText.text = $"( {currentGoal} / {maxGoal} )";
+            }
         }
     }
 }

@@ -101,7 +101,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
                     for (var i = 0; i < purchasedItem.Item2; i++)
                     {
-                        QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Selling, purchasedItem.Item1);
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1);
                     }
 
                     while (targetItemPrice > 0)

@@ -48,6 +48,19 @@ namespace Managers
     }
 
     [Serializable]
+    public struct QuestDataBundle
+    {
+        public int ClearedCount;
+        public int TotalCount;
+        public float ProgressRatio;
+        public string ThumbnailDescription;
+        public int ThumbnailCurrentGoal;
+        public int ThumbnailMaxGoal;
+        public List<UIQuestInfoItem> QuestInfoItems;
+        public Action AdvanceToNextQuestAction;
+    }
+
+    [Serializable]
     public struct QuestData
     {
         public int Stage { get; set; }
@@ -72,69 +85,54 @@ namespace Managers
 
     public class QuestManager : Singleton<QuestManager>
     {
-        private event Action<EQuestType1, EQuestType2> OnUpdateCurrentQuestProgress;
+        public Action<EQuestType1, string> OnUpdateCurrentQuestProgress;
 
         private string[,] _gameData;
         private QuestData _questData;
-
         public int CurrentQuestMainIndex;
         public int CurrentQuestSubIndex;
         public Dictionary<int, bool> IsQuestClear;
-
         private int _maxSubIndexForStage;
-
         private UI_Panel_Quest _uiPanelQuest;
 
         public void RegisterReference(UI_Panel_Quest uiPanelQuest)
         {
             _uiPanelQuest = uiPanelQuest;
-            
             _gameData = DataManager.Instance.QuestData.GetData();
-
             CurrentQuestMainIndex = 1;
             CurrentQuestSubIndex = 1;
-
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             Debug.Log("QuestManager: RegisterReference completed.");
         }
 
         public void InitializeQuestData()
         {
-            // 현재 스테이지에서 가장 큰 List 값(_maxSubIndexForStage)을 찾기
             _maxSubIndexForStage = Enumerable.Range(0, _gameData.GetLength(0))
                 .Where(i => _gameData[i, 1] == CurrentQuestMainIndex.ToString())
-                .Select(i => int.Parse(_gameData[i, 2])) // List 값을 가져옴
+                .Select(i => int.Parse(_gameData[i, 2]))
                 .Max();
 
-            List<List<string>> questData = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i =>
-                    _gameData[i, 1] == CurrentQuestMainIndex.ToString() &&
-                    _gameData[i, 2] == CurrentQuestSubIndex.ToString())
-                .Select(i =>
-                    Enumerable.Range(0, _gameData.GetLength(1))
-                        .Select(j => _gameData[i, j])
-                        .ToList())
+            var questData = Enumerable.Range(0, _gameData.GetLength(0))
+                .Where(i => _gameData[i, 1] == CurrentQuestMainIndex.ToString() && _gameData[i, 2] == CurrentQuestSubIndex.ToString())
+                .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();
 
             if (questData.Count > 0)
             {
-                _questData = new QuestData()
+                _questData = new QuestData
                 {
                     Stage = int.Parse(questData[0][1]),
                     ListRewardType = ParserModule.ParseStringToEnum<ECurrencyType>(questData[0][13]),
                     ListRewardCount = int.Parse(questData[0][14]),
-
                     Datas = new Dictionary<int, Data>()
                 };
 
-                // 수동으로 Dictionary에 데이터를 추가하여 QuestNumber를 키로 사용
-                foreach (List<string> row in questData)
+                foreach (var row in questData)
                 {
-                    var questNumber = int.Parse(row[3]); // QuestNumber
-                    
+                    int questNumber = int.Parse(row[3]);
                     if (!_questData.Datas.ContainsKey(questNumber))
                     {
-                        _questData.Datas.Add(questNumber, new Data()
+                        _questData.Datas.Add(questNumber, new Data
                         {
                             Description = row[5],
                             QuestType1 = row[6],
@@ -146,79 +144,107 @@ namespace Managers
                             Reward2Count = int.Parse(row[12])
                         });
                     }
-                    else
-                    {
-                        Debug.LogWarning($"Duplicate QuestNumber {questNumber} encountered and ignored in quest data.");
-                    }
                 }
 
-                // IsQuestClear 딕셔너리 초기화, QuestNumber를 키로 사용
                 IsQuestClear = _questData.Datas.Keys.ToDictionary(questNumber => questNumber, _ => false);
-                Debug.Log("QuestManager: InitializeQuestData completed. Loaded quest data for stage: " + _questData.Stage);
+                UpdateUI();
+                Debug.Log("QuestManager: InitializeQuestData completed.");
             }
             else
             {
-                Debug.LogWarning("QuestManager: No quest data found for the current main and sub indices.");
+                Debug.LogWarning("QuestManager: No quest data found.");
             }
         }
 
-        private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, EQuestType2 questType2)
+        public void UpdateUI()
         {
-            bool questFound = false;
+            var smallestUnclearedQuest = _questData.Datas
+                .Where(kvp => !IsQuestClear[kvp.Key])
+                .OrderBy(kvp => kvp.Key)
+                .FirstOrDefault();
 
-            foreach ((var subIndex, Data data) in _questData.Datas)
-            {
-                if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2.ToString())
+            string thumbnailDescription = smallestUnclearedQuest.Value.Description;
+            int thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
+            int thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
+
+            int clearedCount = IsQuestClear.Values.Count(cleared => cleared);
+            int totalCount = IsQuestClear.Count;
+            float progressRatio = (float)clearedCount / totalCount;
+
+            List<UIQuestInfoItem> questInfoItems = _questData.Datas
+                .OrderBy(kvp => kvp.Key)
+                .Select(kvp => new UIQuestInfoItem
                 {
-                    questFound = true;
+                    QuestDescriptionText = kvp.Value.Description,
+                    Reward1CountText = kvp.Value.Reward1Count.ToString(),
+                    Reward2CountText = kvp.Value.Reward2Count.ToString(),
+                    QuestProgressText = $"{kvp.Value.CurrentTargetGoal} / {kvp.Value.MaxTargetGoal}",
+                    CurrentProgressCount = kvp.Value.CurrentTargetGoal,
+                    MaxProgressCount = kvp.Value.MaxTargetGoal
+                }).ToList();
 
-                    if (data.CurrentTargetGoal < data.MaxTargetGoal)
-                    {
-                        data.CurrentTargetGoal++;
-                        Debug.Log($"QuestManager: Quest {subIndex} progress updated. Current goal: {data.CurrentTargetGoal}/{data.MaxTargetGoal}");
-                    }
+            var questDataBundle = new QuestDataBundle
+            {
+                ClearedCount = clearedCount,
+                TotalCount = totalCount,
+                ProgressRatio = progressRatio,
+                ThumbnailDescription = thumbnailDescription,
+                ThumbnailCurrentGoal = thumbnailCurrentGoal,
+                ThumbnailMaxGoal = thumbnailMaxGoal,
+                QuestInfoItems = questInfoItems,
+                AdvanceToNextQuestAction = AdvanceToNextQuest
+            };
 
-                    if (data.CurrentTargetGoal >= data.MaxTargetGoal)
+            _uiPanelQuest.UpdateQuestPanel(questDataBundle);
+        }
+
+        private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2)
+        {
+            var parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
+
+            if (parsedQuestType != null)
+            {
+                bool questUpdated = false;
+
+                foreach (var (subIndex, data) in _questData.Datas)
+                {
+                    if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2.ToString())
                     {
-                        IsQuestClear[subIndex] = true;
-                        Debug.Log($"QuestManager: Quest {subIndex} completed!");
+                        if (data.CurrentTargetGoal < data.MaxTargetGoal)
+                        {
+                            data.CurrentTargetGoal++;
+                            questUpdated = true;
+                        }
+                        if (data.CurrentTargetGoal >= data.MaxTargetGoal)
+                        {
+                            IsQuestClear[subIndex] = true;
+                        }
                     }
                 }
-            }
 
-            if (!questFound)
-            {
-                Debug.LogWarning($"QuestManager: No matching quest found for type1: {questType1}, type2: {questType2}");
-            }
+                if (questUpdated)
+                {
+                    UpdateUI();
+                }
 
-            // Check if all quests in the current sub-index are completed
-            if (IsQuestClear.Values.All(status => status))
-            {
-                AdvanceToNextQuest();
+                if (IsQuestClear.Values.All(status => status))
+                {
+                    _uiPanelQuest.MainQuest.EnableRewardButton();
+                }
             }
         }
 
-        private void AdvanceToNextQuest()
+        public void AdvanceToNextQuest()
         {
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
                 InitializeQuestData();
-                Debug.Log($"QuestManager: Moved to next quest set - Main Index: {CurrentQuestMainIndex}, Sub Index: {CurrentQuestSubIndex}");
+                UpdateUI();
             }
             else
             {
                 Debug.Log("QuestManager: All quests for the current stage are complete!");
-            }
-        }
-
-        public void UpdateCurrentQuestProgress(EQuestType1 questType1, string questType2)
-        {
-            EQuestType2? parsedQuestType2 = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
-
-            if (parsedQuestType2 != null)
-            {
-                OnUpdateCurrentQuestProgress?.Invoke(questType1, parsedQuestType2.Value);   
             }
         }
     }

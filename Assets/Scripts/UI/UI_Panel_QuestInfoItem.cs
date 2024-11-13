@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,11 +15,10 @@ namespace UI
         public string Reward1CountText;
         public string Reward2CountText;
         public string QuestProgressText;
-
         public int CurrentProgressCount;
         public int MaxProgressCount;
     }
-    
+
     public class UI_Panel_QuestInfoItem : MonoBehaviour
     {
         [SerializeField] private Image _questIconBackgroundImage;
@@ -27,7 +27,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _reward1CountText;
         [SerializeField] private TextMeshProUGUI _reward2CountText;
         [SerializeField] private TextMeshProUGUI _questProgressText;
-        [SerializeField] private Button _buttonClear;
+        [SerializeField] private Button _buttonClearActive;
+        [SerializeField] private Button _buttonClearInactive;
         [SerializeField] private Button _buttonNotClear;
 
         public void Activate(UIQuestInfoItem uiQuestInfoItem)
@@ -39,8 +40,23 @@ namespace UI
             _reward2CountText.text = uiQuestInfoItem.Reward2CountText;
             _questProgressText.text = uiQuestInfoItem.QuestProgressText;
             
-            if (uiQuestInfoItem.CurrentProgressCount >= uiQuestInfoItem.MaxProgressCount) _buttonClear.gameObject.SetActive(true);
-            else _buttonNotClear.gameObject.SetActive(false);
+            if (uiQuestInfoItem.CurrentProgressCount >= uiQuestInfoItem.MaxProgressCount)
+            {
+                _buttonClearActive.gameObject.SetActive(true);
+                _buttonNotClear.gameObject.SetActive(false);
+            }
+            else
+            {
+                _buttonClearActive.gameObject.SetActive(false);
+                _buttonNotClear.gameObject.SetActive(true);
+            }
+        }
+
+        public void OnClearButtonClick()
+        {
+            _buttonClearActive.gameObject.SetActive(false);
+            _buttonClearInactive.gameObject.SetActive(true);
+            QuestManager.Instance.UpdateUI();
         }
     }
 }

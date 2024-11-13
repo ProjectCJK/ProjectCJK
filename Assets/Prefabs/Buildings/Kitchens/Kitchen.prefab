@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 9027799754862660340}
   - component: {fileID: 4494809673380666559}
   - component: {fileID: 8575195309034144385}
+  - component: {fileID: 3221270604689594253}
   m_Layer: 16
   m_Name: TradeZone_NPC_Kitchen
   m_TagString: Untagged
@@ -8910,6 +8911,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessNPCTypes: 
   _outAccessNPCTypes: 01000000
+--- !u!114 &3221270604689594253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630009804616875617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1705634521758674750
 GameObject:
   m_ObjectHideFlags: 0
@@ -9108,6 +9121,7 @@ GameObject:
   - component: {fileID: 6568304431312087087}
   - component: {fileID: 9137829337408384573}
   - component: {fileID: 8090120802282119292}
+  - component: {fileID: 5318726543287384954}
   m_Layer: 16
   m_Name: TradeZone_Player_Kitchen
   m_TagString: Untagged
@@ -30577,6 +30591,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessPlayer: 1
   _outputAccessPlayer: 1
+--- !u!114 &5318726543287384954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2387726986120040951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2915809244477010001
 GameObject:
   m_ObjectHideFlags: 0
@@ -32192,6 +32218,7 @@ GameObject:
   - component: {fileID: 3875017165051066973}
   - component: {fileID: 5732182103560646264}
   - component: {fileID: 3840533976733515691}
+  - component: {fileID: 7472164902860013097}
   m_Layer: 13
   m_Name: Collision_Factory_Kitchen
   m_TagString: Untagged
@@ -35109,6 +35136,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &7472164902860013097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7856321531335998498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7879943526772793125
 GameObject:
   m_ObjectHideFlags: 0
@@ -35124,6 +35163,7 @@ GameObject:
   - component: {fileID: 9038435194525562715}
   - component: {fileID: 1200605795250325315}
   - component: {fileID: 5469276956908687077}
+  - component: {fileID: 1638898569130199991}
   m_Layer: 14
   m_Name: Collision_Kitchen
   m_TagString: Untagged
@@ -42013,6 +42053,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &1638898569130199991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7879943526772793125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7880305649092624821
 GameObject:
   m_ObjectHideFlags: 0
@@ -42105,6 +42157,7 @@ GameObject:
   - component: {fileID: 8233716465742991735}
   - component: {fileID: 395360533981827603}
   - component: {fileID: 5217421115404426831}
+  - component: {fileID: 3498276508877357350}
   m_Layer: 13
   m_Name: Collision_Inventory_Kitchen
   m_TagString: Untagged
@@ -47682,6 +47735,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &3498276508877357350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075094377592933756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2318509275318708835
 PrefabInstance:
   m_ObjectHideFlags: 0

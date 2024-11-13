@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 12924528369313694}
   - component: {fileID: 8214164492530143154}
   - component: {fileID: 3528030715455356905}
+  - component: {fileID: 362226718171393329}
   m_Layer: 16
   m_Name: TradeZone_NPC_WareHouse
   m_TagString: Untagged
@@ -16188,6 +16189,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessNPCTypes: 02000000
   _outAccessNPCTypes: 
+--- !u!114 &362226718171393329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804658670449659174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &912830935856174268
 GameObject:
   m_ObjectHideFlags: 0
@@ -17267,6 +17280,7 @@ GameObject:
   - component: {fileID: 5761516353481680068}
   - component: {fileID: 2453737544254660430}
   - component: {fileID: 3341841558930349373}
+  - component: {fileID: 432956502497191801}
   m_Layer: 14
   m_Name: Collision_WareHouse
   m_TagString: Untagged
@@ -17582,6 +17596,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &432956502497191801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4019478312232228532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4529542674230759228
 GameObject:
   m_ObjectHideFlags: 0
@@ -18177,6 +18203,7 @@ GameObject:
   - component: {fileID: 4620544714635017779}
   - component: {fileID: 8067026562633249977}
   - component: {fileID: 5190101954728086639}
+  - component: {fileID: 7435305496750239144}
   m_Layer: 14
   m_Name: Collision_Inventory_WareHouse
   m_TagString: Untagged
@@ -18476,6 +18503,18 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 7962377017827083719}
+--- !u!114 &7435305496750239144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7962377017827083719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8284077499946509885
 GameObject:
   m_ObjectHideFlags: 0

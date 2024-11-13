@@ -519,6 +519,7 @@ GameObject:
   - component: {fileID: 9150776361289491652}
   - component: {fileID: 3908088092135445025}
   - component: {fileID: 6195937089084588892}
+  - component: {fileID: 4115336908622047564}
   m_Layer: 14
   m_Name: Collision_Stand
   m_TagString: Untagged
@@ -4766,6 +4767,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &4115336908622047564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269249889231013518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4302940738659222758
 GameObject:
   m_ObjectHideFlags: 0

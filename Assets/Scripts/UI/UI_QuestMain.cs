@@ -1,8 +1,9 @@
 using System;
-using Managers;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Managers;
 
 namespace UI
 {
@@ -11,15 +12,44 @@ namespace UI
         [SerializeField] private TextMeshProUGUI TMP_EntireStageQuestProgress;
         [SerializeField] private TextMeshProUGUI TMP_MainQuestProgress;
         [SerializeField] private Slider Slider_MainQuestProgress;
-        
-        public void Activate(UIQuestInfoItem uiQuestInfoItem)
+        [SerializeField] private Button Button_Reward;
+        [SerializeField] private List<UI_Panel_QuestInfoItem> uiPanelQuestInfoItems;
+
+        public void UpdateMainQuestProgress(int clearedCount, int totalCount, float progressRatio)
         {
-            
+            TMP_MainQuestProgress.text = $"{clearedCount}/{totalCount}";
+            Slider_MainQuestProgress.value = progressRatio;
         }
-        
-        public void Inactivate()
+
+        public void UpdateQuestInfoItems(List<UIQuestInfoItem> questInfoItems)
         {
-            
+            for (int i = 0; i < uiPanelQuestInfoItems.Count; i++)
+            {
+                if (i < questInfoItems.Count)
+                {
+                    uiPanelQuestInfoItems[i].Activate(questInfoItems[i]);
+                    uiPanelQuestInfoItems[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    uiPanelQuestInfoItems[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        public void EnableRewardButton()
+        {
+            Button_Reward.gameObject.SetActive(true);
+        }
+
+        public void SetAdvanceQuestAction(Action advanceQuestAction)
+        {
+            Button_Reward.onClick.RemoveAllListeners();
+            Button_Reward.onClick.AddListener(() => 
+            {
+                advanceQuestAction();
+                Button_Reward.gameObject.SetActive(false);
+            });
         }
     }
 }

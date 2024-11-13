@@ -13,16 +13,6 @@ namespace Managers
         public UI_Panel_Quest UI_Panel_Quest;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
         public UI_Panel_Currency UI_Panel_Currency;
-
-        // public void GetPanelQuest(UIQuestInfoItem uiQuestInfoItem)
-        // {
-        //     UI_Panel_Quest.Activate(uiQuestInfoItem);
-        // }
-
-        public void ReturnPanelQuest()
-        {
-            UI_Panel_Quest.Inactivate();
-        }
         
         public void GetPanelBuildingEnhancement(UIBuildingEnhancementData uiBuildingEnhancementData)
         {
