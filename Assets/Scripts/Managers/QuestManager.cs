@@ -173,7 +173,7 @@ namespace Managers
                     {
                         var value = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
                         break;
                     }
@@ -181,7 +181,7 @@ namespace Managers
                     {
                         var value= VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
                         break;
                     }
@@ -189,7 +189,7 @@ namespace Managers
                     {
                         var value = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
                         break;
                     }
@@ -197,7 +197,7 @@ namespace Managers
                     {
                         var value = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].CurrentTargetGoal
+                            ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
                         break;
                     }

@@ -5,6 +5,7 @@ using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
+using ScriptableObjects.Scripts.Sprites;
 using ScriptableObjects.Scripts.Zones;
 using TMPro;
 using Units.Stages.Units.Items.Enums;
@@ -35,7 +36,6 @@ namespace Managers
 
         [Space(20)] [Header("### Building Data ###")]
         public KitchenDataSO KitchenDataSo;
-
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
@@ -82,6 +82,12 @@ namespace Managers
         
         [Space(20), Header("--- Costume GameData ---")]
         public GameData CostumeData;
+        public GameData CostumeBoxData;
+        public GameData CostumeParamData;
+        public GameData CostumeUpgradeData;
+        public CostumeSpriteSO CostumeSpriteSo;
+        public CostumeBackBackgroundSpriteSO CostumeBackBackgroundSpriteSO;
+        public CostumeFrontBackgroundSpriteSO CostumeFrontBackgroundSpriteSo;
         
         [Space(20), Header("### TMP_SpriteAssets ###")]
         public TMP_SpriteAsset TMP_SpriteDatas;
