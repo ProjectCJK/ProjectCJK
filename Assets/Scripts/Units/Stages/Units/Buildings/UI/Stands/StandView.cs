@@ -6,7 +6,7 @@ namespace Units.Stages.Units.Buildings.UI.Stands
 {
     public class StandView : BaseView<StandViewModel>
     {
-        public TextMeshProUGUI remainedProductCountText;
+        public TextMeshPro remainedProductCountText;
 
         protected override void BindUIElements()
         {

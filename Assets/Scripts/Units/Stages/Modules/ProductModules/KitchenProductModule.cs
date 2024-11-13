@@ -1,5 +1,6 @@
 using System;
 using Interfaces;
+using Managers;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using UnityEngine;
@@ -80,8 +81,8 @@ namespace Units.Stages.Modules.ProductModules
                 {
                     if (_kitchenProductInventoryModule.CanReceiveItem())
                     {
-                        _kitchenProductInventoryModule.ReceiveItemThroughTransfer(_outputItemKey, 1,
-                            SenderTransform.position);
+                        _kitchenProductInventoryModule.ReceiveItemThroughTransfer(_outputItemKey, 1, SenderTransform.position);
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Product, _outputItemKey, 1);
                         _kitchenMaterialInventoryModule.RemoveItem(_inputItemKey);
                     }
 

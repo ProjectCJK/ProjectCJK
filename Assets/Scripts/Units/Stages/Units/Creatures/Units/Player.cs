@@ -108,7 +108,7 @@ namespace Units.Stages.Units.Creatures.Units
             _playerStatsModule = new PlayerStatsModule(_playerDataSo);
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
             _playerInventoryModule =
-                new PlayerInventoryModule(transform, transform, _playerStatsModule, _itemFactory, CreatureType);
+                new PlayerInventoryModule(receiveTransform, receiveTransform, _playerStatsModule, _itemFactory, CreatureType);
             _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, _creatureStateMachine, joystick,
                 spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule(_playerStatsModule);

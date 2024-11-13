@@ -1,13 +1,15 @@
+using System;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
 using Units.Stages.UI;
+using Units.Stages.Units.Items.Enums;
 
 namespace Managers
 {
-    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Currency>, IInitializable
+    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Panel_Currency>, IInitializable
     {
         private CurrencyModel _currencyModel;
-        private UI_Currency _uiCurrency;
+        private UI_Panel_Currency _uiPanelCurrency;
         private CurrencyViewModel _currencyViewModel;
 
         private int _redGem;
@@ -43,13 +45,13 @@ namespace Managers
             }
         }
 
-        public void RegisterReference(UI_Currency uiCurrency)
+        public void RegisterReference(UI_Panel_Currency uiPanelCurrency)
         {
-            _uiCurrency = uiCurrency;
+            _uiPanelCurrency = uiPanelCurrency;
 
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
-            _uiCurrency.BindViewModel(_currencyViewModel);
+            _uiPanelCurrency.BindViewModel(_currencyViewModel);
         }
         
         public void Initialize()
@@ -57,6 +59,44 @@ namespace Managers
             _gold = 100000;
             
             _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
+        }
+
+        public void AddCurrency(ECurrencyType currencyType, int value)
+        {
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                    AddGold(value);
+                    break;
+                case ECurrencyType.Diamond:
+                    AddDiamond(value);
+                    break;
+                case ECurrencyType.RedGem:
+                    AddRedGem(value);
+                    break;
+                case ECurrencyType.Gold:
+                    AddGold(value);
+                    break;
+            }
+        }
+
+        public void RemoveCurrency(ECurrencyType currencyType, int value)
+        {
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                    RemoveGold(value);
+                    break;
+                case ECurrencyType.Diamond:
+                    RemoveDiamond(value);
+                    break;
+                case ECurrencyType.RedGem:
+                    RemoveRedGem(value);
+                    break;
+                case ECurrencyType.Gold:
+                    RemoveGold(value);
+                    break;
+            }
         }
 
         public void AddGold(int value)
@@ -74,7 +114,7 @@ namespace Managers
             RedGem += value;
         }
         
-        public void RemoveRedGed(int value)
+        public void RemoveRedGem(int value)
         {
             RedGem -= value;
         }

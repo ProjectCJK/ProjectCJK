@@ -31,6 +31,8 @@ namespace Units.Stages.Units.Buildings.Units
 
         [Space(10)] [Header("UpgradeZone_Player")]
         public Transform UpgradeZone_Player;
+
+        public Animator Animator;
     }
 
     public class DeliveryLodging : UnlockableBuildingZone, IDeliveryLodging
@@ -51,6 +53,7 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
+        public override Animator Animator => _deliveryLodgingDefaultSetting.Animator;
         public override Transform TradeZoneNpcTransform { get; }
 
         private void Update()
@@ -67,9 +70,8 @@ namespace Units.Stages.Units.Buildings.Units
         {
             _itemFactory = itemFactory;
             _deliveryLodgingDataSo = DataManager.Instance.DeliveryLodgingDataSo;
-            _deliveryLodgingStatsModule =
-                new DeliveryLodgingStatsModule(_deliveryLodgingDataSo);
-
+            _deliveryLodgingStatsModule = new DeliveryLodgingStatsModule(_deliveryLodgingDataSo);
+            VolatileDataManager.Instance.DeliveryLodgingStatsModule = _deliveryLodgingStatsModule;
             BuildingKey = _deliveryLodgingStatsModule.BuildingKey;
 
             _deliveryLodgingInventoryModule = new DeliveryLodgingInventoryModule(null,

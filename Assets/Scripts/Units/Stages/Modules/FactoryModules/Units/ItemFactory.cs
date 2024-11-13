@@ -27,7 +27,6 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
         private readonly Transform _parentTransform;
         private Dictionary<string, Sprite> _currencySprites;
-
         private Dictionary<string, Sprite> _itemSprites;
 
         public ItemFactory(Transform parentTransform, List<MaterialMapping> materialMappings)

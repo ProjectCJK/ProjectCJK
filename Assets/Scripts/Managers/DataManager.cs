@@ -50,6 +50,7 @@ namespace Managers
         [Space(20), Header("### GameData ###")]
         [Header("=== Quest GameData ===")]
         public GameData QuestData;
+        
         [Space(20), Header("=== Building GameData ===")]
         [Header("--- Kitchen GameData ---")]
         public GameData KitchenData;
@@ -57,25 +58,31 @@ namespace Managers
         public GameData KitchenOption2ValueData;
         public GameData KitchenOption1CostData;
         public GameData KitchenOption2CostData;
+        
         [Space(20), Header("--- ManagementDesk GameData ---")]
         public GameData ManagementDeskData;
         public GameData ManagementDeskOption1ValueData;
         public GameData ManagementDeskOption2ValueData;
         public GameData ManagementDeskOption1CostData;
         public GameData ManagementDeskOption2CostData;
+        
         [Space(20), Header("--- DeliveryLodging GameData ---")]
         public GameData DeliveryLodgingData;
         public GameData DeliveryLodgingOption1ValueData;
         public GameData DeliveryLodgingOption2ValueData;
         public GameData DeliveryLodgingOption1CostData;
         public GameData DeliveryLodgingOption2CostData;
+        
         [Space(20), Header("--- WareHouse GameData ---")]
         public GameData WareHouseData;
         public GameData WareHouseOption1ValueData;
         public GameData WareHouseOption2ValueData;
         public GameData WareHouseOption1CostData;
         public GameData WareHouseOption2CostData;
-
+        
+        [Space(20), Header("--- Costume GameData ---")]
+        public GameData CostumeData;
+        
         [Space(20), Header("### TMP_SpriteAssets ###")]
         public TMP_SpriteAsset TMP_SpriteDatas;
         

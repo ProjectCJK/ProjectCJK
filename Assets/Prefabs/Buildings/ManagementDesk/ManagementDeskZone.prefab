@@ -24296,7 +24296,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -64465,7 +64465,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -72389,7 +72389,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -73799,6 +73799,7 @@ MonoBehaviour:
     PaymentZone_Player: {fileID: 5533327720423789516}
     PaymentZone_NPC: {fileID: 2790556725528001961}
     UpgradeZone_Player: {fileID: 7227538351370468106}
+    Animator: {fileID: 0}
   _managementDeskCustomSetting:
     CurrencyType: 0
     Cashier:

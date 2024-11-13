@@ -45,6 +45,8 @@ namespace Units.Stages.Units.Buildings.Units
 
         [Space(10)] [Header("Interaction_Module")]
         public InteractionModule InteractionModule;
+
+        public Animator Animator;
     }
 
     [Serializable]
@@ -81,6 +83,7 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
+        public override Animator Animator => _wareHouseDefaultSetting.Animator;
         public override Transform TradeZoneNpcTransform { get; }
 
         private void Update()
@@ -108,7 +111,7 @@ namespace Units.Stages.Units.Buildings.Units
             _itemFactory = itemFactory;
             _wareHouseDataSo = DataManager.Instance.WareHouseDataSo;
             _wareHouseStatsModule = new WareHouseStatsModule(_wareHouseDataSo, _wareHouseCustomSetting);
-
+            VolatileDataManager.Instance.WareHouseStatsModule = _wareHouseStatsModule;
             BuildingKey = _wareHouseStatsModule.BuildingKey;
 
             UnlockZoneModule = GetComponent<UnlockZoneModule>();

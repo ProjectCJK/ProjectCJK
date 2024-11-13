@@ -96,7 +96,7 @@ namespace Units.Stages.Units.Creatures.Units
             _deliveryManMovementModule = new DeliveryManMovementModule(this, _deliveryManStatsModule,
                 _creatureStateMachine, spriteTransform);
             _deliveryManCollisionModule = new DeliveryManCollisionModule(_deliveryManStatsModule);
-            _deliveryManInventoryModule = new DeliveryManInventoryModule(transform, transform, _deliveryManStatsModule,
+            _deliveryManInventoryModule = new DeliveryManInventoryModule(receiveTransform, receiveTransform, _deliveryManStatsModule,
                 itemFactory, CreatureType, NPCType);
 
             _deliveryManCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;

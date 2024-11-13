@@ -64,19 +64,5 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
                 VolatileDataManager.Instance.ItemPrices.TryAdd(OutputItemKey, (int)CurrentBuildingOption1Value);   
             }
         }
-        
-        protected override void IncreaseCurrentBuildingOption1Level()
-        {
-            base.IncreaseCurrentBuildingOption1Level();
-            
-            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption1, ParserModule.ParseStringToEnum<EQuestType2>(BuildingKey).Value);
-        }
-
-        protected override void IncreaseCurrentBuildingOption2Level()
-        {
-            base.IncreaseCurrentBuildingOption2Level();
-            
-            
-        }
     }
 }
