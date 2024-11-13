@@ -86,6 +86,8 @@ namespace Units.Stages.Controllers
 
         public void RegisterReference(Joystick joystick)
         {
+            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
+            
             InitializeZone();
             InitializeManager();
 
@@ -112,7 +114,6 @@ namespace Units.Stages.Controllers
             _huntingZoneController.Initialize();
             _villageZoneController.Initialize();
             
-            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
             QuestManager.Instance.InitializeQuestData();
         }
 
