@@ -16,6 +16,7 @@ namespace Units.Stages.Units.Creatures.Abstract
 
     public abstract class Creature : MonoBehaviour, ICreature
     {
+        [SerializeField] protected Transform receiveTransform;
         [SerializeField] protected Transform spriteTransform;
         private Transform _transform;
         public abstract Animator Animator { get; protected set; }

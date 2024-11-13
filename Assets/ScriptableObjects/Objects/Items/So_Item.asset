@@ -12,21 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b9cc4cecc134a328b4751eade36b865, type: 3}
   m_Name: So_Item
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2002081285556692792, guid: b383b47c07c9a4c1c953192ef6e86c8f, type: 3}
+  prefab: {fileID: 8485289928414472871, guid: b383b47c07c9a4c1c953192ef6e86c8f, type: 3}
   ItemSprites:
   - ItemType: 0
     StageMaterialType: 0
-    Sprite: {fileID: 21300000, guid: 0f0f9b87f5fdc47bdaf21cf53f4ab2fa, type: 3}
+    Sprite: {fileID: 993781941, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   - ItemType: 1
     StageMaterialType: 0
-    Sprite: {fileID: 21300000, guid: 163e6b2456bbf4e80a7980219ba640e5, type: 3}
+    Sprite: {fileID: 1693457953, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   - ItemType: 0
     StageMaterialType: 1
-    Sprite: {fileID: 21300000, guid: 50a18fd2df6764bf48eca217d2e61288, type: 3}
+    Sprite: {fileID: 1784761013, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   - ItemType: 1
     StageMaterialType: 1
-    Sprite: {fileID: 21300000, guid: 45dfcca1da19d4186bd2c22984ac8fb1, type: 3}
+    Sprite: {fileID: 12330107, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+  - ItemType: 0
+    StageMaterialType: 2
+    Sprite: {fileID: 1839602809, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+  - ItemType: 1
+    StageMaterialType: 2
+    Sprite: {fileID: 1798772662, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+  - ItemType: 2
+    StageMaterialType: 0
+    Sprite: {fileID: 688305970, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   CurrencySprites:
   - CurrencyType: 0
-    Sprite: {fileID: 21300000, guid: 21946a4283cb34b2c8c60f3d999c0d22, type: 3}
+    Sprite: {fileID: 1737994981, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   BaseMovementSpeed: 10

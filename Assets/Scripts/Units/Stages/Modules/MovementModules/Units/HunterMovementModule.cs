@@ -54,9 +54,9 @@ namespace Units.Stages.Modules.MovementModules.Units
             // NavMeshAgent 설정 추가
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
-            _navMeshAgent.autoTraverseOffMeshLink = false;
-            _navMeshAgent.autoBraking = false;
-            _navMeshAgent.stoppingDistance = 0.1f;
+            _navMeshAgent.autoTraverseOffMeshLink = false; // 자동 오프메시 링크 이동 비활성화
+            _navMeshAgent.autoBraking = false; // 목적지 도착 시 자동 정지 비활성화
+            _navMeshAgent.stoppingDistance = 0.5f; // 정지 거리를 작게 설정
             _navMeshAgent.acceleration = 120f;
         }
 
