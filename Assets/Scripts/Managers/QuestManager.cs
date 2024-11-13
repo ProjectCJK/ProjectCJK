@@ -53,6 +53,7 @@ namespace Managers
         public int ClearedCount;
         public int TotalCount;
         public float ProgressRatio;
+        public int RewardCount;
         public string ThumbnailDescription;
         public int ThumbnailCurrentGoal;
         public int ThumbnailMaxGoal;
@@ -127,25 +128,24 @@ namespace Managers
                     Datas = new Dictionary<int, Data>()
                 };
 
-                foreach (var row in questData)
+                for (var i = 0; i < questData.Count; i++)
                 {
-                    int questNumber = int.Parse(row[3]);
-                    if (!_questData.Datas.ContainsKey(questNumber))
+                    if (!_questData.Datas.ContainsKey(i))
                     {
-                        _questData.Datas.Add(questNumber, new Data
+                        _questData.Datas.Add(i, new Data
                         {
-                            Description = row[5],
-                            QuestType1 = row[6],
-                            QuestType2 = row[7],
-                            MaxTargetGoal = int.Parse(row[8]),
-                            Reward1Type = row[9],
-                            Reward1Count = int.Parse(row[10]),
-                            Reward2Type = row[11],
-                            Reward2Count = int.Parse(row[12])
+                            Description = questData[i][5],
+                            QuestType1 = questData[i][6],
+                            QuestType2 = questData[i][7],
+                            MaxTargetGoal = int.Parse(questData[i][8]),
+                            Reward1Type = questData[i][9],
+                            Reward1Count = int.Parse(questData[i][10]),
+                            Reward2Type = questData[i][11],
+                            Reward2Count = int.Parse(questData[i][12])
                         });
                     }
                 }
-
+                
                 IsQuestClear = _questData.Datas.Keys.ToDictionary(questNumber => questNumber, _ => false);
                 UpdateUI();
                 Debug.Log("QuestManager: InitializeQuestData completed.");
@@ -163,10 +163,17 @@ namespace Managers
                 .OrderBy(kvp => kvp.Key)
                 .FirstOrDefault();
 
-            string thumbnailDescription = smallestUnclearedQuest.Value.Description;
-            int thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
-            int thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
-
+            string thumbnailDescription = null;
+            int thumbnailCurrentGoal = 0;
+            int thumbnailMaxGoal = 0;
+            
+            if (smallestUnclearedQuest.Value != null)
+            {
+                thumbnailDescription = smallestUnclearedQuest.Value.Description;
+                thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
+                thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
+            }
+      
             int clearedCount = IsQuestClear.Values.Count(cleared => cleared);
             int totalCount = IsQuestClear.Count;
             float progressRatio = (float)clearedCount / totalCount;
@@ -183,18 +190,36 @@ namespace Managers
                     MaxProgressCount = kvp.Value.MaxTargetGoal
                 }).ToList();
 
-            var questDataBundle = new QuestDataBundle
+            var questDataBundle = new QuestDataBundle();
+            
+            if (smallestUnclearedQuest.Value != null)
             {
-                ClearedCount = clearedCount,
-                TotalCount = totalCount,
-                ProgressRatio = progressRatio,
-                ThumbnailDescription = thumbnailDescription,
-                ThumbnailCurrentGoal = thumbnailCurrentGoal,
-                ThumbnailMaxGoal = thumbnailMaxGoal,
-                QuestInfoItems = questInfoItems,
-                AdvanceToNextQuestAction = AdvanceToNextQuest
-            };
-
+                questDataBundle = new QuestDataBundle
+                {
+                    ClearedCount = clearedCount,
+                    TotalCount = totalCount,
+                    ProgressRatio = progressRatio,
+                    RewardCount = _questData.ListRewardCount,
+                    ThumbnailDescription = thumbnailDescription,
+                    ThumbnailCurrentGoal = thumbnailCurrentGoal,
+                    ThumbnailMaxGoal = thumbnailMaxGoal,
+                    QuestInfoItems = questInfoItems,
+                    AdvanceToNextQuestAction = AdvanceToNextQuest
+                };
+            }
+            else
+            {
+                questDataBundle = new QuestDataBundle
+                {
+                    ClearedCount = clearedCount,
+                    TotalCount = totalCount,
+                    ProgressRatio = progressRatio,
+                    RewardCount = _questData.ListRewardCount,
+                    QuestInfoItems = questInfoItems,
+                    AdvanceToNextQuestAction = AdvanceToNextQuest
+                };
+            }
+            
             _uiPanelQuest.UpdateQuestPanel(questDataBundle);
         }
 
@@ -215,10 +240,6 @@ namespace Managers
                             data.CurrentTargetGoal++;
                             questUpdated = true;
                         }
-                        if (data.CurrentTargetGoal >= data.MaxTargetGoal)
-                        {
-                            IsQuestClear[subIndex] = true;
-                        }
                     }
                 }
 
@@ -226,6 +247,15 @@ namespace Managers
                 {
                     UpdateUI();
                 }
+            }
+        }
+
+        public void MarkQuestAsCleared(int questIndex)
+        {
+            if (_questData.Datas.ContainsKey(questIndex) && IsQuestClear[questIndex] == false)
+            {
+                IsQuestClear[questIndex] = true;
+                UpdateUI();
 
                 if (IsQuestClear.Values.All(status => status))
                 {
@@ -236,6 +266,8 @@ namespace Managers
 
         public void AdvanceToNextQuest()
         {
+            if (_questData.ListRewardType == ECurrencyType.Gold) CurrencyManager.Instance.AddGold(_questData.ListRewardCount);
+            
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
@@ -248,4 +280,4 @@ namespace Managers
             }
         }
     }
-}
+    }

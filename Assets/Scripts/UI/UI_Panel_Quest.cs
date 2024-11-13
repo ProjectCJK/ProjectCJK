@@ -14,16 +14,13 @@ namespace UI
         
         public void UpdateQuestPanel(QuestDataBundle questDataBundle)
         {
-            _thumbnailQuest.UpdateThumbnailQuest(
-                questDataBundle.ThumbnailDescription,
-                questDataBundle.ThumbnailCurrentGoal,
-                questDataBundle.ThumbnailMaxGoal
-            );
+            _thumbnailQuest.UpdateThumbnailQuest(questDataBundle);
 
             _mainQuest.UpdateMainQuestProgress(
                 questDataBundle.ClearedCount,
                 questDataBundle.TotalCount,
-                questDataBundle.ProgressRatio
+                questDataBundle.ProgressRatio,
+                questDataBundle.RewardCount
             );
 
             _mainQuest.UpdateQuestInfoItems(questDataBundle.QuestInfoItems);

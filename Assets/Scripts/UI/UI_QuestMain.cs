@@ -13,11 +13,13 @@ namespace UI
         [SerializeField] private TextMeshProUGUI TMP_MainQuestProgress;
         [SerializeField] private Slider Slider_MainQuestProgress;
         [SerializeField] private Button Button_Reward;
+        [SerializeField] private TextMeshProUGUI Text_RewardCountText;
         [SerializeField] private List<UI_Panel_QuestInfoItem> uiPanelQuestInfoItems;
 
-        public void UpdateMainQuestProgress(int clearedCount, int totalCount, float progressRatio)
+        public void UpdateMainQuestProgress(int clearedCount, int totalCount, float progressRatio, int rewardCount)
         {
             TMP_MainQuestProgress.text = $"{clearedCount}/{totalCount}";
+            Text_RewardCountText.text = $"{rewardCount}";
             Slider_MainQuestProgress.value = progressRatio;
         }
 
@@ -27,7 +29,7 @@ namespace UI
             {
                 if (i < questInfoItems.Count)
                 {
-                    uiPanelQuestInfoItems[i].Activate(questInfoItems[i]);
+                    uiPanelQuestInfoItems[i].Activate(questInfoItems[i], i);
                     uiPanelQuestInfoItems[i].gameObject.SetActive(true);
                 }
                 else

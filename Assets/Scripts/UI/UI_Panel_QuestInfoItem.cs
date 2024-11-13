@@ -31,7 +31,9 @@ namespace UI
         [SerializeField] private Button _buttonClearInactive;
         [SerializeField] private Button _buttonNotClear;
 
-        public void Activate(UIQuestInfoItem uiQuestInfoItem)
+        private int _questIndex;
+
+        public void Activate(UIQuestInfoItem uiQuestInfoItem, int questIndex)
         {
             _questIconBackgroundImage.sprite = uiQuestInfoItem.QuestIconBackgroundImage;
             _questIconImage.sprite = uiQuestInfoItem.QuestIconImage;
@@ -39,15 +41,28 @@ namespace UI
             _reward1CountText.text = uiQuestInfoItem.Reward1CountText;
             _reward2CountText.text = uiQuestInfoItem.Reward2CountText;
             _questProgressText.text = uiQuestInfoItem.QuestProgressText;
-            
+
+            _questIndex = questIndex;
+
             if (uiQuestInfoItem.CurrentProgressCount >= uiQuestInfoItem.MaxProgressCount)
             {
-                _buttonClearActive.gameObject.SetActive(true);
+                if (QuestManager.Instance.IsQuestClear[_questIndex] == false)
+                {
+                    _buttonClearActive.gameObject.SetActive(true);
+                    _buttonClearInactive.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _buttonClearActive.gameObject.SetActive(false);
+                    _buttonClearInactive.gameObject.SetActive(true);
+                }
+       
                 _buttonNotClear.gameObject.SetActive(false);
             }
             else
             {
                 _buttonClearActive.gameObject.SetActive(false);
+                _buttonClearInactive.gameObject.SetActive(false);
                 _buttonNotClear.gameObject.SetActive(true);
             }
         }
@@ -55,8 +70,9 @@ namespace UI
         public void OnClearButtonClick()
         {
             _buttonClearActive.gameObject.SetActive(false);
+            _buttonNotClear.gameObject.SetActive(false);
             _buttonClearInactive.gameObject.SetActive(true);
-            QuestManager.Instance.UpdateUI();
+            QuestManager.Instance.MarkQuestAsCleared(_questIndex);
         }
     }
 }
