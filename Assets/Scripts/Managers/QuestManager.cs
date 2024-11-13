@@ -252,6 +252,8 @@ namespace Managers
 
         public void MarkQuestAsCleared(int questIndex)
         {
+            CurrencyManager.Instance.AddCurrency(ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward2Type).Value, _questData.Datas[questIndex].Reward2Count);
+            
             if (_questData.Datas.ContainsKey(questIndex) && IsQuestClear[questIndex] == false)
             {
                 IsQuestClear[questIndex] = true;
@@ -266,7 +268,7 @@ namespace Managers
 
         public void AdvanceToNextQuest()
         {
-            if (_questData.ListRewardType == ECurrencyType.Gold) CurrencyManager.Instance.AddGold(_questData.ListRewardCount);
+            CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
             
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {

@@ -243,7 +243,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         {
             if (RequiredRedGemToUpgradeBuildingOption2 <= CurrencyManager.Instance.RedGem)
             {
-                CurrencyManager.Instance.RemoveRedGed(RequiredRedGemToUpgradeBuildingOption2);
+                CurrencyManager.Instance.RemoveRedGem(RequiredRedGemToUpgradeBuildingOption2);
                 IncreaseCurrentBuildingOption2Level();
             }
         }

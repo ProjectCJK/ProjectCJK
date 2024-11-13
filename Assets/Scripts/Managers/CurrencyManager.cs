@@ -1,6 +1,8 @@
+using System;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
 using Units.Stages.UI;
+using Units.Stages.Units.Items.Enums;
 
 namespace Managers
 {
@@ -59,6 +61,44 @@ namespace Managers
             _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
 
+        public void AddCurrency(ECurrencyType currencyType, int value)
+        {
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                    AddGold(value);
+                    break;
+                case ECurrencyType.Diamond:
+                    AddDiamond(value);
+                    break;
+                case ECurrencyType.RedGem:
+                    AddRedGem(value);
+                    break;
+                case ECurrencyType.Gold:
+                    AddGold(value);
+                    break;
+            }
+        }
+
+        public void RemoveCurrency(ECurrencyType currencyType, int value)
+        {
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                    RemoveGold(value);
+                    break;
+                case ECurrencyType.Diamond:
+                    RemoveDiamond(value);
+                    break;
+                case ECurrencyType.RedGem:
+                    RemoveRedGem(value);
+                    break;
+                case ECurrencyType.Gold:
+                    RemoveGold(value);
+                    break;
+            }
+        }
+
         public void AddGold(int value)
         {
             Gold += value;
@@ -74,7 +114,7 @@ namespace Managers
             RedGem += value;
         }
         
-        public void RemoveRedGed(int value)
+        public void RemoveRedGem(int value)
         {
             RedGem -= value;
         }
