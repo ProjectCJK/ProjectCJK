@@ -103,7 +103,7 @@ namespace Managers
         {
             _uiPanelQuest = uiPanelQuest;
             _gameData = DataManager.Instance.QuestData.GetData();
-            CurrentQuestMainIndex = 1;
+            CurrentQuestMainIndex = VolatileDataManager.Instance.CurrentStageLevel;
             CurrentQuestSubIndex = 1;
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             Debug.Log("QuestManager: RegisterReference completed.");

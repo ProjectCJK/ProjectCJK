@@ -136,6 +136,10 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     {
                         Guest guest = _customerQueue.Dequeue();
                         Tuple<string, int> purchasedItem = guest.GetItem();
+#if UNITY_EDITOR
+                        if (purchasedItem.Item1 == null) Debug.LogError($"guest의 {purchasedItem}이 NULL!!!!!!!!!!!!!!!!!!!!!!!!!");
+#endif
+                           
                         QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
                         (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
                         var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
