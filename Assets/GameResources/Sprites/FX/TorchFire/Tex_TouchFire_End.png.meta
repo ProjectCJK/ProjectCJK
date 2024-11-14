@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 583433cf34b4238489ab58c516efe774
+guid: e6e1d9c0c4e86b6409ab690c49f2b71c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -136,7 +136,91 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_0
+      name: FXT_TouchFire_End_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2176
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 753313e2bde356d4ea9b356644b1209f
+      internalID: -1806632190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_1
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 2176
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cde826271bf40d4c98377af7c338053
+      internalID: -651007831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_2
+      rect:
+        serializedVersion: 2
+        x: 1722
+        y: 2176
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 376883276ddd39140b8857253ac79e1f
+      internalID: -1029708102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_3
+      rect:
+        serializedVersion: 2
+        x: 2583
+        y: 2176
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdcc71b6b7aca394f80c1f3a2d82dab5
+      internalID: -269058807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_4
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +234,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0aad401704715ea4c875e18d4270006f
-      internalID: 28819032
+      spriteID: 0c3e870adfe7bed42944f07c3af3cd04
+      internalID: -909582676
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_1
+      name: FXT_TouchFire_End_5
       rect:
         serializedVersion: 2
         x: 861
@@ -171,14 +255,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e86411fef23473046ab013309787017a
-      internalID: 641135102
+      spriteID: b03993aab4075f24a8b8599b9b2e957d
+      internalID: -535697057
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_2
+      name: FXT_TouchFire_End_6
       rect:
         serializedVersion: 2
         x: 1722
@@ -192,14 +276,35 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 34133d2899102414abe25df46034928d
-      internalID: 1309561898
+      spriteID: 923951bf1252f38488edb0ef5b4ea385
+      internalID: 2027355657
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_3
+      name: FXT_TouchFire_End_7
+      rect:
+        serializedVersion: 2
+        x: 2583
+        y: 1088
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb0e1a378206844468cbed0a17937381
+      internalID: 1224017144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_8
       rect:
         serializedVersion: 2
         x: 0
@@ -213,14 +318,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db635972a5da3cb4f830e1ccbb0fc158
-      internalID: -1851025421
+      spriteID: 62fd948412729844686635c2bd67161d
+      internalID: -468780646
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_4
+      name: FXT_TouchFire_End_9
       rect:
         serializedVersion: 2
         x: 861
@@ -234,14 +339,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 526ce666243bab040953bb7b21923626
-      internalID: 1242667385
+      spriteID: 7f359cf9774b67d4c99224796a4ab524
+      internalID: -580960970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FXT_TouchFire_Start_5
+      name: FXT_TouchFire_End_10
       rect:
         serializedVersion: 2
         x: 1722
@@ -255,8 +360,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86c3f60336daf0c418504458861123f3
-      internalID: 654013246
+      spriteID: cc8e4d8e88dd5d543a7f8989e603ea19
+      internalID: -2110152235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXT_TouchFire_End_11
+      rect:
+        serializedVersion: 2
+        x: 2583
+        y: 0
+        width: 861
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9eb82b8499df1224e996e9d61260c2fa
+      internalID: -1265649925
       vertices: []
       indices: 
       edges: []
@@ -272,12 +398,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FXT_TouchFire_Start_0: 28819032
-      FXT_TouchFire_Start_1: 641135102
-      FXT_TouchFire_Start_2: 1309561898
-      FXT_TouchFire_Start_3: -1851025421
-      FXT_TouchFire_Start_4: 1242667385
-      FXT_TouchFire_Start_5: 654013246
+      FXT_TouchFire_End_0: -1806632190
+      FXT_TouchFire_End_1: -651007831
+      FXT_TouchFire_End_10: -2110152235
+      FXT_TouchFire_End_11: -1265649925
+      FXT_TouchFire_End_2: -1029708102
+      FXT_TouchFire_End_3: -269058807
+      FXT_TouchFire_End_4: -909582676
+      FXT_TouchFire_End_5: -535697057
+      FXT_TouchFire_End_6: 2027355657
+      FXT_TouchFire_End_7: 1224017144
+      FXT_TouchFire_End_8: -468780646
+      FXT_TouchFire_End_9: -580960970
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
