@@ -74,6 +74,8 @@ namespace Units.Stages.Managers
             CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
             
             QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
+            CostumeManager.Instance.RegisterReference();
+            // CostumeManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Costume);
             
             _mainSceneDefaultSetting.CameraController.RegisterReference(_stageController.PlayerTransform);
         }

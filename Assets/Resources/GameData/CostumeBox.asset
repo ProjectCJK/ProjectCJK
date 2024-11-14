@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
+  m_Name: CostumeBox
+  m_EditorClassIdentifier: 
+  columnNames:
+  - "\uC778\uB371\uC2A4"
+  - "\uC774\uB984"
+  - "\uCF54\uC2A4\uD2AC \uBC15\uC2A4 \uC774\uB984"
+  - "\uB808\uB4DC\uC82C \uC9C0\uAE09 \uC218"
+  - "\uBC88\uB4E4 \uC5EC\uBD80"
+  - "\uAD6C\uB9E4 \uC7AC\uD654"
+  - "\uAD6C\uB9E4 \uAC00\uACA9"
+  - "\uC77C\uBC18 \uD655\uB960"
+  - "\uD76C\uADC0 \uD655\uB960"
+  - "\uC77C\uBC18 \uD68D\uB4DD\uB7C9"
+  - "\uD76C\uADC0 \uD68D\uB4DD\uB7C9"
+  - "\uCF54\uC2A4\uD2AC_1"
+  - "\uCF54\uC2A4\uD2AC_2"
+  - "\uCF54\uC2A4\uD2AC_3"
+  - "\uCF54\uC2A4\uD2AC_4"
+  dataRows:
+  - rowData:
+    - Index
+    - Name
+    - CostumeName
+    - RedGem
+    - IsBundle
+    - BuyMoney
+    - BuyCost
+    - CommonProb
+    - RareProb
+    - CommonGet
+    - RareGet
+    - Costume_1
+    - Costume_2
+    - Costume_3
+    - Costume_4
+  - rowData:
+    - Int
+    - String
+    - String
+    - Int
+    - Bool
+    - Enum
+    - Enum
+    - Float
+    - Float
+    - Int
+    - Int
+    - String
+    - String
+    - String
+    - String
+  - rowData:
+    - 81001
+    - CstBoxA
+    - St_81001
+    - 100
+    - FALSE
+    - Dia
+    - 10
+    - 100
+    - 20
+    - 4
+    - 1
+    - None
+    - None
+    - None
+    - None
+  - rowData:
+    - 81005
+    - CstBundleBoxA
+    - St_81001
+    - 100
+    - TRUE
+    - None
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - Costume_1
+    - None
+    - None
+    - None
+  - rowData:
+    - 81006
+    - CstBundleBoxB
+    - St_81001
+    - 100
+    - TRUE
+    - None
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - Costume_7
+    - None
+    - None
+    - None
+  - rowData:
+    - 81007
+    - CstBundleBoxC
+    - St_81001
+    - 100
+    - TRUE
+    - None
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - Costume_13
+    - None
+    - None
+    - None
+  - rowData:
+    - 81008
+    - CstBundleBoxD
+    - St_81001
+    - 100
+    - TRUE
+    - None
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - Costume_19
+    - None
+    - None
+    - None
