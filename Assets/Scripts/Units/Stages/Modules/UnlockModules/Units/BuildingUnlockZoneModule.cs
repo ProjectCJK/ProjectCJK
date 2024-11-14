@@ -18,10 +18,10 @@ namespace Units.Stages.Modules.UnlockModules.Units
             {
                 case EActiveStatus.Active:
                     ActiveStatus = state;
-                    OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
                     if (TargetObject != null && !TargetObject.activeInHierarchy) TargetObject.SetActive(true);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
+                    OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;

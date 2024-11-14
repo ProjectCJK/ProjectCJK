@@ -178,7 +178,7 @@ namespace Units.Stages.Controllers
             
             if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
             {
-             _currentActiveMaterials.Add(parsedKey.Item2.Value);   
+                _currentActiveMaterials.Add(parsedKey.Item2.Value);   
             }
         }
     }
