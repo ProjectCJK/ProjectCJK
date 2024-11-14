@@ -13,6 +13,16 @@ using IInitializable = Interfaces.IInitializable;
 
 namespace Units.Stages.Controllers
 {
+    [Serializable]
+    public struct BuildingSpawnData
+    {
+        public List<GameObject> KitchenPrefabs;
+        public List<GameObject> StandPrefabs;
+        public GameObject DeliveryLodgingPrefab;
+        public GameObject ManagementDeskPrefab;
+        public GameObject WareHousePrefab;
+    }
+    
     public interface IBuildingController : IRegisterReference<ItemFactory, List<EMaterialType>>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
@@ -20,6 +30,8 @@ namespace Units.Stages.Controllers
 
     public class BuildingController : MonoBehaviour, IBuildingController
     {
+        [SerializeField] private BuildingSpawnData _buildingSpawnData;
+        
         private List<EMaterialType> _currentActiveMaterials;
 
         private List<EMaterialType> _materials;
