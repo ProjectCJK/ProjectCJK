@@ -15,7 +15,7 @@ namespace Managers
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
         
         public Button Button_Costume;
-        public UI_Panel_Currddency UI_Panel_Currency;
+        public UI_Panel_Currency UI_Panel_Currency;
         public UI_Panel_Costume_Gacha UI_Panel_CostumeGacha;
         
         public void GetPanelBuildingEnhancement(UIBuildingEnhancementData uiBuildingEnhancementData)
