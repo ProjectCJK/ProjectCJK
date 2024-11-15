@@ -108,7 +108,7 @@ namespace Units.Stages.Units.Creatures.Units
             _guestMovementModule =
                 new GuestMovementModule(this, _guestStatModule, _creatureStateMachine, spriteTransform);
             _guestCollisionModule = new GuestCollisionModule(_guestStatModule);
-            _guestInventoryModule = new GuestInventoryModule(transform, transform, _guestStatModule, itemFactory,
+            _guestInventoryModule = new GuestInventoryModule(receiveTransform, receiveTransform, _guestStatModule, itemFactory,
                 CreatureType, NPCType);
 
             _guestCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;

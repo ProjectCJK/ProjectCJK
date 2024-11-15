@@ -77,6 +77,7 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
+        public override Animator Animator => _standDefaultSetting.Animator;
         public override Transform TradeZoneNpcTransform => _standDefaultSetting.TradeZone_NPC;
 
         private void Update()
@@ -147,11 +148,6 @@ namespace Units.Stages.Units.Buildings.Units
             UnlockZoneModule.UpdateViewModel();
 
             if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
-        }
-        
-        public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
-        {
-            _standDefaultSetting.Animator.SetTrigger($"{animatorParameter}");
         }
     }
 }

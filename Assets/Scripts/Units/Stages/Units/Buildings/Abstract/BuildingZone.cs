@@ -1,4 +1,5 @@
 using Interfaces;
+using Units.Stages.Units.Buildings.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Units.Buildings.Abstract
@@ -17,8 +18,14 @@ namespace Units.Stages.Units.Buildings.Abstract
         public abstract string BuildingKey { get; protected set; }
         public abstract string InputItemKey { get; protected set; }
         public abstract string OutputItemKey { get; protected set; }
+        public abstract Animator Animator { get; }
         public abstract Transform TradeZoneNpcTransform { get; }
 
         public abstract void Initialize();
+        
+        public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
+        {
+            Animator.SetTrigger($"{animatorParameter}");
+        }
     }
 }

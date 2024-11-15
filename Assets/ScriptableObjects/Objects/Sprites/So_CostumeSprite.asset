@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3492917996b48c5b2e0bf1bf807c3b9, type: 3}
+  m_Name: So_CostumeSprite
+  m_EditorClassIdentifier: 
+  WeaponCostumeSprites:
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 8ae5215872d601c44ac56d2abdf7f1f9, type: 3}
+    - {fileID: 21300000, guid: 28135e6c5b54d9b4da243cf9b4fe25c7, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 2fa01a155c10a274694c76ecb85175c7, type: 3}
+    - {fileID: 21300000, guid: b134c2b1b80943c498e85c84ed766c2b, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 0602eab2ef51c6c429d8e30f613751fc, type: 3}
+    - {fileID: 21300000, guid: 7e02f189736b44c44b928555682fbcc7, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 1d4994feb57456545bdb714bb03658f2, type: 3}
+    - {fileID: 21300000, guid: 826ea994f04de954583649a254f7637e, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: 21e6feb1183b410489a3288c6c40c0b9, type: 3}
+    - {fileID: 21300000, guid: 3f0409fc48dee574ba8220716e45e45e, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: a8c178103ed9a2641985e3dccc3f3295, type: 3}
+    - {fileID: 21300000, guid: dfaf84189281d504aba40ef468c8b96e, type: 3}
+  BodyCostumeSprites:
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 7502a0b3b3bc31f4ea574e3c8ec5afea, type: 3}
+    - {fileID: 21300000, guid: 195265eb58778c342bc654586519b815, type: 3}
+    - {fileID: 21300000, guid: 89cee2f5907886e4dba96de28c092685, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: acfd1fabf2cfc4744ba92c96b0da227a, type: 3}
+    - {fileID: 21300000, guid: adaa60c70b32a414fa4eceb4e6e06616, type: 3}
+    - {fileID: 21300000, guid: bc5c6785227452c40a25a7c2f5293294, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 85fca83cb0e6e6c4e9c5ed017bba4126, type: 3}
+    - {fileID: 21300000, guid: 9ef085dbabdc29340adf0981c5cc59d1, type: 3}
+    - {fileID: 21300000, guid: 4f08001e775b153418aa6e7d2e5cf957, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: c8c9a3a81d04bf64ea96884fa08ec01c, type: 3}
+    - {fileID: 21300000, guid: c384f21a4dc06be47a6f90846a9e8e4a, type: 3}
+    - {fileID: 21300000, guid: f04ce15e6ff13d44fb3db93f7e109e76, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: 6b477e778e6418d469df4bab84d33f89, type: 3}
+    - {fileID: 21300000, guid: 9028f58087246824f89862b3f8b7152a, type: 3}
+    - {fileID: 21300000, guid: 15f68b57db246f44e89204138f2fb149, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: 43d820ff610379a4395403f150a72ec2, type: 3}
+    - {fileID: 21300000, guid: be273a04ea564ed43a8e03bf15002d0d, type: 3}
+    - {fileID: 21300000, guid: 3df77d505a4e8a74a965adfbfa680d71, type: 3}
+  HatCostumeSprites:
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: e5a9388a55df58e45ab6da47c0a1e077, type: 3}
+    - {fileID: 21300000, guid: e26f19de02aa29d4baa54165f20ea713, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 41552f9a883a75e4fa5f687273d7e535, type: 3}
+    - {fileID: 21300000, guid: b856a305a48f5ad40bafcc7b6bb4b87f, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 93d42bf7d61b03e40a665bcc00b61fd0, type: 3}
+    - {fileID: 21300000, guid: fe92448213116284db19d0c50f7e0503, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: b2c60e51ab3892045b14f1e1de73652a, type: 3}
+    - {fileID: 21300000, guid: c65c3754cc9289c48b64698455299935, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: c0c4f9f1c3766f0439eabdf5f5b35d36, type: 3}
+    - {fileID: 21300000, guid: 06641c0fb99aea04989996982aa23575, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: f40ef4237dc38fd47ac838275ecf2bd1, type: 3}
+    - {fileID: 21300000, guid: f4d425c08a0ef574389447275f02203c, type: 3}
+  BagCostumeSprites:
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: cb00baf9559b3eb4385056293f57e62b, type: 3}
+    - {fileID: 21300000, guid: ea5c0ab65970c38499d5634267e2c1c8, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: 19549214349f5d74081889cca8b9ad04, type: 3}
+    - {fileID: 21300000, guid: 717ea842547d6f040a6471d7674674f9, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: e2eb0f1a7a125f842a62eab2c557bf03, type: 3}
+    - {fileID: 21300000, guid: bce895bada781654abe80892e43b124f, type: 3}
+  - Grade: 0
+    Sprites:
+    - {fileID: 21300000, guid: b72c8119030c57b4c93012071ff873f2, type: 3}
+    - {fileID: 21300000, guid: 145cfd6281a412d40b7cd037edf7b476, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: edda0c354b05e0a4f98c1ef19c2cf0b0, type: 3}
+    - {fileID: 21300000, guid: 93765c57ed2fbce409f8ae0fbe3012d6, type: 3}
+  - Grade: 1
+    Sprites:
+    - {fileID: 21300000, guid: 75edf22e3ce0d6840a3666f33879780c, type: 3}
+    - {fileID: 21300000, guid: 6f37adbf6c7650a4299ec6d8f281fa61, type: 3}

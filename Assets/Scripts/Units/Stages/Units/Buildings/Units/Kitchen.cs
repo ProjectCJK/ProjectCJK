@@ -109,6 +109,7 @@ namespace Units.Stages.Units.Buildings.Units
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
+        public override Animator Animator => _kitchenDefaultSetting.Animator;
         public override Transform TradeZoneNpcTransform => _kitchenDefaultSetting.TradeZone_NPC;
 
         public void RegisterReference(ItemFactory itemController)
@@ -116,6 +117,7 @@ namespace Units.Stages.Units.Buildings.Units
             _itemFactory = itemController;
             _kitchenDataSO = DataManager.Instance.KitchenDataSo;
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO, _kitchenCustomSetting);
+            VolatileDataManager.Instance.KitchenStatsModule.TryAdd(_kitchenStatsModule.MaterialType, _kitchenStatsModule);
 
             MaterialType = _kitchenStatsModule.MaterialType;
             BuildingKey = _kitchenStatsModule.BuildingKey;
@@ -197,11 +199,6 @@ namespace Units.Stages.Units.Buildings.Units
                 _kitchenStatsModule.GetUIBuildingEnhancement();
             else
                 _kitchenStatsModule.ReturnUIBuildingEnhancement();
-        }
-
-        public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
-        {
-            _kitchenDefaultSetting.Animator.SetTrigger($"{animatorParameter}");
         }
     }
 }

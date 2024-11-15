@@ -161,7 +161,7 @@ namespace UI
             {
                 if (data.RequiredBuildingLevelToUpgradeOption2Level <= data.CurrentBuildingLevel)
                 {
-                    if (CurrencyManager.Instance.RedGem >= data.RequiredRedGemToUpgradeOption2Level)
+                    if (CurrencyManager.Instance.Gold >= data.RequiredRedGemToUpgradeOption2Level)
                     {
                         _button_Slot3_UpgradeButton.gameObject.SetActive(true);
                     }

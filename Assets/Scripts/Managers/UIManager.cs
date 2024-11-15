@@ -5,6 +5,7 @@ using UI;
 using UI.UI;
 using Units.Stages.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -12,17 +13,10 @@ namespace Managers
     {
         public UI_Panel_Quest UI_Panel_Quest;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
+        
+        public Button Button_Costume;
         public UI_Panel_Currency UI_Panel_Currency;
-
-        // public void GetPanelQuest(UIQuestInfoItem uiQuestInfoItem)
-        // {
-        //     UI_Panel_Quest.Activate(uiQuestInfoItem);
-        // }
-
-        public void ReturnPanelQuest()
-        {
-            UI_Panel_Quest.Inactivate();
-        }
+        public UI_Panel_Costume_Gacha UI_Panel_CostumeGacha;
         
         public void GetPanelBuildingEnhancement(UIBuildingEnhancementData uiBuildingEnhancementData)
         {

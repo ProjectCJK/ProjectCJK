@@ -7,6 +7,7 @@ using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -85,6 +86,8 @@ namespace Units.Stages.Controllers
 
         public void RegisterReference(Joystick joystick)
         {
+            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
+            
             InitializeZone();
             InitializeManager();
 
@@ -110,6 +113,8 @@ namespace Units.Stages.Controllers
             _buildingController.Initialize();
             _huntingZoneController.Initialize();
             _villageZoneController.Initialize();
+            
+            QuestManager.Instance.InitializeQuestData();
         }
 
         private void InitializeManager()
@@ -119,7 +124,6 @@ namespace Units.Stages.Controllers
                 materialMappings.TryAdd(materialMapping.MaterialType, materialMapping.StageMaterialType);
 
             VolatileDataManager.Instance.MaterialMappings = materialMappings;
-            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
         }
 
         private void InitializeZone()
@@ -150,10 +154,12 @@ namespace Units.Stages.Controllers
             {
                 if (activeStatus == EActiveStatus.Active)
                 {
-                    QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, targetKey);
+                    QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Build, targetKey, 1);
                 }
-                
-                _buildingController.BuildingActiveStatuses[_buildingController.Buildings[targetKey]] = activeStatus;   
+
+                BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
+                targetBuilding.HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter.Birth);
+                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;   
             }
 
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
@@ -162,16 +168,18 @@ namespace Units.Stages.Controllers
 
                 if (_buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
                 {
-                    _buildingController.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;   
+                    VolatileDataManager.Instance.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;   
                 }
 
                 activeStatusModule.SetCurrentState(EActiveStatus.Standby);
             }
 
-            (EBuildingType?, EMaterialType?) parsedKey =
-                ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+            
             if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
-                _currentActiveMaterials.Add(parsedKey.Item2.Value);
+            {
+             _currentActiveMaterials.Add(parsedKey.Item2.Value);   
+            }
         }
     }
 }

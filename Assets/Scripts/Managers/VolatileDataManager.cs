@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Enums;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Items.Enums;
 
 namespace Managers
@@ -12,6 +15,12 @@ namespace Managers
 
         public int CurrentStageLevel { get; private set; }
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
+        public readonly Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
+        public readonly Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
+        public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
+        public ManagementDeskStatsModule ManagementDeskStatsModule;
+        public WareHouseStatsModule WareHouseStatsModule;
+        public readonly Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
 
         public void RegisterReference() { }
 
@@ -25,8 +34,6 @@ namespace Managers
         public void SetCurrentStageLevel(int stageLevel)
         {
             CurrentStageLevel = stageLevel;
-            
-            QuestManager.Instance.InitializeQuestData();
         }
     }
 }

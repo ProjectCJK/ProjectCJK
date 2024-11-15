@@ -90,18 +90,22 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
                 if (_playerPaymentElapsedTime >= _playerPaymentDelay)
                 {
-                    Guest guest = _customerQueue.Dequeue();
+                    Guest guest;
+                    
+                    do
+                    {
+                        guest = _customerQueue.Dequeue();
+                    }
+                    while(guest.GetItem() != null);
+                    
                     Tuple<string, int> purchasedItem = guest.GetItem();
 
-                    (EItemType?, EMaterialType?) parsedItemKey =
-                        ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                    var targetItemPrice =
-                        VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) *
-                        purchasedItem.Item2;
+                    (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+                    var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
 
                     for (var i = 0; i < purchasedItem.Item2; i++)
                     {
-                        QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Selling, purchasedItem.Item1);
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
                     }
 
                     while (targetItemPrice > 0)
@@ -132,12 +136,13 @@ namespace Units.Stages.Modules.PaymentModule.Units
                     {
                         Guest guest = _customerQueue.Dequeue();
                         Tuple<string, int> purchasedItem = guest.GetItem();
-
-                        (EItemType?, EMaterialType?) parsedItemKey =
-                            ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                        var targetItemPrice =
-                            VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) *
-                            purchasedItem.Item2;
+#if UNITY_EDITOR
+                        if (purchasedItem.Item1 == null) Debug.LogError($"guest의 {purchasedItem}이 NULL!!!!!!!!!!!!!!!!!!!!!!!!!");
+#endif
+                           
+                        QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
+                        (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+                        var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
 
                         //TODO : 상품 별 가격에 따른 가격 책정
                         while (targetItemPrice > 0)
