@@ -19885,6 +19885,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7775935675763130957}
   - component: {fileID: 7078455117634494044}
+  - component: {fileID: 2409300466165543847}
   m_Layer: 0
   m_Name: HuntingAreaObstacle_Horizontal
   m_TagString: Untagged
@@ -19929,6 +19930,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2409300466165543847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616640355567282277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc077f3aa7fe4d09a44bc3537eb206a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 7078455117634494044}
 --- !u!1 &2769821151427517108
 GameObject:
   m_ObjectHideFlags: 0

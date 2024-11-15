@@ -18,6 +18,7 @@ namespace Units.Stages.Modules.UnlockModules.Units
             {
                 case EActiveStatus.Active:
                     ActiveStatus = state;
+                    if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(false);
                     if (TargetObject != null && !TargetObject.activeInHierarchy) TargetObject.SetActive(true);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
@@ -25,12 +26,14 @@ namespace Units.Stages.Modules.UnlockModules.Units
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;
+                    if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
                     if (TargetObject != null && TargetObject.activeInHierarchy) TargetObject.SetActive(false);
                     if (StandbyObject != null && !StandbyObject.activeInHierarchy) StandbyObject.SetActive(true);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
                     break;
                 case EActiveStatus.Lock:
                     ActiveStatus = state;
+                    if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
                     if (TargetObject != null && TargetObject.activeInHierarchy) TargetObject.SetActive(false);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && !LockObject.activeInHierarchy) LockObject.SetActive(true);

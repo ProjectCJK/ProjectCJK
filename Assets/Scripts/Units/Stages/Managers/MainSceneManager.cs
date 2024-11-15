@@ -40,12 +40,12 @@ namespace Units.Stages.Managers
             QualitySettings.vSyncCount = 0;
             
             // ES3.settings 세팅
-            // ES3.CacheFile();
-            // ES3.settings = new ES3Settings(ES3.Location.Cache);
-            //
-            // ES3.Save<string>("temp", "talskdaskdj", ES3.settings);
-            //
-            // ES3.StoreCachedFile();
+            ES3.CacheFile();
+            ES3.settings = new ES3Settings(ES3.Location.Cache);
+            
+            ES3.Save<string>("temp", "talskdaskdj", ES3.settings);
+            
+            ES3.StoreCachedFile();
             
             InstantiatePrefabs();
             RegisterReference();
