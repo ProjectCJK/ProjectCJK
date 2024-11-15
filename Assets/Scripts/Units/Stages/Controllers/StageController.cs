@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
 using Managers;
+using NavMeshPlus.Components;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
@@ -32,6 +33,7 @@ namespace Units.Stages.Controllers
     public struct StageDefaultSettings
     {
         public StageReferences stageReferences;
+        public NavMeshSurface navigationSurface;
     }
 
     [Serializable]
@@ -44,13 +46,14 @@ namespace Units.Stages.Controllers
     [Serializable]
     public struct StageCustomSettings
     {
-        [Header("--- 스테이지 레벨 정의 ---")] public int StageLevel;
-
-        [Header("--- 재료 타입 정의 ---")] public List<MaterialMapping> materialMappings;
-
-        [Header("최대 손님 수")] public int MaxGuestCount;
-
-        [Header("--- 해금 조건 정의 ---")] public List<ActiveStatusSettings> activeStatusSettings;
+        [Space(20), Header("=== 스테이지 레벨 정의 ===")]
+        public int StageLevel;
+        [Space(20), Header("=== 재료 타입 정의 ===")]
+        public List<MaterialMapping> materialMappings;
+        [Space(20), Header("=== 최대 손님 수 ===")]
+        public int MaxGuestCount;
+        [Space(20), Header("=== 해금 조건 정의 ===")]
+        public List<ActiveStatusSettings> activeStatusSettings;
     }
 
     [Serializable]
@@ -65,8 +68,8 @@ namespace Units.Stages.Controllers
     {
         [Header("### Stage Default Settings ### ")] [SerializeField]
         private StageDefaultSettings _stageDefaultSettings;
-
-        [Space(10)] [Header("### Stage Custom Settings ### ")] [SerializeField]
+        
+        [Header("### Stage Custom Settings ### ")] [SerializeField]
         private StageCustomSettings _stageCustomSettings;
 
         private readonly List<EMaterialType> _currentActiveMaterials = new();
@@ -88,7 +91,6 @@ namespace Units.Stages.Controllers
         {
             VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
             
-            InitializeZone();
             InitializeManager();
 
             var itemFactory = new ItemFactory(transform, _stageCustomSettings.materialMappings);
@@ -106,6 +108,10 @@ namespace Units.Stages.Controllers
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
+            
+            InitializeZone();
+
+            // _stageDefaultSettings.navigationSurface.BuildNavMeshAsync();
         }
 
         public void Initialize()
@@ -129,6 +135,7 @@ namespace Units.Stages.Controllers
         private void InitializeZone()
         {
             var firstLockZoneFounded = false;
+    
             for (var index = 0; index < _stageCustomSettings.activeStatusSettings.Count; index++)
             {
                 ActiveStatusSettings activeStatus = _stageCustomSettings.activeStatusSettings[index];
@@ -139,12 +146,30 @@ namespace Units.Stages.Controllers
                     activeStatusSettingIndex = index;
                 }
 
-                var activeStatusModule = activeStatus.GameObject.GetComponent<UnlockZoneModule>();
+                // 첫 번째 자식을 대상으로 UnlockZoneModule을 설정
+                var targetChild = activeStatus.GameObject.transform.childCount > 0 
+                    ? activeStatus.GameObject.transform.GetChild(0).gameObject 
+                    : null;
 
-                activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
-                activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
+                if (targetChild != null)
+                {
+                    var activeStatusModule = targetChild.GetComponent<UnlockZoneModule>();
 
-                activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
+                    if (activeStatusModule != null)
+                    {
+                        activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
+                        activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
+                        activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"UnlockZoneModule not found on the first child of {activeStatus.GameObject.name}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"No child found in {activeStatus.GameObject.name} to initialize UnlockZoneModule.");
+                }
             }
         }
 
@@ -164,21 +189,30 @@ namespace Units.Stages.Controllers
 
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
             {
-                var activeStatusModule = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex].GameObject.GetComponent<UnlockZoneModule>();
+                ActiveStatusSettings activeStatusData = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex];
+                var activeStatusModule = activeStatusData.GameObject.GetComponent<UnlockZoneModule>();
 
-                if (_buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
+                if (activeStatusModule != null)
                 {
-                    VolatileDataManager.Instance.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;   
-                }
+                    // 첫 번째 자식을 타겟으로 설정
+                    GameObject targetChild = activeStatusData.GameObject.transform.childCount > 0
+                        ? activeStatusData.GameObject.transform.GetChild(0).gameObject
+                        : null;
 
-                activeStatusModule.SetCurrentState(EActiveStatus.Standby);
+                    if (targetChild != null && _buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
+                    {
+                        VolatileDataManager.Instance.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;
+                    }
+
+                    activeStatusModule.SetCurrentState(EActiveStatus.Standby);
+                }
             }
 
             (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
-            
+
             if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
             {
-                _currentActiveMaterials.Add(parsedKey.Item2.Value);   
+                _currentActiveMaterials.Add(parsedKey.Item2.Value);
             }
         }
     }

@@ -5,6 +5,7 @@ using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Buildings.Units;
 using ScriptableObjects.Scripts.Creatures.Units;
 using ScriptableObjects.Scripts.Items;
+using ScriptableObjects.Scripts.Levels;
 using ScriptableObjects.Scripts.Sprites;
 using ScriptableObjects.Scripts.Zones;
 using TMPro;
@@ -27,14 +28,15 @@ namespace Managers
         [Space(20)] [Header("### Item Data ###")]
         public const int GoldSendingMaximum = 1000;
 
-        [Header("### Unit Data ###")] public PlayerDataSO PlayerDataSo;
-
+        [Header("### Unit Data ###")]
+        public PlayerDataSO PlayerDataSo;
         public MonsterDataSO MonsterDataSo;
         public GuestDataSO GuestDataSo;
         public DeliveryManDataSO DeliveryManDataSo;
         public HunterDataSO HunterDataSo;
 
         [Space(20)] [Header("### Building Data ###")]
+        public LevelPrefabSO levelPrefabSo;
         public KitchenDataSO KitchenDataSo;
         public StandDataSO StandDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
