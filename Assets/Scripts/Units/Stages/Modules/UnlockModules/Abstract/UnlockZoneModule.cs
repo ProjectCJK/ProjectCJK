@@ -35,6 +35,7 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         public void RegisterReference(string targetKey)
         {
             TargetKey = targetKey;
+            ActiveStatus = EActiveStatus.Lock;
             _unlockZoneModel = new UnlockZoneModel();
             _unlockZoneViewModel = new UnlockZoneViewModel(_unlockZoneModel);
             _unlockZoneView.BindViewModel(_unlockZoneViewModel);

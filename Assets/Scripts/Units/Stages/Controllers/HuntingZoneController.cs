@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
@@ -19,9 +20,18 @@ namespace Units.Stages.Controllers
         public void SpawnMonsters();
         public void SendDroppedItem(HashSet<IHunter> currentSpawnedHunters);
     }
+    
+    [Serializable]
+    public struct HuntingZoneSpawnData
+    {
+        [Header("=== HuntingZone Position ===")]
+        public List<Transform> HuntingZoneSpawners;
+    }
 
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
     {
+        [SerializeField] private HuntingZoneSpawnData HuntingZoneSpawnData;
+        
         private readonly List<IItem> _droppedItems = new();
         public readonly Dictionary<IHuntingZone, EActiveStatus> HuntingZones = new();
 
@@ -32,8 +42,7 @@ namespace Units.Stages.Controllers
         private float _playerItemPickupRange;
         private IItemFactory itemFactory;
 
-        public void RegisterReference(ICreatureController creatureController, IItemFactory itemController,
-            IPlayer player)
+        public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, IPlayer player)
         {
             _creatureController = creatureController;
             itemFactory = itemController;
@@ -41,9 +50,13 @@ namespace Units.Stages.Controllers
             _playerItemPickupRange = DataManager.Instance.PlayerDataSo.ItemPickupRange;
             _hunterItemPickupRange = DataManager.Instance.HunterDataSo.ItemPickupRange;
 
-            CreateHuntingZoneDictionary();
+            for (var i = 0; i < DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].HuntingZones.Count; i++)
+            {
+                GameObject huntingZonePrefab = DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].HuntingZones[i];
+                InstantiateHuntingZones(HuntingZoneSpawnData.HuntingZoneSpawners[i], huntingZonePrefab);
+            }
         }
-
+        
         public void Initialize()
         {
             foreach (KeyValuePair<IHuntingZone, EActiveStatus> obj in HuntingZones) obj.Key.Initialize();
@@ -98,21 +111,22 @@ namespace Units.Stages.Controllers
                 }
             }
         }
-
-
+        
         public void HandleOnRegisterPlayer(IPlayer player, bool register)
         {
             _player = register ? player : null;
         }
 
-        private void CreateHuntingZoneDictionary()
+        private void InstantiateHuntingZones(Transform spawnTransform, GameObject prefab)
         {
-            foreach (Transform child in transform)
-            {
-                var huntingZone = child.GetComponent<HuntingZone>();
-                huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
-                HuntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
-            }
+            if (spawnTransform == null || prefab == null) return;
+
+            GameObject instance = Instantiate(prefab, spawnTransform);
+            instance.transform.localPosition = Vector3.zero;
+            
+            var huntingZone = instance.GetComponent<HuntingZone>();
+            huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
+            HuntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
         }
     }
 }

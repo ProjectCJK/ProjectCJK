@@ -77,6 +77,8 @@ namespace Managers
         private readonly Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
         private readonly Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
         private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_CostumeGacha;
+
+        private readonly List<CostumeItemData> _currentCostumeItemData = new();
         
         public void RegisterReference()
         {
@@ -218,6 +220,7 @@ namespace Managers
         private void ActivateCostumeGacha()
         {
             List<CostumeItemData> costumeItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
+            
             _uiPanelCostumeGacha.Activate(costumeItems);
         }
 
@@ -227,14 +230,16 @@ namespace Managers
 
             for (var i = 0; i < maxCommonGet; i++)
             {
-                randomItems.Add(GetNormalItem());
+                var normalItem = GetNormalItem();
+                _currentCostumeItemData.Add(normalItem);
+                randomItems.Add(normalItem);
             }
 
             for (var i = 0; i < maxRareGet; i++)
             {
                 var randomIndex = Random.Range(1, 101);
-
-                randomItems.Add(randomIndex <= int.Parse(_costumeBoxData[2, 8]) ? GetRareItem() : GetNormalItem());
+                var randomItem = randomIndex <= int.Parse(_costumeBoxData[2, 8]) ? GetRareItem() : GetNormalItem();
+                randomItems.Add(randomItem);
             }
 
             return randomItems;
