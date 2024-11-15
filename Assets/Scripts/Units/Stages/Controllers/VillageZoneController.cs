@@ -25,24 +25,30 @@ namespace Units.Stages.Controllers
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
     }
 
+    [Serializable]
+    public struct VillageSpawnData
+    {
+        [Header("=== Village Position ===")]
+        public Transform VillageSpawner;
+        public Transform PlayerSpawner;
+        public Transform GuestSpawner;
+    }
+
     public class VillageZoneController : MonoBehaviour, IVillageZoneController
     {
-        [Header("=== 플레이어 생성 위치 ===")] [SerializeField]
-        private Transform _playerSpawnPoint;
+        [SerializeField] private VillageSpawnData _villageSpawnData;
 
-        [Header("=== 손님 NPC 생성 위치 ===")] [SerializeField]
-        private Transform _guestSpawnPoint;
-
+        public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
+        public IPlayer Player { get; private set; }
+        
         private readonly Queue<Tuple<string, Transform>> _deliveryTargetQueue = new();
         private readonly HashSet<IDeliveryMan> currentSpawnedDeliveryMans = new();
         private readonly HashSet<IGuest> currentSpawnedGuests = new();
         private readonly HashSet<IHunter> currentSpawnedHunters = new();
         private IBuildingController _buildingController;
-
         private ICreatureController _creatureController;
         private List<EMaterialType> _currentActiveStandType;
         private float _guestSpawnCheckTime;
-
         private float _guestSpawnElapsedTime;
         private GuestSpawnZoneDataSo _guestSpawnZoneDataSo;
         private IHuntingZoneController _huntingZoneController;
@@ -50,34 +56,6 @@ namespace Units.Stages.Controllers
 
         private Dictionary<IHuntingZone, EActiveStatus> currentHuntingZones = new();
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
-
-        private void Update()
-        {
-#if UNITY_EDITOR
-            // TODO : Cheat Code
-            if (Input.GetKeyDown(KeyCode.E))
-                if (_currentActiveStandType.Count > 0)
-                {
-                    IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
-                    guest.SetTargetPurchaseQuantity(1);
-                    guest.SetDestinations(GetRandomDestinationForGuest());
-
-                    currentSpawnedGuests.Add(guest);
-                }
-#endif
-
-            SpawnGuests();
-            SpawnDeliveryMan();
-            SpawnHunter();
-            SpawnMonster();
-            SetHunterDestination();
-            SetDeliveryManDestination();
-            _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
-        }
-
-        public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
-
-        public IPlayer Player { get; private set; }
 
         public void RegisterReference(
             ICreatureController creatureController,
@@ -95,11 +73,52 @@ namespace Units.Stages.Controllers
             _currentActiveStandType = currentActiveMaterials;
 
             currentHuntingZones = huntingZoneController.HuntingZones;
+
+            InstantiateLevels();
+        }
+
+        private void InstantiateLevels()
+        {
+            GameObject prefab = DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].Village;
+            GameObject village = Instantiate(prefab, _villageSpawnData.VillageSpawner);
+            village.transform.localPosition = Vector3.zero;
+            
+            prefab = DataManager.Instance.levelPrefabSo.GuestSpawner;
+            GameObject guestSpawner = Instantiate(prefab, _villageSpawnData.GuestSpawner);
+            guestSpawner.transform.localPosition = Vector3.zero;
+            
+            prefab = DataManager.Instance.levelPrefabSo.PlayerSpawner;
+            GameObject playerSpawner = Instantiate(prefab, _villageSpawnData.PlayerSpawner);
+            playerSpawner.transform.localPosition = Vector3.zero;
         }
 
         public void Initialize()
         {
             SpawnPlayer();
+        }
+        
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // TODO : Cheat Code
+            if (Input.GetKeyDown(KeyCode.E))
+                if (_currentActiveStandType.Count > 0)
+                {
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
+                    guest.SetTargetPurchaseQuantity(1);
+                    guest.SetDestinations(GetRandomDestinationForGuest());
+
+                    currentSpawnedGuests.Add(guest);
+                }
+#endif
+
+            SpawnGuests();
+            SpawnDeliveryMan();
+            SpawnHunter();
+            SpawnMonster();
+            SetHunterDestination();
+            SetDeliveryManDestination();
+            _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
         }
 
         private void SetDeliveryManDestination()
@@ -250,7 +269,7 @@ namespace Units.Stages.Controllers
         private void SpawnPlayer()
         {
             Player = _creatureController.GetPlayer();
-            Player.Initialize(_playerSpawnPoint.position, ReturnPlayer);
+            Player.Initialize(_villageSpawnData.PlayerSpawner.position, ReturnPlayer);
 
             OnRegisterPlayer?.Invoke(Player, true);
         }
@@ -272,7 +291,7 @@ namespace Units.Stages.Controllers
 
                 if (_guestSpawnElapsedTime >= _guestSpawnCheckTime)
                 {
-                    IGuest guest = _creatureController.GetGuest(_guestSpawnPoint.position, ReturnGuest);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
                     guest.SetDestinations(GetRandomDestinationForGuest());
 
@@ -299,7 +318,7 @@ namespace Units.Stages.Controllers
             {
                 new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
                 new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
-                new(string.Empty, _guestSpawnPoint)
+                new(string.Empty, _villageSpawnData.GuestSpawner)
             };
 
             return destinations;

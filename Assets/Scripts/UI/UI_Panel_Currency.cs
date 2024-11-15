@@ -1,8 +1,9 @@
 using System.ComponentModel;
 using Modules.DesignPatterns.MVVMs;
 using TMPro;
+using Units.Stages.UI;
 
-namespace Units.Stages.UI
+namespace UI
 {
     public class UI_Panel_Currency : BaseView<CurrencyViewModel>
     {
