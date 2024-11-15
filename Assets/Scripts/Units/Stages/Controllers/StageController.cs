@@ -201,7 +201,7 @@ namespace Units.Stages.Controllers
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
             {
                 ActiveStatusSettings activeStatusData = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex];
-                var activeStatusModule = activeStatusData.GameObject.GetComponent<UnlockZoneModule>();
+                var activeStatusModule = activeStatusData.GameObject.GetComponentInChildren<UnlockZoneModule>();
 
                 if (activeStatusModule != null)
                 {
