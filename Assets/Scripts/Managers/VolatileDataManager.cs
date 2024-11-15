@@ -4,6 +4,7 @@ using Modules.DesignPatterns.Singletons;
 using Units.Stages.Enums;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Buildings.Abstract;
+using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 
 namespace Managers
@@ -21,6 +22,7 @@ namespace Managers
         public ManagementDeskStatsModule ManagementDeskStatsModule;
         public WareHouseStatsModule WareHouseStatsModule;
         public readonly Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
+        public readonly Dictionary<HuntingZone, EActiveStatus> HuntingZoneActiveStatuses = new();
 
         public void RegisterReference() { }
 

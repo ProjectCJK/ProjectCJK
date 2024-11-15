@@ -24,6 +24,7 @@ namespace Units.Stages.Modules.UnlockModules.Units
                     if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.GetComponentInChildren<HuntingAreaObstacleAnimator>().SetBool(IsActive, true, IsAnimationEnded);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
+                    OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;

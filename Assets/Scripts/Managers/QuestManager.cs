@@ -8,6 +8,7 @@ using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -208,15 +209,31 @@ namespace Managers
             {
                 (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
 
-                foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
+                if (parsedEnum.Item1 != null)
                 {
-                    if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                    foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
                     {
-                        _questData.Datas[questIndex].CurrentTargetGoal = 1;
-                        break;
-                    }
+                        if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        {
+                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                            break;
+                        }
 
-                    _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<HuntingZone, EActiveStatus> obj in VolatileDataManager.Instance.HuntingZoneActiveStatuses)
+                    {
+                        if (obj.Key.HuntingZoneKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        {
+                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                            break;
+                        }
+
+                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                    }
                 }
             }
         }

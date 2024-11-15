@@ -58,7 +58,7 @@ namespace Units.Stages.Units.HuntingZones
 
         private IHuntingZoneInventoryModule _huntingZoneInventoryModule;
 
-        private string _huntingZoneKey;
+        public string HuntingZoneKey;
         private string _itemKey;
 
         private ITradeZone _unlockZonePlayer;
@@ -82,7 +82,7 @@ namespace Units.Stages.Units.HuntingZones
 
             _huntingZoneInventoryModule = new HuntingZoneInventoryModule(HuntingZoneDefaultSetting.UnlockZone_Player,
                 HuntingZoneDefaultSetting.UnlockZone_Player, itemController, null, string.Empty, string.Empty);
-            _huntingZoneKey = $"HuntingZone_{huntingZoneCustomSetting._materialType.ToString()}";
+            HuntingZoneKey = $"HuntingZone_{huntingZoneCustomSetting._materialType.ToString()}";
 
             UnlockZoneModule = GetComponent<HuntingZoneUnlockZoneModule>();
             UnlockZoneModule.RegisterReference($"HuntingZone_{huntingZoneCustomSetting._materialType}");
@@ -91,7 +91,7 @@ namespace Units.Stages.Units.HuntingZones
 
             _unlockZonePlayer = HuntingZoneDefaultSetting.UnlockZone_Player.GetComponent<ITradeZone>();
             _unlockZonePlayer.RegisterReference(this, HuntingZoneDefaultSetting.UnlockZone_Player,
-                _huntingZoneInventoryModule, null, _huntingZoneKey, $"{ECurrencyType.Money}");
+                _huntingZoneInventoryModule, null, HuntingZoneKey, $"{ECurrencyType.Money}");
 
             _huntingZoneInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
         }

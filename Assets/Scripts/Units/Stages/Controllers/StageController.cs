@@ -10,6 +10,7 @@ using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -185,6 +186,16 @@ namespace Units.Stages.Controllers
                 BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
                 targetBuilding.HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter.Birth);
                 VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;   
+            }
+            else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
+            {
+                if (activeStatus == EActiveStatus.Active)
+                {
+                    QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Build, targetKey, 1);
+                }
+
+                HuntingZone huntingZone = _huntingZoneController.HuntingZones[targetKey];
+                VolatileDataManager.Instance.HuntingZoneActiveStatuses[huntingZone] = activeStatus;   
             }
 
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)

@@ -54,7 +54,7 @@ namespace Units.Stages.Controllers
         private IHuntingZoneController _huntingZoneController;
         private StageCustomSettings _stageCustomSettings;
 
-        private Dictionary<IHuntingZone, EActiveStatus> currentHuntingZones = new();
+        private Dictionary<HuntingZone, EActiveStatus> currentHuntingZones = new();
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
 
         public void RegisterReference(
@@ -72,7 +72,7 @@ namespace Units.Stages.Controllers
             _stageCustomSettings = stageCustomSettings;
             _currentActiveStandType = currentActiveMaterials;
 
-            currentHuntingZones = huntingZoneController.HuntingZones;
+            currentHuntingZones = VolatileDataManager.Instance.HuntingZoneActiveStatuses;
 
             InstantiateLevels();
         }
@@ -208,7 +208,7 @@ namespace Units.Stages.Controllers
                     var closestDistance = float.MaxValue;
 
                     // 가장 가까운 활성화된 몬스터 찾기
-                    foreach (KeyValuePair<IHuntingZone, EActiveStatus> huntingZone in currentHuntingZones)
+                    foreach (KeyValuePair<HuntingZone, EActiveStatus> huntingZone in currentHuntingZones)
                         if (huntingZone.Value == EActiveStatus.Active)
                             foreach (IMonster monster in huntingZone.Key.CurrentSpawnedMonsters)
                                 if (monster.Transform.gameObject.activeInHierarchy)
