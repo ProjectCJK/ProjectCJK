@@ -82,6 +82,14 @@ namespace Units.Stages.Controllers
             GameObject prefab = DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].Village;
             GameObject village = Instantiate(prefab, _villageSpawnData.VillageSpawner);
             village.transform.localPosition = Vector3.zero;
+            
+            prefab = DataManager.Instance.levelPrefabSo.GuestSpawner;
+            GameObject guestSpawner = Instantiate(prefab, _villageSpawnData.GuestSpawner);
+            guestSpawner.transform.localPosition = Vector3.zero;
+            
+            prefab = DataManager.Instance.levelPrefabSo.PlayerSpawner;
+            GameObject playerSpawner = Instantiate(prefab, _villageSpawnData.PlayerSpawner);
+            playerSpawner.transform.localPosition = Vector3.zero;
         }
 
         public void Initialize()
