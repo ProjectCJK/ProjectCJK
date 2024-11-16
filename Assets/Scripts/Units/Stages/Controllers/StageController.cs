@@ -235,6 +235,16 @@ namespace Units.Stages.Controllers
             {
                 BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
                 VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;
+
+                if (activeStatus == EActiveStatus.Active)
+                {
+                    (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+
+                    if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
+                    {
+                        VolatileDataManager.Instance.CurrentActiveMaterials.Add(parsedKey.Item2.Value);
+                    }
+                }
             }
             else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
             {

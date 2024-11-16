@@ -55,7 +55,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             _navMeshAgent.speed = _movementSpeed;
 
-            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas))
                 _guestTransform.position = hit.position;
 
             ActivateNavMeshAgent(false);
@@ -63,32 +63,22 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void SetDestination(Vector3 destination)
         {
-            if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            _destination = destination;
+            if (TryCalculateAndSetPath(destination))
             {
-                _destination = hit.position;
-
-                if (_navMeshAgent.isOnNavMesh)
-                {
-                    _navMeshAgent.ResetPath();
-
-                    var path = new NavMeshPath();
-
-                    if (NavMesh.CalculatePath(_guestTransform.position, destination, NavMesh.AllAreas, path))
-                    {
-                        _navMeshAgent.SetPath(path);
-                        ActivateNavMeshAgent(true);
-                    }
-                }
+                ActivateNavMeshAgent(true);
             }
         }
 
         public void Update()
         {
-            if (Vector3.Distance(_destination, _guestTransform.position) > 0.5f) SetDestination(_destination);
+            if (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
+            {
+                ActivateNavMeshAgent(true);
+            }
 
             switch (_navMeshAgent.velocity.x)
             {
-                // NavMeshAgent의 velocity에 따라 스프라이트 방향 설정
                 case > 0 when !_isFacingRight:
                     FlipSprite(true);
                     break;
@@ -102,14 +92,12 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void FixedUpdate()
         {
-            if (_navMeshAgent != null && !_navMeshAgent.isStopped && _navMeshAgent.enabled && _navMeshAgent.isOnNavMesh)
+            if (_navMeshAgent.enabled && !_navMeshAgent.isStopped && _navMeshAgent.isOnNavMesh)
             {
-                var path = new NavMeshPath();
-
-                if (NavMesh.CalculatePath(_guestTransform.position, _destination, NavMesh.AllAreas, path))
-                    _navMeshAgent.SetPath(path);
+                TryCalculateAndSetPath(_destination);
             }
         }
+
 
         public void ActivateNavMeshAgent(bool value)
         {
@@ -140,6 +128,20 @@ namespace Units.Stages.Modules.MovementModules.Units
             _creatureStateMachine.ChangeState(_isMoving
                 ? _creatureStateMachine.CreatureRunState
                 : _creatureStateMachine.CreatureIdleState);
+        }
+        
+        private bool TryCalculateAndSetPath(Vector3 position)
+        {
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            {
+                var path = new NavMeshPath();
+                if (NavMesh.CalculatePath(_guestTransform.position, hit.position, NavMesh.AllAreas, path))
+                {
+                    _navMeshAgent.SetPath(path);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

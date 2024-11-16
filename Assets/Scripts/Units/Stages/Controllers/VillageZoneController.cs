@@ -312,8 +312,10 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            var randomIndex = new Random().Next(VolatileDataManager.Instance.CurrentActiveMaterials.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, VolatileDataManager.Instance.CurrentActiveMaterials[randomIndex]);
+            List<EMaterialType> materialsList = VolatileDataManager.Instance.CurrentActiveMaterials.ToList();
+            var randomIndex = new Random().Next(materialsList.Count);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, materialsList[randomIndex]);
+
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
             
