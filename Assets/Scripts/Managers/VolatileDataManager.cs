@@ -23,7 +23,7 @@ namespace Managers
         public WareHouseStatsModule WareHouseStatsModule;
         public readonly Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
         public readonly Dictionary<HuntingZone, EActiveStatus> HuntingZoneActiveStatuses = new();
-        public readonly List<EMaterialType> CurrentActiveMaterials = new();
+        public readonly HashSet<EMaterialType> CurrentActiveMaterials = new();
 
         public void RegisterReference() { }
 
