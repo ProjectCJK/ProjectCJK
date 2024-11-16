@@ -4,6 +4,8 @@ using System.Linq;
 using Modules.DesignPatterns.Singletons;
 using ScriptableObjects.Scripts.Sprites;
 using UI;
+using UI.CostumeGachaPanels;
+using UI.CostumePanels;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -76,7 +78,10 @@ namespace Managers
 
         private readonly Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
         private readonly Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
+        private readonly Dictionary<ECostumeType, CostumeItemData> _currentEquippedCostumeItemDatas = new();
+        
         private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_CostumeGacha;
+        private readonly UI_Panel_Costume _uiPanelCostume = UIManager.Instance.UI_Panel_Costume;
 
         private readonly List<CostumeItemData> _currentCostumeItemData = new();
         
@@ -91,7 +96,10 @@ namespace Managers
             CacheGachaBackgroundSprites();
             
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
+            _uiPanelCostume.RegisterReference(_currentCostumeItemData, _currentEquippedCostumeItemDatas);
+            
             UIManager.Instance.Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
+            UIManager.Instance.Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
         }
 
         private void CacheGachaBackgroundSprites()
@@ -114,12 +122,13 @@ namespace Managers
 
             for (var i = 2; i < _costumeData.GetLength(0); i++)
             {
-                var costumeItem = new CostumeItemData();
+                var costumeItem = new CostumeItemData
+                {
+                    CostumeType = Enum.Parse<ECostumeType>(_costumeData[i, 3]),
+                    CostumeGrade = Enum.Parse<ECostumeGrade>(_costumeData[i, 5]),
+                    SpriteIndex = int.Parse(_costumeData[i, 4])
+                };
 
-                costumeItem.CostumeType = Enum.Parse<ECostumeType>(_costumeData[i, 3]);
-                costumeItem.CostumeGrade = Enum.Parse<ECostumeGrade>(_costumeData[i, 5]);
-                costumeItem.SpriteIndex = int.Parse(_costumeData[i, 4]);
-                
                 costumeItem.CostumeSprites = costumeItem.CostumeType switch
                 {
                     ECostumeType.Weapon => DataManager.Instance.CostumeSpriteSo
@@ -265,8 +274,13 @@ namespace Managers
                 return default;
             }
 
-            var randomIndex = UnityEngine.Random.Range(0, _cachedRareCostumes.Count);
+            var randomIndex = Random.Range(0, _cachedRareCostumes.Count);
             return _cachedRareCostumes[randomIndex];
+        }
+        
+        private void ActivateCostumePanel()
+        {
+            _uiPanelCostume.Activate();
         }
     }
 }

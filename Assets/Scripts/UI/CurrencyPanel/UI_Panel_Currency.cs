@@ -3,7 +3,7 @@ using Modules.DesignPatterns.MVVMs;
 using TMPro;
 using Units.Stages.UI;
 
-namespace UI
+namespace UI.CurrencyPanel
 {
     public class UI_Panel_Currency : BaseView<CurrencyViewModel>
     {

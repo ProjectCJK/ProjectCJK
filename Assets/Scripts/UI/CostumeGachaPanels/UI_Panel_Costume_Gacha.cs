@@ -5,7 +5,7 @@ using Units.Stages.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.CostumeGachaPanels
 {
     [Serializable]
     public struct GachaCostumeItemData

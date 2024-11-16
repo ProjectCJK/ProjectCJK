@@ -2,6 +2,7 @@ using System;
 using Interfaces;
 using Modules.DesignPatterns.Singletons;
 using UI;
+using UI.CurrencyPanel;
 using Units.Stages.UI;
 using Units.Stages.Units.Items.Enums;
 

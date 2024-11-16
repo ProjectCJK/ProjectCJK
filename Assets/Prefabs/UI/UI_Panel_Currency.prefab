@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 163972730152320608}
   - component: {fileID: 4560125145136775140}
   - component: {fileID: 474329452242968140}
-  - component: {fileID: 6850184177504647540}
   m_Layer: 5
   m_Name: UI_Panel_Currency
   m_TagString: Untagged
@@ -243,21 +242,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
 --- !u!114 &474329452242968140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5841248985028807150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91b21536f78fa514cbc28ea5d7715f99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DiamondText: {fileID: 2505805158823376318}
-  RedGemText: {fileID: 3907471570563974274}
-  GoldText: {fileID: 9129590068834516700}
---- !u!114 &6850184177504647540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

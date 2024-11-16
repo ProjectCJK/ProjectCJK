@@ -6,7 +6,7 @@ using System.Linq;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Abstract;
 using TMPro;
-using UI.UI;
+using UI.BuildingEnhancementPanel.UI;
 using Units.Stages.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using UnityEngine;

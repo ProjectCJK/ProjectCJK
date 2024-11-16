@@ -4,6 +4,7 @@ using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using UI;
+using UI.QuestPanels;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Units.Buildings.Abstract;

@@ -1,16 +1,12 @@
 using System;
 using Managers;
 using TMPro;
-using UI.UI;
+using UI.BuildingEnhancementPanel.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.BuildingEnhancementPanel
 {
-    using System;
-    using TMPro;
-    using UnityEngine;
-
     namespace UI
     {
         [Serializable]

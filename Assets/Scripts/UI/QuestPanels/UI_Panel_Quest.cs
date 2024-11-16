@@ -1,8 +1,7 @@
-using UnityEngine;
-using UI;
 using Managers;
+using UnityEngine;
 
-namespace UI
+namespace UI.QuestPanels
 {
     public class UI_Panel_Quest : MonoBehaviour
     {

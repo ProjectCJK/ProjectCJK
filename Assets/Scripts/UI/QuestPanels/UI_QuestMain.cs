@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Managers;
 
-namespace UI
+namespace UI.QuestPanels
 {
     public class UI_QuestMain : MonoBehaviour
     {
