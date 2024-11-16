@@ -61,7 +61,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
                         if (_player != null) _playerPaymentDelay = _player.PaymentDelay;
                         return true;
                     case ECreatureType.NPC when creature as Creature:
-                        if (_customerQueue.Contains(creature as Guest)) _customerQueue.Enqueue(creature as Guest);
+                        if (!_customerQueue.Contains(creature as Guest)) _customerQueue.Enqueue(creature as Guest);
                         return true;
                     case ECreatureType.Monster:
                     default:

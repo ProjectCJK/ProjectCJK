@@ -24,9 +24,11 @@ namespace UI.CostumeGachaPanels
         [SerializeField] private CostumeBoxController costumeBoxController;
         [SerializeField] private GachaCostumeItemData _currentGachaCostumeItemDatas;
         [SerializeField] private List<GachaCostumeItemData> _gachaCostumeItemDatas;
+        [SerializeField] private Button _skipButton;
         
         private int currentIndex = 0;
         private int maxIndex;
+        private bool isSkipped;
 
         private List<CostumeItemData> _costumeItems;
         private Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
@@ -35,6 +37,8 @@ namespace UI.CostumeGachaPanels
         private void OnEnable()
         {
             currentIndex = 0;
+            isSkipped = false;
+            _skipButton.gameObject.SetActive(true);
         }
 
         public void RegisterReference(Dictionary<ECostumeGrade, Sprite> backgroundImageCache, Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache)
@@ -55,6 +59,7 @@ namespace UI.CostumeGachaPanels
         
         public void OnClick_Costume_Gacha()
         {
+            
             if (currentIndex == 0 && costumeBoxController.IsEndedIdleAnimation)
             {
                 UpdateGachaCostumeItemData(_currentGachaCostumeItemDatas, currentIndex);
@@ -73,11 +78,16 @@ namespace UI.CostumeGachaPanels
                 currentIndex++;
                 costumeBoxController.Animator.SetTrigger(Result);
             }
-            else if (currentIndex == maxIndex + 1 && costumeBoxController.IsEndedResultAnimation)
+            else if ((currentIndex == maxIndex + 1 || isSkipped) && costumeBoxController.IsEndedResultAnimation)
             {
                 _gachaCostumeItemDatas.Clear();
                 gameObject.SetActive(false);
             }
+        }
+        
+        public void OnClick_SkipButton()
+        {
+            isSkipped = true;
         }
 
         private void UpdateGachaCostumeItemData(GachaCostumeItemData gachaData, int index)
