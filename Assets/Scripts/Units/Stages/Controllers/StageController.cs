@@ -73,8 +73,6 @@ namespace Units.Stages.Controllers
         [Header("### Stage Custom Settings ### ")] [SerializeField]
         private StageCustomSettings _stageCustomSettings;
 
-        private readonly List<EMaterialType> _currentActiveMaterials = new();
-
         private int activeStatusSettingIndex;
 
         private ICreatureController _creatureController => _stageDefaultSettings.stageReferences.CreatureController;
@@ -103,9 +101,9 @@ namespace Units.Stages.Controllers
 
             _creatureController.RegisterReference(playerFactory, monsterFactory, guestFactory, deliveryManFactory,
                 hunterFactory);
-            _buildingController.RegisterReference(itemFactory, _currentActiveMaterials);
+            _buildingController.RegisterReference(itemFactory);
             _villageZoneController.RegisterReference(_creatureController, _buildingController, _huntingZoneController,
-                _stageCustomSettings, _currentActiveMaterials);
+                _stageCustomSettings);
             _huntingZoneController.RegisterReference(_creatureController, itemFactory, _villageZoneController.Player);
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
@@ -136,7 +134,7 @@ namespace Units.Stages.Controllers
         private void InitializeZone()
         {
             var firstLockZoneFounded = false;
-    
+
             for (var index = 0; index < _stageCustomSettings.activeStatusSettings.Count; index++)
             {
                 ActiveStatusSettings activeStatus = _stageCustomSettings.activeStatusSettings[index];
@@ -144,12 +142,12 @@ namespace Units.Stages.Controllers
                 if (activeStatus.InitialActiveStatus != EActiveStatus.Active && !firstLockZoneFounded)
                 {
                     firstLockZoneFounded = true;
-                    activeStatusSettingIndex = index;
+                    activeStatusSettingIndex = index; // 여기서는 첫 번째 비활성화된 영역만 기억
                 }
 
                 // 첫 번째 자식을 대상으로 UnlockZoneModule을 설정
-                var targetChild = activeStatus.GameObject.transform.childCount > 0 
-                    ? activeStatus.GameObject.transform.GetChild(0).gameObject 
+                GameObject targetChild = activeStatus.GameObject.transform.childCount > 0
+                    ? activeStatus.GameObject.transform.GetChild(0).gameObject
                     : null;
 
                 if (targetChild != null)
@@ -161,6 +159,9 @@ namespace Units.Stages.Controllers
                         activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
                         activeStatusModule.SetCurrentState(activeStatus.InitialActiveStatus);
                         activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
+
+                        // 초기화 시 상태만 동기화 (activeStatusSettingIndex 변경 X)
+                        SyncActiveStatus(activeStatusModule.TargetKey, activeStatus.InitialActiveStatus);
                     }
                     else
                     {
@@ -181,11 +182,18 @@ namespace Units.Stages.Controllers
                 if (activeStatus == EActiveStatus.Active)
                 {
                     QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Build, targetKey, 1);
+
+                    (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
+
+                    if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
+                    {
+                        VolatileDataManager.Instance.CurrentActiveMaterials.Add(parsedKey.Item2.Value);
+                    }
                 }
 
                 BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
                 targetBuilding.HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter.Birth);
-                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;   
+                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;
             }
             else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
             {
@@ -195,17 +203,18 @@ namespace Units.Stages.Controllers
                 }
 
                 HuntingZone huntingZone = _huntingZoneController.HuntingZones[targetKey];
-                VolatileDataManager.Instance.HuntingZoneActiveStatuses[huntingZone] = activeStatus;   
+                VolatileDataManager.Instance.HuntingZoneActiveStatuses[huntingZone] = activeStatus;
             }
 
+            // 다음 상태로 이동
             if (activeStatusSettingIndex < _stageCustomSettings.activeStatusSettings.Count - 1)
             {
-                ActiveStatusSettings activeStatusData = _stageCustomSettings.activeStatusSettings[++activeStatusSettingIndex];
+                activeStatusSettingIndex++;
+                ActiveStatusSettings activeStatusData = _stageCustomSettings.activeStatusSettings[activeStatusSettingIndex];
                 var activeStatusModule = activeStatusData.GameObject.GetComponentInChildren<UnlockZoneModule>();
 
                 if (activeStatusModule != null)
                 {
-                    // 첫 번째 자식을 타겟으로 설정
                     GameObject targetChild = activeStatusData.GameObject.transform.childCount > 0
                         ? activeStatusData.GameObject.transform.GetChild(0).gameObject
                         : null;
@@ -218,12 +227,19 @@ namespace Units.Stages.Controllers
                     activeStatusModule.SetCurrentState(EActiveStatus.Standby);
                 }
             }
+        }
 
-            (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
-
-            if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
+        private void SyncActiveStatus(string targetKey, EActiveStatus activeStatus)
+        {
+            if (_buildingController.Buildings.ContainsKey(targetKey))
             {
-                _currentActiveMaterials.Add(parsedKey.Item2.Value);
+                BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
+                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;
+            }
+            else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
+            {
+                HuntingZone huntingZone = _huntingZoneController.HuntingZones[targetKey];
+                VolatileDataManager.Instance.HuntingZoneActiveStatuses[huntingZone] = activeStatus;
             }
         }
     }

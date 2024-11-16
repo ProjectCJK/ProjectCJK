@@ -18,8 +18,7 @@ using Random = System.Random;
 namespace Units.Stages.Controllers
 {
     public interface IVillageZoneController :
-        IRegisterReference<ICreatureController, IBuildingController, HuntingZoneController, StageCustomSettings,
-            List<EMaterialType>>, IInitializable
+        IRegisterReference<ICreatureController, IBuildingController, HuntingZoneController, StageCustomSettings>, IInitializable
     {
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
@@ -47,7 +46,6 @@ namespace Units.Stages.Controllers
         private readonly HashSet<IHunter> currentSpawnedHunters = new();
         private IBuildingController _buildingController;
         private ICreatureController _creatureController;
-        private List<EMaterialType> _currentActiveStandType;
         private float _guestSpawnCheckTime;
         private float _guestSpawnElapsedTime;
         private GuestSpawnZoneDataSo _guestSpawnZoneDataSo;
@@ -61,8 +59,7 @@ namespace Units.Stages.Controllers
             ICreatureController creatureController,
             IBuildingController buildingController,
             HuntingZoneController huntingZoneController,
-            StageCustomSettings stageCustomSettings,
-            List<EMaterialType> currentActiveMaterials)
+            StageCustomSettings stageCustomSettings)
         {
             _creatureController = creatureController;
             _buildingController = buildingController;
@@ -70,7 +67,6 @@ namespace Units.Stages.Controllers
 
             _guestSpawnZoneDataSo = DataManager.Instance.GuestSpawnZoneDataSo;
             _stageCustomSettings = stageCustomSettings;
-            _currentActiveStandType = currentActiveMaterials;
 
             currentHuntingZones = VolatileDataManager.Instance.HuntingZoneActiveStatuses;
 
@@ -102,7 +98,7 @@ namespace Units.Stages.Controllers
 #if UNITY_EDITOR
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.E))
-                if (_currentActiveStandType.Count > 0)
+                if (VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
                 {
                     IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
@@ -281,7 +277,7 @@ namespace Units.Stages.Controllers
 
         private void SpawnGuests()
         {
-            if (currentSpawnedGuests.Count < _guestMaxCount && _currentActiveStandType.Count > 0)
+            if (currentSpawnedGuests.Count < _guestMaxCount && VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
             {
                 if (_guestSpawnCheckTime == 0f)
                     _guestSpawnCheckTime = UnityEngine.Random.Range(_guestSpawnZoneDataSo.guestSpawnMinimumTime,
@@ -310,8 +306,8 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            var randomIndex = new Random().Next(_currentActiveStandType.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
+            var randomIndex = new Random().Next(VolatileDataManager.Instance.CurrentActiveMaterials.Count);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, VolatileDataManager.Instance.CurrentActiveMaterials[randomIndex]);
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
 
             var destinations = new List<Tuple<string, Transform>>
