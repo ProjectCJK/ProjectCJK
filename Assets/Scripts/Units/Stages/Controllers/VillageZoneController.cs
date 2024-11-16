@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Zones;
@@ -30,7 +31,7 @@ namespace Units.Stages.Controllers
         [Header("=== Village Position ===")]
         public Transform VillageSpawner;
         public Transform PlayerSpawner;
-        public Transform GuestSpawner;
+        public List<Transform> GuestSpawner;
     }
 
     public class VillageZoneController : MonoBehaviour, IVillageZoneController
@@ -80,8 +81,11 @@ namespace Units.Stages.Controllers
             village.transform.localPosition = Vector3.zero;
             
             prefab = DataManager.Instance.levelPrefabSo.GuestSpawner;
-            GameObject guestSpawner = Instantiate(prefab, _villageSpawnData.GuestSpawner);
-            guestSpawner.transform.localPosition = Vector3.zero;
+
+            foreach (GameObject guestSpawner in _villageSpawnData.GuestSpawner.Select(t => Instantiate(prefab, t)))
+            {
+                guestSpawner.transform.localPosition = Vector3.zero;
+            }
             
             prefab = DataManager.Instance.levelPrefabSo.PlayerSpawner;
             GameObject playerSpawner = Instantiate(prefab, _villageSpawnData.PlayerSpawner);
@@ -100,7 +104,8 @@ namespace Units.Stages.Controllers
             if (Input.GetKeyDown(KeyCode.E))
                 if (VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
                 {
-                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
+                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
                     guest.SetDestinations(GetRandomDestinationForGuest());
 
@@ -287,7 +292,8 @@ namespace Units.Stages.Controllers
 
                 if (_guestSpawnElapsedTime >= _guestSpawnCheckTime)
                 {
-                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
+                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
                     guest.SetDestinations(GetRandomDestinationForGuest());
 
@@ -309,12 +315,13 @@ namespace Units.Stages.Controllers
             var randomIndex = new Random().Next(VolatileDataManager.Instance.CurrentActiveMaterials.Count);
             var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, VolatileDataManager.Instance.CurrentActiveMaterials[randomIndex]);
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
-
+            var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+            
             var destinations = new List<Tuple<string, Transform>>
             {
                 new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
                 new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
-                new(string.Empty, _villageSpawnData.GuestSpawner)
+                new(string.Empty, _villageSpawnData.GuestSpawner[randomPosition])
             };
 
             return destinations;

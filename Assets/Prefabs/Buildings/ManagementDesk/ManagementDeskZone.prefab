@@ -683,6 +683,7 @@ GameObject:
   - component: {fileID: 7103360495616465571}
   - component: {fileID: 1423815351062193686}
   - component: {fileID: 8378204664297777446}
+  - component: {fileID: 4183953881290627716}
   m_Layer: 16
   m_Name: TradeZone_Player_ManagementDesk
   m_TagString: Untagged
@@ -23482,6 +23483,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputAccessPlayer: 0
   _outputAccessPlayer: 1
+--- !u!114 &4183953881290627716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744755368697598310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1506283353234752476
 GameObject:
   m_ObjectHideFlags: 0
@@ -23771,6 +23784,7 @@ GameObject:
   - component: {fileID: 1609085055432740627}
   - component: {fileID: 7917966008915109290}
   - component: {fileID: 8904809338788768095}
+  - component: {fileID: 4101856528130295666}
   m_Layer: 14
   m_Name: Collision_ManagementDesk
   m_TagString: Untagged
@@ -63784,6 +63798,18 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &4101856528130295666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598965846473018865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2570548119177083503
 GameObject:
   m_ObjectHideFlags: 0
@@ -63798,6 +63824,7 @@ GameObject:
   - component: {fileID: 6239173806724782391}
   - component: {fileID: 717793097357247185}
   - component: {fileID: 2820492816623360951}
+  - component: {fileID: 9056110262438315336}
   m_Layer: 13
   m_Name: Collision_Inventory_ManagementDesk
   m_TagString: Untagged
@@ -64117,6 +64144,18 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 2570548119177083503}
+--- !u!114 &9056110262438315336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2570548119177083503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2961466009390246208
 GameObject:
   m_ObjectHideFlags: 0
@@ -64194,6 +64233,7 @@ GameObject:
   - component: {fileID: 3377621250315754234}
   - component: {fileID: 8913155308653751571}
   - component: {fileID: 8018517781152440295}
+  - component: {fileID: 4742088426001960715}
   m_Layer: 21
   m_Name: PaymentZone_NPC_ManagementDesk
   m_TagString: Untagged
@@ -69761,6 +69801,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5082707f2b4121894a2df60de673ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4742088426001960715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393669777916176694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3723544072332775233
 GameObject:
   m_ObjectHideFlags: 0
@@ -72148,6 +72200,7 @@ GameObject:
   - component: {fileID: 8672332780161686903}
   - component: {fileID: 4499257952906537661}
   - component: {fileID: 4466848986761434827}
+  - component: {fileID: 2408862006602445787}
   m_Layer: 21
   m_Name: PaymentZone_Player_ManagementDesk
   m_TagString: Untagged
@@ -73741,6 +73794,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d50d0ea206a0406c90f81daeaa3c864f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2408862006602445787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9093880379541834868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18b9a504804f28a2479d66e372471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9182398534575797795
