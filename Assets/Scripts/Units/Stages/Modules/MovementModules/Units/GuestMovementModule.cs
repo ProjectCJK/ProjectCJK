@@ -53,12 +53,15 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void Initialize(Vector3 startPosition)
         {
+            ActivateNavMeshAgent(false);
+            
             _navMeshAgent.speed = _movementSpeed;
 
-            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            {
                 _guestTransform.position = hit.position;
-
-            ActivateNavMeshAgent(false);
+                Debug.Log($"Guest initialized at: {hit.position}, StartPosition: {startPosition}, Difference: {Vector3.Distance(hit.position, startPosition)}");
+            }
         }
 
         public void SetDestination(Vector3 destination)
@@ -132,7 +135,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         
         private bool TryCalculateAndSetPath(Vector3 position)
         {
-            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
             {
                 var path = new NavMeshPath();
                 if (NavMesh.CalculatePath(_guestTransform.position, hit.position, NavMesh.AllAreas, path))
