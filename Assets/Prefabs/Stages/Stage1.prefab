@@ -365,7 +365,7 @@ Transform:
   - {fileID: 8051165114350914590}
   - {fileID: 8017298701463625805}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &3134688737096638988
 Grid:
@@ -405,26 +405,26 @@ MonoBehaviour:
       StageMaterialType: 0
     - MaterialType: 1
       StageMaterialType: 1
-    MaxGuestCount: 5
+    MaxGuestCount: 14
     activeStatusSettings:
     - GameObject: {fileID: 1646918430592216892}
-      InitialActiveStatus: 0
-      RequiredGoldCountForUnlock: 2000
-    - GameObject: {fileID: 8639463543083165241}
       InitialActiveStatus: 1
-      RequiredGoldCountForUnlock: 3500
+      RequiredGoldCountForUnlock: 200
+    - GameObject: {fileID: 8639463543083165241}
+      InitialActiveStatus: 2
+      RequiredGoldCountForUnlock: 100
     - GameObject: {fileID: 8033528621188380486}
       InitialActiveStatus: 2
-      RequiredGoldCountForUnlock: 2500
+      RequiredGoldCountForUnlock: 600
     - GameObject: {fileID: 8989968707896283011}
       InitialActiveStatus: 2
-      RequiredGoldCountForUnlock: 3000
+      RequiredGoldCountForUnlock: 400
     - GameObject: {fileID: 4028544055791657619}
       InitialActiveStatus: 2
-      RequiredGoldCountForUnlock: 4000
+      RequiredGoldCountForUnlock: 200
     - GameObject: {fileID: 7932655790919305514}
       InitialActiveStatus: 2
-      RequiredGoldCountForUnlock: 4500
+      RequiredGoldCountForUnlock: 500
 --- !u!1 &5619218078800360678
 GameObject:
   m_ObjectHideFlags: 0
