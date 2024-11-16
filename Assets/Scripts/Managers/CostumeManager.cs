@@ -43,6 +43,7 @@ namespace Managers
     [Serializable]
     public struct CostumeItemData
     {
+        public bool IsEquipped;
         public List<Sprite> CostumeSprites;
         public ECostumeType CostumeType;
         public ECostumeGrade CostumeGrade;
@@ -96,7 +97,7 @@ namespace Managers
             CacheGachaBackgroundSprites();
             
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
-            _uiPanelCostume.RegisterReference(_currentCostumeItemData, _currentEquippedCostumeItemDatas);
+            _uiPanelCostume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData, _currentEquippedCostumeItemDatas);
             
             UIManager.Instance.Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
             UIManager.Instance.Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
@@ -228,9 +229,9 @@ namespace Managers
 
         private void ActivateCostumeGacha()
         {
-            List<CostumeItemData> costumeItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
+            var gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
             
-            _uiPanelCostumeGacha.Activate(costumeItems);
+            _uiPanelCostumeGacha.Activate(gachaItems);
         }
 
         private List<CostumeItemData> GetRandomItem(int maxCommonGet, int maxRareGet)
@@ -248,6 +249,7 @@ namespace Managers
             {
                 var randomIndex = Random.Range(1, 101);
                 var randomItem = randomIndex <= int.Parse(_costumeBoxData[2, 8]) ? GetRareItem() : GetNormalItem();
+                _currentCostumeItemData.Add(randomItem);
                 randomItems.Add(randomItem);
             }
 

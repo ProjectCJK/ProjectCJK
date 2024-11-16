@@ -59,29 +59,34 @@ namespace UI.CostumeGachaPanels
         
         public void OnClick_Costume_Gacha()
         {
-            
-            if (currentIndex == 0 && costumeBoxController.IsEndedIdleAnimation)
+            switch (currentIndex)
             {
-                UpdateGachaCostumeItemData(_currentGachaCostumeItemDatas, currentIndex);
-                currentIndex++;
-                costumeBoxController.Animator.SetTrigger(OpenFirst);
-            }
-            else if (currentIndex > 0 && currentIndex < maxIndex && costumeBoxController.IsEndedOpenIdleAnimation)
-            {
-                UpdateGachaCostumeItemData(_currentGachaCostumeItemDatas, currentIndex);
-                currentIndex++;
-                costumeBoxController.IsEndedOpenIdleAnimation = false;
-                costumeBoxController.Animator.SetTrigger(OpenSecond);
-            }
-            else if (currentIndex == maxIndex && costumeBoxController.IsEndedOpenIdleAnimation)
-            {
-                currentIndex++;
-                costumeBoxController.Animator.SetTrigger(Result);
-            }
-            else if ((currentIndex == maxIndex + 1 || isSkipped) && costumeBoxController.IsEndedResultAnimation)
-            {
-                _gachaCostumeItemDatas.Clear();
-                gameObject.SetActive(false);
+                case 0 when costumeBoxController.IsEndedIdleAnimation:
+                    UpdateGachaCostumeItemData(_currentGachaCostumeItemDatas, currentIndex);
+                    currentIndex++;
+                    costumeBoxController.Animator.SetTrigger(OpenFirst);
+                    break;
+                case > 0 when currentIndex < maxIndex && costumeBoxController.IsEndedOpenIdleAnimation:
+                    UpdateGachaCostumeItemData(_currentGachaCostumeItemDatas, currentIndex);
+                    currentIndex++;
+                    costumeBoxController.IsEndedOpenIdleAnimation = false;
+                    costumeBoxController.Animator.SetTrigger(OpenSecond);
+                    break;
+                default:
+                {
+                    if (currentIndex == maxIndex && costumeBoxController.IsEndedOpenIdleAnimation)
+                    {
+                        currentIndex++;
+                        costumeBoxController.Animator.SetTrigger(Result);
+                    }
+                    else if ((currentIndex == maxIndex + 1 || isSkipped) && costumeBoxController.IsEndedResultAnimation)
+                    {
+                        _gachaCostumeItemDatas.Clear();
+                        gameObject.SetActive(false);
+                    }
+
+                    break;
+                }
             }
         }
         

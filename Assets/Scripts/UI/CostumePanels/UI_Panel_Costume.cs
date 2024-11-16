@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Managers;
 using UnityEngine;
@@ -18,11 +19,12 @@ namespace UI.CostumePanels
         }
 
         public void RegisterReference(
+            Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
             List<CostumeItemData> currentCostumeItemData,
             Dictionary<ECostumeType, CostumeItemData> currentEquippedCostumeItemDatas)
         {
-            _uiPanelCurrentEquipmentInfo.RegisterReference(currentEquippedCostumeItemDatas);
-            _uiPanelInventory.RegisterReference(currentCostumeItemData, currentEquippedCostumeItemDatas);
+            _uiPanelCurrentEquipmentInfo.RegisterReference(frontGroundImageCache, currentEquippedCostumeItemDatas);
+            _uiPanelInventory.RegisterReference(frontGroundImageCache, currentCostumeItemData, currentEquippedCostumeItemDatas, _uiPanelPopup);
         }
     }
 }

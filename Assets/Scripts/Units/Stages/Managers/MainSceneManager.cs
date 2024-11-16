@@ -114,6 +114,20 @@ namespace Units.Stages.Managers
             {
                 CurrencyManager.Instance.AddGold(100);
             }
+                  
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                CurrencyManager.Instance.AddGold(10000);
+                CurrencyManager.Instance.AddDiamond(10000);
+                CurrencyManager.Instance.AddRedGem(10000);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                CurrencyManager.Instance._gold = 0;
+                CurrencyManager.Instance._diamond = 0;
+                CurrencyManager.Instance._redGem = 0;
+            }
 
             // if (Input.GetKeyDown(KeyCode.U))
             // {
