@@ -14,7 +14,7 @@ namespace Managers
         private UI_Panel_Currency _uiPanelCurrency;
         private CurrencyViewModel _currencyViewModel;
 
-        private int _redGem;
+        public int _redGem;
         public int RedGem
         {
             get => _redGem;
@@ -25,7 +25,7 @@ namespace Managers
             }
         }
         
-        private int _gold;
+        public int _gold;
         public int Gold
         {
             get => _gold;
@@ -36,7 +36,7 @@ namespace Managers
             }
         }
 
-        private int _diamond;
+        public int _diamond;
         public int Diamond
         {
             get => _diamond;

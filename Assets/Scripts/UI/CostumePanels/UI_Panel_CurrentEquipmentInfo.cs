@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Managers;
 using UnityEngine;
@@ -8,7 +9,8 @@ namespace UI.CostumePanels
     {
         private Dictionary<ECostumeType, CostumeItemData> _currentEquippedCostumeItemDatas;
         
-        public void RegisterReference(Dictionary<ECostumeType, CostumeItemData> currentEquippedCostumeItemDatas)
+        public void RegisterReference(Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
+            Dictionary<ECostumeType, CostumeItemData> currentEquippedCostumeItemDatas)
         {
             _currentEquippedCostumeItemDatas = currentEquippedCostumeItemDatas;
         }
