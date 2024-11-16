@@ -11,10 +11,12 @@ namespace Managers
 {
     public class UIManager : SingletonMono<UIManager>
     {
+        public Button Button_CostumeGachaPanel;
+        public Button Button_CostumePanel;
+        
         public UI_Panel_Quest UI_Panel_Quest;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
-        
-        public Button Button_Costume;
+        public UI_Panel_Costume UI_Panel_Costume;
         public UI_Panel_Currency UI_Panel_Currency;
         public UI_Panel_Costume_Gacha UI_Panel_CostumeGacha;
         

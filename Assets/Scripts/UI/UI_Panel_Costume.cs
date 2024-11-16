@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Units.Stages.UI
+namespace UI
 {
     public class UI_Panel_Costume : MonoBehaviour
     {

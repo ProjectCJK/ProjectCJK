@@ -91,7 +91,7 @@ namespace Managers
             CacheGachaBackgroundSprites();
             
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
-            UIManager.Instance.Button_Costume.onClick.AddListener(ActivateCostumeGacha);
+            UIManager.Instance.Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
         }
 
         private void CacheGachaBackgroundSprites()
