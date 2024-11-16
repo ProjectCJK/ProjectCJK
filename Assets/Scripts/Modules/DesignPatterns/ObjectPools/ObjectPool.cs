@@ -42,7 +42,7 @@ namespace Modules.DesignPatterns.ObjectPools
                     if (parentTransform != null)
                         monoObject.transform.SetParent(parentTransform);
 
-                    monoObject.gameObject.SetActive(true);
+                    // monoObject.gameObject.SetActive(true);
                 }
 
                 return obj;
@@ -69,7 +69,7 @@ namespace Modules.DesignPatterns.ObjectPools
                     if (parentTransform != null)
                         monoObject.transform.SetParent(parentTransform);
 
-                    monoObject.gameObject.SetActive(false);
+                    // monoObject.gameObject.SetActive(false);
                 }
 
                 poolQueue.Enqueue(obj);

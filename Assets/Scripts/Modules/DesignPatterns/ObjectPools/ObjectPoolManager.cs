@@ -29,6 +29,21 @@ namespace Modules.DesignPatterns.ObjectPools
             if (poolDictionary[key] is ObjectPool<T> pool) return pool.GetObject();
             throw new InvalidCastException($"The pool with key '{key}' does not match the requested type.");
         }
+        
+        /// <summary>
+        /// 특정 키에 해당하는 모든 객체를 가져옵니다.
+        /// </summary>
+        public List<T> GetAllObjects<T>(string key) where T : IPoolable
+        {
+            if (poolDictionary.TryGetValue(key, out var pool) && pool is ObjectPool<T> typedPool)
+            {
+                return typedPool.GetAllObjects(); // ObjectPool에서 모든 객체를 가져옴
+            }
+            else
+            {
+                throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
+            }
+        }
 
         /// <summary>
         /// 요청한 키에 해당하는 풀로 오브젝트를 반환합니다.
@@ -39,6 +54,25 @@ namespace Modules.DesignPatterns.ObjectPools
                 typedPool.ReturnObject(obj);
             else
                 throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
+        }
+
+        /// <summary>
+        /// 특정 키에 해당하는 모든 객체들을 반환합니다.
+        /// </summary>
+        public void ReturnAllObjects<T>(string key) where T : IPoolable
+        {
+            if (poolDictionary.TryGetValue(key, out var pool) && pool is ObjectPool<T> typedPool)
+            {
+                List<T> allObjects = typedPool.GetAllObjects();
+                foreach (var obj in allObjects)
+                {
+                    typedPool.ReturnObject(obj);
+                }
+            }
+            else
+            {
+                throw new Exception($"Pool with key '{key}' does not exist or is of a different type.");
+            }
         }
 
         /// <summary>

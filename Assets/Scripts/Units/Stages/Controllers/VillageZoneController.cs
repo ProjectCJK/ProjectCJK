@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Interfaces;
 using Managers;
+using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Zones;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
@@ -70,6 +72,21 @@ namespace Units.Stages.Controllers
             _stageCustomSettings = stageCustomSettings;
 
             currentHuntingZones = VolatileDataManager.Instance.HuntingZoneActiveStatuses;
+
+            foreach (var guest in ObjectPoolManager.Instance.GetAllObjects<IGuest>("GuestPool"))
+            {
+                guest.Transform.position = _villageSpawnData.GuestSpawner[0].transform.position;
+            }
+            
+            foreach (var deliveryMan in ObjectPoolManager.Instance.GetAllObjects<IDeliveryMan>("DeliveryManPool"))
+            {
+                deliveryMan.Transform.position = _buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].transform.position;
+            }
+            
+            foreach (var hunter in ObjectPoolManager.Instance.GetAllObjects<IHunter>("HunterPool"))
+            {
+                hunter.Transform.position = _buildingController.Buildings[$"{EBuildingType.WareHouse}"].transform.position;
+            }
 
             InstantiateLevels();
         }

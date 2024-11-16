@@ -25,7 +25,7 @@ namespace Units.Stages.Units.Creatures.Units
         Deliver
     }
 
-    public interface IDeliveryMan : IPoolable, IRegisterReference<DeliveryManDataSO, IItemFactory>,
+    public interface IDeliveryMan : ICreature, IPoolable, IRegisterReference<DeliveryManDataSO, IItemFactory>,
         IInitializable<Vector3, CreatureSprite>
     {
         public CommandState CommandState { get; set; }
