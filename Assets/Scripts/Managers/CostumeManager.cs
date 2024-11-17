@@ -324,9 +324,11 @@ namespace Managers
         public void SortCostumeItems()
         {
             var typeOrder = new List<ECostumeType> { ECostumeType.Weapon, ECostumeType.Hat, ECostumeType.Bag, ECostumeType.Clothes };
-    
+
             _currentCostumeItemData.Sort((a, b) =>
             {
+                if (a == null || b == null) return a == null ? 1 : -1; // Null 값 처리
+
                 // 1. IsEquipped 기준 (true 우선)
                 var equippedComparison = b.IsEquipped.CompareTo(a.IsEquipped);
                 if (equippedComparison != 0) return equippedComparison;
@@ -336,11 +338,13 @@ namespace Managers
                 if (gradeComparison != 0) return gradeComparison;
 
                 // 3. CostumeType 기준 (지정된 순서대로)
-                var typeComparison = typeOrder.IndexOf(a.CostumeType).CompareTo(typeOrder.IndexOf(b.CostumeType));
+                var typeComparison = typeOrder.Contains(a.CostumeType) && typeOrder.Contains(b.CostumeType)
+                    ? typeOrder.IndexOf(a.CostumeType).CompareTo(typeOrder.IndexOf(b.CostumeType))
+                    : 0; // 기본값 설정
                 if (typeComparison != 0) return typeComparison;
 
-                // 4. CostumeName 기준 (사전순)
-                return string.Compare(a.CostumeName, b.CostumeName, StringComparison.Ordinal);
+                // 4. CostumeName 기준 (사전순, InvariantCulture 사용)
+                return string.Compare(a.CostumeName, b.CostumeName, StringComparison.InvariantCulture);
             });
         }
     }

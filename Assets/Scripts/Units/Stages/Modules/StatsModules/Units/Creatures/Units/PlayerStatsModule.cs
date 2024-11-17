@@ -68,8 +68,22 @@ namespace Units.Stages.Modules.StatsModules.Units.Creatures.Units
                 return _playerDataSo.BaseDamage;
             }
         }
-        public float AttackDelay => _playerDataSo.BaseAttackDelay;
         
+        public float AttackDelay => _playerDataSo.BaseAttackDelay;
+
+        public float RevenueGrowth
+        {
+            get
+            {
+                if (VolatileDataManager.Instance.CostumeEquipmentOption.ContainsKey(ECostumeOptionType.All_Product_Income))
+                {
+                    return _playerDataSo.BaseRevenueGrowth + (int) VolatileDataManager.Instance.CostumeEquipmentOption[ECostumeOptionType.All_Product_Income];
+                }
+
+                return _playerDataSo.BaseRevenueGrowth;
+            }
+        }
+
         public PlayerStatsModule(PlayerDataSO playerDataSo)
         {
             _playerDataSo = playerDataSo;

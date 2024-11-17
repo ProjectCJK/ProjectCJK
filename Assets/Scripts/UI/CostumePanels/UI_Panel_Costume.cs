@@ -16,6 +16,7 @@ namespace UI.CostumePanels
             List<CostumeItemData> currentCostumeItemData)
         {
             uiPanelCostumeInventory.RegisterReference(frontGroundImageCache, currentCostumeItemData, uiPanelCostumeInfo);
+            uiPanelCostumeInfo.RegisterReference(frontGroundImageCache, currentCostumeItemData, uiPanelCostumeInventory, uiPanelCurrentEquippedCostumeInfo);
         }
 
         public void Activate()

@@ -64,6 +64,7 @@ namespace UI.CostumePanels
             damageGrowthText.text = $"{VolatileDataManager.Instance.Player.PlayerStatsModule.Damage}";
             inventorySizeGrowthText.text = $"{VolatileDataManager.Instance.Player.PlayerStatsModule.MaxProductInventorySize}";
             healthGrowthText.text = $"{VolatileDataManager.Instance.Player.PlayerStatsModule.MovementSpeed}";
+            revenueGrowthText.text = $"{VolatileDataManager.Instance.Player.PlayerStatsModule.RevenueGrowth}";
 
             gameObject.SetActive(true);
         }

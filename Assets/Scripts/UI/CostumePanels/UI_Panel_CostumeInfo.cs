@@ -23,87 +23,75 @@ namespace UI.CostumePanels
 
         [Space(20), SerializeField] private Button enhancementButton;
         [SerializeField] private Button equipButton;
+        [SerializeField] private Button equipButtonNone;
 
         [Space(20), SerializeField] private UI_Panel_CostumeUpgrade uiPanelCostumeUpgrade;
 
-        public UI_Panel_CostumeUpgrade CostumeUpgradePanel => uiPanelCostumeUpgrade;
-
         private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache;
         private CostumeItemData _costumeItemData;
+        private UI_Panel_CostumeInventory _uiPanelCostumeInventory;
 
-        // public void RegisterReference(
-        //     Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
-        //     List<CostumeItemData> currentCostumeItemData)
-        // {
-        //     gameObject.SetActive(false);
-        //     _frontGroundImageCache = frontGroundImageCache;
-        //     _currentCostumeItemData = currentCostumeItemData;
-        //
-        //     upgradeButton.onClick.AddListener(OnClickUpgradeButton);
-        //
-        //     ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateUpgradeItem(_costumeUpgradeItemPrefab), _itemPrefabInstancePosition);
-        // }
-        
-        public void RegisterReference(Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache, List<CostumeItemData> currentCostumeItemData)
+        public void RegisterReference(Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
+            List<CostumeItemData> currentCostumeItemData,
+            UI_Panel_CostumeInventory uiPanelCostumeInventory,
+            UI_Panel_CurrentEquippedCostumeInfo uiPanelCurrentEquippedCostumeInfo)
         {
-            gameObject.SetActive(false);
-
             _frontGroundImageCache = frontGroundImageCache;
+            _uiPanelCostumeInventory = uiPanelCostumeInventory;
 
             uiPanelCostumeUpgrade.RegisterReference(frontGroundImageCache, currentCostumeItemData);
+            uiPanelCostumeUpgrade.RegisterUpdateActions(UpdateUI, _uiPanelCostumeInventory.UpdateItems, uiPanelCurrentEquippedCostumeInfo.Activate);
 
-            // 의존성 주입으로 UI 업데이트 연결
-            uiPanelCostumeUpgrade.RegisterUpdateActions(UpdateUI, null);
+            // 버튼 이벤트 등록
+            enhancementButton.onClick.AddListener(OnClickEnhancementButton);
+            equipButton.onClick.AddListener(OnClickEquipmentButton);
         }
 
         public void UpdateUI(CostumeItemData costumeItemData)
         {
             _costumeItemData = costumeItemData;
 
-            UpdateUI();
-        }
+            // 텍스트 및 이미지 업데이트
+            costumeNameText.text = costumeItemData.CostumeName;
 
-        public void Activate(CostumeItemData costumeItemData)
-        {
-            _costumeItemData = costumeItemData;
-            UpdateUI();
+            for (int i = 0; i < costumeTypeImage.Count; i++)
+                costumeTypeImage[i].gameObject.SetActive((int)costumeItemData.CostumeType == i);
 
-            gameObject.SetActive(true);
-        }
+            costumeTypeText.text = $"{costumeItemData.CostumeType}";
+            costumeLevelText.text = $"Lv. {costumeItemData.CurrentLevel}";
+            costumeIconImage.sprite = costumeItemData.CostumeSprites[0];
+            costumeBackgroundImage.sprite = _frontGroundImageCache[new Tuple<ECostumeType, ECostumeGrade>(costumeItemData.CostumeType, costumeItemData.CostumeGrade)];
 
-        public void UpdateUI()
-        {
-            costumeNameText.text = _costumeItemData.CostumeName;
+            costumeDescriptionText.text = $"{costumeItemData.CostumeItemOptionDatas[0].OptionDescription} +{costumeItemData.GetCurrentOptionValue()[0]}";
 
-            switch (_costumeItemData.CostumeGrade)
-            {
-                case ECostumeGrade.Common:
-                    costumeTypeImage[0].gameObject.SetActive(true);
-                    costumeTypeImage[1].gameObject.SetActive(false);
-                    break;
-                case ECostumeGrade.Rare:
-                    costumeTypeImage[0].gameObject.SetActive(false);
-                    costumeTypeImage[1].gameObject.SetActive(true);
-                    break;
-            }
-
-            costumeTypeText.text = $"{_costumeItemData.CostumeType}";
-            costumeLevelText.text = $"Lv. {_costumeItemData.CurrentLevel}";
-            costumeIconImage.sprite = _costumeItemData.CostumeSprites[0];
-            costumeBackgroundImage.sprite = _frontGroundImageCache[new Tuple<ECostumeType, ECostumeGrade>(_costumeItemData.CostumeType, _costumeItemData.CostumeGrade)];
-            costumeDescriptionText.text = $"{_costumeItemData.GetCurrentOptionValue()[0]}";
-
-            if (_costumeItemData.CostumeItemOptionDatas.Count > 1)
+            if (costumeItemData.CostumeItemOptionDatas.Count > 1)
             {
                 costumeOption1DescriptionIconImage.gameObject.SetActive(true);
                 costumeOption1DescriptionText.gameObject.SetActive(true);
-                costumeOption1DescriptionText.text = $"{_costumeItemData.GetCurrentOptionValue()[1]}";
+                costumeOption1DescriptionText.text = $"{costumeItemData.CostumeItemOptionDatas[1].OptionDescription} +{costumeItemData.GetCurrentOptionValue()[1]}";
             }
             else
             {
                 costumeOption1DescriptionIconImage.gameObject.SetActive(false);
                 costumeOption1DescriptionText.gameObject.SetActive(false);
             }
+
+            if (costumeItemData.IsEquipped)
+            {
+                equipButton.gameObject.SetActive(true);
+                equipButtonNone.gameObject.SetActive(false);
+            }
+            else
+            {
+                equipButton.gameObject.SetActive(false);
+                equipButtonNone.gameObject.SetActive(true);
+            }
+        }
+
+        public void Activate(CostumeItemData costumeItemData)
+        {
+            UpdateUI(costumeItemData);
+            gameObject.SetActive(true);
         }
 
         public void OnClickEnhancementButton()
@@ -113,7 +101,20 @@ namespace UI.CostumePanels
 
         public void OnClickEquipmentButton()
         {
-            VolatileDataManager.Instance.Player.PlayerCostumeModule.EquipCostume(_costumeItemData.CostumeType, _costumeItemData);
+            // 기존 장착 장비 해제
+            if (VolatileDataManager.Instance.EquippedCostumes.TryGetValue(_costumeItemData.CostumeType, out var equippedCostume))
+            {
+                equippedCostume.IsEquipped = false;
+                VolatileDataManager.Instance.Player.PlayerCostumeModule.UpdateEquippedCostumeStats(equippedCostume, true); // 스탯 감소
+            }
+
+            // 새 장비 장착
+            _costumeItemData.IsEquipped = true;
+            VolatileDataManager.Instance.EquippedCostumes[_costumeItemData.CostumeType] = _costumeItemData;
+            VolatileDataManager.Instance.Player.PlayerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, false); // 스탯 증가
+
+            // 인벤토리와 UI 업데이트
+            _uiPanelCostumeInventory.UpdateItems();
             CostumeManager.Instance.SortCostumeItems();
         }
     }

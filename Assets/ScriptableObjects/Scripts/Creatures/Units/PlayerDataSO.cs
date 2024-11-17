@@ -29,5 +29,6 @@ namespace ScriptableObjects.Scripts.Creatures.Units
         
         [Space(20), Header("=== 결제 세팅 ===")]
         public float BasePaymentDelay;
+        public float BaseRevenueGrowth;
     }
 }

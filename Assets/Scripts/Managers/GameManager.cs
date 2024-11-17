@@ -1,4 +1,5 @@
 using Modules.DesignPatterns.Singletons;
+using UnityEngine;
 
 namespace Managers
 {
@@ -8,5 +9,22 @@ namespace Managers
 
     public class GameManager : SingletonMono<GameManager>, IGameManager
     {
+        private bool InGameTrigger;
+        
+        protected override void Awake()
+        {
+            // 프레임 고정
+            Application.targetFrameRate = 60;
+            // VSync 비활성화
+            QualitySettings.vSyncCount = 0;
+            
+            // ES3.settings 세팅
+            ES3.CacheFile();
+            ES3.settings = new ES3Settings(ES3.Location.Cache);
+            
+            // ES3.Save("temp", "talskdaskdj", ES3.settings);
+            
+            ES3.StoreCachedFile();
+        }
     }
 }

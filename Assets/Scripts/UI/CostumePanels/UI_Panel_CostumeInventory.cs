@@ -11,15 +11,13 @@ namespace UI.CostumePanels
         [SerializeField] private GameObject _costumeInventoryItemPrefab;
         [SerializeField] private Transform _itemPrefabInstancePosition;
 
-        private Dictionary<ECostumeType, CostumeItemData> _currentEquippedCostumeItemDatas;
-        private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
-
-        private readonly List<UI_Panel_CostumeInventoryItem> _ui_Panel_CostumeInventoryItems = new();
+        private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache;
+        private List<CostumeItemData> _currentCostumeItemData;
         private UI_Panel_CostumeInfo _uiPanelCostumeInfo;
 
-        private static string PoolKey => "CostumeInventoryItemPool";
+        private readonly List<UI_Panel_CostumeInventoryItem> _inventoryItems = new();
 
-        private List<CostumeItemData> _currentCostumeItemData;
+        private static string PoolKey => "CostumeInventoryItemPool";
 
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
@@ -30,52 +28,55 @@ namespace UI.CostumePanels
             _currentCostumeItemData = currentCostumeItemData;
             _uiPanelCostumeInfo = uiPanelCostumeInfo;
 
-            _uiPanelCostumeInfo.RegisterReference(_frontGroundImageCache, currentCostumeItemData);
-
-            ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateCostumeInventoryItem(_costumeInventoryItemPrefab), _itemPrefabInstancePosition);
-
-            // CostumeUpgrade와 연결
-            _uiPanelCostumeInfo.CostumeUpgradePanel.RegisterUpdateActions(_uiPanelCostumeInfo.UpdateUI, UpdateItems);
+            ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateInventoryItem(_costumeInventoryItemPrefab), _itemPrefabInstancePosition);
         }
 
-        private UI_Panel_CostumeInventoryItem InstantiateCostumeInventoryItem(GameObject costumeItemPrefab)
+        private UI_Panel_CostumeInventoryItem InstantiateInventoryItem(GameObject prefab)
         {
-            GameObject obj = Instantiate(costumeItemPrefab, _itemPrefabInstancePosition, true);
+            GameObject obj = Instantiate(prefab, _itemPrefabInstancePosition);
             obj.transform.localScale = Vector3.one;
-            var costumeItem = obj.GetComponent<UI_Panel_CostumeInventoryItem>();
-            costumeItem.RegisterReference(_frontGroundImageCache, _uiPanelCostumeInfo);
-
-            return costumeItem;
+            var item = obj.GetComponent<UI_Panel_CostumeInventoryItem>();
+            item.RegisterReference(_frontGroundImageCache, _uiPanelCostumeInfo);
+            return item;
         }
 
         public void Activate()
         {
-            foreach (CostumeItemData costumeItem in _currentCostumeItemData)
+            foreach (var costumeItem in _currentCostumeItemData)
             {
                 var item = ObjectPoolManager.Instance.GetObject<UI_Panel_CostumeInventoryItem>(PoolKey, null);
-                _ui_Panel_CostumeInventoryItems.Add(item);
+                _inventoryItems.Add(item);
                 item.Activate(costumeItem);
             }
 
             gameObject.SetActive(true);
         }
 
-        private void OnDisable()
-        {
-            foreach (UI_Panel_CostumeInventoryItem uiPanelCostumeItem in _ui_Panel_CostumeInventoryItems)
-            {
-                ObjectPoolManager.Instance.ReturnObject(PoolKey, uiPanelCostumeItem);
-            }
-
-            _ui_Panel_CostumeInventoryItems.Clear();
-        }
-
         public void UpdateItems()
         {
-            for (var i = 0; i < _currentCostumeItemData.Count; i++)
+            foreach (var item in _inventoryItems)
             {
-                _ui_Panel_CostumeInventoryItems[i].Activate(_currentCostumeItemData[i]);
+                ObjectPoolManager.Instance.ReturnObject(PoolKey, item);
             }
+
+            _inventoryItems.Clear();
+
+            foreach (var costumeItem in _currentCostumeItemData)
+            {
+                var item = ObjectPoolManager.Instance.GetObject<UI_Panel_CostumeInventoryItem>(PoolKey, null);
+                _inventoryItems.Add(item);
+                item.Activate(costumeItem);
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var item in _inventoryItems)
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolKey, item);
+            }
+
+            _inventoryItems.Clear();
         }
     }
 }

@@ -25,7 +25,10 @@ namespace UI.CostumePanels
         [SerializeField] private Image costumeOption1Icon;
         [SerializeField] private TextMeshProUGUI costumeOption1Description;
 
-        [Space(20), SerializeField] private Button upgradeButton;
+        [Space(20), SerializeField] private Button upgradeButton_EnoughRedGem;
+        [SerializeField] private TextMeshProUGUI upgradeButton_EnoughRedGemText;
+        [SerializeField] private Button upgradeButton_NotEnoughRedGem;
+        [SerializeField] private TextMeshProUGUI upgradeButton_NotEnoughRedGemText;
 
         private static string PoolKey => "CostumeUpgradeItemPool";
         private readonly List<UI_Panel_CostumeUpgradeItem> _ui_Panel_CostumeUpgradeItems = new();
@@ -39,11 +42,14 @@ namespace UI.CostumePanels
         private int _tempCostumeMaxExp;
         private int _finalExp; // 애니메이션 도중 목표 경험치
         private float _cachedSliderValue;
-        
+
         private const float duration = 0.5f;
-                
+
         private Action<CostumeItemData> _updateCostumeInfoAction;
         private Action _updateCostumeInventoryAction;
+        private Action _updateUICurrentEquippedCostumeInfo;
+        
+        private int _totalMaterialValue; // 선택한 아이템들의 MaterialValues 합산
 
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCachePara,
@@ -54,15 +60,17 @@ namespace UI.CostumePanels
             _frontGroundImageCache = frontGroundImageCachePara;
             _currentCostumeItemData = currentCostumeItemData;
 
-            upgradeButton.onClick.AddListener(OnClickUpgradeButton);
+            upgradeButton_EnoughRedGem.onClick.AddListener(OnClickUpgradeButton);
 
             ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateCostumeUpgradeItem(_costumeUpgradeItemPrefab), _itemPrefabInstancePosition);
         }
-        
-        public void RegisterUpdateActions(Action<CostumeItemData> updateCostumeInfo, Action updateCostumeInventory)
+
+        public void RegisterUpdateActions(Action<CostumeItemData> updateCostumeInfo, Action updateCostumeInventory,
+            Action updateUICurrentEquippedCostumeInfo)
         {
             _updateCostumeInfoAction = updateCostumeInfo;
             _updateCostumeInventoryAction = updateCostumeInventory;
+            _updateUICurrentEquippedCostumeInfo = updateUICurrentEquippedCostumeInfo;
         }
 
         private UI_Panel_CostumeUpgradeItem InstantiateCostumeUpgradeItem(GameObject costumeItemPrefab)
@@ -117,72 +125,104 @@ namespace UI.CostumePanels
             int materialValue = materialItem.MaterialValues[_tempCostumeLevel - 1];
             _finalExp += isAdding ? materialValue : -materialValue;
 
-            // 기존 코루틴 중단 및 슬라이더 값 캐싱
+            // 선택한 아이템들의 합산 값 업데이트
+            _totalMaterialValue += isAdding ? materialValue : -materialValue;
+
+            UpdateUpgradeButtonState();
+
             if (_sliderAnimationCoroutine != null)
             {
                 StopCoroutine(_sliderAnimationCoroutine);
-                _cachedSliderValue = costumeCurrentExp.value; // 현재 슬라이더 값을 캐싱
+                _cachedSliderValue = costumeCurrentExp.value;
             }
             else
             {
-                // 슬라이더 애니메이션이 없는 경우, 캐싱 값을 현재 상태로 초기화
                 _cachedSliderValue = (float)_tempCostumeExp / _tempCostumeMaxExp;
             }
 
-            // 새로운 코루틴 시작
             _sliderAnimationCoroutine = StartCoroutine(AnimateSliderAndLevelChange());
+        }
+
+        private void UpdateUpgradeButtonState()
+        {
+            if (_totalMaterialValue == 0)
+            {
+                // 선택된 아이템이 없는 경우
+                upgradeButton_EnoughRedGem.gameObject.SetActive(false);
+                upgradeButton_NotEnoughRedGem.gameObject.SetActive(false);
+                upgradeButton_EnoughRedGemText.gameObject.SetActive(false);
+                upgradeButton_NotEnoughRedGemText.gameObject.SetActive(false);
+            }
+            else
+            {
+                float requiredGems = _totalMaterialValue * 0.5f;
+                string costText = $"<sprite=4> {Mathf.CeilToInt(requiredGems)}";
+
+                if (CurrencyManager.Instance.RedGem >= requiredGems)
+                {
+                    upgradeButton_EnoughRedGemText.text = costText;
+                    upgradeButton_EnoughRedGem.gameObject.SetActive(true);
+                    upgradeButton_NotEnoughRedGem.gameObject.SetActive(false);
+                }
+                else
+                {
+                    upgradeButton_NotEnoughRedGemText.text = costText;
+                    upgradeButton_EnoughRedGem.gameObject.SetActive(false);
+                    upgradeButton_NotEnoughRedGem.gameObject.SetActive(true);
+                }
+
+                upgradeButton_EnoughRedGemText.gameObject.SetActive(true);
+                upgradeButton_NotEnoughRedGemText.gameObject.SetActive(true);
+            }
         }
 
         private IEnumerator AnimateSliderAndLevelChange()
         {
-            float totalDuration = duration; // 전체 애니메이션 시간
+            float totalDuration = duration;
             while (true)
             {
                 if (_finalExp < 0 && _tempCostumeLevel > 1)
                 {
-                    // 레벨 다운
                     int previousMaxExp = _costumeItemData.MaxExps[_tempCostumeLevel - 2];
                     float firstPhaseDuration = totalDuration * (float)(_tempCostumeExp) / (_tempCostumeMaxExp + _tempCostumeExp);
                     float secondPhaseDuration = totalDuration - firstPhaseDuration;
 
-                    yield return AnimateSlider(_cachedSliderValue, 0f, firstPhaseDuration); // 1단계: 현재 → 0%
+                    yield return AnimateSlider(_cachedSliderValue, 0f, firstPhaseDuration);
                     _tempCostumeLevel--;
                     _tempCostumeMaxExp = previousMaxExp;
 
-                    // UI 즉시 업데이트
                     UpdateLevelText();
                     UpdateCostumeDescriptions();
+                    UpdateUpgradeButtonState();
 
                     _tempCostumeExp = _finalExp + _tempCostumeMaxExp;
                     _finalExp = _tempCostumeExp;
                     _cachedSliderValue = (float)_tempCostumeExp / _tempCostumeMaxExp;
 
-                    yield return AnimateSlider(1f, _cachedSliderValue, secondPhaseDuration); // 2단계: 100% → 남은 값
+                    yield return AnimateSlider(1f, _cachedSliderValue, secondPhaseDuration);
                 }
                 else if (_finalExp >= _tempCostumeMaxExp && _tempCostumeLevel < _costumeItemData.MaxLevel)
                 {
-                    // 레벨 업
                     int overflowExp = _finalExp - _tempCostumeMaxExp;
                     float firstPhaseDuration = totalDuration * (float)(_tempCostumeMaxExp - _tempCostumeExp) / (_tempCostumeMaxExp + overflowExp);
                     float secondPhaseDuration = totalDuration - firstPhaseDuration;
 
-                    yield return AnimateSlider(_cachedSliderValue, 1f, firstPhaseDuration); // 1단계: 현재 → 100%
+                    yield return AnimateSlider(_cachedSliderValue, 1f, firstPhaseDuration);
                     _tempCostumeLevel++;
                     _tempCostumeMaxExp = _costumeItemData.MaxExps[_tempCostumeLevel - 1];
 
-                    // UI 즉시 업데이트
                     UpdateLevelText();
                     UpdateCostumeDescriptions();
+                    UpdateUpgradeButtonState();
 
                     _tempCostumeExp = overflowExp;
                     _finalExp = _tempCostumeExp;
                     _cachedSliderValue = (float)_tempCostumeExp / _tempCostumeMaxExp;
 
-                    yield return AnimateSlider(0f, _cachedSliderValue, secondPhaseDuration); // 2단계: 0% → 남은 값
+                    yield return AnimateSlider(0f, _cachedSliderValue, secondPhaseDuration);
                 }
                 else
                 {
-                    // 일반적인 경우
                     yield return AnimateSlider(_cachedSliderValue, (float)_finalExp / _tempCostumeMaxExp, totalDuration);
                     _tempCostumeExp = _finalExp;
                     _cachedSliderValue = (float)_tempCostumeExp / _tempCostumeMaxExp;
@@ -190,7 +230,6 @@ namespace UI.CostumePanels
                 }
             }
 
-            // 최종 UI 동기화
             UpdateUI();
         }
 
@@ -206,7 +245,7 @@ namespace UI.CostumePanels
                 yield return null;
             }
 
-            costumeCurrentExp.value = endValue; // 최종 값 설정
+            costumeCurrentExp.value = endValue;
         }
 
         private void InitializeTemporaryValues()
@@ -215,8 +254,10 @@ namespace UI.CostumePanels
             _tempCostumeExp = _costumeItemData.CurrentExp;
             _tempCostumeMaxExp = _costumeItemData.MaxExps[_tempCostumeLevel - 1];
             _finalExp = _tempCostumeExp;
-            
+
             costumeCurrentExp.value = (float)_tempCostumeExp / _tempCostumeMaxExp;
+            _totalMaterialValue = 0;
+            UpdateUpgradeButtonState(); // 초기 상태 업데이트
         }
 
         private void UpdateLevelText()
@@ -231,7 +272,8 @@ namespace UI.CostumePanels
 
             UpdateLevelText();
             UpdateCostumeDescriptions();
-            
+            UpdateUpgradeButtonState();
+
             costumeBackground.sprite = _frontGroundImageCache[new Tuple<ECostumeType, ECostumeGrade>(_costumeItemData.CostumeType, _costumeItemData.CostumeGrade)];
             costumeIcon.sprite = _costumeItemData.CostumeSprites[0];
         }
@@ -254,56 +296,36 @@ namespace UI.CostumePanels
             }
         }
 
-        // private void OnClickUpgradeButton()
-        // {
-        //     _costumeItemData.CurrentLevel = _tempCostumeLevel;
-        //     _costumeItemData.CurrentExp = _tempCostumeExp;
-        //
-        //     foreach (UI_Panel_CostumeUpgradeItem selectedItem in _ui_Panel_CostumeUpgradeItems.Where(item => item.IsSelected))
-        //     {
-        //         _currentCostumeItemData.Remove(selectedItem.CostumeItemData);
-        //         ObjectPoolManager.Instance.ReturnObject(PoolKey, selectedItem);
-        //     }
-        //
-        //     ClearUpgradeItems();
-        //     Activate(_costumeItemData);
-        // }
-        
         private void OnClickUpgradeButton()
         {
             var playerCostumeModule = VolatileDataManager.Instance.Player.PlayerCostumeModule;
 
-            // 장착된 장비의 강화 전 스탯 감소 처리
             if (_costumeItemData.IsEquipped)
             {
-                playerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, true); // 스탯 감소
+                playerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, true);
             }
 
-            // 강화 데이터 갱신
             _costumeItemData.CurrentLevel = _tempCostumeLevel;
             _costumeItemData.CurrentExp = _tempCostumeExp;
 
-            // 장착된 장비의 강화 후 스탯 증가 처리
             if (_costumeItemData.IsEquipped)
             {
-                playerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, false); // 스탯 증가
+                playerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, false);
             }
 
-            // 강화 재료 제거
             foreach (var item in _ui_Panel_CostumeUpgradeItems.Where(item => item.IsSelected))
             {
                 _currentCostumeItemData.Remove(item.CostumeItemData);
                 ObjectPoolManager.Instance.ReturnObject(PoolKey, item);
             }
 
-            // UI 업데이트
             _updateCostumeInfoAction?.Invoke(_costumeItemData);
             _updateCostumeInventoryAction?.Invoke();
+            _updateUICurrentEquippedCostumeInfo?.Invoke();
 
             ClearUpgradeItems();
             Activate(_costumeItemData);
         }
-
 
         private void OnDisable()
         {
