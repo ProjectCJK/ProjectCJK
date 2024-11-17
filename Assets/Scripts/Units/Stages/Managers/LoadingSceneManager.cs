@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 namespace Units.Stages.Managers
 {
+    public enum ESceneName
+    {
+        MainScene
+    }
+    
     public class LoadingSceneManager : SingletonMono<LoadingSceneManager>
     {
         [SerializeField] private Slider progressBar;
@@ -14,9 +19,9 @@ namespace Units.Stages.Managers
         
         private const string loadingSceneName = "LoadingScene";
         
-        public void LoadSceneWithLoadingScreen(string sceneName)
+        public void LoadSceneWithLoadingScreen(ESceneName sceneName)
         {
-            targetSceneName = sceneName;
+            targetSceneName = $"{sceneName}";
             SceneManager.LoadScene(loadingSceneName);
 
             StartCoroutine(InitializeAndLoadTargetSceneAsync());
@@ -34,23 +39,27 @@ namespace Units.Stages.Managers
             }
 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetSceneName);
-            asyncLoad.allowSceneActivation = false;
-
-            // 로딩 진행률을 슬라이더에 업데이트
-            while (!asyncLoad.isDone)
+            
+            if (asyncLoad != null)
             {
-                progressBar.value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+                asyncLoad.allowSceneActivation = false;
 
-                if (asyncLoad.progress >= 0.9f)
+                // 로딩 진행률을 슬라이더에 업데이트
+                while (!asyncLoad.isDone)
                 {
-                    // 로딩이 완료되면 약간의 딜레이 후 씬 전환
-                    progressBar.value = 1f;
-                    yield return new WaitForSeconds(0.5f);
-                    asyncLoad.allowSceneActivation = true;
-                }
+                    progressBar.value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
 
-                yield return null;
-            }  
+                    if (asyncLoad.progress >= 0.9f)
+                    {
+                        // 로딩이 완료되면 약간의 딜레이 후 씬 전환
+                        progressBar.value = 1f;
+                        yield return new WaitForSeconds(0.5f);
+                        asyncLoad.allowSceneActivation = true;
+                    }
+
+                    yield return null;
+                }
+            }
 
             SceneManager.UnloadSceneAsync(loadingSceneName);
         }

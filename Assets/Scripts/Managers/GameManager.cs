@@ -6,6 +6,11 @@ namespace Managers
     public interface IGameManager
     {
     }
+    
+    public enum ES3Key
+    {
+        CurrentStage
+    }
 
     public class GameManager : SingletonMono<GameManager>, IGameManager
     {

@@ -131,7 +131,7 @@ namespace Units.Stages.Units.Buildings.Units
                 for (var i = 0;
                      i < _managementDeskPaymentModule.CurrentSpawnedCashierCount -
                      _managementDeskPaymentModule.CashierPaymentDelay.Count;
-                     i++) _managementDeskPaymentModule.CashierPaymentDelay.Add(0);
+                     i++) _managementDeskPaymentModule.CashierPaymentDelay.Add(new CashierPayment());
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                     if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
