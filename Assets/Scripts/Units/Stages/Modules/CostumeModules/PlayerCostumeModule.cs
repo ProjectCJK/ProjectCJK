@@ -30,6 +30,35 @@ namespace Units.Stages.Modules.CostumeModules
 
             EquipCurrentCostume(costumeType, costumeItemData);
         }
+        
+        public void UpdateEquippedCostumeStats(CostumeItemData costumeItemData, bool isRemoving)
+        {
+            List<float> optionValues = costumeItemData.GetCurrentOptionValue();
+
+            for (var i = 0; i < optionValues.Count; i++)
+            {
+                var optionType = costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType;
+
+                if (isRemoving)
+                {
+                    // 기존 옵션 제거
+                    VolatileDataManager.Instance.CostumeEquipmentOption[optionType] -= optionValues[i];
+                }
+                else
+                {
+                    // 새로운 옵션 추가
+                    if (VolatileDataManager.Instance.CostumeEquipmentOption.ContainsKey(optionType))
+                    {
+                        VolatileDataManager.Instance.CostumeEquipmentOption[optionType] += optionValues[i];
+                    }
+                    else
+                    {
+                        VolatileDataManager.Instance.CostumeEquipmentOption[optionType] = optionValues[i];
+                    }
+                }
+            }
+        }
+
 
         private void UnEquipPreviousCostume(ECostumeType costumeType)
         {

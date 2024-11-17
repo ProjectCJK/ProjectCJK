@@ -10,17 +10,17 @@ namespace UI.CostumePanels
     {
         [SerializeField] private GameObject _costumeInventoryItemPrefab;
         [SerializeField] private Transform _itemPrefabInstancePosition;
-        
+
         private Dictionary<ECostumeType, CostumeItemData> _currentEquippedCostumeItemDatas;
         private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
-        
+
         private readonly List<UI_Panel_CostumeInventoryItem> _ui_Panel_CostumeInventoryItems = new();
         private UI_Panel_CostumeInfo _uiPanelCostumeInfo;
-        
+
         private static string PoolKey => "CostumeInventoryItemPool";
-        
+
         private List<CostumeItemData> _currentCostumeItemData;
-        
+
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
             List<CostumeItemData> currentCostumeItemData,
@@ -31,8 +31,11 @@ namespace UI.CostumePanels
             _uiPanelCostumeInfo = uiPanelCostumeInfo;
 
             _uiPanelCostumeInfo.RegisterReference(_frontGroundImageCache, currentCostumeItemData);
-            
+
             ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateCostumeInventoryItem(_costumeInventoryItemPrefab), _itemPrefabInstancePosition);
+
+            // CostumeUpgrade와 연결
+            _uiPanelCostumeInfo.CostumeUpgradePanel.RegisterUpdateActions(_uiPanelCostumeInfo.UpdateUI, UpdateItems);
         }
 
         private UI_Panel_CostumeInventoryItem InstantiateCostumeInventoryItem(GameObject costumeItemPrefab)
@@ -53,7 +56,7 @@ namespace UI.CostumePanels
                 _ui_Panel_CostumeInventoryItems.Add(item);
                 item.Activate(costumeItem);
             }
-            
+
             gameObject.SetActive(true);
         }
 
@@ -63,7 +66,7 @@ namespace UI.CostumePanels
             {
                 ObjectPoolManager.Instance.ReturnObject(PoolKey, uiPanelCostumeItem);
             }
-            
+
             _ui_Panel_CostumeInventoryItems.Clear();
         }
 

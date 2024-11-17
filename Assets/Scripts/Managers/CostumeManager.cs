@@ -125,13 +125,13 @@ namespace Managers
             _costumeBoxData = DataManager.Instance.CostumeBoxData.GetData();
             _costumeParamData = DataManager.Instance.CostumeParamData.GetData();
             _costumeUpgradeData = DataManager.Instance.CostumeUpgradeData.GetData();
-            
+
             CacheCostumes();
             CacheGachaBackgroundSprites();
-            
+
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
             _uiPanelCostume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
-            
+
             UIManager.Instance.Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
             UIManager.Instance.Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
         }
@@ -325,12 +325,23 @@ namespace Managers
         {
             var typeOrder = new List<ECostumeType> { ECostumeType.Weapon, ECostumeType.Hat, ECostumeType.Bag, ECostumeType.Clothes };
     
-            _currentCostumeItemData = _currentCostumeItemData
-                .OrderByDescending(item => item.IsEquipped) // 1. IsEquipped 기준 (true 우선)
-                .ThenByDescending(item => item.CostumeGrade) // 2. CostumeGrade 기준 (Rare 우선)
-                .ThenBy(item => typeOrder.IndexOf(item.CostumeType)) // 3. CostumeType 기준 (지정된 순서대로)
-                .ThenBy(item => item.CostumeName) // 4. CostumeName 기준 (사전 순서)
-                .ToList();
+            _currentCostumeItemData.Sort((a, b) =>
+            {
+                // 1. IsEquipped 기준 (true 우선)
+                var equippedComparison = b.IsEquipped.CompareTo(a.IsEquipped);
+                if (equippedComparison != 0) return equippedComparison;
+
+                // 2. CostumeGrade 기준 (Rare 우선)
+                var gradeComparison = b.CostumeGrade.CompareTo(a.CostumeGrade);
+                if (gradeComparison != 0) return gradeComparison;
+
+                // 3. CostumeType 기준 (지정된 순서대로)
+                var typeComparison = typeOrder.IndexOf(a.CostumeType).CompareTo(typeOrder.IndexOf(b.CostumeType));
+                if (typeComparison != 0) return typeComparison;
+
+                // 4. CostumeName 기준 (사전순)
+                return string.Compare(a.CostumeName, b.CostumeName, StringComparison.Ordinal);
+            });
         }
     }
 }

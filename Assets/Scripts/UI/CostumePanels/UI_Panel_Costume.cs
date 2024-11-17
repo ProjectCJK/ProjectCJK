@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Managers;
-using Units.Stages.Units.Creatures.Units;
 using UnityEngine;
 
 namespace UI.CostumePanels
@@ -11,14 +10,14 @@ namespace UI.CostumePanels
         [SerializeField] private UI_Panel_CurrentEquippedCostumeInfo uiPanelCurrentEquippedCostumeInfo;
         [SerializeField] private UI_Panel_CostumeInventory uiPanelCostumeInventory;
         [SerializeField] private UI_Panel_CostumeInfo uiPanelCostumeInfo;
-        
+
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
             List<CostumeItemData> currentCostumeItemData)
         {
             uiPanelCostumeInventory.RegisterReference(frontGroundImageCache, currentCostumeItemData, uiPanelCostumeInfo);
         }
-        
+
         public void Activate()
         {
             uiPanelCurrentEquippedCostumeInfo.Activate();
