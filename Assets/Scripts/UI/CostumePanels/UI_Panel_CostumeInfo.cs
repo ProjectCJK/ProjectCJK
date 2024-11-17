@@ -30,6 +30,7 @@ namespace UI.CostumePanels
         private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache;
         private CostumeItemData _costumeItemData;
         private UI_Panel_CostumeInventory _uiPanelCostumeInventory;
+        private UI_Panel_CurrentEquippedCostumeInfo _uiPanelCurrentEquippedCostumeInfo;
 
         public void RegisterReference(Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
             List<CostumeItemData> currentCostumeItemData,
@@ -38,6 +39,7 @@ namespace UI.CostumePanels
         {
             _frontGroundImageCache = frontGroundImageCache;
             _uiPanelCostumeInventory = uiPanelCostumeInventory;
+            _uiPanelCurrentEquippedCostumeInfo = uiPanelCurrentEquippedCostumeInfo;
 
             uiPanelCostumeUpgrade.RegisterReference(frontGroundImageCache, currentCostumeItemData);
             uiPanelCostumeUpgrade.RegisterUpdateActions(UpdateUI, _uiPanelCostumeInventory.UpdateItems, uiPanelCurrentEquippedCostumeInfo.Activate);
@@ -78,13 +80,13 @@ namespace UI.CostumePanels
 
             if (costumeItemData.IsEquipped)
             {
-                equipButton.gameObject.SetActive(true);
-                equipButtonNone.gameObject.SetActive(false);
+                equipButton.gameObject.SetActive(false);
+                equipButtonNone.gameObject.SetActive(true);
             }
             else
             {
-                equipButton.gameObject.SetActive(false);
-                equipButtonNone.gameObject.SetActive(true);
+                equipButton.gameObject.SetActive(true);
+                equipButtonNone.gameObject.SetActive(false);
             }
         }
 
@@ -115,7 +117,9 @@ namespace UI.CostumePanels
 
             // 인벤토리와 UI 업데이트
             _uiPanelCostumeInventory.UpdateItems();
+            _uiPanelCurrentEquippedCostumeInfo.Activate();
             CostumeManager.Instance.SortCostumeItems();
+            gameObject.SetActive(false);
         }
     }
 }
