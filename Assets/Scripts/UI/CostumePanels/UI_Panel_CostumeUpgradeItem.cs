@@ -8,32 +8,46 @@ using UnityEngine.UI;
 
 namespace UI.CostumePanels
 {
-    public class UI_Panel_CostumeItem : MonoBehaviour, IPoolable
+    public class UI_Panel_CostumeUpgradeItem : MonoBehaviour, IPoolable
     {
         [SerializeField] private Image costumeBackground;
         [SerializeField] private Image costumeIcon;
         [SerializeField] private TextMeshProUGUI costumeLevel;
-        [SerializeField] private Image equipmentEffect;
+        [SerializeField] private Image selectEffect;
         
         private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache;
-        private UI_Panel_Popup _uiPanelPopup;
+        private CostumeItemData _costumeItemData;
         
-        public void RegisterReference(
-            Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
-            UI_Panel_Popup uiPanelPopup)
+        private bool isSelected;
+        
+        public void RegisterReference(Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache)
         {
             _frontGroundImageCache = frontGroundImageCache;
-            _uiPanelPopup = uiPanelPopup;
-
-            GetComponent<Button>().onClick.AddListener(OnClickItem);
         }
         
-        public void Initialize(CostumeItemData costumeItem)
+        public void Activate(CostumeItemData costumeItem, Action<CostumeItemData> OnClick)
         {
-            equipmentEffect.gameObject.SetActive(costumeItem.IsEquipped);
-
+            isSelected = false;
+            
+            _costumeItemData = costumeItem;
+            
             costumeIcon.sprite = costumeItem.CostumeSprites[0];
             costumeBackground.sprite = _frontGroundImageCache[new Tuple<ECostumeType, ECostumeGrade>(costumeItem.CostumeType, costumeItem.CostumeGrade)];
+            costumeLevel.text = $"Lv.{costumeItem.CurrentLevel}";
+            
+            GetComponent<Button>().onClick.RemoveAllListeners();
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                isSelected = !isSelected;
+                
+                UpdateUI();
+                OnClick?.Invoke(costumeItem);
+            });
+        }
+
+        private void UpdateUI()
+        {
+            selectEffect.gameObject.SetActive(isSelected);
         }
         
         public void Create()
@@ -49,12 +63,6 @@ namespace UI.CostumePanels
         public void ReturnToPool()
         {
             gameObject.SetActive(false);
-        }
-
-        private void OnClickItem()
-        {
-            _uiPanelPopup.RegisterReference();
-            _uiPanelPopup.gameObject.SetActive(true);
         }
     }
 }

@@ -81,7 +81,6 @@ namespace UI.CostumeGachaPanels
                     }
                     else if ((currentIndex == maxIndex + 1 || isSkipped) && costumeBoxController.IsEndedResultAnimation)
                     {
-                        _gachaCostumeItemDatas.Clear();
                         gameObject.SetActive(false);
                     }
 

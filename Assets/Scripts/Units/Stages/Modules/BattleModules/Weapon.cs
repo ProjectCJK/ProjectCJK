@@ -22,6 +22,8 @@ namespace Units.Stages.Modules.BattleModules
     {
         private static readonly int Disable = Animator.StringToHash("Disable");
 
+        public SpriteRenderer WeaponSprite;
+
         [SerializeField] private AttackTrigger _attackTrigger;
         [SerializeField] private LayerMask _targetLayerMask;
         [SerializeField] private List<EBattleTag> _targetTags;

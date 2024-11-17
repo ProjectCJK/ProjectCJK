@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ScriptableObjects.Scripts.Creatures.Units
 {
     [Serializable]
-    public struct CreatureSprite
+    public class CreatureSprite
     {
         public List<Sprite> Body;
         public List<Sprite> Bag;

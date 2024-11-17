@@ -6,11 +6,13 @@ using Units.Stages.Modules;
 using Units.Stages.Modules.BattleModules;
 using Units.Stages.Modules.BattleModules.Units;
 using Units.Stages.Modules.CollisionModules.Units;
+using Units.Stages.Modules.CostumeModules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units;
 using Units.Stages.Modules.MovementModules.Units;
+using Units.Stages.Modules.SpriteModules;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
@@ -21,8 +23,7 @@ using UnityEngine;
 
 namespace Units.Stages.Units.Creatures.Units
 {
-    public interface IPlayer : ICreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>,
-        IInitializable<Vector3, Action>
+    public interface IPlayer : ICreature, IRegisterReference<PlayerDataSO, Joystick, IItemFactory>, IInitializable<Vector3, Action>
     {
         public IItemReceiver PlayerInventoryModule { get; }
         public float PaymentDelay { get; }
@@ -30,8 +31,6 @@ namespace Units.Stages.Units.Creatures.Units
 
     public class Player : Creature, IPlayer
     {
-        // private event Action OnReturnPlayer;
-
         [SerializeField] private Weapon _weapon;
 
         private CreatureStateMachine _creatureStateMachine;
@@ -42,12 +41,53 @@ namespace Units.Stages.Units.Creatures.Units
 
         private PlayerDataSO _playerDataSo;
 
+        public PlayerCostumeModule PlayerCostumeModule;
+        public PlayerStatsModule PlayerStatsModule;
         private IPlayerInventoryModule _playerInventoryModule;
         private IPlayerMovementModule _playerMovementModule;
-        private IPlayerStatsModule _playerStatsModule;
         public override Animator Animator { get; protected set; }
         public ICreatureItemReceiver CreatureItemReceiver => _playerInventoryModule;
 
+        public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemFactory itemFactory)
+        {
+            Animator = spriteTransform.GetComponent<Animator>();
+            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
+            var creatureSpriteModule = spriteTransform.GetComponent<CreatureSpriteModule>();
+
+            _playerDataSo = playerDataSo;
+            _itemFactory = itemFactory;
+
+            _creatureStateMachine = new CreatureStateMachine(this);
+            PlayerCostumeModule = new PlayerCostumeModule(creatureSpriteModule, _weapon);
+            PlayerStatsModule = new PlayerStatsModule(_playerDataSo);
+            _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
+            _playerInventoryModule = new PlayerInventoryModule(receiveTransform, receiveTransform, PlayerStatsModule, _itemFactory, CreatureType);
+            _playerMovementModule = new PlayerMovementModule(this, PlayerStatsModule, _creatureStateMachine, joystick, spriteTransform);
+            _playerCollisionModule = new PlayerCollisionModule(PlayerStatsModule);
+
+            _damageFlashModule.RegisterReference();
+            _weapon.RegisterReference(PlayerStatsModule);
+
+            _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
+            _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
+            _playerCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
+            _weapon.AttackTrigger.OnHitSuccessful += _playerMovementModule.HandleOnHit;
+        }
+
+        public void Initialize(Vector3 position, Action action)
+        {
+            // OnReturnPlayer = action;
+
+            _playerMovementModule.Initialize();
+            _playerInventoryModule.Initialize();
+            _playerBattleModule.Initialize();
+
+            _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
+
+            transform.position = position;
+            transform.gameObject.SetActive(true);
+        }
+        
         private void Update()
         {
 #if UNITY_EDITOR
@@ -91,50 +131,10 @@ namespace Units.Stages.Units.Creatures.Units
         }
 
         public IItemReceiver PlayerInventoryModule => _playerInventoryModule;
-        public float PaymentDelay => _playerStatsModule.PaymentDelay;
+        public float PaymentDelay => PlayerStatsModule.PaymentDelay;
 
-        public override ECreatureType CreatureType => _playerStatsModule.CreatureType;
+        public override ECreatureType CreatureType => PlayerStatsModule.CreatureType;
         public override Transform Transform => transform;
-
-        public void RegisterReference(PlayerDataSO playerDataSo, Joystick joystick, IItemFactory itemFactory)
-        {
-            Animator = spriteTransform.GetComponent<Animator>();
-            _damageFlashModule = spriteTransform.GetComponent<DamageFlashModule>();
-
-            _playerDataSo = playerDataSo;
-            _itemFactory = itemFactory;
-
-            _creatureStateMachine = new CreatureStateMachine(this);
-            _playerStatsModule = new PlayerStatsModule(_playerDataSo);
-            _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
-            _playerInventoryModule =
-                new PlayerInventoryModule(receiveTransform, receiveTransform, _playerStatsModule, _itemFactory, CreatureType);
-            _playerMovementModule = new PlayerMovementModule(this, _playerStatsModule, _creatureStateMachine, joystick,
-                spriteTransform);
-            _playerCollisionModule = new PlayerCollisionModule(_playerStatsModule);
-
-            _damageFlashModule.RegisterReference();
-            _weapon.RegisterReference(_playerStatsModule);
-
-            _playerCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
-            _playerCollisionModule.OnTriggerHuntingZone += HandleOnTriggerHuntingZone;
-            _playerCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
-            _weapon.AttackTrigger.OnHitSuccessful += _playerMovementModule.HandleOnHit;
-        }
-
-        public void Initialize(Vector3 position, Action action)
-        {
-            // OnReturnPlayer = action;
-
-            _playerMovementModule.Initialize();
-            _playerInventoryModule.Initialize();
-            _playerBattleModule.Initialize();
-
-            _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
-
-            transform.position = position;
-            transform.gameObject.SetActive(true);
-        }
 
         private void HandleOnTriggerTradeZone(ITradeZone zone, bool value)
         {

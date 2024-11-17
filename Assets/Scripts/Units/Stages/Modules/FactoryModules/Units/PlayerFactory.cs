@@ -44,6 +44,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
             GameObject obj = Object.Instantiate(PlayerDataSo.prefab);
 
             _player = obj.GetComponent<IPlayer>();
+            VolatileDataManager.Instance.Player = _player as Player;;
             _player.Transform.gameObject.SetActive(false);
             _player?.RegisterReference(PlayerDataSo, _joystick, _itemFactory);
         }
