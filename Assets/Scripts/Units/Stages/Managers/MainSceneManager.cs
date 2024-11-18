@@ -9,6 +9,7 @@ using UI.CurrencyPanel;
 using UI.QuestPanels;
 using Units.Stages.Controllers;
 using Units.Stages.UI;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Managers
@@ -111,24 +112,24 @@ namespace Units.Stages.Managers
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                CurrencyManager.Instance.AddDiamond(100);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.Diamond, 100);
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                CurrencyManager.Instance.AddRedGem(100);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.RedGem, 100);
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                CurrencyManager.Instance.AddGold(100);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.Gold, 100);
             }
                   
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                CurrencyManager.Instance.AddGold(10000);
-                CurrencyManager.Instance.AddDiamond(10000);
-                CurrencyManager.Instance.AddRedGem(10000);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.Gold, 10000);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.Diamond, 10000);
+                CurrencyManager.Instance.AddCurrency(ECurrencyType.RedGem, 10000);
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha5))

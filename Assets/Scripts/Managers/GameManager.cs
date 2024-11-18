@@ -7,13 +7,18 @@ namespace Managers
     public enum EES3Key
     {
         CurrentStage,
-        BuildingActiveStatuses
+        BuildingActiveStatuses,
+        Gold,
+        RedGem,
+        Diamond
     }
 
     public class GameManager : SingletonMono<GameManager>
     {
         [SerializeField] private GameObject _mainCamera;
-        
+        private float _saveInterval = 30f; // 30초마다 저장
+        private float _saveTimer;
+
         public bool InGameTrigger { get; set; }
         
         protected override void Awake()
@@ -33,9 +38,6 @@ namespace Managers
             ES3.CacheFile();
             ES3.settings = new ES3Settings(ES3.Location.Cache);
             
-            // ES3.Save("temp", "talskdaskdj", ES3.settings);
-            // ES3.StoreCachedFile();
-            
             InGameTrigger = false;
         }
 
@@ -43,5 +45,59 @@ namespace Managers
         {
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
+
+        private void Update()
+        {
+            // 30초마다 데이터를 저장
+            _saveTimer += Time.deltaTime;
+            if (_saveTimer >= _saveInterval)
+            {
+                SaveData();
+                _saveTimer = 0f;
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            Debug.Log($"OnApplicationPause called. Pause status: {pauseStatus}");
+            if (pauseStatus) // 앱이 백그라운드로 이동할 때만 저장
+            {
+                SaveData();
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            Debug.Log("OnApplicationQuit called.");
+            SaveData();
+        }
+
+        private void SaveData()
+        {
+            // 데이터 저장 로직
+            Debug.Log("Data saved.");
+            ES3.StoreCachedFile(); // ES3 데이터 저장
+        }
+
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange state)
+        {
+            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            {
+                Debug.Log("Exiting Play Mode - Saving data in editor.");
+                SaveData(); // 에디터에서 플레이 모드 종료 시 데이터 저장
+            }
+        }
+#endif
     }
 }

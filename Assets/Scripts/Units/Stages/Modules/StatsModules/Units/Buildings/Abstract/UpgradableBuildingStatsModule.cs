@@ -9,6 +9,7 @@ using TMPro;
 using UI.BuildingEnhancementPanel.UI;
 using Units.Stages.Modules.StatsModules.Abstract;
 using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
 namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
@@ -234,7 +235,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         {
             if (RequiredGoldToUpgradeBuildingOption1 <= CurrencyManager.Instance.Gold)
             {
-                CurrencyManager.Instance.RemoveGold(RequiredGoldToUpgradeBuildingOption1);
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, RequiredGoldToUpgradeBuildingOption1);
                 IncreaseCurrentBuildingOption1Level();
             }
         }
@@ -243,7 +244,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         {
             if (RequiredGoldToUpgradeBuildingOption2 <= CurrencyManager.Instance.Gold)
             {
-                CurrencyManager.Instance.RemoveGold(RequiredGoldToUpgradeBuildingOption2);
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, RequiredGoldToUpgradeBuildingOption2);
                 IncreaseCurrentBuildingOption2Level();
             }
         }

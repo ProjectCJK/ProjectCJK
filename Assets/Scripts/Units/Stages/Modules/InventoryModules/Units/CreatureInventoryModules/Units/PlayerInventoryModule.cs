@@ -52,7 +52,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
                 {
                     case ECurrencyType.Money:
                         QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Get, inputItemKey, item.Count);
-                        CurrencyManager.Instance.AddGold(item.Count);
+                        CurrencyManager.Instance.AddCurrency(ECurrencyType.Gold, item.Count);
                         break;
                 }
             }

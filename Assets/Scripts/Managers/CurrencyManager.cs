@@ -54,12 +54,14 @@ namespace Managers
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
             _uiPanelCurrency.BindViewModel(_currencyViewModel);
+
+            _gold = ES3.KeyExists($"{EES3Key.Gold}") ? ES3.Load<int>($"{EES3Key.Gold}") : 10000;
+            _diamond = ES3.KeyExists($"{EES3Key.Diamond}") ? ES3.Load<int>($"{EES3Key.Diamond}") : 0;
+            _redGem = ES3.KeyExists($"{EES3Key.RedGem}") ? ES3.Load<int>($"{EES3Key.RedGem}") : 0;
         }
         
         public void Initialize()
         {
-            _gold = 100000;
-            
             _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
 
@@ -101,32 +103,32 @@ namespace Managers
             }
         }
 
-        public void AddGold(int value)
+        private void AddGold(int value)
         {
             Gold += value;
         }
 
-        public void RemoveGold(int value)
+        private void RemoveGold(int value)
         {
             Gold -= value;
         }
         
-        public void AddRedGem(int value)
+        private void AddRedGem(int value)
         {
             RedGem += value;
         }
         
-        public void RemoveRedGem(int value)
+        private void RemoveRedGem(int value)
         {
             RedGem -= value;
         }
         
-        public void AddDiamond(int value)
+        private void AddDiamond(int value)
         {
             Diamond += value;
         }
                 
-        public void RemoveDiamond(int value)
+        private void RemoveDiamond(int value)
         {
             Diamond -= value;
         }

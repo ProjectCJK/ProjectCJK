@@ -69,7 +69,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
 
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, targetMoney, SenderTransform.position);
 
-                        CurrencyManager.Instance.RemoveGold(targetMoney);
+                        CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, targetMoney);
                     }
                 }
             }
