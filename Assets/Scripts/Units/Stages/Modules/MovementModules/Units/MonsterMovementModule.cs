@@ -1,6 +1,7 @@
 using System.Collections;
 using Interfaces;
 using Managers;
+using Units.Stages.Managers;
 using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.MovementModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
@@ -72,6 +73,8 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void Update()
         {
+            if (!MainSceneManager.Instance.Initialized) return;
+            
             if (hitTrigger)
             {
                 hitTrigger = false;

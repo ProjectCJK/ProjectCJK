@@ -12,10 +12,18 @@ namespace Managers
 
     public class GameManager : SingletonMono<GameManager>
     {
-        public bool InGameTrigger;
+        [SerializeField] private GameObject _mainCamera;
+        
+        public bool InGameTrigger { get; set; }
         
         protected override void Awake()
         {
+            if (_mainCamera != null)
+            {
+                GameObject cam = Instantiate(_mainCamera);
+                DontDestroyOnLoad(cam);
+            }
+            
             // 프레임 고정
             Application.targetFrameRate = 60;
             // VSync 비활성화

@@ -220,12 +220,12 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
                 OnClickUpgradeButtonForBuildingOption2 = OnClickUpgradeButtonForBuildingOption2
             };
     
-            MainSceneUIManager.Instance.UI_Panel_BuildingEnhancement.Activate(uiBuildingEnhancementData);
+            UIManager.Instance.UI_Panel_BuildingEnhancement.Activate(uiBuildingEnhancementData);
         }
 
         public void ReturnUIBuildingEnhancement()
         {
-            MainSceneUIManager.Instance.UI_Panel_BuildingEnhancement.Inactivate();
+            UIManager.Instance.UI_Panel_BuildingEnhancement.Inactivate();
         }
 
         protected abstract void UpdateValue();

@@ -175,6 +175,7 @@ MonoBehaviour:
     HuntingZoneSpawners:
     - {fileID: 3121102612073639220}
     - {fileID: 4142494014169057933}
+    - {fileID: 4220081994370663406}
 --- !u!1 &2465994031231754761
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +542,7 @@ Transform:
   - {fileID: 8051165114350914590}
   - {fileID: 8017298701463625805}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &3134688737096638988
 Grid:
@@ -617,7 +618,7 @@ MonoBehaviour:
     - GameObject: {fileID: 76930816036644391}
       InitialActiveStatus: 2
       RequiredGoldCountForUnlock: 4500
-    - GameObject: {fileID: 0}
+    - GameObject: {fileID: 6461197981061510047}
       InitialActiveStatus: 2
       RequiredGoldCountForUnlock: 13500
     - GameObject: {fileID: 6742650348813395910}
