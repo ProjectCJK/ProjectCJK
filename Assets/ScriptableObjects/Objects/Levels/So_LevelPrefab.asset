@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a02f2a7cc3481899838bd76e97cf15, type: 3}
+  m_Name: So_LevelPrefab
+  m_EditorClassIdentifier: 
+  Kitchen:
+  - {fileID: 290466370950747261, guid: 7447c0e6877c34e0fac3ad4bd6bed473, type: 3}
+  - {fileID: 2733312411462221776, guid: 8a0a6de17ca1f4f9eb3a7d467b05f40e, type: 3}
+  - {fileID: 2327368830247422890, guid: b6f70064ede0f4a9da839b614962532f, type: 3}
+  - {fileID: 8551076191316513208, guid: 3b1d53ce42d4b4b4a9793d8bc45e6cc5, type: 3}
+  Stand:
+  - {fileID: 5394632198990801485, guid: 0f33b93ce0e7d4b79b80c729184762b0, type: 3}
+  - {fileID: 6857839417004270998, guid: 1dd571acf612f4493a7fe9eaec8e84cf, type: 3}
+  - {fileID: 6133593825421429424, guid: 4af9ed88971274b779be30075dc160a5, type: 3}
+  - {fileID: 1285514420063647142, guid: 421270cd3461f5c49af747c683f9f339, type: 3}
+  ManagementDesk: {fileID: 9182398534575797795, guid: 6a8048753d5c24c0899c2e675dc73847, type: 3}
+  DeliveryLodging: {fileID: 4302940738659222758, guid: 58a50ee0926ce425cb3913ad8bbbd441, type: 3}
+  WareHouse: {fileID: 2707792022543788432, guid: 2e03047439dcb43f9ac160edc9d8b235, type: 3}
+  PlayerSpawner: {fileID: 8769885672753804970, guid: ae5e1c6fed9e74ec092f05779110537a, type: 3}
+  GuestSpawner: {fileID: 2467739441455631197, guid: 74ecefbe2c68e49e8ad32ecc235af115, type: 3}
+  Levels:
+  - Village: {fileID: 1678204023138983144, guid: 0fac656b809894185aa6c8c5622351df, type: 3}
+    HuntingZones:
+    - {fileID: 3700934624018088582, guid: 3107bcd5276ef4c88a50d65af73a9366, type: 3}
+    - {fileID: 1224479624917914615, guid: 6d525c732cfdb48cb8df6d3fe5988283, type: 3}
+  - Village: {fileID: 1678204023138983144, guid: 251d41874f0674e818af90ef276ec7d9, type: 3}
+    HuntingZones:
+    - {fileID: 6141885243971045696, guid: f93a69da183c0f246ba900b5741f0523, type: 3}
+    - {fileID: 3687341536239121690, guid: 8c3688b875a810748ad21bc93bb3049d, type: 3}
+    - {fileID: 3491249487539546007, guid: e1bd35c13ffc62d4ea270483426ebeb8, type: 3}

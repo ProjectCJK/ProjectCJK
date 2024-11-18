@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace Managers
 {
-    public interface IGameManager
-    {
-    }
-    
     public enum ES3Key
     {
         CurrentStage
     }
 
-    public class GameManager : SingletonMono<GameManager>, IGameManager
+    public class GameManager : SingletonMono<GameManager>
     {
         public bool InGameTrigger;
         
@@ -34,9 +30,12 @@ namespace Managers
             InGameTrigger = false;
         }
 
-        private void Start()
+        private void Update()
         {
-            LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                LoadingSceneManager.Instance.LoadSceneWithLoadingScreen("MainScene");  
+            }
         }
     }
 }
