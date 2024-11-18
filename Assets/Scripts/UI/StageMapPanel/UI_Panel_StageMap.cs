@@ -16,14 +16,15 @@ namespace UI.StageMapPanel
         {
             for (var i = 0; i < buttons.Count; i++)
             {
+                var capturedIndex = i; // 로컬 변수에 i 값 복사
                 buttons[i].onClick.RemoveAllListeners();
-                buttons[i].onClick.AddListener(() => ChangeStage(i + 1));
+                buttons[i].onClick.AddListener(() => ChangeStage(capturedIndex));
             }
         }
 
         private void ChangeStage(int index)
         {
-            ES3.Save($"{ES3Key.CurrentStage}", index);
+            ES3.Save($"{EES3Key.CurrentStage}", index);
             
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }

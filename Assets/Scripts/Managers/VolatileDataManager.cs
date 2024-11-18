@@ -24,13 +24,17 @@ namespace Managers
         public readonly Dictionary<string, int> ItemPrices = new();
         public readonly Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
         public readonly Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
-        public readonly Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
+        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
         public readonly Dictionary<HuntingZone, EActiveStatus> HuntingZoneActiveStatuses = new();
         public readonly HashSet<EMaterialType> CurrentActiveMaterials = new();
         public readonly Dictionary<ECostumeOptionType, float> CostumeEquipmentOption = new();
         public readonly Dictionary<ECostumeType, CostumeItemData> EquippedCostumes = new();
 
-        public void RegisterReference() { }
+        public void RegisterReference()
+        {
+            // BuildingActiveStatuses = (Dictionary<BuildingZone, EActiveStatus>) ES3.Load($"{EES3Key.BuildingActiveStatuses}");
+            // ES3.Save($"{EES3Key.BuildingActiveStatuses}", BuildingActiveStatuses);
+        }
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
         {

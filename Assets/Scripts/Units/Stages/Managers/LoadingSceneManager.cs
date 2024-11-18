@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
+using Managers;
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Modules;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,11 +16,18 @@ namespace Units.Stages.Managers
 
     public class LoadingSceneManager : SingletonMono<LoadingSceneManager>
     {
-        private Slider progressBar;
+        [SerializeField] private Canvas _rootCanvasPrefab;
+        [SerializeField] private List<LoadingModule> _loadingPrefabs;
+        [SerializeField] private GameObject _splashPrefabs;
+
         private string targetSceneName;
         private bool isLoading;
+        private Slider progressBar;
+        private Canvas _rootCanvas;
 
         private const string loadingSceneName = "LoadingScene";
+
+        private readonly List<Coroutine> activeCoroutines = new(); // 모든 실행 중인 코루틴을 저장
 
         public void LoadSceneWithLoadingScreen(ESceneName sceneName)
         {
@@ -27,31 +37,78 @@ namespace Units.Stages.Managers
             targetSceneName = $"{sceneName}";
             SceneManager.LoadScene(loadingSceneName);
 
-            StartCoroutine(InitializeAndLoadTargetSceneAsync());
+            StartManagedCoroutine(InitializeLoadingScene());
         }
 
-        public void LoadSceneWithLoadingScreen(string sceneName)
+        private void StartManagedCoroutine(IEnumerator coroutine)
         {
-            if (isLoading) return; // 이미 로드 중이면 무시
+            // 실행 중인 모든 코루틴 종료
+            StopAllManagedCoroutines();
 
-            isLoading = true;
-            targetSceneName = sceneName;
-            SceneManager.LoadScene(loadingSceneName);
+            // 새 코루틴 실행 및 관리
+            Coroutine newCoroutine = StartCoroutine(coroutine); // StartCoroutine의 반환값을 저장
+            activeCoroutines.Add(newCoroutine); // 리스트에 추가
+        }
 
-            StartCoroutine(InitializeAndLoadTargetSceneAsync());
+        private void StopAllManagedCoroutines()
+        {
+            foreach (Coroutine coroutine in activeCoroutines)
+            {
+                StopCoroutine(coroutine); // 실행 중인 모든 코루틴 정지
+            }
+
+            activeCoroutines.Clear(); // 리스트 초기화
+            Debug.Log("All active coroutines have been stopped.");
+        }
+
+        private IEnumerator InitializeLoadingScene()
+        {
+            // 로딩 씬이 로드될 때까지 대기
+            yield return new WaitUntil(() => SceneManager.GetActiveScene().name == loadingSceneName);
+
+            Debug.Log("LoadingScene is active.");
+
+            _rootCanvas = Instantiate(_rootCanvasPrefab, Vector3.zero, Quaternion.identity);
+            
+            // GameManager 상태에 따라 Prefab 생성
+            if (!GameManager.Instance.InGameTrigger)
+            {
+                GameManager.Instance.InGameTrigger = true;
+                Debug.Log("Creating splash and loading UI (InGameTrigger: false).");
+
+                // Splash Prefab 생성
+                Instantiate(_splashPrefabs, Vector3.zero, Quaternion.identity);
+
+                // Loading Prefab 0 생성
+                var loadingModule = Instantiate(_loadingPrefabs[0], _rootCanvas.transform);
+                progressBar = loadingModule.Slider; // Slider 연결
+            }
+            else
+            {
+                Debug.Log("Creating loading UI (InGameTrigger: true).");
+
+                // Loading Prefab 1 생성
+                var loadingModule = Instantiate(_loadingPrefabs[1], _rootCanvas.transform);
+                progressBar = loadingModule.Slider; // Slider 연결
+            }
+
+            // progressBar가 설정되지 않았다면 에러 출력 후 종료
+            if (progressBar == null)
+            {
+                Debug.LogError("Progress bar could not be assigned from the loading UI.");
+                isLoading = false; // 로딩 상태 초기화
+                yield break;
+            }
+
+            Debug.Log("ProgressBar successfully assigned. Starting target scene loading.");
+
+            // 비동기 로딩 실행
+            StartManagedCoroutine(InitializeAndLoadTargetSceneAsync());
         }
 
         private IEnumerator InitializeAndLoadTargetSceneAsync()
         {
-            // ProgressBar 찾기 시도
-            yield return StartCoroutine(FindProgressBar());
-
-            if (progressBar == null)
-            {
-                Debug.LogError("Progress bar not found in LoadingScene.");
-                isLoading = false; // 로딩 상태 초기화
-                yield break;
-            }
+            Debug.Log("Starting InitializeAndLoadTargetSceneAsync...");
 
             // 비동기 로드 시작
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetSceneName);
@@ -64,14 +121,11 @@ namespace Units.Stages.Managers
                 // 로딩 진행률 업데이트
                 while (!asyncLoad.isDone)
                 {
-                    // 목표 진행률 계산
                     var targetProgress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
 
-                    // 현재 진행률을 목표 진행률에 보간
                     currentProgress = Mathf.Lerp(currentProgress, targetProgress, Time.deltaTime * 5f);
                     progressBar.value = currentProgress;
 
-                    // 로딩 완료 시 처리
                     if (asyncLoad.progress >= 0.9f && Mathf.Abs(currentProgress - 1f) < 0.01f)
                     {
                         progressBar.value = 1f;
@@ -85,14 +139,12 @@ namespace Units.Stages.Managers
 
             // 로딩 씬 상태 확인
             Scene loadingScene = SceneManager.GetSceneByName(loadingSceneName);
-            
             if (loadingScene.IsValid() && loadingScene.isLoaded)
             {
-                // 로딩 씬 언로드
                 AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(loadingSceneName);
                 while (unloadOperation is { isDone: false })
                 {
-                    yield return null; // 언로드 완료 대기
+                    yield return null;
                 }
             }
             else
@@ -100,21 +152,9 @@ namespace Units.Stages.Managers
                 Debug.LogWarning($"Scene '{loadingSceneName}' is not valid or already unloaded.");
             }
 
-            isLoading = false; // 로딩 상태 초기화
-        }
-
-        private IEnumerator FindProgressBar()
-        {
             progressBar = null;
-            while (progressBar == null)
-            {
-                progressBar = FindObjectOfType<Slider>();
-                if (progressBar == null)
-                {
-                    Debug.Log("Waiting for progress bar to be initialized...");
-                    yield return null; // 다음 프레임까지 대기
-                }
-            }
+            isLoading = false; // 로딩 상태 초기화
+            Debug.Log("Scene loading completed.");
         }
     }
 }
