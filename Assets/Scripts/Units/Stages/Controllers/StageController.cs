@@ -193,7 +193,7 @@ namespace Units.Stages.Controllers
 
                 BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
                 targetBuilding.HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter.Birth);
-                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;
+                VolatileDataManager.Instance.SetBuildingActiveStatuses(targetBuilding, activeStatus);
             }
             else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
             {
@@ -221,7 +221,7 @@ namespace Units.Stages.Controllers
 
                     if (targetChild != null && _buildingController.Buildings.ContainsKey(activeStatusModule.TargetKey))
                     {
-                        VolatileDataManager.Instance.BuildingActiveStatuses[_buildingController.Buildings[activeStatusModule.TargetKey]] = EActiveStatus.Standby;
+                        VolatileDataManager.Instance.SetBuildingActiveStatuses(_buildingController.Buildings[activeStatusModule.TargetKey], EActiveStatus.Standby);
                     }
 
                     activeStatusModule.SetCurrentState(EActiveStatus.Standby);
@@ -234,7 +234,8 @@ namespace Units.Stages.Controllers
             if (_buildingController.Buildings.ContainsKey(targetKey))
             {
                 BuildingZone targetBuilding = _buildingController.Buildings[targetKey];
-                VolatileDataManager.Instance.BuildingActiveStatuses[targetBuilding] = activeStatus;
+                
+                VolatileDataManager.Instance.SetBuildingActiveStatuses(targetBuilding, activeStatus);
 
                 if (activeStatus == EActiveStatus.Active)
                 {

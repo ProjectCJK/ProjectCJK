@@ -101,24 +101,24 @@ namespace Units.Stages.Controllers
             var key = building.BuildingKey;
             Buildings.TryAdd(key, building);
 
-            if (building is UnlockableBuildingZone unlockableBuildingZone)
-            {
-                VolatileDataManager.Instance.BuildingActiveStatuses.TryAdd(building, unlockableBuildingZone.ActiveStatus);
-
-                if (unlockableBuildingZone.ActiveStatus == EActiveStatus.Active)
-                {
-                    var splits = building.BuildingKey.Split('_');
-
-                    if (Enum.TryParse(splits[0], out EBuildingType buildingType) && splits.Length > 1)
-                    {
-                        if (Enum.TryParse(splits[1], out EMaterialType materialType) && buildingType == EBuildingType.Stand)
-                        {
-                            if (!_currentActiveMaterials.Contains(materialType))
-                                _currentActiveMaterials.Add(materialType);
-                        }
-                    }
-                }
-            }
+            // if (building is UnlockableBuildingZone unlockableBuildingZone)
+            // {
+            //     VolatileDataManager.Instance.BuildingActiveStatuses.TryAdd(building, unlockableBuildingZone.ActiveStatus);
+            //
+            //     if (unlockableBuildingZone.ActiveStatus == EActiveStatus.Active)
+            //     {
+            //         var splits = building.BuildingKey.Split('_');
+            //
+            //         if (Enum.TryParse(splits[0], out EBuildingType buildingType) && splits.Length > 1)
+            //         {
+            //             if (Enum.TryParse(splits[1], out EMaterialType materialType) && buildingType == EBuildingType.Stand)
+            //             {
+            //                 if (!_currentActiveMaterials.Contains(materialType))
+            //                     _currentActiveMaterials.Add(materialType);
+            //             }
+            //         }
+            //     }
+            // }
         }
 
         public void Initialize()
