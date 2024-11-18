@@ -55,8 +55,6 @@ namespace UI.CostumePanels
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCachePara,
             List<CostumeItemData> currentCostumeItemData)
         {
-            gameObject.SetActive(false);
-
             _frontGroundImageCache = frontGroundImageCachePara;
             _currentCostumeItemData = currentCostumeItemData;
 

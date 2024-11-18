@@ -38,6 +38,8 @@ namespace Units.Stages.Managers
 
         private void Awake()
         {
+            VolatileDataManager.Instance.RegisterReference();
+            
             InstantiatePrefabs();
             RegisterReference();
         }
@@ -49,36 +51,45 @@ namespace Units.Stages.Managers
 
         private void InstantiatePrefabs()
         {
-            InstantiateJoystick();
+            InstantiateUI();
             InstantiateStage();
         }
 
-        private void InstantiateJoystick()
+        private void InstantiateUI()
         {
-            GameObject obj = Instantiate(_mainSceneDefaultSetting.JoystickPrefab, _mainSceneDefaultSetting.Canvas.Canvas_Joystick.transform);
-            _joystick = obj.GetComponent<Joystick>();
+            MainSceneUIManager.Instance.RegisterReference(_mainSceneDefaultSetting.Canvas.transform);
         }
 
         private void InstantiateStage()
         {
-            // GameObject stage = Instantiate(ES3.KeyExists($"{ES3Key.CurrentStage}") ? _mainSceneDefaultSetting.StagePrefab[ES3.Load<int>($"{ES3Key.CurrentStage}")] : _mainSceneDefaultSetting.StagePrefab[0]);
-            GameObject stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[0]);
+            GameObject stage;
+            
+            if (ES3.KeyExists($"{EES3Key.CurrentStage}"))
+            {
+                var targetStage = ES3.Load<int>($"{EES3Key.CurrentStage}") + 1;
+                stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[targetStage]);
+            }
+            else
+            {
+                stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[0]);
+            }
+            
             _stageController = stage.GetComponent<StageController>();
         }
 
         private void RegisterReference()
         {
+            _joystick = MainSceneUIManager.Instance.Joystick;
             _stageController.RegisterReference(_joystick);
             
-            VolatileDataManager.Instance.RegisterReference();
-            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
+            CurrencyManager.Instance.RegisterReference(MainSceneUIManager.Instance.UI_Panel_Currency);
             
-            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
+            QuestManager.Instance.RegisterReference(MainSceneUIManager.Instance.UI_Panel_Quest);
             CostumeManager.Instance.RegisterReference();
             
-            UIManager.Instance.Button_StageMap.onClick.RemoveAllListeners();
-            UIManager.Instance.Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
-            UIManager.Instance.UI_Panel_StageMap.RegisterReference();
+            MainSceneUIManager.Instance.UI_Button_StageMap.onClick.RemoveAllListeners();
+            MainSceneUIManager.Instance.UI_Button_StageMap.onClick.AddListener(() => MainSceneUIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
+            MainSceneUIManager.Instance.UI_Panel_StageMap.RegisterReference();
             
             _mainSceneDefaultSetting.CameraController.RegisterReference(_stageController.PlayerTransform);
         }

@@ -5,17 +5,12 @@ namespace Units.Stages.Modules.UnlockModules.Modules
 {
     public class HuntingAreaObstacleAnimator : MonoBehaviour
     {
-        private Animator Animator;
+        [SerializeField] private Animator _animator;
         private Action _onComplete;
         
-        private void OnEnable()
-        {
-            if (Animator != null) Animator.GetComponent<Animator>();
-        }
-
         public void SetBool(int isActive, bool value, Action onComplete)
         {
-            Animator.SetBool(isActive, value);
+            _animator.SetBool(isActive, value);
 
             _onComplete = onComplete;
         }
