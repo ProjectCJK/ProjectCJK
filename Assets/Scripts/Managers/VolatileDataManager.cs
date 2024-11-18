@@ -13,7 +13,7 @@ namespace Managers
     public class VolatileDataManager : Singleton<VolatileDataManager>, IRegisterReference
     {
         public Player Player;
-        
+
         public int CurrentStageLevel { get; private set; }
 
         public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
@@ -21,7 +21,7 @@ namespace Managers
         public WareHouseStatsModule WareHouseStatsModule;
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
         public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
-        
+
         public readonly Dictionary<string, int> ItemPrices = new();
         public readonly Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
         public readonly Dictionary<EMaterialType, StandStatsModule> StandStatsModule = new();
@@ -32,7 +32,7 @@ namespace Managers
 
         public void RegisterReference()
         {
-            if (ES3.KeyExists($"{EES3Key.BuildingActiveStatuses}")) BuildingActiveStatuses = (Dictionary<BuildingZone, EActiveStatus>) ES3.Load($"{EES3Key.BuildingActiveStatuses}");
+            // if (ES3.KeyExists($"{EES3Key.BuildingActiveStatuses}")) BuildingActiveStatuses = (Dictionary<BuildingZone, EActiveStatus>) ES3.Load($"{EES3Key.BuildingActiveStatuses}");
         }
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
@@ -41,7 +41,7 @@ namespace Managers
 
             return 0;
         }
-        
+
         public void SetCurrentStageLevel(int stageLevel)
         {
             CurrentStageLevel = stageLevel;
@@ -50,8 +50,8 @@ namespace Managers
         public void SetBuildingActiveStatuses(BuildingZone buildingZone, EActiveStatus activeStatus)
         {
             BuildingActiveStatuses[buildingZone] = activeStatus;
-            
-            ES3.Save($"{EES3Key.BuildingActiveStatuses}", BuildingActiveStatuses);
+
+            // ES3.Save($"{EES3Key.BuildingActiveStatuses}", BuildingActiveStatuses);
         }
     }
 }

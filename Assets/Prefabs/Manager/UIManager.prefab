@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7436839539697734294
 MonoBehaviour:
@@ -44,15 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cc47e3f01b427eaf2f23a1b1d24986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rootCanvas: {fileID: 2066894877731744750, guid: 69959c7387c0f484ab096647a6a49667, type: 3}
-  _eventSystemPrefab: {fileID: 2896132484104396301, guid: 85b7bbd3c777546a5b15b2049e161115, type: 3}
+  _rootCanvas: {fileID: 2066894877731744750, guid: 8e57575bd14fed24a88f47c58ec3f080, type: 3}
+  _eventSystemPrefab: {fileID: 2896132484104396301, guid: 0e34008f13b38614cbfeb9c6c7ae57e6, type: 3}
   _joystick: {fileID: 8170153791668043265, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
-  _ui_Button_CostumeGachaPanel: {fileID: 2320485388426185815, guid: 589eb06d381524e5184476c91cf16585, type: 3}
-  _ui_Button_CostumePanel: {fileID: 8747128319836481988, guid: 6fcf851f2ec2a43a491fdd600168921b, type: 3}
-  _ui_Button_StageMap: {fileID: 6500788735440906003, guid: ebc2a893896c948eb94e6983fe55604a, type: 3}
+  _ui_Button_CostumeGachaPanel: {fileID: 2320485388426185815, guid: dba569a742259d847abf26c4001d7440, type: 3}
+  _ui_Button_CostumePanel: {fileID: 8747128319836481988, guid: 4c133301e6c0cc040b7489ac065a6797, type: 3}
+  _ui_Button_StageMap: {fileID: 6500788735440906003, guid: 526e0516afcdddf4b9518641e82ab276, type: 3}
   _ui_Panel_Quest: {fileID: 4978901860848282796, guid: 97005c759d6b44c2fb692316fc35f0d6, type: 3}
   _ui_Panel_BuildingEnhancement: {fileID: 7850059717496280743, guid: 81698a0ccb9c349e3bb7dbcc5c33de8e, type: 3}
-  _ui_Panel_Costume: {fileID: 1127529115198209825, guid: 03ef937da21f94b619cad318c70555d4, type: 3}
+  _ui_Panel_Costume: {fileID: 1127529115198209825, guid: 5308864f165e73a4bb15fd9a0fafb2af, type: 3}
   _ui_Panel_Currency: {fileID: 3705621065492943871, guid: aad84d2868721402aa8c8eccf9060498, type: 3}
   _ui_Panel_CostumeGacha: {fileID: 3651990478030823126, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
   _ui_Panel_StageMap: {fileID: 1731934305061684676, guid: 5f2e3bb6e6b74a441a4dc690d9e77f07, type: 3}
