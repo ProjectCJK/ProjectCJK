@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Managers
 {
-    public enum ES3Key
+    public enum EES3Key
     {
-        CurrentStage
+        CurrentStage,
+        BuildingActiveStatuses
     }
 
     public class GameManager : SingletonMono<GameManager>
@@ -30,12 +31,9 @@ namespace Managers
             InGameTrigger = false;
         }
 
-        private void Update()
+        private void Start()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                LoadingSceneManager.Instance.LoadSceneWithLoadingScreen("MainScene");  
-            }
+            LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
     }
 }
