@@ -560,6 +560,7 @@ GameObject:
   - component: {fileID: 3762390366856301477}
   - component: {fileID: 3289402412290518913}
   - component: {fileID: 7116944725240944411}
+  - component: {fileID: 5183862124966815006}
   m_Layer: 5
   m_Name: Btn_Dubble_Reward
   m_TagString: Untagged
@@ -671,6 +672,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!111 &5183862124966815006
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548333439750768092}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ed107ab4cf27cec4c9a459d425f3c362, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: ed107ab4cf27cec4c9a459d425f3c362, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1711101848125367164
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +752,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7070282359940838
 Transform:
   m_ObjectHideFlags: 0
@@ -7334,6 +7351,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7112813806879280393, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
       propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363855583515922400, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363855583515922400, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363855583515922400, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363855583515922400, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363855583515922400, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minMaxState
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8396568201888562279, guid: e21aa3bcfc64a1847a81f1f6ccfeaea6, type: 3}
