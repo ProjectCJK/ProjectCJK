@@ -7,14 +7,18 @@
 
         _MainTex ("Main Texture", 2D) = "white" {}
         _Color ("Main Color", Color) = (1,1,1,1)
-        _Main_Intensity("Main_Intensity", Float) = 1
-        _Main_Range("Main_Range", Float) = 1
+        _Main_Intensity("Main Intensity", Float) = 1
+        _Main_Range("Main Range", Float) = 1
+
+        
+        _xTime("Main X Panenr", Float) = 0
+        _yTime("Main Y Panenr", Float) = 0
 
         _Dissolve_Texture("Dissolve Texture", 2D) = "white" {}
-        _Dissolve_Progress("Dissolve_Progress", Range( -1 , 1)) = 0
+        _Dissolve_Progress("Dissolve Progress", Range( -1 , 1)) = 0
 
-        _Mask_Texture("Mask_Texture", 2D) = "white" {}
-        _Mask_Range("Mask_Range", Float) = 1
+        _Mask_Texture("Mask Texture", 2D) = "white" {}
+        _Mask_Range("Mask Range", Float) = 1
 
         [Header(__________________________________________________________________)]
         [Space(17)]
@@ -124,6 +128,9 @@
             fixed4 _LerpColor;
             float _LerpProgress;
 
+            float _xTime;
+            float _yTime;
+
             // 버텍스 쉐이더
             v2f vert(appdata_t v) //버텍스 구조체를 가져와서 v2f 함수에 담았다.
             {
@@ -168,7 +175,10 @@
 
                 float4 noise = saturate(mask_alpha * dissolve_alpha);
 
-                float4 main_color = (tex2D(_MainTex, IN.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw) + _TextureSampleAdd) * IN.color;
+                float2 timeOffset = float2(_xTime, _yTime) * _Time.y;
+
+                // MainTex 패닝 기능
+                float4 main_color = (tex2D(_MainTex, IN.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw + timeOffset) + _TextureSampleAdd) * IN.color;
                 float4 Out_color = saturate(pow(main_color,_Main_Range));
 
                 //Lerp 선언
