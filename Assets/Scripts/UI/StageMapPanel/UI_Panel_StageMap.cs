@@ -24,7 +24,7 @@ namespace UI.StageMapPanel
 
         private void ChangeStage(int index)
         {
-            ES3.Save($"{EES3Key.CurrentStage}", index);
+            ES3.Save($"{EES3Key.CurrentStage}", index, ES3.settings);
             
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
