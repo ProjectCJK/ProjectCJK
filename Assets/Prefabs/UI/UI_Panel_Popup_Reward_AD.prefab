@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4327301889001905513
 RectTransform:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 6079680517826385104}
   - component: {fileID: 79456412506268697}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Txt_Free
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 7394067840585137486}
   - component: {fileID: 3375185256223019521}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Txt_Dia_Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DIA
+  m_text: <sprite=2>999
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
   m_sharedMaterial: {fileID: 1859963639648239295, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 4525878003792220248}
   - component: {fileID: 3970356590929961570}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel_Txt_Product_Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -431,8 +431,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 533.3333, y: -140}
-  m_SizeDelta: {x: 213.33333, y: 280}
+  m_AnchoredPosition: {x: 550, y: -140}
+  m_SizeDelta: {x: 520, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8301553348929971034
 CanvasRenderer:
@@ -901,7 +901,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 520, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7427066814894094029
 CanvasRenderer:
@@ -1002,7 +1002,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9200509708510477899
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1255,7 +1255,7 @@ GameObject:
   - component: {fileID: 7295332322779443425}
   - component: {fileID: 5486434241532263710}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel_Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1274,15 +1274,15 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2582708677496722808}
-  - {fileID: 5541736267768428260}
   - {fileID: 68934104052867638}
+  - {fileID: 5541736267768428260}
   m_Father: {fileID: 8454548955909660899}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 640, y: 280}
+  m_SizeDelta: {x: 1100, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7295332322779443425
 CanvasRenderer:
@@ -1310,10 +1310,10 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_Spacing: 30
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
@@ -1329,7 +1329,7 @@ GameObject:
   - component: {fileID: 590401566511958492}
   - component: {fileID: 423309865560066148}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel_Img_Product
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1538,7 +1538,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7407389884894929441
@@ -1863,7 +1863,7 @@ GameObject:
   - component: {fileID: 9121699906039505859}
   - component: {fileID: 5092273093390262953}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Txt_AD_Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1917,7 +1917,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AD
+  m_text: <sprite=82>(5/5)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
   m_sharedMaterial: {fileID: 1859963639648239295, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
@@ -2004,7 +2004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5541736267768428260
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2021,10 +2021,10 @@ RectTransform:
   m_Father: {fileID: 6203273371473537998}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 320, y: -140}
-  m_SizeDelta: {x: 213.33333, y: 280}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 520, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6594849946897971906
 CanvasRenderer:
