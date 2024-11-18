@@ -1,4 +1,5 @@
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Managers;
 using UnityEngine;
 
 namespace Managers
@@ -14,7 +15,7 @@ namespace Managers
 
     public class GameManager : SingletonMono<GameManager>, IGameManager
     {
-        private bool InGameTrigger;
+        public bool InGameTrigger;
         
         protected override void Awake()
         {
@@ -28,8 +29,14 @@ namespace Managers
             ES3.settings = new ES3Settings(ES3.Location.Cache);
             
             // ES3.Save("temp", "talskdaskdj", ES3.settings);
+            // ES3.StoreCachedFile();
             
-            ES3.StoreCachedFile();
+            InGameTrigger = false;
+        }
+
+        private void Start()
+        {
+            LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
     }
 }

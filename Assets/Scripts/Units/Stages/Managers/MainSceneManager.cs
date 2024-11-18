@@ -61,8 +61,8 @@ namespace Units.Stages.Managers
 
         private void InstantiateStage()
         {
-            GameObject stage = Instantiate(ES3.KeyExists($"{ES3Key.CurrentStage}") ? _mainSceneDefaultSetting.StagePrefab[ES3.Load<int>($"{ES3Key.CurrentStage}")] : _mainSceneDefaultSetting.StagePrefab[0]);
-
+            // GameObject stage = Instantiate(ES3.KeyExists($"{ES3Key.CurrentStage}") ? _mainSceneDefaultSetting.StagePrefab[ES3.Load<int>($"{ES3Key.CurrentStage}")] : _mainSceneDefaultSetting.StagePrefab[0]);
+            GameObject stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[0]);
             _stageController = stage.GetComponent<StageController>();
         }
 

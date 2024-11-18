@@ -17,7 +17,7 @@ namespace UI.StageMapPanel
             for (var i = 0; i < buttons.Count; i++)
             {
                 buttons[i].onClick.RemoveAllListeners();
-                buttons[i].onClick.AddListener(() => ChangeStage(i + 2));
+                buttons[i].onClick.AddListener(() => ChangeStage(i + 1));
             }
         }
 

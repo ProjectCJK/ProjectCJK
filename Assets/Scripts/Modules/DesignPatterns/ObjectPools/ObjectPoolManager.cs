@@ -81,8 +81,6 @@ namespace Modules.DesignPatterns.ObjectPools
         public void CreatePool<T>(string key, int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory)
             where T : IPoolable
         {
-            if (poolDictionary.ContainsKey(key)) throw new Exception($"Pool with key '{key}' already exists.");
-
             var newPool = new ObjectPool<T>(initialSize, maxSize, isFlexible, objectFactory);
             poolDictionary[key] = newPool;
         }
@@ -93,8 +91,6 @@ namespace Modules.DesignPatterns.ObjectPools
         public void CreatePool<T>(string key, int initialSize, int maxSize, bool isFlexible, Func<T> objectFactory, Transform parentTransform)
             where T : IPoolable
         {
-            if (poolDictionary.ContainsKey(key)) throw new Exception($"Pool with key '{key}' already exists.");
-
             var newPool = new ObjectPool<T>(initialSize, maxSize, isFlexible, objectFactory, parentTransform);
             poolDictionary[key] = newPool;
         }
