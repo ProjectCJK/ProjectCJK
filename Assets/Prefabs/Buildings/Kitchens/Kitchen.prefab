@@ -37165,7 +37165,6 @@ GameObject:
   - component: {fileID: 5523320864473367059}
   - component: {fileID: 3875017165051066973}
   - component: {fileID: 5732182103560646264}
-  - component: {fileID: 3840533976733515691}
   - component: {fileID: 7472164902860013097}
   m_Layer: 13
   m_Name: Collision_Factory_Kitchen
@@ -40068,22 +40067,6 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 7856321531335998498}
---- !u!114 &3840533976733515691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7856321531335998498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!114 &7472164902860013097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40575,7 +40558,6 @@ GameObject:
   - component: {fileID: 2749529756165216570}
   - component: {fileID: 8233716465742991735}
   - component: {fileID: 395360533981827603}
-  - component: {fileID: 5217421115404426831}
   - component: {fileID: 3498276508877357350}
   m_Layer: 13
   m_Name: Collision_Inventory_Kitchen
@@ -46138,22 +46120,6 @@ CompositeCollider2D:
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 8075094377592933756}
---- !u!114 &5217421115404426831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075094377592933756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!114 &3498276508877357350
 MonoBehaviour:
   m_ObjectHideFlags: 0

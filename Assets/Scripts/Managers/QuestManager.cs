@@ -4,10 +4,12 @@ using System.Linq;
 using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
 using UI;
+using UI.QuestPanels;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -40,9 +42,12 @@ namespace Managers
         ProductB_B,
         ProductB_C,
         ProductB_D,
+        Stand_A,
         Stand_B,
         Stand_C,
         Stand_D,
+        HuntingZone_A,
+        HuntingZone_B,
         WareHouse,
         ManagementDesk,
         DeliveryLodging,
@@ -208,29 +213,45 @@ namespace Managers
             {
                 (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
 
-                foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
+                if (parsedEnum.Item1 != null)
                 {
-                    if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                    foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
                     {
-                        _questData.Datas[questIndex].CurrentTargetGoal = 1;
-                        break;
-                    }
+                        if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        {
+                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                            break;
+                        }
 
-                    _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<HuntingZone, EActiveStatus> obj in VolatileDataManager.Instance.HuntingZoneActiveStatuses)
+                    {
+                        if (obj.Key.HuntingZoneKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        {
+                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
+                            break;
+                        }
+
+                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
+                    }
                 }
             }
         }
 
-        public void UpdateUI()
+        private void UpdateUI()
         {
-            var smallestUnclearedQuest = _questData.Datas
+            KeyValuePair<int, Data> smallestUnclearedQuest = _questData.Datas
                 .Where(kvp => !IsQuestClear[kvp.Key])
                 .OrderBy(kvp => kvp.Key)
                 .FirstOrDefault();
 
             string thumbnailDescription = null;
-            int thumbnailCurrentGoal = 0;
-            int thumbnailMaxGoal = 0;
+            var thumbnailCurrentGoal = 0;
+            var thumbnailMaxGoal = 0;
             
             if (smallestUnclearedQuest.Value != null)
             {
@@ -239,9 +260,9 @@ namespace Managers
                 thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
             }
       
-            int clearedCount = IsQuestClear.Values.Count(cleared => cleared);
-            int totalCount = IsQuestClear.Count;
-            float progressRatio = (float)clearedCount / totalCount;
+            var clearedCount = IsQuestClear.Values.Count(cleared => cleared);
+            var totalCount = IsQuestClear.Count;
+            var progressRatio = (float)clearedCount / totalCount;
 
             List<UIQuestInfoItem> questInfoItems = _questData.Datas
                 .OrderBy(kvp => kvp.Key)
@@ -273,13 +294,13 @@ namespace Managers
 
         private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2, int value)
         {
-            var parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
+            EQuestType2? parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
 
             if (parsedQuestType != null)
             {
-                bool questUpdated = false;
+                var questUpdated = false;
 
-                foreach (var (_, data) in _questData.Datas)
+                foreach ((_, Data data) in _questData.Datas)
                 {
                     if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2)
                     {
@@ -320,7 +341,7 @@ namespace Managers
             }
         }
 
-        public void AdvanceToNextQuest()
+        private void AdvanceToNextQuest()
         {
             CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
             

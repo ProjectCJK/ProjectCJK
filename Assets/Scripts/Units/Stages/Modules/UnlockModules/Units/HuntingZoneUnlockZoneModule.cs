@@ -20,10 +20,10 @@ namespace Units.Stages.Modules.UnlockModules.Units
             {
                 case EActiveStatus.Active:
                     ActiveStatus = state;
-                    OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
-                    if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.GetComponent<HuntingAreaObstacleAnimator>().SetBool(IsActive, true, IsAnimationEnded);
+                    if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.GetComponentInChildren<HuntingAreaObstacleAnimator>().SetBool(IsActive, false, IsAnimationEnded);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
+                    OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;

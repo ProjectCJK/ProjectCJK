@@ -33,7 +33,8 @@ namespace Units.Stages.Controllers
         [SerializeField] private HuntingZoneSpawnData HuntingZoneSpawnData;
         
         private readonly List<IItem> _droppedItems = new();
-        public readonly Dictionary<IHuntingZone, EActiveStatus> HuntingZones = new();
+        
+        public Dictionary<string, HuntingZone> HuntingZones { get; } = new();
 
         private ICreatureController _creatureController;
         private float _hunterItemPickupRange;
@@ -59,13 +60,12 @@ namespace Units.Stages.Controllers
         
         public void Initialize()
         {
-            foreach (KeyValuePair<IHuntingZone, EActiveStatus> obj in HuntingZones) obj.Key.Initialize();
+            foreach (var obj in HuntingZones) obj.Value.Initialize();
         }
 
         public void SpawnMonsters()
         {
-            foreach (KeyValuePair<IHuntingZone, EActiveStatus> huntingZone in HuntingZones)
-                huntingZone.Key.SpawnMonsters();
+            foreach (var obj in HuntingZones) obj.Value.SpawnMonsters();
         }
 
         public void SendDroppedItem(HashSet<IHunter> currentSpawnedHunters)
@@ -126,7 +126,9 @@ namespace Units.Stages.Controllers
             
             var huntingZone = instance.GetComponent<HuntingZone>();
             huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
-            HuntingZones.TryAdd(huntingZone, huntingZone.ActiveStatus);
+            HuntingZones.TryAdd(huntingZone.HuntingZoneKey, huntingZone);
+            
+            VolatileDataManager.Instance.HuntingZoneActiveStatuses.TryAdd(huntingZone, huntingZone.ActiveStatus);
         }
     }
 }

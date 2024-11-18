@@ -150,7 +150,7 @@ namespace Units.Stages.Units.Buildings.Units
 
         public void SpawnHunter(ICreatureController creatureController, HashSet<IHunter> currentSpawnedHunters)
         {
-            if (_currentSpawnedHunters.Count < (int)_wareHouseStatsModule.CurrentBuildingOption2Value)
+            if (ActiveStatus == EActiveStatus.Active && _currentSpawnedHunters.Count < (int)_wareHouseStatsModule.CurrentBuildingOption2Value)
             {
                 IHunter hunter = creatureController.GetHunter(transform.position);
 

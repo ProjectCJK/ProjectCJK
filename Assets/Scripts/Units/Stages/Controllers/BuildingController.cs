@@ -32,7 +32,7 @@ namespace Units.Stages.Controllers
         public Transform WareHouseSpawner;
     }
     
-    public interface IBuildingController : IRegisterReference<ItemFactory, List<EMaterialType>>, IInitializable
+    public interface IBuildingController : IRegisterReference<ItemFactory>, IInitializable
     {
         public Dictionary<string, BuildingZone> Buildings { get; }
     }
@@ -44,10 +44,8 @@ namespace Units.Stages.Controllers
         private List<EMaterialType> _currentActiveMaterials;
         public Dictionary<string, BuildingZone> Buildings { get; } = new();
 
-        public void RegisterReference(ItemFactory itemFactory, List<EMaterialType> currentActiveMaterials)
+        public void RegisterReference(ItemFactory itemFactory)
         {
-            _currentActiveMaterials = currentActiveMaterials;
-
             for (var i = 0; i < buildingSpawnData.KitchenSpawner.Count; i++)
             {
                 InstantiateBuilding(buildingSpawnData.KitchenSpawner[i], DataManager.Instance.levelPrefabSo.Kitchen[i], itemFactory);

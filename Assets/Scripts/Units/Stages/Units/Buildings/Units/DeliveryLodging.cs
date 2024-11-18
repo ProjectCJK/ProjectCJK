@@ -96,10 +96,9 @@ namespace Units.Stages.Units.Buildings.Units
         {
         }
 
-        public void SpawnDeliveryMan(ICreatureController creatureController,
-            HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
+        public void SpawnDeliveryMan(ICreatureController creatureController, HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
         {
-            if (_currentSpawnedDeliveryMans.Count < (int)_deliveryLodgingStatsModule.CurrentBuildingOption2Value)
+            if (ActiveStatus == EActiveStatus.Active && _currentSpawnedDeliveryMans.Count < (int)_deliveryLodgingStatsModule.CurrentBuildingOption2Value)
             {
                 IDeliveryMan deliveryMan = creatureController.GetDeliveryMan(transform.position);
 

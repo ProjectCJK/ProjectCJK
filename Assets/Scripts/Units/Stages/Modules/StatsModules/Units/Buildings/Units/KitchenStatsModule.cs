@@ -3,7 +3,6 @@ using System.Linq;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
 using TMPro;
-using UI.UI;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
 using Units.Stages.Units.Buildings.Units;

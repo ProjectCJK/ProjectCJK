@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using Interfaces;
 using Managers;
+using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Zones;
 using Units.Stages.Enums;
 using Units.Stages.Modules;
@@ -18,8 +21,7 @@ using Random = System.Random;
 namespace Units.Stages.Controllers
 {
     public interface IVillageZoneController :
-        IRegisterReference<ICreatureController, IBuildingController, HuntingZoneController, StageCustomSettings,
-            List<EMaterialType>>, IInitializable
+        IRegisterReference<ICreatureController, IBuildingController, HuntingZoneController, StageCustomSettings>, IInitializable
     {
         public IPlayer Player { get; }
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
@@ -31,7 +33,7 @@ namespace Units.Stages.Controllers
         [Header("=== Village Position ===")]
         public Transform VillageSpawner;
         public Transform PlayerSpawner;
-        public Transform GuestSpawner;
+        public List<Transform> GuestSpawner;
     }
 
     public class VillageZoneController : MonoBehaviour, IVillageZoneController
@@ -47,22 +49,20 @@ namespace Units.Stages.Controllers
         private readonly HashSet<IHunter> currentSpawnedHunters = new();
         private IBuildingController _buildingController;
         private ICreatureController _creatureController;
-        private List<EMaterialType> _currentActiveStandType;
         private float _guestSpawnCheckTime;
         private float _guestSpawnElapsedTime;
         private GuestSpawnZoneDataSo _guestSpawnZoneDataSo;
         private IHuntingZoneController _huntingZoneController;
         private StageCustomSettings _stageCustomSettings;
 
-        private Dictionary<IHuntingZone, EActiveStatus> currentHuntingZones = new();
+        private Dictionary<HuntingZone, EActiveStatus> currentHuntingZones = new();
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
 
         public void RegisterReference(
             ICreatureController creatureController,
             IBuildingController buildingController,
             HuntingZoneController huntingZoneController,
-            StageCustomSettings stageCustomSettings,
-            List<EMaterialType> currentActiveMaterials)
+            StageCustomSettings stageCustomSettings)
         {
             _creatureController = creatureController;
             _buildingController = buildingController;
@@ -70,9 +70,29 @@ namespace Units.Stages.Controllers
 
             _guestSpawnZoneDataSo = DataManager.Instance.GuestSpawnZoneDataSo;
             _stageCustomSettings = stageCustomSettings;
-            _currentActiveStandType = currentActiveMaterials;
 
-            currentHuntingZones = huntingZoneController.HuntingZones;
+            currentHuntingZones = VolatileDataManager.Instance.HuntingZoneActiveStatuses;
+
+            foreach (IGuest guest in ObjectPoolManager.Instance.GetAllObjects<IGuest>("GuestPool"))
+            {
+                guest.Transform.position = _villageSpawnData.GuestSpawner[0].transform.position;
+            }
+
+            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.DeliveryLodging}"))
+            {
+                foreach (IDeliveryMan deliveryMan in ObjectPoolManager.Instance.GetAllObjects<IDeliveryMan>("DeliveryManPool"))
+                {
+                    deliveryMan.Transform.position = _buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].transform.position;
+                }
+            }
+
+            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.WareHouse}"))
+            {
+                foreach (IHunter hunter in ObjectPoolManager.Instance.GetAllObjects<IHunter>("HunterPool"))
+                {
+                    hunter.Transform.position = _buildingController.Buildings[$"{EBuildingType.WareHouse}"].transform.position;
+                }
+            }
 
             InstantiateLevels();
         }
@@ -84,8 +104,11 @@ namespace Units.Stages.Controllers
             village.transform.localPosition = Vector3.zero;
             
             prefab = DataManager.Instance.levelPrefabSo.GuestSpawner;
-            GameObject guestSpawner = Instantiate(prefab, _villageSpawnData.GuestSpawner);
-            guestSpawner.transform.localPosition = Vector3.zero;
+
+            foreach (GameObject guestSpawner in _villageSpawnData.GuestSpawner.Select(t => Instantiate(prefab, t)))
+            {
+                guestSpawner.transform.localPosition = Vector3.zero;
+            }
             
             prefab = DataManager.Instance.levelPrefabSo.PlayerSpawner;
             GameObject playerSpawner = Instantiate(prefab, _villageSpawnData.PlayerSpawner);
@@ -102,9 +125,10 @@ namespace Units.Stages.Controllers
 #if UNITY_EDITOR
             // TODO : Cheat Code
             if (Input.GetKeyDown(KeyCode.E))
-                if (_currentActiveStandType.Count > 0)
+                if (VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
                 {
-                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
+                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
                     guest.SetDestinations(GetRandomDestinationForGuest());
 
@@ -208,7 +232,7 @@ namespace Units.Stages.Controllers
                     var closestDistance = float.MaxValue;
 
                     // 가장 가까운 활성화된 몬스터 찾기
-                    foreach (KeyValuePair<IHuntingZone, EActiveStatus> huntingZone in currentHuntingZones)
+                    foreach (KeyValuePair<HuntingZone, EActiveStatus> huntingZone in currentHuntingZones)
                         if (huntingZone.Value == EActiveStatus.Active)
                             foreach (IMonster monster in huntingZone.Key.CurrentSpawnedMonsters)
                                 if (monster.Transform.gameObject.activeInHierarchy)
@@ -281,7 +305,7 @@ namespace Units.Stages.Controllers
 
         private void SpawnGuests()
         {
-            if (currentSpawnedGuests.Count < _guestMaxCount && _currentActiveStandType.Count > 0)
+            if (currentSpawnedGuests.Count < _guestMaxCount && VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
             {
                 if (_guestSpawnCheckTime == 0f)
                     _guestSpawnCheckTime = UnityEngine.Random.Range(_guestSpawnZoneDataSo.guestSpawnMinimumTime,
@@ -291,7 +315,8 @@ namespace Units.Stages.Controllers
 
                 if (_guestSpawnElapsedTime >= _guestSpawnCheckTime)
                 {
-                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner.position, ReturnGuest);
+                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
                     guest.SetTargetPurchaseQuantity(1);
                     guest.SetDestinations(GetRandomDestinationForGuest());
 
@@ -310,15 +335,18 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            var randomIndex = new Random().Next(_currentActiveStandType.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, _currentActiveStandType[randomIndex]);
-            var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
+            List<EMaterialType> materialsList = VolatileDataManager.Instance.CurrentActiveMaterials.ToList();
+            var randomIndex = new Random().Next(materialsList.Count);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, materialsList[randomIndex]);
 
+            var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
+            var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+            
             var destinations = new List<Tuple<string, Transform>>
             {
                 new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
                 new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
-                new(string.Empty, _villageSpawnData.GuestSpawner)
+                new(string.Empty, _villageSpawnData.GuestSpawner[randomPosition])
             };
 
             return destinations;

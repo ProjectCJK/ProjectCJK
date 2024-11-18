@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Managers;
 using Modules.DesignPatterns.Singletons;
 using UI;
+using UI.BuildingEnhancementPanel;
+using UI.CurrencyPanel;
+using UI.QuestPanels;
 using Units.Stages.Controllers;
 using Units.Stages.UI;
 using UnityEngine;
@@ -16,7 +20,7 @@ namespace Units.Stages.Managers
         [Header("=== UI Settings ===")]
         public RootCanvas Canvas;
         public GameObject JoystickPrefab;
-        public GameObject StagePrefab;
+        public List<GameObject> StagePrefab;
         public CameraController CameraController;
     }
 
@@ -34,19 +38,6 @@ namespace Units.Stages.Managers
 
         private void Awake()
         {
-            // 프레임 고정
-            Application.targetFrameRate = 60;
-            // VSync 비활성화
-            QualitySettings.vSyncCount = 0;
-            
-            // ES3.settings 세팅
-            ES3.CacheFile();
-            ES3.settings = new ES3Settings(ES3.Location.Cache);
-            
-            ES3.Save<string>("temp", "talskdaskdj", ES3.settings);
-            
-            ES3.StoreCachedFile();
-            
             InstantiatePrefabs();
             RegisterReference();
         }
@@ -70,8 +61,9 @@ namespace Units.Stages.Managers
 
         private void InstantiateStage()
         {
-            GameObject obj = Instantiate(_mainSceneDefaultSetting.StagePrefab);
-            _stageController = obj.GetComponent<StageController>();
+            // GameObject stage = Instantiate(ES3.KeyExists($"{ES3Key.CurrentStage}") ? _mainSceneDefaultSetting.StagePrefab[ES3.Load<int>($"{ES3Key.CurrentStage}")] : _mainSceneDefaultSetting.StagePrefab[0]);
+            GameObject stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[0]);
+            _stageController = stage.GetComponent<StageController>();
         }
 
         private void RegisterReference()
@@ -83,7 +75,10 @@ namespace Units.Stages.Managers
             
             QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
             CostumeManager.Instance.RegisterReference();
-            // CostumeManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Costume);
+            
+            UIManager.Instance.Button_StageMap.onClick.RemoveAllListeners();
+            UIManager.Instance.Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
+            UIManager.Instance.UI_Panel_StageMap.RegisterReference();
             
             _mainSceneDefaultSetting.CameraController.RegisterReference(_stageController.PlayerTransform);
         }
@@ -110,6 +105,20 @@ namespace Units.Stages.Managers
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 CurrencyManager.Instance.AddGold(100);
+            }
+                  
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                CurrencyManager.Instance.AddGold(10000);
+                CurrencyManager.Instance.AddDiamond(10000);
+                CurrencyManager.Instance.AddRedGem(10000);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                CurrencyManager.Instance._gold = 0;
+                CurrencyManager.Instance._diamond = 0;
+                CurrencyManager.Instance._redGem = 0;
             }
 
             // if (Input.GetKeyDown(KeyCode.U))
