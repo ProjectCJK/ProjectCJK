@@ -155,6 +155,7 @@ Transform:
   m_Children:
   - {fileID: 3121102612073639220}
   - {fileID: 4142494014169057933}
+  - {fileID: 4220081994370663406}
   m_Father: {fileID: 1319462551212418385}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -616,7 +617,7 @@ MonoBehaviour:
     - GameObject: {fileID: 76930816036644391}
       InitialActiveStatus: 2
       RequiredGoldCountForUnlock: 4500
-    - GameObject: {fileID: 4224253973279049912}
+    - GameObject: {fileID: 0}
       InitialActiveStatus: 2
       RequiredGoldCountForUnlock: 13500
     - GameObject: {fileID: 6742650348813395910}
@@ -774,6 +775,37 @@ Transform:
   m_GameObject: {fileID: 6445905599187982262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22, y: 24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8051165114350914590}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6461197981061510047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4220081994370663406}
+  m_Layer: 19
+  m_Name: HuntingZoneCPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4220081994370663406
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461197981061510047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 78, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
