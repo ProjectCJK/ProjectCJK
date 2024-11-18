@@ -18,10 +18,7 @@ namespace Units.Stages.Managers
     {
         [Header("### Stage Settings ###")]
         [Header("=== UI Settings ===")]
-        public RootCanvas Canvas;
-        public GameObject JoystickPrefab;
         public List<GameObject> StagePrefab;
-        public CameraController CameraController;
     }
 
     public class MainSceneManager : SceneSingleton<MainSceneManager>
@@ -35,9 +32,13 @@ namespace Units.Stages.Managers
         private UI_Panel_Currency _uiPanelCurrencyPrefab;
         private UI_Panel_BuildingEnhancement _upgradePanelPrefab;
         private UI_Panel_Quest _questPanelPrefab;
+        
+        public bool Initialized { get; set; }
 
         private void Awake()
         {
+            Initialized = false;
+            
             VolatileDataManager.Instance.RegisterReference();
             
             InstantiatePrefabs();
@@ -47,6 +48,7 @@ namespace Units.Stages.Managers
         private void Start()
         {
             Initialize();
+            Initialized = true;
         }
 
         private void InstantiatePrefabs()
@@ -57,7 +59,7 @@ namespace Units.Stages.Managers
 
         private void InstantiateUI()
         {
-            MainSceneUIManager.Instance.RegisterReference(_mainSceneDefaultSetting.Canvas.transform);
+            UIManager.Instance.RegisterReference();
         }
 
         private void InstantiateStage()
@@ -66,8 +68,8 @@ namespace Units.Stages.Managers
             
             if (ES3.KeyExists($"{EES3Key.CurrentStage}"))
             {
-                var targetStage = ES3.Load<int>($"{EES3Key.CurrentStage}") + 1;
-                stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[targetStage]);
+                var targetStage = ES3.Load<int>($"{EES3Key.CurrentStage}");
+                stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[targetStage + 1]);
             }
             else
             {
@@ -79,19 +81,23 @@ namespace Units.Stages.Managers
 
         private void RegisterReference()
         {
-            _joystick = MainSceneUIManager.Instance.Joystick;
+            _joystick = UIManager.Instance.Joystick;
             _stageController.RegisterReference(_joystick);
             
-            CurrencyManager.Instance.RegisterReference(MainSceneUIManager.Instance.UI_Panel_Currency);
+            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
             
-            QuestManager.Instance.RegisterReference(MainSceneUIManager.Instance.UI_Panel_Quest);
+            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
             CostumeManager.Instance.RegisterReference();
             
-            MainSceneUIManager.Instance.UI_Button_StageMap.onClick.RemoveAllListeners();
-            MainSceneUIManager.Instance.UI_Button_StageMap.onClick.AddListener(() => MainSceneUIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
-            MainSceneUIManager.Instance.UI_Panel_StageMap.RegisterReference();
-            
-            _mainSceneDefaultSetting.CameraController.RegisterReference(_stageController.PlayerTransform);
+            UIManager.Instance.UI_Button_StageMap.onClick.RemoveAllListeners();
+            UIManager.Instance.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
+            UIManager.Instance.UI_Panel_StageMap.RegisterReference();
+
+            if (Camera.main != null)
+            {
+                Camera.main.orthographicSize = 10;
+                Camera.main.GetComponent<CameraController>().RegisterReference(_stageController.PlayerTransform);   
+            }
         }
 
         private void Initialize()

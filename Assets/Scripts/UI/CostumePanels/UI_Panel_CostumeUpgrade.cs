@@ -120,7 +120,7 @@ namespace UI.CostumePanels
 
         private void AddMaterialForUpgrade(CostumeItemData materialItem, bool isAdding)
         {
-            int materialValue = materialItem.MaterialValues[_tempCostumeLevel - 1];
+            int materialValue = materialItem.MaterialValues[materialItem.CurrentLevel - 1];
             _finalExp += isAdding ? materialValue : -materialValue;
 
             // 선택한 아이템들의 합산 값 업데이트

@@ -68,8 +68,13 @@ namespace Units.Stages.Managers
 
             Debug.Log("LoadingScene is active.");
 
-            _rootCanvas = Instantiate(_rootCanvasPrefab, Vector3.zero, Quaternion.identity);
-            
+            if (Camera.main != null)
+            {
+                Camera.main.orthographicSize = 5;
+                _rootCanvas = Instantiate(_rootCanvasPrefab, Vector3.zero, Quaternion.identity);
+                _rootCanvas.GetComponent<Canvas>().worldCamera = Camera.main;
+            }
+
             // GameManager 상태에 따라 Prefab 생성
             if (!GameManager.Instance.InGameTrigger)
             {
