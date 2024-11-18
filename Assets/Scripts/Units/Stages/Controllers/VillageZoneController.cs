@@ -73,19 +73,25 @@ namespace Units.Stages.Controllers
 
             currentHuntingZones = VolatileDataManager.Instance.HuntingZoneActiveStatuses;
 
-            foreach (var guest in ObjectPoolManager.Instance.GetAllObjects<IGuest>("GuestPool"))
+            foreach (IGuest guest in ObjectPoolManager.Instance.GetAllObjects<IGuest>("GuestPool"))
             {
                 guest.Transform.position = _villageSpawnData.GuestSpawner[0].transform.position;
             }
-            
-            foreach (var deliveryMan in ObjectPoolManager.Instance.GetAllObjects<IDeliveryMan>("DeliveryManPool"))
+
+            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.DeliveryLodging}"))
             {
-                deliveryMan.Transform.position = _buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].transform.position;
+                foreach (IDeliveryMan deliveryMan in ObjectPoolManager.Instance.GetAllObjects<IDeliveryMan>("DeliveryManPool"))
+                {
+                    deliveryMan.Transform.position = _buildingController.Buildings[$"{EBuildingType.DeliveryLodging}"].transform.position;
+                }
             }
-            
-            foreach (var hunter in ObjectPoolManager.Instance.GetAllObjects<IHunter>("HunterPool"))
+
+            if (_buildingController.Buildings.ContainsKey($"{EBuildingType.WareHouse}"))
             {
-                hunter.Transform.position = _buildingController.Buildings[$"{EBuildingType.WareHouse}"].transform.position;
+                foreach (IHunter hunter in ObjectPoolManager.Instance.GetAllObjects<IHunter>("HunterPool"))
+                {
+                    hunter.Transform.position = _buildingController.Buildings[$"{EBuildingType.WareHouse}"].transform.position;
+                }
             }
 
             InstantiateLevels();

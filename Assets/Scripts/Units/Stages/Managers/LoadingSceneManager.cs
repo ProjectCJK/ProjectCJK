@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 namespace Units.Stages.Managers
 {
+    public enum ESceneName
+    {
+        MainScene
+    }
+    
     public class LoadingSceneManager : SingletonMono<LoadingSceneManager>
     {
         [SerializeField] private Slider progressBar;
@@ -14,9 +19,9 @@ namespace Units.Stages.Managers
         
         private const string loadingSceneName = "LoadingScene";
         
-        public void LoadSceneWithLoadingScreen(string sceneName)
+        public void LoadSceneWithLoadingScreen(ESceneName sceneName)
         {
-            targetSceneName = sceneName;
+            targetSceneName = $"{sceneName}";
             SceneManager.LoadScene(loadingSceneName);
 
             StartCoroutine(InitializeAndLoadTargetSceneAsync());
@@ -24,6 +29,7 @@ namespace Units.Stages.Managers
 
         private IEnumerator InitializeAndLoadTargetSceneAsync()
         {
+            // ProgressBar가 로드되기를 잠시 대기
             yield return new WaitForSeconds(0.1f);
             progressBar = FindObjectOfType<Slider>();
 
@@ -33,26 +39,30 @@ namespace Units.Stages.Managers
                 yield break;
             }
 
+            // 비동기 로드 시작
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetSceneName);
-            asyncLoad.allowSceneActivation = false;
-
-            // 로딩 진행률을 슬라이더에 업데이트
-            while (!asyncLoad.isDone)
+            if (asyncLoad != null)
             {
-                progressBar.value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+                asyncLoad.allowSceneActivation = false; // 씬 전환 대기
 
-                if (asyncLoad.progress >= 0.9f)
+                // 로딩 진행률 업데이트
+                while (!asyncLoad.isDone)
                 {
-                    // 로딩이 완료되면 약간의 딜레이 후 씬 전환
-                    progressBar.value = 1f;
-                    yield return new WaitForSeconds(0.5f);
-                    asyncLoad.allowSceneActivation = true;
+                    progressBar.value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+
+                    if (asyncLoad.progress >= 0.9f) // 로딩 완료
+                    {
+                        progressBar.value = 1f;
+                        yield return new WaitForSeconds(0.5f); // 사용자 경험 개선을 위한 딜레이
+                        asyncLoad.allowSceneActivation = true; // 씬 전환 허용
+                    }
+
+                    yield return null;
                 }
+            }
 
-                yield return null;
-            }  
-
-            SceneManager.UnloadSceneAsync(loadingSceneName);
+            // 로딩 씬 언로드
+            yield return SceneManager.UnloadSceneAsync(loadingSceneName);
         }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.CostumePanels
 {
-    public class UI_Panel_CostumeItem : MonoBehaviour, IPoolable
+    public class UI_Panel_CostumeInventoryItem : MonoBehaviour, IPoolable
     {
         [SerializeField] private Image costumeBackground;
         [SerializeField] private Image costumeIcon;
@@ -16,24 +16,27 @@ namespace UI.CostumePanels
         [SerializeField] private Image equipmentEffect;
         
         private Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache;
-        private UI_Panel_Popup _uiPanelPopup;
+        private UI_Panel_CostumeInfo _uiPanelCostumeInfo;
+        private CostumeItemData _costumeItemData;
         
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
-            UI_Panel_Popup uiPanelPopup)
+            UI_Panel_CostumeInfo uiPanelCostumeInfo)
         {
             _frontGroundImageCache = frontGroundImageCache;
-            _uiPanelPopup = uiPanelPopup;
+            _uiPanelCostumeInfo = uiPanelCostumeInfo;
 
             GetComponent<Button>().onClick.AddListener(OnClickItem);
         }
         
-        public void Initialize(CostumeItemData costumeItem)
+        public void Activate(CostumeItemData costumeItem)
         {
+            _costumeItemData = costumeItem;
+            
             equipmentEffect.gameObject.SetActive(costumeItem.IsEquipped);
-
             costumeIcon.sprite = costumeItem.CostumeSprites[0];
             costumeBackground.sprite = _frontGroundImageCache[new Tuple<ECostumeType, ECostumeGrade>(costumeItem.CostumeType, costumeItem.CostumeGrade)];
+            costumeLevel.text = $"Lv.{costumeItem.CurrentLevel}";
         }
         
         public void Create()
@@ -53,8 +56,7 @@ namespace UI.CostumePanels
 
         private void OnClickItem()
         {
-            _uiPanelPopup.RegisterReference();
-            _uiPanelPopup.gameObject.SetActive(true);
+            _uiPanelCostumeInfo.Activate(_costumeItemData);
         }
     }
 }

@@ -18,6 +18,12 @@ namespace Units.Stages.Modules.PaymentModule.Units
         public bool RegisterPaymentTarget(ICreature creature, bool register);
     }
 
+    public class CashierPayment
+    {
+        public float delay;
+        public Guest guest;
+    }
+
     public class ManagementDeskPaymentModule : BuildingPaymentModule, IManagementDeskPaymentModule
     {
         private readonly Queue<Guest> _customerQueue = new();
@@ -26,7 +32,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         // private readonly List<> // TODO : 이후 계산원 유닛 추가되면 이 부분에서 처리할 것
         private readonly IManagementDeskInventoryModule _managementDeskInventoryModule;
-        public readonly List<float> CashierPaymentDelay = new();
+        public readonly List<CashierPayment> CashierPaymentDelay = new();
         private readonly float _npcPaymentDelay;
         private float _npcPaymentElapsedTime;
 
@@ -72,6 +78,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
             {
                 case ECreatureType.Player:
                     _player = null;
+                    _playerPaymentElapsedTime = 0;
                     return true;
                 case ECreatureType.NPC when creature is Creature:
                     FindAndDequeue(creature as Guest);
@@ -127,39 +134,52 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         private void ProcessCashierPayment()
         {
-            if (CashierPaymentDelay.Count > 0 && _customerQueue.Count > 0)
-                for (var i = 0; i < CashierPaymentDelay.Count; i++)
+            if (CashierPaymentDelay.Count > 0)
+            {
+                foreach (CashierPayment cashier in CashierPaymentDelay)
                 {
-                    CashierPaymentDelay[i] += Time.deltaTime;
-
-                    if (CashierPaymentDelay[i] >= _npcPaymentDelay)
+                    if (cashier.guest != null)
                     {
-                        Guest guest = _customerQueue.Dequeue();
-                        Tuple<string, int> purchasedItem = guest.GetItem();
+                        cashier.delay += Time.deltaTime;
 
-                        if (purchasedItem != null)
+                        if (cashier.delay >= _npcPaymentDelay)
                         {
-                            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
-                            (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                            var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
+                            Tuple<string, int> purchasedItem = cashier.guest.GetItem();
 
-                            //TODO : 상품 별 가격에 따른 가격 책정
-                            while (targetItemPrice > 0)
+                            if (purchasedItem != null)
                             {
-                                var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum
-                                    ? DataManager.GoldSendingMaximum
-                                    : targetItemPrice;
-                                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldSendingAmount);
+                                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
+                                (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+                                var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
 
-                                targetItemPrice -= goldSendingAmount;
+                                //TODO : 상품 별 가격에 따른 가격 책정
+                                while (targetItemPrice > 0)
+                                {
+                                    var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum
+                                        ? DataManager.GoldSendingMaximum
+                                        : targetItemPrice;
+                                    _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldSendingAmount);
+
+                                    targetItemPrice -= goldSendingAmount;
+                                }
                             }
+
+                            cashier.guest.CheckNextDestination();
+
+                            cashier.delay = 0;
+                            cashier.guest = null;
                         }
-
-                        guest.CheckNextDestination();
-
-                        CashierPaymentDelay[i] = 0;
+                    }
+                    else if (_customerQueue.Count > 0)
+                    {
+                        if (_customerQueue.TryDequeue(out Guest guest))
+                        {
+                            cashier.delay = 0;
+                            cashier.guest = guest;
+                        }
                     }
                 }
+            }
         }
 
         private void FindAndDequeue(Guest creature)

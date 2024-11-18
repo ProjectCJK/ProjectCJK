@@ -7,24 +7,23 @@ namespace UI.CostumePanels
 {
     public class UI_Panel_Costume : MonoBehaviour
     {
-        [SerializeField] private UI_Panel_CurrentEquipmentInfo _uiPanelCurrentEquipmentInfo;
-        [SerializeField] private UI_Panel_Inventory _uiPanelInventory;
-        [SerializeField] private UI_Panel_Popup _uiPanelPopup;
-        
-        public void Activate()
-        {
-            _uiPanelCurrentEquipmentInfo.Activate();
-            _uiPanelInventory.Activate();
-            gameObject.SetActive(true);
-        }
+        [SerializeField] private UI_Panel_CurrentEquippedCostumeInfo uiPanelCurrentEquippedCostumeInfo;
+        [SerializeField] private UI_Panel_CostumeInventory uiPanelCostumeInventory;
+        [SerializeField] private UI_Panel_CostumeInfo uiPanelCostumeInfo;
 
         public void RegisterReference(
             Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> frontGroundImageCache,
-            List<CostumeItemData> currentCostumeItemData,
-            Dictionary<ECostumeType, CostumeItemData> currentEquippedCostumeItemDatas)
+            List<CostumeItemData> currentCostumeItemData)
         {
-            _uiPanelCurrentEquipmentInfo.RegisterReference(frontGroundImageCache, currentEquippedCostumeItemDatas);
-            _uiPanelInventory.RegisterReference(frontGroundImageCache, currentCostumeItemData, currentEquippedCostumeItemDatas, _uiPanelPopup);
+            uiPanelCostumeInventory.RegisterReference(frontGroundImageCache, currentCostumeItemData, uiPanelCostumeInfo);
+            uiPanelCostumeInfo.RegisterReference(frontGroundImageCache, currentCostumeItemData, uiPanelCostumeInventory, uiPanelCurrentEquippedCostumeInfo);
+        }
+
+        public void Activate()
+        {
+            uiPanelCurrentEquippedCostumeInfo.Activate();
+            uiPanelCostumeInventory.Activate();
+            gameObject.SetActive(true);
         }
     }
 }
