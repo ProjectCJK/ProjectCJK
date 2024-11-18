@@ -69,17 +69,17 @@ namespace Managers
         {
             switch (currencyType)
             {
-                case ECurrencyType.Money:
-                    AddGold(value);
-                    break;
                 case ECurrencyType.Diamond:
                     AddDiamond(value);
+                    ES3.Save($"{EES3Key.Diamond}", Diamond);
                     break;
                 case ECurrencyType.RedGem:
                     AddRedGem(value);
+                    ES3.Save($"{EES3Key.RedGem}", RedGem);
                     break;
                 case ECurrencyType.Gold:
                     AddGold(value);
+                    ES3.Save($"{EES3Key.Gold}", Gold);
                     break;
             }
         }
@@ -88,17 +88,17 @@ namespace Managers
         {
             switch (currencyType)
             {
-                case ECurrencyType.Money:
-                    RemoveGold(value);
-                    break;
                 case ECurrencyType.Diamond:
                     RemoveDiamond(value);
+                    ES3.Save($"{EES3Key.Diamond}", Diamond);
                     break;
                 case ECurrencyType.RedGem:
                     RemoveRedGem(value);
+                    ES3.Save($"{EES3Key.RedGem}", RedGem);
                     break;
                 case ECurrencyType.Gold:
                     RemoveGold(value);
+                    ES3.Save($"{EES3Key.Gold}", Gold);
                     break;
             }
         }

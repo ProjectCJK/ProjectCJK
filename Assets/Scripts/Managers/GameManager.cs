@@ -6,6 +6,7 @@ namespace Managers
 {
     public enum EES3Key
     {
+        InitialSet,
         CurrentStage,
         BuildingActiveStatuses,
         Gold,
@@ -37,6 +38,8 @@ namespace Managers
             // ES3.settings 세팅
             ES3.CacheFile();
             ES3.settings = new ES3Settings(ES3.Location.Cache);
+            
+            ES3.Save($"{EES3Key.InitialSet}", true, ES3.settings);
             
             InGameTrigger = false;
         }
@@ -74,7 +77,6 @@ namespace Managers
 
         private void SaveData()
         {
-            // 데이터 저장 로직
             Debug.Log("Data saved.");
             ES3.StoreCachedFile(); // ES3 데이터 저장
         }
