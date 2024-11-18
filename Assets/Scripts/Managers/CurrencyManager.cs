@@ -71,15 +71,15 @@ namespace Managers
             {
                 case ECurrencyType.Diamond:
                     AddDiamond(value);
-                    ES3.Save($"{EES3Key.Diamond}", Diamond);
+                    ES3.Save($"{EES3Key.Diamond}", Diamond, ES3.settings);
                     break;
                 case ECurrencyType.RedGem:
                     AddRedGem(value);
-                    ES3.Save($"{EES3Key.RedGem}", RedGem);
+                    ES3.Save($"{EES3Key.RedGem}", RedGem, ES3.settings);
                     break;
                 case ECurrencyType.Gold:
                     AddGold(value);
-                    ES3.Save($"{EES3Key.Gold}", Gold);
+                    ES3.Save($"{EES3Key.Gold}", Gold, ES3.settings);
                     break;
             }
         }
@@ -90,15 +90,15 @@ namespace Managers
             {
                 case ECurrencyType.Diamond:
                     RemoveDiamond(value);
-                    ES3.Save($"{EES3Key.Diamond}", Diamond);
+                    ES3.Save($"{EES3Key.Diamond}", Diamond, ES3.settings);
                     break;
                 case ECurrencyType.RedGem:
                     RemoveRedGem(value);
-                    ES3.Save($"{EES3Key.RedGem}", RedGem);
+                    ES3.Save($"{EES3Key.RedGem}", RedGem, ES3.settings);
                     break;
                 case ECurrencyType.Gold:
                     RemoveGold(value);
-                    ES3.Save($"{EES3Key.Gold}", Gold);
+                    ES3.Save($"{EES3Key.Gold}", Gold, ES3.settings);
                     break;
             }
         }
