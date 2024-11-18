@@ -171,7 +171,7 @@ MonoBehaviour:
   UI_Panel_BuildingEnhancement: {fileID: 653790557}
   Button_Costume: {fileID: 1830039125}
   UI_Panel_Currency: {fileID: 1914768889}
-  UI_Panel_CostumeGacha: {fileID: 2092434254}
+  UI_Panel_CostumeGacha: {fileID: 0}
 --- !u!1001 &653790555
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -338,6 +338,7 @@ MonoBehaviour:
   GuestDataSo: {fileID: 11400000, guid: d93aeec5af232420bb056f0bd621cd83, type: 2}
   DeliveryManDataSo: {fileID: 11400000, guid: b3dc2101d89184dc7862e8c6ac5dc9b0, type: 2}
   HunterDataSo: {fileID: 11400000, guid: ea2279562f66548b59631f9d27cc6c96, type: 2}
+  levelPrefabSo: {fileID: 11400000, guid: ba69e69c830b349fa97a60b3272e5582, type: 2}
   KitchenDataSo: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
   StandDataSo: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
   ManagementDeskDataSo: {fileID: 11400000, guid: 5f80df1fa3fb04f37aaf200ff1d77ab0, type: 2}
@@ -2212,17 +2213,6 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
 --- !u!224 &2092434253 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8117551551261710846, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6309883907108828620, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
   m_PrefabInstance: {fileID: 2092434252}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2092434254 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3651990478030823126, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
-  m_PrefabInstance: {fileID: 2092434252}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6af653b826a34022a74d27d2a937e21e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

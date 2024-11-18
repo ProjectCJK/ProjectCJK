@@ -2,15 +2,17 @@ using System;
 using Units.Stages.Enums;
 using Units.Stages.Modules.UnlockModules.Abstract;
 using Units.Stages.Modules.UnlockModules.Enums;
+using Units.Stages.Modules.UnlockModules.Modules;
 using UnityEngine;
 
 namespace Units.Stages.Modules.UnlockModules.Units
 {
     public class HuntingZoneUnlockZoneModule : UnlockZoneModule
     {
-        [SerializeField] private GameObject _playerCollision;
         public override EUnlockZoneType UnlockZoneType => EUnlockZoneType.Hunting;
         public override event Action<string, EActiveStatus> OnChangeActiveStatus;
+        
+        private static readonly int IsActive = Animator.StringToHash("IsActive");
 
         public override void SetCurrentState(EActiveStatus state)
         {
@@ -19,21 +21,28 @@ namespace Units.Stages.Modules.UnlockModules.Units
                 case EActiveStatus.Active:
                     ActiveStatus = state;
                     OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
-                    if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.SetActive(false);
+                    if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.GetComponent<HuntingAreaObstacleAnimator>().SetBool(IsActive, true, IsAnimationEnded);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;
+                    if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
                     if (StandbyObject != null && !StandbyObject.activeInHierarchy) StandbyObject.SetActive(true);
                     if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
                     break;
                 case EActiveStatus.Lock:
                     ActiveStatus = state;
+                    if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
                     if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
                     if (LockObject != null && !LockObject.activeInHierarchy) LockObject.SetActive(true);
                     break;
             }
+        }
+
+        private void IsAnimationEnded()
+        {
+            _playerCollision.gameObject.SetActive(false);
         }
     }
 }

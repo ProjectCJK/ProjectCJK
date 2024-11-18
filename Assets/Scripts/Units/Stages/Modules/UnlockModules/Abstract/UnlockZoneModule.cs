@@ -17,10 +17,11 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
     public abstract class UnlockZoneModule : MonoBehaviour, IUnlockZoneModule
     {
         [SerializeField] private UnlockZoneView _unlockZoneView;
-
+     
+        [SerializeField] protected GameObject _playerCollision;
         public GameObject StandbyObject;
         public GameObject LockObject;
-
+        
         private UnlockZoneModel _unlockZoneModel;
         private UnlockZoneViewModel _unlockZoneViewModel;
         public string TargetKey { get; private set; }
@@ -35,6 +36,7 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         public void RegisterReference(string targetKey)
         {
             TargetKey = targetKey;
+            ActiveStatus = EActiveStatus.Lock;
             _unlockZoneModel = new UnlockZoneModel();
             _unlockZoneViewModel = new UnlockZoneViewModel(_unlockZoneModel);
             _unlockZoneView.BindViewModel(_unlockZoneViewModel);
