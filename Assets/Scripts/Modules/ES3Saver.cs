@@ -12,6 +12,8 @@ namespace Modules
         public int RedGem;
         public Dictionary<string, Dictionary<string, int>> CreatureItems = new();
         
+        // public List<CostumeDataSerializable> CurrentCostumes = new();
+        
         // BuildingInfo
         public Dictionary<string, EActiveStatus> BuildingActiveStatuses = new();
         public Dictionary<string, EActiveStatus> HuntingZoneActiveStatuses = new();
@@ -20,10 +22,8 @@ namespace Modules
         public Dictionary<string, int> CurrentBuildingLevel = new();
         public Dictionary<string, int> CurrentBuildingOption1Level = new();
         public Dictionary<string, int> CurrentBuildingOption2Level = new();
-
         public Dictionary<string, int> RequiredMoneyForBuildingActive = new();
         public Dictionary<string, int> RequiredMoneyForHuntingZoneActive = new();
-
         public int ActiveStatusSettingIndex = 0; 
         
         // Quest Data

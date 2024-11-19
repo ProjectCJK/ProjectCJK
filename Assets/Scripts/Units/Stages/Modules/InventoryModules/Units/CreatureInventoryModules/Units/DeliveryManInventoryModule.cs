@@ -43,6 +43,11 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
+        public override void Initialize()
+        {
+            Inventory.Clear();
+        }
+        
         public override void RegisterItemReceiver(ITradeZone zone, bool isConnected)
         {
             if (isConnected)

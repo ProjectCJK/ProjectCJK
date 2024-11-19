@@ -124,7 +124,8 @@ namespace Managers
                 .Max();
 
             List<List<string>> questData = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString() && _gameData[i, 2] == CurrentQuestSubIndex.ToString())
+                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
+                            _gameData[i, 2] == CurrentQuestSubIndex.ToString())
                 .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();
 
@@ -153,18 +154,30 @@ namespace Managers
                             Reward2Type = questData[i][11],
                             Reward2Count = int.Parse(questData[i][12])
                         });
-                        
-                        SetLevelUpOption1Goal(i);
+
+                        // 저장 대상 제외 (SetLevelUpOption1Goal 관련)
+                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1)
+                        {
+                            SetLevelUpOption1Goal(i);
+                        }
+                        else
+                        {
+                            // 저장된 진행도 로드
+                            _questData.Datas[i].CurrentTargetGoal = GameManager.Instance.ES3Saver.QuestProgress.ContainsKey(i)
+                                ? GameManager.Instance.ES3Saver.QuestProgress[i]
+                                : 0;
+                        }
                     }
                 }
-                
-                IsQuestClear = _questData.Datas.Keys.ToDictionary(questNumber => questNumber, _ => false);
+
+                // 클리어 상태 로드
+                IsQuestClear = _questData.Datas.Keys.ToDictionary(
+                    questNumber => questNumber,
+                    questNumber => GameManager.Instance.ES3Saver.ClearedQuestStatuses.ContainsKey(questNumber) &&
+                                   GameManager.Instance.ES3Saver.ClearedQuestStatuses[questNumber]
+                );
+
                 UpdateUI();
-                Debug.Log("QuestManager: InitializeQuestData completed.");
-            }
-            else
-            {
-                Debug.LogWarning("QuestManager: No quest data found.");
             }
         }
 
@@ -305,18 +318,20 @@ namespace Managers
             {
                 var questUpdated = false;
 
-                foreach ((_, Data data) in _questData.Datas)
+                foreach (var kvp in _questData.Datas)
                 {
-                    if (data.QuestType1 == questType1.ToString() && data.QuestType2 == questType2)
+                    if (kvp.Value.QuestType1 == questType1.ToString() && kvp.Value.QuestType2 == questType2)
                     {
-                        if (data.CurrentTargetGoal < data.MaxTargetGoal)
+                        if (kvp.Value.CurrentTargetGoal < kvp.Value.MaxTargetGoal)
                         {
-                            data.CurrentTargetGoal += value;
+                            kvp.Value.CurrentTargetGoal += value;
 
-                            if (data.CurrentTargetGoal >= data.MaxTargetGoal)
+                            if (kvp.Value.CurrentTargetGoal >= kvp.Value.MaxTargetGoal)
                             {
-                                data.CurrentTargetGoal = data.MaxTargetGoal;
+                                kvp.Value.CurrentTargetGoal = kvp.Value.MaxTargetGoal;
                             }
+                            
+                            GameManager.Instance.ES3Saver.QuestProgress[kvp.Key] = kvp.Value.CurrentTargetGoal;
                             
                             questUpdated = true;
                         }
@@ -339,6 +354,8 @@ namespace Managers
                 IsQuestClear[questIndex] = true;
                 UpdateUI();
 
+                GameManager.Instance.ES3Saver.ClearedQuestStatuses[questIndex] = true;
+                
                 if (IsQuestClear.Values.All(status => status))
                 {
                     _uiPanelQuest.MainQuest.EnableRewardButton();
@@ -350,12 +367,16 @@ namespace Managers
         {
             if (_questData.ListRewardType != null)
             {
-                CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);   
+                CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
             }
 
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
+
+                // 진행 중인 퀘스트 인덱스 저장
+                GameManager.Instance.ES3Saver.CurrentQuestSubIndex = CurrentQuestSubIndex;
+
                 InitializeQuestData();
                 UpdateUI();
             }
