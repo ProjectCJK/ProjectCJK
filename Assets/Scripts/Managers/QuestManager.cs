@@ -246,9 +246,9 @@ namespace Managers
                 }
                 else
                 {
-                    foreach (KeyValuePair<HuntingZone, EActiveStatus> obj in VolatileDataManager.Instance.HuntingZoneActiveStatuses)
+                    foreach (KeyValuePair<string, EActiveStatus> obj in GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses)
                     {
-                        if (obj.Key.HuntingZoneKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        if (obj.Key == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
                         {
                             _questData.Datas[questIndex].CurrentTargetGoal = 1;
                             break;

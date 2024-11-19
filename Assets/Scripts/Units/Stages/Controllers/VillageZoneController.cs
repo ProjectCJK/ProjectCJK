@@ -136,12 +136,12 @@ namespace Units.Stages.Controllers
                 }
 #endif
 
-            SpawnGuests();
             SpawnDeliveryMan();
-            SpawnHunter();
-            SpawnMonster();
-            SetHunterDestination();
             SetDeliveryManDestination();
+            SpawnHunter();
+            SetHunterDestination();
+            SpawnMonster();
+            SpawnGuests();
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
         }
 

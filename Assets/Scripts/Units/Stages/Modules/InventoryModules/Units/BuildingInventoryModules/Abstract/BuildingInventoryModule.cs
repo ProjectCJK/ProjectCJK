@@ -92,12 +92,12 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
                     ItemFactory.ReturnItem(item);
                     RemoveItem(OutputItemKey);
                 }
-                else
-                {
-                    item = ItemFactory.GetItem(OutputItemKey, 1, SenderTransform.position);
-                    currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
-                    RemoveItem(OutputItemKey);
-                }
+                // else
+                // {
+                //     item = ItemFactory.GetItem(OutputItemKey, 1, SenderTransform.position);
+                //     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
+                //     RemoveItem(OutputItemKey);
+                // }
             }
             else
             {

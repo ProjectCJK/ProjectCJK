@@ -21,7 +21,7 @@ namespace Managers
     public class GameManager : SingletonMono<GameManager>
     {
         [SerializeField] private GameObject _mainCamera;
-        private const float _saveInterval = 1f; // 30초마다 저장
+        private const float _saveInterval = 60f; // 30초마다 저장
         private float _saveTimer;
 
         public bool InGameTrigger { get; set; }

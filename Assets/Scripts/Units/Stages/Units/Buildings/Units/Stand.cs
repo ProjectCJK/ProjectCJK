@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -53,6 +54,8 @@ namespace Units.Stages.Units.Buildings.Units
         [Space(10)] [Header("Input 아이템 타입")] public EItemType InputItemType;
 
         [Space(10)] [Header("Output 아이템 타입")] public EItemType OutputItemType;
+        
+        [Space(10)] [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
     }
 
     public class Stand : UnlockableBuildingZone, IStand
