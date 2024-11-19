@@ -33,6 +33,10 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
             InputItemKey = ParserModule.ParseEnumToString(managementDeskCustomSetting.CurrencyType);
             OutputItemKey = ParserModule.ParseEnumToString(managementDeskCustomSetting.CurrencyType);
             
+            GameManager.Instance.ES3Saver.CurrentBuildingLevel.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption1Level.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption2Level.TryAdd(BuildingKey, 1);
+            
             UpdateDefaultValue();
             UpdateBuildingStatsModule();
         }

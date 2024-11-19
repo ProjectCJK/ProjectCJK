@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
@@ -15,6 +17,33 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class StandInventoryModule : BuildingInventoryModule, IStandInventoryModule
     {
+        protected override Dictionary<string, int> Inventory
+        {
+            get
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_standStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+                
+                return GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey];
+            }
+            set
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_standStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey].TryAdd(_standStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                }
+            }
+        }
+        
+        private readonly StandStatsModule _standStatsModule;
+        
         public StandInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -24,6 +53,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, standStatsModule, inputItemKey, outputItemKey)
         {
+            _standStatsModule = standStatsModule;
         }
 
         public event Action<int> OnMoneyReceived;
@@ -38,7 +68,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }
-
+                
                 ItemFactory.ReturnItem(item);
             }
             else

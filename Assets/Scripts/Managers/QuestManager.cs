@@ -6,6 +6,7 @@ using Modules.DesignPatterns.Singletons;
 using UI;
 using UI.QuestPanels;
 using Units.Stages.Enums;
+using Units.Stages.Managers;
 using Units.Stages.Modules;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
@@ -122,7 +123,7 @@ namespace Managers
                 .Select(i => int.Parse(_gameData[i, 2]))
                 .Max();
 
-            var questData = Enumerable.Range(0, _gameData.GetLength(0))
+            List<List<string>> questData = Enumerable.Range(0, _gameData.GetLength(0))
                 .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString() && _gameData[i, 2] == CurrentQuestSubIndex.ToString())
                 .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();
@@ -177,15 +178,19 @@ namespace Managers
                 {
                     case EBuildingType.Kitchen:
                     {
-                        var value = VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].CurrentBuildingOption1Level;
-                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].MaxTargetGoal
-                            : value;
+                        if (parsedEnum.Item2 != null)
+                        {
+                            var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey];
+                            _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
+                                ? _questData.Datas[questIndex].MaxTargetGoal
+                                : value;
+                        }
+
                         break;
                     }
                     case EBuildingType.ManagementDesk:
                     {
-                        var value= VolatileDataManager.Instance.ManagementDeskStatsModule.CurrentBuildingOption1Level;
+                        var value= GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey];
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
                             ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
@@ -193,7 +198,7 @@ namespace Managers
                     }
                     case EBuildingType.WareHouse:
                     {
-                        var value = VolatileDataManager.Instance.WareHouseStatsModule.CurrentBuildingOption1Level;
+                        var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.WareHouseStatsModule.BuildingKey];
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
                             ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
@@ -201,7 +206,7 @@ namespace Managers
                     }
                     case EBuildingType.DeliveryLodging:
                     {
-                        var value = VolatileDataManager.Instance.DeliveryLodgingStatsModule.CurrentBuildingOption1Level;
+                        var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.DeliveryLodgingStatsModule.BuildingKey];
                         _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
                             ? _questData.Datas[questIndex].MaxTargetGoal
                             : value;
@@ -215,9 +220,9 @@ namespace Managers
 
                 if (parsedEnum.Item1 != null)
                 {
-                    foreach (KeyValuePair<BuildingZone, EActiveStatus> obj in VolatileDataManager.Instance.BuildingActiveStatuses)
+                    foreach (KeyValuePair<string, EActiveStatus> obj in GameManager.Instance.ES3Saver.BuildingActiveStatuses)
                     {
-                        if (obj.Key.BuildingKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        if (obj.Key == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
                         {
                             _questData.Datas[questIndex].CurrentTargetGoal = 1;
                             break;
@@ -343,8 +348,11 @@ namespace Managers
 
         private void AdvanceToNextQuest()
         {
-            CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
-            
+            if (_questData.ListRewardType != null)
+            {
+                CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);   
+            }
+
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;

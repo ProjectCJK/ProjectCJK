@@ -29,7 +29,8 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
     {
         private const float SendItemInterval = 0.2f;
 
-        protected readonly Dictionary<string, int> Inventory = new();
+        protected abstract Dictionary<string, int> Inventory { get; set; }
+
         protected readonly Stack<IItem> spawnedItemStack = new();
         private bool _isItemReceiving;
         private float _lastSendTime;

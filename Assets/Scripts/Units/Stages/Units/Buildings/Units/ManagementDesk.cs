@@ -64,21 +64,6 @@ namespace Units.Stages.Units.Buildings.Units
         private TradeZone _tradeZonePlayer;
         private UpgradeZone _upgradeZonePlayer;
 
-        private void Update()
-        {
-            _managementDeskPaymentModule.Update();
-            _managementDeskInventoryModule.Update();
-
-            SpawnCashier();
-
-#if UNITY_EDITOR
-            // TODO : Test Scripts
-            if (Input.GetKeyDown(KeyCode.W))
-                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey,
-                    VolatileDataManager.Instance.GetItemPrice(EItemType.ProductA, EMaterialType.A));
-#endif
-        }
-
         public override string BuildingKey { get; protected set; }
         public override string InputItemKey { get; protected set; }
         public override string OutputItemKey { get; protected set; }
@@ -119,6 +104,21 @@ namespace Units.Stages.Units.Buildings.Units
         public override void Initialize()
         {
         }
+        
+        private void Update()
+        {
+            _managementDeskPaymentModule.Update();
+            _managementDeskInventoryModule.Update();
+
+            SpawnCashier();
+
+#if UNITY_EDITOR
+            // TODO : Test Scripts
+            if (Input.GetKeyDown(KeyCode.W))
+                _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(OutputItemKey,
+                    VolatileDataManager.Instance.GetItemPrice(EItemType.ProductA, EMaterialType.A));
+#endif
+        }
 
         private void SpawnCashier()
         {
@@ -128,14 +128,18 @@ namespace Units.Stages.Units.Buildings.Units
                 _managementDeskPaymentModule.CurrentSpawnedCashierCount =
                     (int)_managementDeskStatsModule.CurrentBuildingOption2Value;
 
-                for (var i = 0;
-                     i < _managementDeskPaymentModule.CurrentSpawnedCashierCount -
-                     _managementDeskPaymentModule.CashierPaymentDelay.Count;
-                     i++) _managementDeskPaymentModule.CashierPaymentDelay.Add(new CashierPayment());
+                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount - _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                {
+                    _managementDeskPaymentModule.AddCashierPaymentSlot(i);
+                }
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                {
                     if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
-                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
+                    {
+                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);   
+                    }
+                }
             }
         }
 

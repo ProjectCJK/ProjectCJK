@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using Modules;
 using Modules.DesignPatterns.Singletons;
+using Units.Stages.Enums;
 using Units.Stages.Managers;
 using UnityEngine;
 
@@ -7,21 +10,23 @@ namespace Managers
     public enum EES3Key
     {
         InitialSet,
+        ES3Saver,
         CurrentStage,
         BuildingActiveStatuses,
         Gold,
         RedGem,
         Diamond
     }
-
+    
     public class GameManager : SingletonMono<GameManager>
     {
         [SerializeField] private GameObject _mainCamera;
-        private float _saveInterval = 30f; // 30초마다 저장
+        private const float _saveInterval = 1f; // 30초마다 저장
         private float _saveTimer;
 
         public bool InGameTrigger { get; set; }
-        
+        public ES3Saver ES3Saver { get; set; }
+
         protected override void Awake()
         {
             if (_mainCamera != null)
@@ -29,18 +34,39 @@ namespace Managers
                 GameObject cam = Instantiate(_mainCamera);
                 DontDestroyOnLoad(cam);
             }
-            
+
             // 프레임 고정
             Application.targetFrameRate = 60;
-            // VSync 비활성화
             QualitySettings.vSyncCount = 0;
-            
+
             // ES3.settings 세팅
             ES3.CacheFile();
             ES3.settings = new ES3Settings(ES3.Location.Cache);
-            
-            ES3.Save($"{EES3Key.InitialSet}", true, ES3.settings);
-            
+
+            // 데이터 로드
+            if (ES3.KeyExists($"{EES3Key.ES3Saver}"))
+            {
+                ES3Saver = ES3.Load<ES3Saver>($"{EES3Key.ES3Saver}", ES3.settings);
+            }
+            else
+            {
+                ES3Saver = new ES3Saver
+                {
+                    Gold = 10000,
+                    Diamond = 0,
+                    RedGem = 0,
+                    BuildingActiveStatuses = new Dictionary<string, EActiveStatus>(),
+                    HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>(),
+                    RequiredMoneyForBuildingActive = new Dictionary<string, int>(),
+                    RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>(),
+                    ActiveStatusSettingIndex = 0
+                };
+
+                // 초기화 상태를 저장
+                ES3.Save($"{EES3Key.InitialSet}", true, ES3.settings);
+                ES3.Save($"{EES3Key.ES3Saver}", ES3Saver, ES3.settings);
+            }
+
             InGameTrigger = false;
         }
 
@@ -62,8 +88,7 @@ namespace Managers
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            Debug.Log($"OnApplicationPause called. Pause status: {pauseStatus}");
-            if (pauseStatus) // 앱이 백그라운드로 이동할 때만 저장
+            if (pauseStatus)
             {
                 SaveData();
             }
@@ -71,14 +96,14 @@ namespace Managers
 
         private void OnApplicationQuit()
         {
-            Debug.Log("OnApplicationQuit called.");
             SaveData();
         }
 
         private void SaveData()
         {
+            ES3.Save($"{EES3Key.ES3Saver}", ES3Saver, ES3.settings);
+            ES3.StoreCachedFile();
             Debug.Log("Data saved.");
-            ES3.StoreCachedFile(); // ES3 데이터 저장
         }
 
 #if UNITY_EDITOR
@@ -96,7 +121,6 @@ namespace Managers
         {
             if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
             {
-                Debug.Log("Exiting Play Mode - Saving data in editor.");
                 SaveData(); // 에디터에서 플레이 모드 종료 시 데이터 저장
             }
         }

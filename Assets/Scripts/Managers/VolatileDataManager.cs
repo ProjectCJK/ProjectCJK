@@ -20,7 +20,6 @@ namespace Managers
         public ManagementDeskStatsModule ManagementDeskStatsModule;
         public WareHouseStatsModule WareHouseStatsModule;
         public Dictionary<EMaterialType, EStageMaterialType> MaterialMappings = new();
-        public Dictionary<BuildingZone, EActiveStatus> BuildingActiveStatuses = new();
 
         public readonly Dictionary<string, int> ItemPrices = new();
         public readonly Dictionary<EMaterialType, KitchenStatsModule> KitchenStatsModule = new();
@@ -32,7 +31,6 @@ namespace Managers
 
         public void RegisterReference()
         {
-            // if (ES3.KeyExists($"{EES3Key.BuildingActiveStatuses}")) BuildingActiveStatuses = (Dictionary<BuildingZone, EActiveStatus>) ES3.Load($"{EES3Key.BuildingActiveStatuses}");
         }
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)
@@ -45,13 +43,6 @@ namespace Managers
         public void SetCurrentStageLevel(int stageLevel)
         {
             CurrentStageLevel = stageLevel;
-        }
-
-        public void SetBuildingActiveStatuses(BuildingZone buildingZone, EActiveStatus activeStatus)
-        {
-            BuildingActiveStatuses[buildingZone] = activeStatus;
-
-            // ES3.Save($"{EES3Key.BuildingActiveStatuses}", BuildingActiveStatuses);
         }
     }
 }

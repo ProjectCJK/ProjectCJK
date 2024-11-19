@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
@@ -21,6 +22,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class GuestInventoryModule : CreatureInventoryModule, IGuestInventoryModule
     {
+        protected override Dictionary<string, int> Inventory { get; set; } = new();
+
         private readonly ENPCType _npcType;
 
         public GuestInventoryModule(

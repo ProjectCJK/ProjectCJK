@@ -92,9 +92,7 @@ namespace Units.Stages.Units.Buildings.Units
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
         }
 
-        public override void Initialize()
-        {
-        }
+        public override void Initialize() { }
 
         public void SpawnDeliveryMan(ICreatureController creatureController, HashSet<IDeliveryMan> currentSpawnedDeliveryMans)
         {
@@ -105,16 +103,6 @@ namespace Units.Stages.Units.Buildings.Units
                 _currentSpawnedDeliveryMans.Add(deliveryMan);
                 currentSpawnedDeliveryMans.Add(deliveryMan);
             }
-        }
-
-        private void HandleOnMoneyReceived(int value)
-        {
-            CurrentGoldForUnlock += value;
-            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
-
-            UnlockZoneModule.UpdateViewModel();
-
-            if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
         }
 
         private void HandleOnPlayerConnected(bool value)

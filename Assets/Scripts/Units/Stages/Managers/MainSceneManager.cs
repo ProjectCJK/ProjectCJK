@@ -26,7 +26,7 @@ namespace Units.Stages.Managers
     {
         [SerializeField] private MainSceneDefaultSetting _mainSceneDefaultSetting;
         
-        private IStageController _stageController;
+        public StageController StageController;
         
         private Joystick _joystick;
         
@@ -77,13 +77,13 @@ namespace Units.Stages.Managers
                 stage = Instantiate(_mainSceneDefaultSetting.StagePrefab[0]);
             }
             
-            _stageController = stage.GetComponent<StageController>();
+            StageController = stage.GetComponent<StageController>();
         }
 
         private void RegisterReference()
         {
             _joystick = UIManager.Instance.Joystick;
-            _stageController.RegisterReference(_joystick);
+            StageController.RegisterReference(_joystick);
             
             CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
             
@@ -97,14 +97,14 @@ namespace Units.Stages.Managers
             if (Camera.main != null)
             {
                 Camera.main.orthographicSize = 10;
-                Camera.main.GetComponent<CameraController>().RegisterReference(_stageController.PlayerTransform);   
+                Camera.main.GetComponent<CameraController>().RegisterReference(StageController.PlayerTransform);   
             }
         }
 
         private void Initialize()
         {
             CurrencyManager.Instance.Initialize();
-            _stageController.Initialize();
+            StageController.Initialize();
         }
 
         private void Update()

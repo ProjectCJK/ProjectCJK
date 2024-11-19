@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
 using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
@@ -16,6 +19,33 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class WareHouseInventoryModule : BuildingInventoryModule, IWareHouseInventoryModule
     {
+        protected override Dictionary<string, int> Inventory
+        {
+            get
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+                
+                return GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey];
+            }
+            set
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey].TryAdd(_upgradableBuildingStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                }
+            }
+        }
+        
+        private readonly UpgradableBuildingStatsModule _upgradableBuildingStatsModule;
+        
         public WareHouseInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -25,6 +55,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, upgradableBuildingStatsModule, inputItemKey, outputItemKey)
         {
+            _upgradableBuildingStatsModule = upgradableBuildingStatsModule;
         }
 
         public event Action<int> OnMoneyReceived;
