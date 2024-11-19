@@ -119,6 +119,7 @@ namespace UI.CostumePanels
             _uiPanelCostumeInventory.UpdateItems();
             _uiPanelCurrentEquippedCostumeInfo.Activate();
             CostumeManager.Instance.SortCostumeItems();
+            CostumeManager.Instance.SaveCostumeData();
             gameObject.SetActive(false);
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using Units.Stages.Enums;
 
 namespace Modules
@@ -11,8 +12,8 @@ namespace Modules
         public int Diamond;
         public int RedGem;
         public Dictionary<string, Dictionary<string, int>> CreatureItems = new();
-        
-        // public List<CostumeDataSerializable> CurrentCostumes = new();
+
+        public List<CostumeDataSerializable> CurrentCostumes = new();
         
         // BuildingInfo
         public Dictionary<string, EActiveStatus> BuildingActiveStatuses = new();

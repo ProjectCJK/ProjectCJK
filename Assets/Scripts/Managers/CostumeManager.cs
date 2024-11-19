@@ -40,7 +40,7 @@ namespace Managers
         Common,
         Rare
     }
-    
+
     [Serializable]
     public class CostumeItemData
     {
@@ -57,12 +57,39 @@ namespace Managers
         public List<int> MaterialValues;
         public List<CostumeItemOptionData> CostumeItemOptionDatas;
 
+        /// <summary>
+        /// 현재 레벨에 따른 옵션 값 계산
+        /// </summary>
         public List<float> GetCurrentOptionValue()
         {
             var currentLevel = CurrentLevel;
-            return CostumeItemOptionDatas.Select(costumeItemOptionData => costumeItemOptionData.BaseOptionValue + (currentLevel - 1) * costumeItemOptionData.UpgradeOptionValue).ToList();
+            return CostumeItemOptionDatas.Select(costumeItemOptionData =>
+                costumeItemOptionData.BaseOptionValue +
+                (currentLevel - 1) * costumeItemOptionData.UpgradeOptionValue).ToList();
         }
-        
+
+        /// <summary>
+        /// CostumeSprites를 스프라이트 인덱스에 따라 설정
+        /// </summary>
+        public void RestoreSprites()
+        {
+            CostumeSprites = CostumeType switch
+            {
+                ECostumeType.Weapon => DataManager.Instance.CostumeSpriteSo
+                    .WeaponCostumeSprites[SpriteIndex].Sprites,
+                ECostumeType.Clothes => DataManager.Instance.CostumeSpriteSo
+                    .BodyCostumeSprites[SpriteIndex].Sprites,
+                ECostumeType.Bag => DataManager.Instance.CostumeSpriteSo
+                    .BagCostumeSprites[SpriteIndex].Sprites,
+                ECostumeType.Hat => DataManager.Instance.CostumeSpriteSo
+                    .HatCostumeSprites[SpriteIndex].Sprites,
+                _ => CostumeSprites
+            };
+        }
+
+        /// <summary>
+        /// 현재 CostumeItemData 객체를 복제
+        /// </summary>
         public CostumeItemData Clone()
         {
             return new CostumeItemData
@@ -89,7 +116,7 @@ namespace Managers
             };
         }
     }
-    
+        
     [Serializable]
     public class CostumeItemOptionData
     {
@@ -99,6 +126,17 @@ namespace Managers
         public float UpgradeOptionValue;
         
         public string OptionDescription;
+    }
+    
+    [Serializable]
+    public class CostumeDataSerializable
+    {
+        public string CostumeName;
+        public ECostumeType CostumeType;
+        public ECostumeGrade CostumeGrade;
+        public int SpriteIndex;
+        public int CurrentLevel;
+        public int CurrentExp;
     }
 
     public class CostumeManager : Singleton<CostumeManager>
@@ -113,12 +151,12 @@ namespace Managers
 
         private readonly Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
         private readonly Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
-        
+
         private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_CostumeGacha;
         private readonly UI_Panel_Costume _uiPanelCostume = UIManager.Instance.UI_Panel_Costume;
 
         private List<CostumeItemData> _currentCostumeItemData = new();
-        
+
         public void RegisterReference()
         {
             _costumeData = DataManager.Instance.CostumeData.GetData();
@@ -129,24 +167,13 @@ namespace Managers
             CacheCostumes();
             CacheGachaBackgroundSprites();
 
+            LoadCostumeData(); // ES3Saver에서 데이터 로드
+
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
             _uiPanelCostume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
 
             UIManager.Instance.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
             UIManager.Instance.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
-        }
-
-        private void CacheGachaBackgroundSprites()
-        {
-            foreach (CostumeBackBackgroundSprite costumeBackBackgroundSprite in DataManager.Instance.CostumeBackBackgroundSpriteSO.CostumeBackBackgroundSprites)
-            {
-                _backgroundImageCache.TryAdd(costumeBackBackgroundSprite.Grade, costumeBackBackgroundSprite.Sprite);
-            }
-            
-            foreach (CostumeFrontBackgroundSprite costumeFrontBackgroundSprite in DataManager.Instance.CostumeFrontBackgroundSpriteSo.CostumeFrontBackgroundSprites)
-            {
-                _frontGroundImageCache.TryAdd(new Tuple<ECostumeType, ECostumeGrade>(costumeFrontBackgroundSprite.Type, costumeFrontBackgroundSprite.Grade), costumeFrontBackgroundSprite.Sprite);
-            }
         }
 
         private void CacheCostumes()
@@ -164,74 +191,62 @@ namespace Managers
                     SpriteIndex = int.Parse(_costumeData[i, 4])
                 };
 
-                costumeItem.CostumeSprites = costumeItem.CostumeType switch
-                {
-                    ECostumeType.Weapon => DataManager.Instance.CostumeSpriteSo
-                        .WeaponCostumeSprites[costumeItem.SpriteIndex].Sprites,
-                    ECostumeType.Clothes => DataManager.Instance.CostumeSpriteSo
-                        .BodyCostumeSprites[costumeItem.SpriteIndex].Sprites,
-                    ECostumeType.Bag => DataManager.Instance.CostumeSpriteSo.BagCostumeSprites[costumeItem.SpriteIndex]
-                        .Sprites,
-                    ECostumeType.Hat => DataManager.Instance.CostumeSpriteSo.HatCostumeSprites[costumeItem.SpriteIndex]
-                        .Sprites,
-                    _ => costumeItem.CostumeSprites
-                };
-
+                costumeItem.RestoreSprites();
                 costumeItem.CurrentLevel = 1;
                 costumeItem.MaxLevel = Enumerable.Range(0, _costumeUpgradeData.GetLength(0))
                     .Where(index => _costumeUpgradeData[index, 1] == $"{costumeItem.CostumeGrade}")
-                    .Select(index => int.Parse(_costumeUpgradeData[index, 2]))  // 레벨을 int로 파싱
-                    .DefaultIfEmpty(0)  // 데이터가 없는 경우 기본값을 설정
+                    .Select(index => int.Parse(_costumeUpgradeData[index, 2]))
+                    .DefaultIfEmpty(0)
                     .Max() + 1;
-                
-                costumeItem.CurrentExp = 0;
+
                 costumeItem.MaxExps = Enumerable.Range(0, _costumeUpgradeData.GetLength(0))
-                    .Where(index => _costumeUpgradeData[index, 1] == $"{costumeItem.CostumeGrade}")  // CostumeGrade가 일치하는 행 필터링
-                    .Select(index => int.Parse(_costumeUpgradeData[index, 3]))  // Upgrade 값 파싱
+                    .Where(index => _costumeUpgradeData[index, 1] == $"{costumeItem.CostumeGrade}")
+                    .Select(index => int.Parse(_costumeUpgradeData[index, 3]))
                     .ToList();
-                
+
                 costumeItem.MaterialValues = Enumerable.Range(0, _costumeUpgradeData.GetLength(0))
-                    .Where(index => _costumeUpgradeData[index, 1] == $"{costumeItem.CostumeGrade}")  // CostumeGrade가 일치하는 행 필터링
-                    .Select(index => int.Parse(_costumeUpgradeData[index, 4]))  // Material 값 파싱
+                    .Where(index => _costumeUpgradeData[index, 1] == $"{costumeItem.CostumeGrade}")
+                    .Select(index => int.Parse(_costumeUpgradeData[index, 4]))
                     .ToList();
-                
+
                 costumeItem.CostumeItemOptionDatas = new List<CostumeItemOptionData>();
                 List<ECostumeOptionType> options = GetCostumeOptions(i);
                 foreach (ECostumeOptionType costumeOptionType in options)
                 {
                     var costumeItemOptionData = new CostumeItemOptionData();
-    
+
                     // CostumeOptionType 설정
                     var paramIndex = Enumerable.Range(0, _costumeParamData.GetLength(0))
                         .FirstOrDefault(index => _costumeParamData[index, 4] == $"{costumeOptionType}");
 
                     if (paramIndex >= 0)
                     {
-                        costumeItemOptionData.CostumeOptionType = Enum.Parse<ECostumeOptionType>(_costumeParamData[paramIndex, 4]);
-        
+                        costumeItemOptionData.CostumeOptionType =
+                            Enum.Parse<ECostumeOptionType>(_costumeParamData[paramIndex, 4]);
+
                         // CostumeOptionCalculateType 설정
-                        costumeItemOptionData.CostumeOptionCalculateType = Enum.Parse<ECostumeOptionCalculateType>(_costumeParamData[paramIndex, 5]);
-        
+                        costumeItemOptionData.CostumeOptionCalculateType =
+                            Enum.Parse<ECostumeOptionCalculateType>(_costumeParamData[paramIndex, 5]);
+
                         // OptionDescription 설정
                         costumeItemOptionData.OptionDescription = _costumeParamData[paramIndex, 6];
-        
+
                         // BaseOptionValue와 UpgradeOptionValue 설정 (Common과 Rare에 따라 다름)
                         if (costumeItem.CostumeGrade == ECostumeGrade.Common)
                         {
-                            costumeItemOptionData.BaseOptionValue = float.Parse(_costumeParamData[paramIndex, 7]);  // CommonValue 열
-                            costumeItemOptionData.UpgradeOptionValue = float.Parse(_costumeParamData[paramIndex, 8]);  // CommonUpgrade 열
+                            costumeItemOptionData.BaseOptionValue = float.Parse(_costumeParamData[paramIndex, 7]);
+                            costumeItemOptionData.UpgradeOptionValue = float.Parse(_costumeParamData[paramIndex, 8]);
                         }
                         else if (costumeItem.CostumeGrade == ECostumeGrade.Rare)
                         {
-                            costumeItemOptionData.BaseOptionValue = float.Parse(_costumeParamData[paramIndex, 9]);  // RareValue 열
-                            costumeItemOptionData.UpgradeOptionValue = float.Parse(_costumeParamData[paramIndex, 10]);  // RareUpgrade 열
+                            costumeItemOptionData.BaseOptionValue = float.Parse(_costumeParamData[paramIndex, 9]);
+                            costumeItemOptionData.UpgradeOptionValue = float.Parse(_costumeParamData[paramIndex, 10]);
                         }
                     }
-                    
+
                     costumeItem.CostumeItemOptionDatas.Add(costumeItemOptionData);
                 }
 
-                
                 switch (costumeItem.CostumeGrade)
                 {
                     case ECostumeGrade.Common:
@@ -241,6 +256,22 @@ namespace Managers
                         _cachedRareCostumes.Add(costumeItem);
                         break;
                 }
+            }
+        }
+        
+        private void CacheGachaBackgroundSprites()
+        {
+            foreach (CostumeBackBackgroundSprite costumeBackBackgroundSprite in DataManager.Instance.CostumeBackBackgroundSpriteSO.CostumeBackBackgroundSprites)
+            {
+                _backgroundImageCache.TryAdd(costumeBackBackgroundSprite.Grade, costumeBackBackgroundSprite.Sprite);
+            }
+
+            foreach (CostumeFrontBackgroundSprite costumeFrontBackgroundSprite in DataManager.Instance.CostumeFrontBackgroundSpriteSo.CostumeFrontBackgroundSprites)
+            {
+                _frontGroundImageCache.TryAdd(
+                    new Tuple<ECostumeType, ECostumeGrade>(costumeFrontBackgroundSprite.Type, costumeFrontBackgroundSprite.Grade),
+                    costumeFrontBackgroundSprite.Sprite
+                );
             }
         }
 
@@ -261,12 +292,53 @@ namespace Managers
             return optionTypes;
         }
 
+        public void LoadCostumeData()
+        {
+            if (GameManager.Instance.ES3Saver.CurrentCostumes != null && GameManager.Instance.ES3Saver.CurrentCostumes.Count > 0)
+            {
+                _currentCostumeItemData = GameManager.Instance.ES3Saver.CurrentCostumes
+                    .Select(data => new CostumeItemData
+                    {
+                        CostumeName = data.CostumeName,
+                        CostumeType = data.CostumeType,
+                        CostumeGrade = data.CostumeGrade,
+                        SpriteIndex = data.SpriteIndex,
+                        CurrentLevel = data.CurrentLevel,
+                        CurrentExp = data.CurrentExp
+                    }).ToList();
+
+                foreach (var costume in _currentCostumeItemData)
+                {
+                    costume.RestoreSprites();
+                }
+
+                Debug.Log("Costume data loaded from CurrentCostumes.");
+            }
+            else
+            {
+                Debug.LogWarning("No costume data found in CurrentCostumes.");
+            }
+        }
+
+        public void SaveCostumeData()
+        {
+            GameManager.Instance.ES3Saver.CurrentCostumes = _currentCostumeItemData.Select(costume => new CostumeDataSerializable
+            {
+                CostumeName = costume.CostumeName,
+                CostumeType = costume.CostumeType,
+                CostumeGrade = costume.CostumeGrade,
+                SpriteIndex = costume.SpriteIndex,
+                CurrentLevel = costume.CurrentLevel,
+                CurrentExp = costume.CurrentExp
+            }).ToList();
+
+            Debug.Log("Costume data saved to CurrentCostumes.");
+        }
+
         private void ActivateCostumeGacha()
         {
             var gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
-            
             SortCostumeItems();
-            
             _uiPanelCostumeGacha.Activate(gachaItems);
         }
 
@@ -289,6 +361,8 @@ namespace Managers
                 randomItems.Add(randomItem);
             }
 
+            SaveCostumeData();
+
             return randomItems;
         }
 
@@ -299,7 +373,7 @@ namespace Managers
                 Debug.LogWarning("No Common costumes found.");
                 return default;
             }
-    
+
             var randomIndex = Random.Range(0, _cachedCommonCostumes.Count);
             return _cachedCommonCostumes[randomIndex].Clone();
         }
@@ -315,35 +389,29 @@ namespace Managers
             var randomIndex = Random.Range(0, _cachedRareCostumes.Count);
             return _cachedRareCostumes[randomIndex].Clone();
         }
-        
+
         private void ActivateCostumePanel()
         {
             _uiPanelCostume.Activate();
         }
-        
+
         public void SortCostumeItems()
         {
             var typeOrder = new List<ECostumeType> { ECostumeType.Weapon, ECostumeType.Hat, ECostumeType.Bag, ECostumeType.Clothes };
 
             _currentCostumeItemData.Sort((a, b) =>
             {
-                if (a == null || b == null) return a == null ? 1 : -1; // Null 값 처리
+                if (a == null || b == null) return a == null ? 1 : -1;
 
-                // 1. IsEquipped 기준 (true 우선)
                 var equippedComparison = b.IsEquipped.CompareTo(a.IsEquipped);
                 if (equippedComparison != 0) return equippedComparison;
 
-                // 2. CostumeGrade 기준 (Rare 우선)
                 var gradeComparison = b.CostumeGrade.CompareTo(a.CostumeGrade);
                 if (gradeComparison != 0) return gradeComparison;
 
-                // 3. CostumeType 기준 (지정된 순서대로)
-                var typeComparison = typeOrder.Contains(a.CostumeType) && typeOrder.Contains(b.CostumeType)
-                    ? typeOrder.IndexOf(a.CostumeType).CompareTo(typeOrder.IndexOf(b.CostumeType))
-                    : 0; // 기본값 설정
+                var typeComparison = typeOrder.IndexOf(a.CostumeType).CompareTo(typeOrder.IndexOf(b.CostumeType));
                 if (typeComparison != 0) return typeComparison;
 
-                // 4. CostumeName 기준 (사전순, InvariantCulture 사용)
                 return string.Compare(a.CostumeName, b.CostumeName, StringComparison.InvariantCulture);
             });
         }
