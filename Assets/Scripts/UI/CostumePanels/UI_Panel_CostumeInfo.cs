@@ -115,10 +115,12 @@ namespace UI.CostumePanels
             VolatileDataManager.Instance.EquippedCostumes[_costumeItemData.CostumeType] = _costumeItemData;
             VolatileDataManager.Instance.Player.PlayerCostumeModule.UpdateEquippedCostumeStats(_costumeItemData, false); // 스탯 증가
 
+            CostumeManager.Instance.SortCostumeItems();
+            
             // 인벤토리와 UI 업데이트
             _uiPanelCostumeInventory.UpdateItems();
             _uiPanelCurrentEquippedCostumeInfo.Activate();
-            CostumeManager.Instance.SortCostumeItems();
+            
             CostumeManager.Instance.SaveCostumeData();
             gameObject.SetActive(false);
         }

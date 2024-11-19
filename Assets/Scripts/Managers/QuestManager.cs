@@ -373,8 +373,9 @@ namespace Managers
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
-
-                // 진행 중인 퀘스트 인덱스 저장
+                
+                GameManager.Instance.ES3Saver.ClearedQuestStatuses.Clear();
+                GameManager.Instance.ES3Saver.QuestProgress.Clear();
                 GameManager.Instance.ES3Saver.CurrentQuestSubIndex = CurrentQuestSubIndex;
 
                 InitializeQuestData();
