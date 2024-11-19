@@ -261,17 +261,15 @@ namespace Managers
         
         private void CacheGachaBackgroundSprites()
         {
-            foreach (CostumeBackBackgroundSprite costumeBackBackgroundSprite in DataManager.Instance.CostumeBackBackgroundSpriteSO.CostumeBackBackgroundSprites)
+            foreach (var backSprite in DataManager.Instance.CostumeBackBackgroundSpriteSO.CostumeBackBackgroundSprites)
             {
-                _backgroundImageCache.TryAdd(costumeBackBackgroundSprite.Grade, costumeBackBackgroundSprite.Sprite);
+                _backgroundImageCache.TryAdd(backSprite.Grade, backSprite.Sprite);
             }
 
-            foreach (CostumeFrontBackgroundSprite costumeFrontBackgroundSprite in DataManager.Instance.CostumeFrontBackgroundSpriteSo.CostumeFrontBackgroundSprites)
+            foreach (var frontSprite in DataManager.Instance.CostumeFrontBackgroundSpriteSo.CostumeFrontBackgroundSprites)
             {
-                _frontGroundImageCache.TryAdd(
-                    new Tuple<ECostumeType, ECostumeGrade>(costumeFrontBackgroundSprite.Type, costumeFrontBackgroundSprite.Grade),
-                    costumeFrontBackgroundSprite.Sprite
-                );
+                var key = new Tuple<ECostumeType, ECostumeGrade>(frontSprite.Type, frontSprite.Grade);
+                _frontGroundImageCache.TryAdd(key, frontSprite.Sprite);
             }
         }
 
@@ -360,8 +358,6 @@ namespace Managers
                 _currentCostumeItemData.Add(randomItem);
                 randomItems.Add(randomItem);
             }
-
-            SaveCostumeData();
 
             return randomItems;
         }
