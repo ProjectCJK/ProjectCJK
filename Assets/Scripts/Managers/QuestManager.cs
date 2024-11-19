@@ -156,7 +156,7 @@ namespace Managers
                         });
 
                         // 저장 대상 제외 (SetLevelUpOption1Goal 관련)
-                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1)
+                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1 || ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.Build)
                         {
                             SetLevelUpOption1Goal(i);
                         }
