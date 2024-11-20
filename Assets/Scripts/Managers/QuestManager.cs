@@ -119,12 +119,12 @@ namespace Managers
         public void InitializeQuestData()
         {
             _maxSubIndexForStage = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString())
+                .Where(i => _gameData[i, 1] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString())
                 .Select(i => int.Parse(_gameData[i, 2]))
                 .Max();
 
             List<List<string>> questData = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == VolatileDataManager.Instance.CurrentStageLevel.ToString() &&
+                .Where(i => _gameData[i, 1] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                             _gameData[i, 2] == CurrentQuestSubIndex.ToString())
                 .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();

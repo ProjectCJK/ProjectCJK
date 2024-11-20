@@ -8,6 +8,8 @@ namespace Modules
     [Serializable]
     public class ES3Saver
     {
+        public int CurrentStageLevel;
+            
         public int Gold;
         public int Diamond;
         public int RedGem;
@@ -30,6 +32,23 @@ namespace Modules
         // Quest Data
         public int CurrentQuestSubIndex; // 현재 진행 중인 퀘스트 인덱스
         public Dictionary<int, bool> ClearedQuestStatuses = new(); // 퀘스트 클리어 상태
-        public Dictionary<int, int> QuestProgress = new(); // 퀘스트 진행 상태 (현재 목표 값)
+        public Dictionary<int, int> QuestProgress = new(); // 퀘스트 진행 상태 (현재 목표 값)\
+
+        public void ResetStageData()
+        {
+            BuildingActiveStatuses = new Dictionary<string, EActiveStatus>();
+            HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>();
+            BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();
+            BuildingOutputItems = new Dictionary<string, Dictionary<string, int>>();
+            CurrentBuildingLevel = new Dictionary<string, int>();
+            CurrentBuildingOption1Level = new Dictionary<string, int>();
+            CurrentBuildingOption2Level = new Dictionary<string, int>();
+            RequiredMoneyForBuildingActive = new Dictionary<string, int>();
+            RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>();
+            ActiveStatusSettingIndex = 0;
+            CurrentQuestSubIndex = 0;
+            ClearedQuestStatuses = new Dictionary<int, bool>();
+            QuestProgress = new Dictionary<int, int>();
+        }
     }
 }

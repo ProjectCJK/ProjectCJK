@@ -84,7 +84,7 @@ namespace Units.Stages.Controllers
 
         public void RegisterReference(Joystick joystick)
         {
-            VolatileDataManager.Instance.SetCurrentStageLevel(_stageCustomSettings.StageLevel);
+            GameManager.Instance.ES3Saver.CurrentStageLevel = _stageCustomSettings.StageLevel;
             
             InitializeManager();
 

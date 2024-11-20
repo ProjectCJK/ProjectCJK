@@ -14,8 +14,6 @@ namespace Managers
     {
         public Player Player;
 
-        public int CurrentStageLevel { get; private set; }
-
         public DeliveryLodgingStatsModule DeliveryLodgingStatsModule;
         public ManagementDeskStatsModule ManagementDeskStatsModule;
         public WareHouseStatsModule WareHouseStatsModule;
@@ -38,11 +36,6 @@ namespace Managers
             if (item1.HasValue && item2.HasValue) return ItemPrices[$"{item1.Value}_{item2.Value}"];
 
             return 0;
-        }
-
-        public void SetCurrentStageLevel(int stageLevel)
-        {
-            CurrentStageLevel = stageLevel;
         }
     }
 }

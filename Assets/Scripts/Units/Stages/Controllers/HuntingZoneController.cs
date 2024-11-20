@@ -51,9 +51,9 @@ namespace Units.Stages.Controllers
             _playerItemPickupRange = DataManager.Instance.PlayerDataSo.ItemPickupRange;
             _hunterItemPickupRange = DataManager.Instance.HunterDataSo.ItemPickupRange;
 
-            for (var i = 0; i < DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].HuntingZones.Count; i++)
+            for (var i = 0; i < DataManager.Instance.levelPrefabSo.Levels[GameManager.Instance.ES3Saver.CurrentStageLevel - 1].HuntingZones.Count; i++)
             {
-                GameObject huntingZonePrefab = DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].HuntingZones[i];
+                GameObject huntingZonePrefab = DataManager.Instance.levelPrefabSo.Levels[GameManager.Instance.ES3Saver.CurrentStageLevel - 1].HuntingZones[i];
                 InstantiateHuntingZones(HuntingZoneSpawnData.HuntingZoneSpawners[i], huntingZonePrefab);
             }
         }

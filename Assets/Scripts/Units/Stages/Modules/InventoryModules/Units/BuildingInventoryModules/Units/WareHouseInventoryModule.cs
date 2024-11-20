@@ -23,23 +23,23 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         {
             get
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
                 
-                return GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey];
+                return GameManager.Instance.ES3Saver.BuildingOutputItems[_upgradableBuildingStatsModule.BuildingKey];
             }
             set
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_upgradableBuildingStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_upgradableBuildingStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
 
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems[_upgradableBuildingStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems[_upgradableBuildingStatsModule.BuildingKey].TryAdd(_upgradableBuildingStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                    GameManager.Instance.ES3Saver.BuildingOutputItems[_upgradableBuildingStatsModule.BuildingKey].TryAdd(_upgradableBuildingStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
                 }
             }
         }

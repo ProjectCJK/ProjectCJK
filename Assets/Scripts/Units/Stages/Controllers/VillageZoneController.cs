@@ -99,7 +99,7 @@ namespace Units.Stages.Controllers
 
         private void InstantiateLevels()
         {
-            GameObject prefab = DataManager.Instance.levelPrefabSo.Levels[VolatileDataManager.Instance.CurrentStageLevel - 1].Village;
+            GameObject prefab = DataManager.Instance.levelPrefabSo.Levels[GameManager.Instance.ES3Saver.CurrentStageLevel - 1].Village;
             GameObject village = Instantiate(prefab, _villageSpawnData.VillageSpawner);
             village.transform.localPosition = Vector3.zero;
             

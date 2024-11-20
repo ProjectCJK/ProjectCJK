@@ -21,23 +21,23 @@ namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModule
         {
             get
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_huntingZoneKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_huntingZoneKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_huntingZoneKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_huntingZoneKey, new Dictionary<string, int>());
                 }
                 
-                return GameManager.Instance.ES3Saver.BuildingInputItems[_huntingZoneKey];
+                return GameManager.Instance.ES3Saver.BuildingOutputItems[_huntingZoneKey];
             }
             set
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_huntingZoneKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_huntingZoneKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_huntingZoneKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_huntingZoneKey, new Dictionary<string, int>());
                 }
 
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_huntingZoneKey].ContainsKey(value.Keys.ToString()))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems[_huntingZoneKey].ContainsKey(value.Keys.ToString()))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems[_huntingZoneKey].TryAdd(_huntingZoneKey, int.Parse(value.Values.ToString()));
+                    GameManager.Instance.ES3Saver.BuildingOutputItems[_huntingZoneKey].TryAdd(_huntingZoneKey, int.Parse(value.Values.ToString()));
                 }
             }
         }
