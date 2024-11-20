@@ -81,7 +81,7 @@ namespace Units.Stages.Units.HuntingZones
             _itemKey = ParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
 
             _huntingZoneInventoryModule = new HuntingZoneInventoryModule(HuntingZoneDefaultSetting.UnlockZone_Player,
-                HuntingZoneDefaultSetting.UnlockZone_Player, itemController, null, string.Empty, string.Empty);
+                HuntingZoneDefaultSetting.UnlockZone_Player, itemController, null, string.Empty, string.Empty, HuntingZoneKey);
             HuntingZoneKey = $"HuntingZone_{huntingZoneCustomSetting._materialType.ToString()}";
 
             UnlockZoneModule = GetComponent<HuntingZoneUnlockZoneModule>();

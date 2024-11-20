@@ -54,14 +54,14 @@ namespace Managers
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
             _uiPanelCurrency.BindViewModel(_currencyViewModel);
-
-            _gold = ES3.KeyExists($"{EES3Key.Gold}") ? ES3.Load<int>($"{EES3Key.Gold}") : 10000;
-            _diamond = ES3.KeyExists($"{EES3Key.Diamond}") ? ES3.Load<int>($"{EES3Key.Diamond}") : 0;
-            _redGem = ES3.KeyExists($"{EES3Key.RedGem}") ? ES3.Load<int>($"{EES3Key.RedGem}") : 0;
         }
         
         public void Initialize()
         {
+            _gold = GameManager.Instance.ES3Saver.Gold;
+            _diamond = GameManager.Instance.ES3Saver.Diamond;
+            _redGem = GameManager.Instance.ES3Saver.RedGem;
+            
             _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
         }
 
@@ -71,15 +71,15 @@ namespace Managers
             {
                 case ECurrencyType.Diamond:
                     AddDiamond(value);
-                    ES3.Save($"{EES3Key.Diamond}", Diamond, ES3.settings);
+                    GameManager.Instance.ES3Saver.Diamond = Diamond;
                     break;
                 case ECurrencyType.RedGem:
                     AddRedGem(value);
-                    ES3.Save($"{EES3Key.RedGem}", RedGem, ES3.settings);
+                    GameManager.Instance.ES3Saver.RedGem = RedGem;
                     break;
                 case ECurrencyType.Gold:
                     AddGold(value);
-                    ES3.Save($"{EES3Key.Gold}", Gold, ES3.settings);
+                    GameManager.Instance.ES3Saver.Gold = Gold;
                     break;
             }
         }

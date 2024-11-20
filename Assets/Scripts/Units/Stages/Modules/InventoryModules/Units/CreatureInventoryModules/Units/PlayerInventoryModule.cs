@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
@@ -18,6 +19,31 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class PlayerInventoryModule : CreatureInventoryModule, IPlayerInventoryModule
     {
+        protected override Dictionary<string, int> Inventory
+        {
+            get
+            {
+                if (!GameManager.Instance.ES3Saver.CreatureItems.ContainsKey($"{CreatureType}"))
+                {
+                    GameManager.Instance.ES3Saver.CreatureItems.TryAdd($"{CreatureType}", new Dictionary<string, int>());
+                }
+                
+                return GameManager.Instance.ES3Saver.CreatureItems[$"{CreatureType}"];
+            }
+            set
+            {
+                if (!GameManager.Instance.ES3Saver.CreatureItems.ContainsKey($"{CreatureType}"))
+                {
+                    GameManager.Instance.ES3Saver.CreatureItems.TryAdd($"{CreatureType}", new Dictionary<string, int>());
+                }
+
+                if (!GameManager.Instance.ES3Saver.CreatureItems[$"{CreatureType}"].ContainsKey(value.Keys.ToString()))
+                {
+                    GameManager.Instance.ES3Saver.CreatureItems[$"{CreatureType}"].TryAdd($"{CreatureType}", int.Parse(value.Values.ToString()));
+                }
+            }
+        }
+        
         public PlayerInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,

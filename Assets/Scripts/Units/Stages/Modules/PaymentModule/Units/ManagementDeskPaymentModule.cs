@@ -14,188 +14,186 @@ namespace Units.Stages.Modules.PaymentModule.Units
 {
     public interface IManagementDeskPaymentModule
     {
-        public void Update();
-        public bool RegisterPaymentTarget(ICreature creature, bool register);
+        void Update();
+        bool RegisterPaymentTarget(ICreature creature, bool register);
     }
 
     public class CashierPayment
     {
-        public float delay;
-        public Guest guest;
+        public float Delay;
+        public Guest Guest;
     }
 
     public class ManagementDeskPaymentModule : BuildingPaymentModule, IManagementDeskPaymentModule
     {
-        private readonly Queue<Guest> _customerQueue = new();
+        private readonly Queue<Guest> _customerQueue = new(); // NPC 손님 대기열
+        private readonly List<CashierPayment> _cashierPayments = new(); // 계산원 처리 리스트
 
-        private readonly string _inputKey;
+        private readonly string _inputKey; // 관리 데스크 키
+        private readonly IManagementDeskInventoryModule _inventoryModule; // 인벤토리 모듈
+        private readonly float _npcPaymentDelay; // NPC 결제 딜레이
 
-        // private readonly List<> // TODO : 이후 계산원 유닛 추가되면 이 부분에서 처리할 것
-        private readonly IManagementDeskInventoryModule _managementDeskInventoryModule;
-        public readonly List<CashierPayment> CashierPaymentDelay = new();
-        private readonly float _npcPaymentDelay;
-        private float _npcPaymentElapsedTime;
+        private Player _player; // 플레이어 참조
+        private float _playerPaymentElapsedTime; // 플레이어 결제 대기 시간
+        private float _playerPaymentDelay; // 플레이어 결제 딜레이
 
-        private Player _player;
-        private float _playerPaymentDelay;
+        public int CurrentSpawnedCashierCount { get; set; }
 
-        private float _playerPaymentElapsedTime;
-
-        public int CurrentSpawnedCashierCount;
-
-        public ManagementDeskPaymentModule(ManagementDeskStatsModule managementDeskStatsModule,
-            IManagementDeskInventoryModule managementDeskInventoryModule, string inputKey)
+        public ManagementDeskPaymentModule(ManagementDeskStatsModule statsModule, 
+                                           IManagementDeskInventoryModule inventoryModule, 
+                                           string inputKey)
         {
-            _npcPaymentDelay = managementDeskStatsModule.CurrentBuildingOption1Value;
-            _managementDeskInventoryModule = managementDeskInventoryModule;
+            _npcPaymentDelay = statsModule.CurrentBuildingOption1Value;
+            _inventoryModule = inventoryModule;
             _inputKey = inputKey;
         }
 
         public void Update()
         {
             ProcessPlayerPayment();
-            ProcessCashierPayment();
+            ProcessCashierPayments();
         }
 
         public bool RegisterPaymentTarget(ICreature creature, bool register)
         {
-            if (register)
-                switch (creature.CreatureType)
-                {
-                    case ECreatureType.Player:
-                        _player = creature as Player;
-                        if (_player != null) _playerPaymentDelay = _player.PaymentDelay;
-                        return true;
-                    case ECreatureType.NPC when creature as Creature:
-                        if (!_customerQueue.Contains(creature as Guest)) _customerQueue.Enqueue(creature as Guest);
-                        return true;
-                    case ECreatureType.Monster:
-                    default:
-                        return false;
-                }
-
+            // 플레이어 또는 NPC 등록 처리
             switch (creature.CreatureType)
             {
                 case ECreatureType.Player:
-                    _player = null;
-                    _playerPaymentElapsedTime = 0;
-                    return true;
-                case ECreatureType.NPC when creature is Creature:
-                    FindAndDequeue(creature as Guest);
-                    return true;
-                case ECreatureType.Monster:
+                    return HandlePlayerRegistration(creature as Player, register);
+                case ECreatureType.NPC:
+                    return HandleNpcRegistration(creature as Guest, register);
                 default:
-                    return false;
+                    return false; // 다른 타입은 무시
             }
+        }
+
+        private bool HandlePlayerRegistration(Player player, bool register)
+        {
+            if (register)
+            {
+                _player = player;
+                _playerPaymentDelay = player?.PaymentDelay ?? 0f;
+            }
+            else
+            {
+                _player = null;
+                _playerPaymentElapsedTime = 0f;
+            }
+            return true;
+        }
+
+        private bool HandleNpcRegistration(Guest guest, bool register)
+        {
+            switch (register)
+            {
+                case true when guest != null && !_customerQueue.Contains(guest):
+                    _customerQueue.Enqueue(guest);
+                    break;
+                case false:
+                    RemoveFromQueue(guest);
+                    break;
+            }
+
+            return true;
         }
 
         private void ProcessPlayerPayment()
         {
-            if (_player != null && _customerQueue.Count > 0)
+            if (_player == null || _customerQueue.Count == 0) return;
+
+            _playerPaymentElapsedTime += Time.deltaTime;
+
+            if (_playerPaymentElapsedTime >= _playerPaymentDelay)
             {
-                _playerPaymentElapsedTime += Time.deltaTime;
+                Guest guest = _customerQueue.Dequeue();
+                ProcessPaymentForGuest(guest);
 
-                if (_playerPaymentElapsedTime >= _playerPaymentDelay)
+                _playerPaymentElapsedTime = 0f; // 결제 딜레이 초기화
+            }
+        }
+
+        private void ProcessCashierPayments()
+        {
+            foreach (CashierPayment cashier in _cashierPayments)
+            {
+                if (cashier.Guest != null)
                 {
-                    Guest guest = _customerQueue.Dequeue();
-                    Tuple<string, int> purchasedItem = guest.GetItem();
+                    cashier.Delay += Time.deltaTime;
 
-                    if (purchasedItem != null)
+                    if (cashier.Delay >= _npcPaymentDelay)
                     {
-                        (EItemType?, EMaterialType?) parsedItemKey =
-                            ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                        var targetItemPrice =
-                            VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) *
-                            purchasedItem.Item2;
-
-                        for (var i = 0; i < purchasedItem.Item2; i++)
-                        {
-                            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling,
-                                purchasedItem.Item1, 1);
-                        }
-
-                        while (targetItemPrice > 0)
-                        {
-                            var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum
-                                ? DataManager.GoldSendingMaximum
-                                : targetItemPrice;
-                            _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldSendingAmount);
-
-                            targetItemPrice -= goldSendingAmount;
-                        }
+                        ProcessPaymentForGuest(cashier.Guest);
+                        cashier.Guest = null;
+                        cashier.Delay = 0f; // 계산원 결제 딜레이 초기화
                     }
-
-                    guest.CheckNextDestination();
-
-                    _playerPaymentElapsedTime = 0;
+                }
+                else if (_customerQueue.TryDequeue(out var guest))
+                {
+                    cashier.Guest = guest;
+                    cashier.Delay = 0f; // 새로운 손님 처리 시작
                 }
             }
         }
 
-        private void ProcessCashierPayment()
+        private void ProcessPaymentForGuest(Guest guest)
         {
-            if (CashierPaymentDelay.Count > 0)
+            if (guest == null) return;
+
+            Tuple<string, int> purchasedItem = guest.GetItem();
+            if (purchasedItem == null) return;
+
+            (EItemType? itemType, EMaterialType? materialType) = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
+            var totalItemPrice = VolatileDataManager.Instance.GetItemPrice(itemType, materialType) * purchasedItem.Item2;
+
+            // 퀘스트 진행 상황 업데이트
+            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, purchasedItem.Item2);
+
+            // 아이템 가격 처리
+            while (totalItemPrice > 0)
             {
-                foreach (CashierPayment cashier in CashierPaymentDelay)
-                {
-                    if (cashier.guest != null)
-                    {
-                        cashier.delay += Time.deltaTime;
-
-                        if (cashier.delay >= _npcPaymentDelay)
-                        {
-                            Tuple<string, int> purchasedItem = cashier.guest.GetItem();
-
-                            if (purchasedItem != null)
-                            {
-                                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, 1);
-                                (EItemType?, EMaterialType?) parsedItemKey = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-                                var targetItemPrice = VolatileDataManager.Instance.GetItemPrice(parsedItemKey.Item1, parsedItemKey.Item2) * purchasedItem.Item2;
-
-                                //TODO : 상품 별 가격에 따른 가격 책정
-                                while (targetItemPrice > 0)
-                                {
-                                    var goldSendingAmount = targetItemPrice >= DataManager.GoldSendingMaximum
-                                        ? DataManager.GoldSendingMaximum
-                                        : targetItemPrice;
-                                    _managementDeskInventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldSendingAmount);
-
-                                    targetItemPrice -= goldSendingAmount;
-                                }
-                            }
-
-                            cashier.guest.CheckNextDestination();
-
-                            cashier.delay = 0;
-                            cashier.guest = null;
-                        }
-                    }
-                    else if (_customerQueue.Count > 0)
-                    {
-                        if (_customerQueue.TryDequeue(out Guest guest))
-                        {
-                            cashier.delay = 0;
-                            cashier.guest = guest;
-                        }
-                    }
-                }
+                var goldAmount = Mathf.Min(totalItemPrice, DataManager.GoldSendingMaximum);
+                _inventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldAmount);
+                totalItemPrice -= goldAmount;
             }
+
+            guest.CheckNextDestination(); // 손님 다음 행동 처리
         }
 
-        private void FindAndDequeue(Guest creature)
+        private void RemoveFromQueue(Guest guest)
         {
+            if (guest == null) return;
+
             var tempQueue = new Queue<Guest>();
 
             while (_customerQueue.Count > 0)
             {
-                Guest currentGuest = _customerQueue.Dequeue();
-
-                if (currentGuest == creature) break;
-
-                tempQueue.Enqueue(currentGuest);
+                Guest dequeuedGuest = _customerQueue.Dequeue();
+                
+                if (dequeuedGuest == guest) continue; // 제거할 손님은 대기열에서 제외
+                tempQueue.Enqueue(dequeuedGuest);
             }
 
-            foreach (Guest guest in tempQueue) _customerQueue.Enqueue(guest);
+            while (tempQueue.Count > 0)
+            {
+                _customerQueue.Enqueue(tempQueue.Dequeue());
+            }
+        }
+
+        public void AddCashierPaymentSlot(int slotCount)
+        {
+            for (var i = 0; i < slotCount; i++)
+            {
+                _cashierPayments.Add(new CashierPayment());
+            }
+        }
+
+        public void RemoveCashierPaymentSlot(int slotCount)
+        {
+            for (var i = 0; i < slotCount && _cashierPayments.Count > 0; i++)
+            {
+                _cashierPayments.RemoveAt(_cashierPayments.Count - 1);
+            }
         }
     }
 }

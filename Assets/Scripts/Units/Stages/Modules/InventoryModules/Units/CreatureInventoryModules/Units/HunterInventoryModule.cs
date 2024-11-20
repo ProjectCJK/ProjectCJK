@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
@@ -15,6 +17,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class HunterInventoryModule : CreatureInventoryModule, IHunterInventoryModule
     {
+        protected override Dictionary<string, int> Inventory { get; set; } = new ();
+        
         private readonly ENPCType _npcType;
 
         public HunterInventoryModule(
@@ -38,6 +42,11 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
+        public override void Initialize()
+        {
+            Inventory.Clear();
+        }
+        
         public override void RegisterItemReceiver(ITradeZone zone, bool isConnected)
         {
             if (isConnected)

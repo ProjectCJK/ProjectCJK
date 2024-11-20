@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
@@ -15,6 +17,33 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class KitchenMaterialInventoryModule : BuildingInventoryModule, IKitchenMaterialInventoryModule
     {
+        protected override Dictionary<string, int> Inventory
+        {
+            get
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+                
+                return GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey];
+            }
+            set
+            {
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
+                }
+
+                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                {
+                    GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey].TryAdd(_kitchenStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                }
+            }
+        }
+
+        private readonly KitchenStatsModule _kitchenStatsModule;
+        
         public KitchenMaterialInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -24,6 +53,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             string outputItemKey)
             : base(senderTransform, receiverTransform, itemFactory, kitchenStatsModule, inputItemKey, outputItemKey)
         {
+            _kitchenStatsModule = kitchenStatsModule;
         }
 
         public event Action<int> OnMoneyReceived;

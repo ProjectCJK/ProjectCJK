@@ -321,6 +321,7 @@ namespace UI.CostumePanels
             _updateCostumeInventoryAction?.Invoke();
             _updateUICurrentEquippedCostumeInfo?.Invoke();
 
+            CostumeManager.Instance.SaveCostumeData();
             ClearUpgradeItems();
             Activate(_costumeItemData);
         }

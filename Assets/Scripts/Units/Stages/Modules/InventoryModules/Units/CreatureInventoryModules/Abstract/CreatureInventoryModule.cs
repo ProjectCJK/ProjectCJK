@@ -33,10 +33,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
         public abstract override Transform ReceiverTransform { get; }
         public override int MaxInventorySize => InventoryProperty.MaxProductInventorySize;
 
-        public override void Initialize()
-        {
-            Inventory.Clear();
-        }
+        public override void Initialize() { }
 
         public abstract void RegisterItemReceiver(ITradeZone zone, bool isConnected);
 

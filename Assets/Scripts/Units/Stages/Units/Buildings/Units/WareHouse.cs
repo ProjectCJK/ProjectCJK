@@ -110,7 +110,7 @@ namespace Units.Stages.Units.Buildings.Units
         {
             _itemFactory = itemFactory;
             _wareHouseDataSo = DataManager.Instance.WareHouseDataSo;
-            _wareHouseStatsModule = new WareHouseStatsModule(_wareHouseDataSo, _wareHouseCustomSetting);
+            _wareHouseStatsModule = new WareHouseStatsModule(_wareHouseDataSo);
             VolatileDataManager.Instance.WareHouseStatsModule = _wareHouseStatsModule;
             BuildingKey = _wareHouseStatsModule.BuildingKey;
 
@@ -157,16 +157,6 @@ namespace Units.Stages.Units.Buildings.Units
                 _currentSpawnedHunters.Add(hunter);
                 currentSpawnedHunters.Add(hunter);
             }
-        }
-
-        private void HandleOnMoneyReceived(int value)
-        {
-            CurrentGoldForUnlock += value;
-            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
-
-            UnlockZoneModule.UpdateViewModel();
-
-            if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
         }
 
         private void HandleOnPlayerConnected(bool value)

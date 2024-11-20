@@ -132,22 +132,13 @@ namespace Units.Stages.Units.Buildings.Units
 
         public override void Initialize()
         {
+            UpdateViewModel();
         }
 
         private void UpdateViewModel()
         {
             var remainedProductCount = _standInventoryModule.GetItemCount(InputItemKey);
             _standViewModel.UpdateValues(remainedProductCount);
-        }
-
-        private void HandleOnMoneyReceived(int value)
-        {
-            CurrentGoldForUnlock += value;
-            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
-
-            UnlockZoneModule.UpdateViewModel();
-
-            if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
         }
     }
 }

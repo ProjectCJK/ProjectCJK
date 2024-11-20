@@ -34,7 +34,6 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
         public override string[,] BuildingOption1CostData => DataManager.Instance.KitchenOption1CostData.GetData();
         public override string[,] BuildingOption2CostData => DataManager.Instance.KitchenOption2CostData.GetData();
 
-
         public KitchenStatsModule(KitchenDataSO kitchenDataSo, KitchenCustomSetting kitchenCustomSetting) : base(kitchenDataSo)
         {
             MaterialType = kitchenCustomSetting.MaterialType;
@@ -47,6 +46,10 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
 
             ItemType = OutputItemType;
             StageMaterialType = VolatileDataManager.Instance.MaterialMappings[MaterialType];
+            
+            GameManager.Instance.ES3Saver.CurrentBuildingLevel.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption1Level.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption2Level.TryAdd(BuildingKey, 1);
             
             UpdateDefaultValue();
             UpdateBuildingStatsModule();

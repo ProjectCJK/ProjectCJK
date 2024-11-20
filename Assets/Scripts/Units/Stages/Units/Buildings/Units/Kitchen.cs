@@ -183,16 +183,6 @@ namespace Units.Stages.Units.Buildings.Units
             _kitchenDefaultSetting.KitchenView.gameObject.SetActive(isProcessing);
         }
 
-        private void HandleOnMoneyReceived(int value)
-        {
-            CurrentGoldForUnlock += value;
-            UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
-
-            UnlockZoneModule.UpdateViewModel();
-
-            if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
-        }
-
         private void HandleOnPlayerConnected(bool value)
         {
             if (value)

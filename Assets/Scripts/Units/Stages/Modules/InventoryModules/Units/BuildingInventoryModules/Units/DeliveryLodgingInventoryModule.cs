@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
@@ -15,6 +17,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class DeliveryLodgingInventoryModule : BuildingInventoryModule, IDeliveryLodgingInventoryModule
     {
+        protected override Dictionary<string, int> Inventory { get; set; } = new();
+
         public DeliveryLodgingInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
@@ -27,6 +31,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         }
 
         public event Action<int> OnMoneyReceived;
+        
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {

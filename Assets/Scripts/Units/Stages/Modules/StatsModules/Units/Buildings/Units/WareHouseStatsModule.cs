@@ -24,10 +24,13 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Units
         public override string[,] BuildingOption2CostData => DataManager.Instance.WareHouseOption2CostData.GetData();
 
         public WareHouseStatsModule(
-            WareHouseDataSO wareHouseDataSo,
-            WareHouseCustomSetting wareHouseCustomSetting) : base(wareHouseDataSo)
+            WareHouseDataSO wareHouseDataSo) : base(wareHouseDataSo)
         {
             BuildingKey = ParserModule.ParseEnumToString(BuildingType);
+            
+            GameManager.Instance.ES3Saver.CurrentBuildingLevel.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption1Level.TryAdd(BuildingKey, 1);
+            GameManager.Instance.ES3Saver.CurrentBuildingOption2Level.TryAdd(BuildingKey, 1);
 
             UpdateDefaultValue();
             UpdateBuildingStatsModule();

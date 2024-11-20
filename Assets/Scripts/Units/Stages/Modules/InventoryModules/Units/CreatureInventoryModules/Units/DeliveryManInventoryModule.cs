@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
 using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Abstract;
+using Units.Stages.Modules.StatsModules.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
 using Units.Stages.Units.Creatures.Enums;
@@ -15,6 +18,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class DeliveryManInventoryModule : CreatureInventoryModule, IDeliveryManInventoryModule
     {
+        protected override Dictionary<string, int> Inventory { get; set; } = new ();
+        
         private readonly ENPCType _npcType;
 
         public DeliveryManInventoryModule(
@@ -33,11 +38,16 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         }
 
         public override ECreatureType CreatureType { get; }
-
+        
         public override IItemFactory ItemFactory { get; }
         public override Transform SenderTransform { get; }
         public override Transform ReceiverTransform { get; }
 
+        public override void Initialize()
+        {
+            Inventory.Clear();
+        }
+        
         public override void RegisterItemReceiver(ITradeZone zone, bool isConnected)
         {
             if (isConnected)
