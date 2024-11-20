@@ -10,7 +10,7 @@ namespace UI.StageMapPanel
 {
     public class UI_Panel_StageMap : MonoBehaviour
     {
-        [SerializeField] List<Button> buttons = new();
+        [SerializeField] private List<Button> buttons = new();
 
         public void RegisterReference()
         {
@@ -22,10 +22,9 @@ namespace UI.StageMapPanel
             }
         }
 
-        private void ChangeStage(int index)
+        private static void ChangeStage(int index)
         {
-            ES3.Save($"{EES3Key.CurrentStage}", index, ES3.settings);
-            
+            GameManager.Instance.ES3Saver.CurrentStageLevel = index + 2;
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
     }

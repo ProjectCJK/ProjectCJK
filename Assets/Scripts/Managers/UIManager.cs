@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace Managers
 {
-    public class UIManager : SceneSingleton<UIManager>
+    public class UIManager : SingletonMono<UIManager>
     {
         [SerializeField] private Canvas _rootCanvas;
         [SerializeField] private GameObject _eventSystemPrefab;

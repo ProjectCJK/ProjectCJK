@@ -457,10 +457,10 @@ RectTransform:
   m_Father: {fileID: 510842550773324952}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!320 &3560655428916395990
 PlayableDirector:
@@ -560,6 +560,10 @@ PlayableDirector:
   - key: {fileID: -5299324918182770584, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
     value: {fileID: 4085827157585213344}
   - key: {fileID: -3116075710741151936, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
+    value: {fileID: 3390950854460016918}
+  - key: {fileID: -5835121883321847243, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
+    value: {fileID: 4085827157585213344}
+  - key: {fileID: 4983169619125512433, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
     value: {fileID: 3390950854460016918}
   m_ExposedReferences:
     m_References:
@@ -6298,7 +6302,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -33359,10 +33363,10 @@ RectTransform:
   m_Father: {fileID: 510842550773324952}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8612892723149604779
 CanvasRenderer:

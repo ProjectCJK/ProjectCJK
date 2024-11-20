@@ -19,23 +19,23 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         {
             get
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_managementDeskStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_managementDeskStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_managementDeskStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_managementDeskStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
                 
-                return GameManager.Instance.ES3Saver.BuildingInputItems[_managementDeskStatsModule.BuildingKey];
+                return GameManager.Instance.ES3Saver.BuildingOutputItems[_managementDeskStatsModule.BuildingKey];
             }
             set
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_managementDeskStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_managementDeskStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_managementDeskStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_managementDeskStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
 
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_managementDeskStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems[_managementDeskStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems[_managementDeskStatsModule.BuildingKey].TryAdd(_managementDeskStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                    GameManager.Instance.ES3Saver.BuildingOutputItems[_managementDeskStatsModule.BuildingKey].TryAdd(_managementDeskStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
                 }
             }
         }

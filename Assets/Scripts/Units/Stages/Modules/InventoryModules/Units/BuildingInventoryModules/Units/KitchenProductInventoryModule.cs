@@ -19,23 +19,23 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         {
                 get
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
                 
-                return GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey];
+                return GameManager.Instance.ES3Saver.BuildingOutputItems[_kitchenStatsModule.BuildingKey];
             }
             set
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_kitchenStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_kitchenStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
 
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems[_kitchenStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems[_kitchenStatsModule.BuildingKey].TryAdd(_kitchenStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                    GameManager.Instance.ES3Saver.BuildingOutputItems[_kitchenStatsModule.BuildingKey].TryAdd(_kitchenStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
                 }
             }
         }

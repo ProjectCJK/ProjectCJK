@@ -18,7 +18,6 @@ namespace Units.Stages.Managers
     {
         [SerializeField] private Canvas _rootCanvasPrefab;
         [SerializeField] private List<LoadingModule> _loadingPrefabs;
-        [SerializeField] private GameObject _splashPrefabs;
 
         private string targetSceneName;
         private bool isLoading;
@@ -79,11 +78,7 @@ namespace Units.Stages.Managers
             if (!GameManager.Instance.InGameTrigger)
             {
                 GameManager.Instance.InGameTrigger = true;
-                Debug.Log("Creating splash and loading UI (InGameTrigger: false).");
-
-                // Splash Prefab 생성
-                Instantiate(_splashPrefabs, Vector3.zero, Quaternion.identity);
-
+                Debug.Log("Creating loading UI (InGameTrigger: false).");
                 // Loading Prefab 0 생성
                 var loadingModule = Instantiate(_loadingPrefabs[0], _rootCanvas.transform);
                 progressBar = loadingModule.Slider; // Slider 연결

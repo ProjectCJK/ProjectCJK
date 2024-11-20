@@ -21,23 +21,23 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         {
             get
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_standStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_standStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
                 
-                return GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey];
+                return GameManager.Instance.ES3Saver.BuildingOutputItems[_standStatsModule.BuildingKey];
             }
             set
             {
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems.ContainsKey(_standStatsModule.BuildingKey))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey(_standStatsModule.BuildingKey))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
+                    GameManager.Instance.ES3Saver.BuildingOutputItems.TryAdd(_standStatsModule.BuildingKey, new Dictionary<string, int>());
                 }
 
-                if (!GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
+                if (!GameManager.Instance.ES3Saver.BuildingOutputItems[_standStatsModule.BuildingKey].ContainsKey(value.Keys.ToString()))
                 {
-                    GameManager.Instance.ES3Saver.BuildingInputItems[_standStatsModule.BuildingKey].TryAdd(_standStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
+                    GameManager.Instance.ES3Saver.BuildingOutputItems[_standStatsModule.BuildingKey].TryAdd(_standStatsModule.BuildingKey, int.Parse(value.Values.ToString()));
                 }
             }
         }
