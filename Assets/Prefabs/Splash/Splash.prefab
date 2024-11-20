@@ -561,6 +561,10 @@ PlayableDirector:
     value: {fileID: 4085827157585213344}
   - key: {fileID: -3116075710741151936, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
     value: {fileID: 3390950854460016918}
+  - key: {fileID: -5835121883321847243, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
+    value: {fileID: 4085827157585213344}
+  - key: {fileID: 4983169619125512433, guid: 04d80e765bfdb41c4b25f2b789566259, type: 2}
+    value: {fileID: 3390950854460016918}
   m_ExposedReferences:
     m_References:
     - ca43c69f1c6ce94438c8ca154913cbdb: {fileID: 3055105490319538457}
@@ -6298,7 +6302,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
