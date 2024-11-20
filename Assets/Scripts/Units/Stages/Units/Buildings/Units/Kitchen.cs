@@ -165,10 +165,13 @@ namespace Units.Stages.Units.Buildings.Units
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
 
             _kitchenStatsModule.OnTriggerBuildingAnimation += HandleOnTriggerBuildingAnimation;
+
+            _kitchenProductInventoryModule.OnUpdateStackedItem += HandleOnUpdateStackedItem;
         }
 
         public override void Initialize()
         {
+            HandleOnUpdateStackedItem(_kitchenProductInventoryModule.CurrentInventorySize);
             UpdateViewModel();
             UnlockZoneModule.UpdateViewModel();
         }
@@ -192,6 +195,18 @@ namespace Units.Stages.Units.Buildings.Units
                 _kitchenStatsModule.GetUIBuildingEnhancement();
             else
                 _kitchenStatsModule.ReturnUIBuildingEnhancement();
+        }
+
+        private void HandleOnUpdateStackedItem(int value)
+        {
+            var targetIndex = Mathf.Min(_kitchenCustomSetting.SpawnedItem.Count, value) - 1;
+
+            foreach (GameObject spawnedItem in _kitchenCustomSetting.SpawnedItem)
+            {
+                spawnedItem.SetActive(false);
+            }
+            
+            if (targetIndex >= 0)_kitchenCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }

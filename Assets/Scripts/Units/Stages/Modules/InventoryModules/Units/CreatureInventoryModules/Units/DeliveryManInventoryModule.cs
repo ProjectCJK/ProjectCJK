@@ -18,7 +18,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class DeliveryManInventoryModule : CreatureInventoryModule, IDeliveryManInventoryModule
     {
-        protected override Dictionary<string, int> Inventory { get; set; } = new ();
+        public override Dictionary<string, int> Inventory { get; set; } = new ();
         
         private readonly ENPCType _npcType;
 
@@ -59,7 +59,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey, item.Count);
-            PushSpawnedItem(ReceiverTransform, item);
+            PushSpawnedItem(ReceiverTransform, item, true);
         }
 
         private void RegisterZone(INPCTradeZone zone)

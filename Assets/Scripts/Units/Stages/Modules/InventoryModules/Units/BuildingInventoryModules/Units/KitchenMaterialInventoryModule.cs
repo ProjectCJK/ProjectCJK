@@ -17,7 +17,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class KitchenMaterialInventoryModule : BuildingInventoryModule, IKitchenMaterialInventoryModule
     {
-        protected override Dictionary<string, int> Inventory
+        public override Dictionary<string, int> Inventory
         {
             get
             {

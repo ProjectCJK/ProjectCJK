@@ -35647,13 +35647,7 @@ CompositeCollider2D:
       - X: -29316406
         Y: 332031
   m_CompositePaths:
-    m_Paths:
-    - - {x: 2.003937, y: 1.003937}
-      - {x: -2.972441, y: 1.003937}
-      - {x: -3.003937, y: 0.980315}
-      - {x: -3.003937, y: 0.027559001}
-      - {x: -2.972441, y: -0.003937}
-      - {x: 2.003937, y: -0.003937}
+    m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0
   m_UseDelaunayMesh: 0
@@ -37809,6 +37803,10 @@ PrefabInstance:
     - target: {fileID: 4906598179322629131, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
       propertyPath: m_Name
       value: ActiveStatus
+      objectReference: {fileID: 0}
+    - target: {fileID: 6174431740777622710, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
+      propertyPath: m_CompositePaths.m_Paths.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6174431740777622710, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.size
@@ -55928,6 +55926,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3385087359335992211}
     m_Modifications:
+    - target: {fileID: 955179068720276197, guid: dd9f32f5c0b284d468dc5fc73c5ba802, type: 3}
+      propertyPath: m_SortingOrder
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1869298316360927951, guid: dd9f32f5c0b284d468dc5fc73c5ba802, type: 3}
       propertyPath: m_Name
       value: Canvas_Kitchen_Sign

@@ -17,7 +17,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class DeliveryLodgingInventoryModule : BuildingInventoryModule, IDeliveryLodgingInventoryModule
     {
-        protected override Dictionary<string, int> Inventory { get; set; } = new();
+        public override Dictionary<string, int> Inventory { get; set; } = new();
 
         public DeliveryLodgingInventoryModule(
             Transform senderTransform,

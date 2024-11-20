@@ -131,10 +131,13 @@ namespace Units.Stages.Units.Buildings.Units
 
             _standInventoryModule.OnInventoryCountChanged += UpdateViewModel;
             _standInventoryModule.OnMoneyReceived += HandleOnMoneyReceived;
+
+            _standInventoryModule.OnUpdateStackedItem += HandleOnUpdateStackedItem;
         }
 
         public override void Initialize()
         {
+            HandleOnUpdateStackedItem(_standInventoryModule.CurrentInventorySize);
             UpdateViewModel();
         }
 
@@ -142,6 +145,18 @@ namespace Units.Stages.Units.Buildings.Units
         {
             var remainedProductCount = _standInventoryModule.GetItemCount(InputItemKey);
             _standViewModel.UpdateValues(remainedProductCount);
+        }
+        
+        private void HandleOnUpdateStackedItem(int value)
+        {
+            var targetIndex = Mathf.Min(_standCustomSetting.SpawnedItem.Count, value) - 1;
+
+            foreach (GameObject spawnedItem in _standCustomSetting.SpawnedItem)
+            {
+                spawnedItem.SetActive(false);
+            }
+            
+            if (targetIndex >= 0)_standCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }

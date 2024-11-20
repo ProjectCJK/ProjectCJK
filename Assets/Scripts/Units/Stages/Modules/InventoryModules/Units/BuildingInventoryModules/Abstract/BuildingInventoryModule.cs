@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Managers;
 using Modules.DataStructures;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Abstract;
@@ -19,6 +21,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
 
     public abstract class BuildingInventoryModule : InventoryModule, IBuildingInventoryModule
     {
+        public Action<int> OnUpdateStackedItem;
+        
         private readonly BuildingStatsModule _buildingStatsModule;
         private readonly PriorityQueue<ICreatureItemReceiver> _itemReceiverQueue = new();
 
@@ -82,22 +86,18 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
 
             if (_itemReceiverQueue.TryPeek(out ICreatureItemReceiver currentItemReceiver))
             {
-                if (!string.Equals(OutputItemKey, $"{ECurrencyType.Money}") &&
-                    !currentItemReceiver.CanReceiveItem()) return;
-
-                IItem item = PopSpawnedItem();
-                if (item != null)
+                if (string.Equals(OutputItemKey, $"{ECurrencyType.Money}"))
                 {
-                    currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
-                    ItemFactory.ReturnItem(item);
+                    var goldAmount = Mathf.Min(Inventory[$"{ECurrencyType.Money}"], DataManager.GoldSendingMaximum);
+                    currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, goldAmount, SenderTransform.position);
+                    Inventory[$"{ECurrencyType.Money}"] -= goldAmount;
+                }
+                else if (currentItemReceiver.CanReceiveItem())
+                {
+                    OnUpdateStackedItem?.Invoke(CurrentInventorySize);
+                    currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, 1, SenderTransform.position);
                     RemoveItem(OutputItemKey);
                 }
-                // else
-                // {
-                //     item = ItemFactory.GetItem(OutputItemKey, 1, SenderTransform.position);
-                //     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, item.Count, item.Transform.position);
-                //     RemoveItem(OutputItemKey);
-                // }
             }
             else
             {

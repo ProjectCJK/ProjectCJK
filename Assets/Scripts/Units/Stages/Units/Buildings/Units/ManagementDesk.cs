@@ -46,6 +46,8 @@ namespace Units.Stages.Units.Buildings.Units
         [Header("재화 타입")] public ECurrencyType CurrencyType;
 
         [Header("계산원")] public List<GameObject> Cashier;
+        
+        [Space(10)] [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
     }
 
     public class ManagementDesk : BuildingZone, IManagementDesk
@@ -99,10 +101,13 @@ namespace Units.Stages.Units.Buildings.Units
                 _managementDeskInventoryModule, _managementDeskInventoryModule, BuildingKey, InputItemKey);
 
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
+
+            _managementDeskInventoryModule.OnUpdateStackedItem += HandleOnUpdateStackedItem;
         }
 
         public override void Initialize()
         {
+            HandleOnUpdateStackedItem(_managementDeskInventoryModule.CurrentInventorySize);
         }
         
         private void Update()
@@ -149,6 +154,18 @@ namespace Units.Stages.Units.Buildings.Units
                 _managementDeskStatsModule.GetUIBuildingEnhancement();
             else
                 _managementDeskStatsModule.ReturnUIBuildingEnhancement();
+        }
+        
+        private void HandleOnUpdateStackedItem(int value)
+        {
+            var targetIndex = Mathf.Min(_managementDeskCustomSetting.SpawnedItem.Count, value) - 1;
+
+            foreach (GameObject spawnedItem in _managementDeskCustomSetting.SpawnedItem)
+            {
+                spawnedItem.SetActive(false);
+            }
+            
+            if (targetIndex >= 0)_managementDeskCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }
