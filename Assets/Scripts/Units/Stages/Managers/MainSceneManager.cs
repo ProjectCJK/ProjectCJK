@@ -30,10 +30,6 @@ namespace Units.Stages.Managers
         
         private Joystick _joystick;
         
-        private UI_Panel_Currency _uiPanelCurrencyPrefab;
-        private UI_Panel_BuildingEnhancement _upgradePanelPrefab;
-        private UI_Panel_Quest _questPanelPrefab;
-        
         public bool Initialized { get; set; }
 
         private void Awake()
