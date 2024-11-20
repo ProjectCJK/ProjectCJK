@@ -52,18 +52,14 @@ namespace Managers
             {
                 ES3Saver = new ES3Saver
                 {
+                    InitializeES3Saver = true,
+                    TutorialClear = false,
                     Gold = 10000,
                     Diamond = 0,
                     RedGem = 0,
-                    BuildingActiveStatuses = new Dictionary<string, EActiveStatus>(),
-                    HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>(),
-                    RequiredMoneyForBuildingActive = new Dictionary<string, int>(),
-                    RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>(),
                     ActiveStatusSettingIndex = 0
                 };
 
-                // 초기화 상태를 저장
-                ES3.Save($"{EES3Key.InitialSet}", true, ES3.settings);
                 ES3.Save($"{EES3Key.ES3Saver}", ES3Saver, ES3.settings);
             }
 
