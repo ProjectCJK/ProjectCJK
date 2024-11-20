@@ -19,7 +19,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class WareHouseInventoryModule : BuildingInventoryModule, IWareHouseInventoryModule
     {
-        protected override Dictionary<string, int> Inventory
+        public override Dictionary<string, int> Inventory
         {
             get
             {
@@ -97,7 +97,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             else
             {
                 AddItem(inputItemKey, item.Count);
-                PushSpawnedItem(ReceiverTransform, item);
+                ItemFactory.ReturnItem(item);
+                OnUpdateStackedItem?.Invoke(Inventory[inputItemKey]);
             }
         }
     }

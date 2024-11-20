@@ -17,7 +17,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModule
 
     public class HuntingZoneInventoryModule : BuildingInventoryModule, IHuntingZoneInventoryModule
     {
-        protected override Dictionary<string, int> Inventory
+        public override Dictionary<string, int> Inventory
         {
             get
             {

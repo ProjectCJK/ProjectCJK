@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using ScriptableObjects.Scripts.Buildings.Units;
@@ -62,6 +63,8 @@ namespace Units.Stages.Units.Buildings.Units
         [Space(10)] [Header("Input 아이템 타입")] public EItemType InputItemType;
 
         [Space(10)] [Header("Output 아이템 타입")] public EItemType OutputItemType;
+        
+        [Space(10)] [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
     }
 
     public class Kitchen : UnlockableBuildingZone, IKitchen
@@ -162,10 +165,13 @@ namespace Units.Stages.Units.Buildings.Units
             _upgradeZonePlayer.OnPlayerConnected += HandleOnPlayerConnected;
 
             _kitchenStatsModule.OnTriggerBuildingAnimation += HandleOnTriggerBuildingAnimation;
+
+            _kitchenProductInventoryModule.OnUpdateStackedItem += HandleOnUpdateStackedItem;
         }
 
         public override void Initialize()
         {
+            HandleOnUpdateStackedItem(_kitchenProductInventoryModule.CurrentInventorySize);
             UpdateViewModel();
             UnlockZoneModule.UpdateViewModel();
         }
@@ -189,6 +195,18 @@ namespace Units.Stages.Units.Buildings.Units
                 _kitchenStatsModule.GetUIBuildingEnhancement();
             else
                 _kitchenStatsModule.ReturnUIBuildingEnhancement();
+        }
+
+        private void HandleOnUpdateStackedItem(int value)
+        {
+            var targetIndex = Mathf.Min(_kitchenCustomSetting.SpawnedItem.Count, value) - 1;
+
+            foreach (GameObject spawnedItem in _kitchenCustomSetting.SpawnedItem)
+            {
+                spawnedItem.SetActive(false);
+            }
+            
+            if (targetIndex >= 0)_kitchenCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }

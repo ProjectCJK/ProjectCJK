@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Managers;
 using Units.Stages.Modules.FactoryModules.Units;
@@ -14,7 +15,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
     public class KitchenProductInventoryModule : BuildingInventoryModule, IKitchenProductInventoryModule
     {
-        protected override Dictionary<string, int> Inventory
+        public override Dictionary<string, int> Inventory
         {
                 get
             {
@@ -55,7 +56,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
             AddItem(inputItemKey, item.Count);
-            PushSpawnedItem(ReceiverTransform, item);
+            ItemFactory.ReturnItem(item);
+            OnUpdateStackedItem?.Invoke(Inventory[inputItemKey]);
         }
     }
 }

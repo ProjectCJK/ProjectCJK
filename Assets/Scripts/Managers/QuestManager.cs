@@ -156,7 +156,7 @@ namespace Managers
                         });
 
                         // 저장 대상 제외 (SetLevelUpOption1Goal 관련)
-                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1)
+                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1 || ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.Build)
                         {
                             SetLevelUpOption1Goal(i);
                         }
@@ -246,9 +246,9 @@ namespace Managers
                 }
                 else
                 {
-                    foreach (KeyValuePair<HuntingZone, EActiveStatus> obj in VolatileDataManager.Instance.HuntingZoneActiveStatuses)
+                    foreach (KeyValuePair<string, EActiveStatus> obj in GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses)
                     {
-                        if (obj.Key.HuntingZoneKey == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
+                        if (obj.Key == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
                         {
                             _questData.Datas[questIndex].CurrentTargetGoal = 1;
                             break;
@@ -373,8 +373,9 @@ namespace Managers
             if (CurrentQuestSubIndex < _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
-
-                // 진행 중인 퀘스트 인덱스 저장
+                
+                GameManager.Instance.ES3Saver.ClearedQuestStatuses.Clear();
+                GameManager.Instance.ES3Saver.QuestProgress.Clear();
                 GameManager.Instance.ES3Saver.CurrentQuestSubIndex = CurrentQuestSubIndex;
 
                 InitializeQuestData();

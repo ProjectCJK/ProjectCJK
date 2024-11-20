@@ -17,7 +17,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class HunterInventoryModule : CreatureInventoryModule, IHunterInventoryModule
     {
-        protected override Dictionary<string, int> Inventory { get; set; } = new ();
+        public override Dictionary<string, int> Inventory { get; set; } = new ();
         
         private readonly ENPCType _npcType;
 

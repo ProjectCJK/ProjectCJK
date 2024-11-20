@@ -52,6 +52,7 @@ namespace Units.Stages.Units.Buildings.Units
     [Serializable]
     public struct WareHouseCustomSetting
     {
+        [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
     }
 
     public class WareHouse : UnlockableBuildingZone, IWareHouse
@@ -141,10 +142,13 @@ namespace Units.Stages.Units.Buildings.Units
             _interactionModule = _wareHouseDefaultSetting.InteractionModule;
             _interactionModule.OnTriggerStay2DAction += HandleOnTriggerStay2D;
             _interactionModule.OnTriggerExit2DAction += HandleOnTriggerExit2D;
+
+            _wareHouseInventoryModule.OnUpdateStackedItem += HandleOnUpdateStackedItem;
         }
 
         public override void Initialize()
         {
+            HandleOnUpdateStackedItem(_wareHouseInventoryModule.CurrentInventorySize);
             isSendingItemToPlayer = false;
         }
 
@@ -192,6 +196,18 @@ namespace Units.Stages.Units.Buildings.Units
         {
             isSendingItemToPlayer = true;
             sendingItemType = materialType;
+        }
+        
+        private void HandleOnUpdateStackedItem(int value)
+        {
+            var targetIndex = Mathf.Min(_wareHouseCustomSetting.SpawnedItem.Count, value) - 1;
+
+            foreach (GameObject spawnedItem in _wareHouseCustomSetting.SpawnedItem)
+            {
+                spawnedItem.SetActive(false);
+            }
+            
+            if (targetIndex >= 0)_wareHouseCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }

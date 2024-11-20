@@ -19,7 +19,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
 
     public class PlayerInventoryModule : CreatureInventoryModule, IPlayerInventoryModule
     {
-        protected override Dictionary<string, int> Inventory
+        public override Dictionary<string, int> Inventory
         {
             get
             {

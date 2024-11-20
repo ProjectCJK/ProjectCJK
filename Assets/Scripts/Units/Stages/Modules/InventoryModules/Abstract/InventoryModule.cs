@@ -5,6 +5,7 @@ using Interfaces;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Items.Units;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Units.Stages.Modules.InventoryModules.Abstract
@@ -29,7 +30,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
     {
         private const float SendItemInterval = 0.2f;
 
-        protected abstract Dictionary<string, int> Inventory { get; set; }
+        public abstract Dictionary<string, int> Inventory { get; set; }
 
         protected readonly Stack<IItem> spawnedItemStack = new();
         private bool _isItemReceiving;
@@ -130,8 +131,9 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
             }
         }
 
-        protected void PushSpawnedItem(Transform receiveTransform, IItem item)
+        protected void PushSpawnedItem(Transform receiveTransform, IItem item, bool isVisible)
         {
+            item.Transform.gameObject.SetActive(isVisible);
             item.Transform.SetParent(receiveTransform);
             spawnedItemStack.Push(item);
         }

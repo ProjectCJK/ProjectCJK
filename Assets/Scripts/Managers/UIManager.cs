@@ -9,6 +9,7 @@ using UI.CostumePanels;
 using UI.CurrencyPanel;
 using UI.QuestPanels;
 using UI.StageMapPanel;
+using Units.Stages.Modules;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,8 @@ namespace Managers
         [SerializeField] private UI_Panel_Currency _ui_Panel_Currency;
         [SerializeField] private UI_Panel_Costume_Gacha _ui_Panel_CostumeGacha;
         [SerializeField] private UI_Panel_StageMap _ui_Panel_StageMap;
+        
+        [Space(20), SerializeField] private GameSpeedControlModule _gameSpeedControlModule;
 
         public Button UI_Button_CostumeGachaPanel { get; private set; }
         public Button UI_Button_CostumePanel { get; private set; }
@@ -63,6 +66,8 @@ namespace Managers
             UI_Panel_CostumeGacha = Instantiate(_ui_Panel_CostumeGacha, Canvas.transform);
             UI_Panel_StageMap = Instantiate(_ui_Panel_StageMap, Canvas.transform);
 
+            Instantiate(_gameSpeedControlModule, Canvas.transform);
+            
             // 부모 자식 관계 정리
             UI_Button_CostumeGachaPanel.transform.localScale = Vector3.one;
             UI_Button_CostumePanel.transform.localScale = Vector3.one;
