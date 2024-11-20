@@ -48,6 +48,7 @@ namespace Units.Stages.Units.Buildings.Units
         [Header("계산원")] public List<GameObject> Cashier;
         
         [Space(10)] [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
+        [Space(10)] [Header("인벤토리 아이템 활성화 조건")] public List<int> triggetCount;
     }
 
     public class ManagementDesk : BuildingZone, IManagementDesk
@@ -158,14 +159,22 @@ namespace Units.Stages.Units.Buildings.Units
         
         private void HandleOnUpdateStackedItem(int value)
         {
-            var targetIndex = Mathf.Min(_managementDeskCustomSetting.SpawnedItem.Count, value) - 1;
-
+            var targetIndex = 0;
+            
             foreach (GameObject spawnedItem in _managementDeskCustomSetting.SpawnedItem)
             {
                 spawnedItem.SetActive(false);
             }
-            
-            if (targetIndex >= 0)_managementDeskCustomSetting.SpawnedItem[targetIndex].SetActive(true);
+
+            for (var index = 0; index < _managementDeskCustomSetting.triggetCount.Count; index++)
+            {
+                if (_managementDeskCustomSetting.triggetCount[index] <= value)
+                {
+                    targetIndex = index;
+                }
+            }
+
+            _managementDeskCustomSetting.SpawnedItem[targetIndex].SetActive(true);
         }
     }
 }
