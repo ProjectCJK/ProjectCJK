@@ -187,6 +187,8 @@
                     clip (Out_color.a - 0.001);
                 #endif
 
+                Out_color.a *= Out_color.r;
+
                 Out_color.rgb *= Out_color.a;
 
                 return Out_color;
