@@ -123,8 +123,8 @@ namespace Managers
         private readonly Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
         private readonly Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
 
-        private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_CostumeGacha;
-        private readonly UI_Panel_Costume _uiPanelCostume = UIManager.Instance.UI_Panel_Costume;
+        private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha;
+        private readonly UI_Panel_Costume _uiPanelCostume = UIManager.Instance.UI_Panel_Main.UI_Panel_Costume;
 
         private List<CostumeItemData> _currentCostumeItemData;
 
@@ -146,8 +146,8 @@ namespace Managers
             _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
             _uiPanelCostume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
 
-            UIManager.Instance.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
-            UIManager.Instance.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
+            UIManager.Instance.UI_Panel_Main.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
+            UIManager.Instance.UI_Panel_Main.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
         }
 
         private void CacheGachaBackgroundSprites()

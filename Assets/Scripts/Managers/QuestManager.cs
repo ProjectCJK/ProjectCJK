@@ -347,7 +347,17 @@ namespace Managers
 
         public void MarkQuestAsCleared(int questIndex)
         {
-            CurrencyManager.Instance.AddCurrency(ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward2Type).Value, _questData.Datas[questIndex].Reward2Count);
+            ECurrencyType? questReward1Type = ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward1Type);
+            if (questReward1Type != null)
+            {
+                AddQuestReward(questReward1Type.Value, _questData.Datas[questIndex].Reward1Count);
+            }
+
+            ECurrencyType? questReward2Type = ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward2Type);
+            if (questReward2Type != null)
+            {
+                AddQuestReward(questReward2Type.Value, _questData.Datas[questIndex].Reward2Count);
+            }
             
             if (_questData.Datas.ContainsKey(questIndex) && IsQuestClear[questIndex] == false)
             {
@@ -384,6 +394,21 @@ namespace Managers
             else
             {
                 Debug.Log("QuestManager: All quests for the current stage are complete!");
+            }
+        }
+        
+        private void AddQuestReward(ECurrencyType currencyType, int reward)
+        {
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                case ECurrencyType.Diamond:
+                case ECurrencyType.RedGem:
+                    CurrencyManager.Instance.AddCurrency(currencyType, reward);
+                    break;
+                case ECurrencyType.Star:
+                    LevelManager.Instance.AddExp(reward);
+                    break;
             }
         }
     }

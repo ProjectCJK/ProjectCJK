@@ -28,6 +28,7 @@ namespace Units.Stages.Managers
         
         public StageController StageController;
         
+        private CameraController _cameraController;
         private Joystick _joystick;
         
         public bool Initialized { get; set; }
@@ -73,26 +74,44 @@ namespace Units.Stages.Managers
             _joystick = UIManager.Instance.Joystick;
             StageController.RegisterReference(_joystick);
             
-            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Currency);
+            LevelManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.LevelView);
+            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.CurrencyView);
             
-            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Quest);
+            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.UI_Panel_Quest);
             CostumeManager.Instance.RegisterReference();
             
-            UIManager.Instance.UI_Button_StageMap.onClick.RemoveAllListeners();
-            UIManager.Instance.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_StageMap.gameObject.SetActive(true));
-            UIManager.Instance.UI_Panel_StageMap.RegisterReference();
+            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.RemoveAllListeners();
+            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.gameObject.SetActive(true));
+            UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.RegisterReference();
 
             if (Camera.main != null)
             {
                 Camera.main.orthographicSize = 10;
-                Camera.main.GetComponent<CameraController>().RegisterReference(StageController.PlayerTransform);   
+                _cameraController = Camera.main.GetComponent<CameraController>();
+                _cameraController.RegisterReference();
+
+                if (GameManager.Instance.ES3Saver.TutorialClear)
+                {
+                    SetPlayerToCameraTarget();
+                }
+            }
+            
+            if (GameManager.Instance.ES3Saver.TutorialClear == false)
+            {
+                TutorialManager.Instance.RegisterReference(_cameraController, SetPlayerToCameraTarget);
             }
         }
 
         private void Initialize()
         {
+            LevelManager.Instance.Initialize();
             CurrencyManager.Instance.Initialize();
             StageController.Initialize();
+            
+            if (GameManager.Instance.ES3Saver.TutorialClear == false)
+            {
+                TutorialManager.Instance.Initialize();
+            }
         }
 
         private void Update()
@@ -147,6 +166,12 @@ namespace Units.Stages.Managers
             //     QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, $"{EQuestType2.Stand_B}");
             // }
 #endif
+        }
+
+        private void SetPlayerToCameraTarget()
+        {
+            _cameraController.Transform.position = new Vector3(StageController.PlayerTransform.position.x, StageController.PlayerTransform.position.y, _cameraController.Transform.position.z);
+            _cameraController.FollowTarget(StageController.PlayerTransform);
         }
     }
 }

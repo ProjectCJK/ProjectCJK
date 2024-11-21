@@ -109,7 +109,7 @@ namespace Units.Stages.Units.Buildings.Units
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
             UnlockZoneModule.RegisterReference(BuildingKey);
 
-            _standStatsModule = new StandStatsModule(_standDataSo);
+            _standStatsModule = new StandStatsModule(_standDataSo, _standCustomSetting);
             _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory,
                 _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutputItemKey);
 

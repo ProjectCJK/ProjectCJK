@@ -79,6 +79,13 @@ namespace Units.Stages.Modules.MovementModules.Units
             {
                 ActivateNavMeshAgent(true);
             }
+            
+            // 이동 상태가 변하지 않았으면 로직을 건너뛰기
+            if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude < 0.01f)
+            {
+                HandleStateUpdate(); // 정지 상태 업데이트
+                return;
+            }
 
             switch (_navMeshAgent.velocity.x)
             {
@@ -97,10 +104,12 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             if (_navMeshAgent.enabled && !_navMeshAgent.isStopped && _navMeshAgent.isOnNavMesh)
             {
-                TryCalculateAndSetPath(_destination);
+                if (!_navMeshAgent.hasPath || _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
+                {
+                    TryCalculateAndSetPath(_destination);
+                }
             }
         }
-
 
         public void ActivateNavMeshAgent(bool value)
         {
@@ -146,5 +155,6 @@ namespace Units.Stages.Modules.MovementModules.Units
             }
             return false;
         }
+
     }
 }

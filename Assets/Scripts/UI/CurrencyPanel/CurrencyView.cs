@@ -5,7 +5,7 @@ using Units.Stages.UI;
 
 namespace UI.CurrencyPanel
 {
-    public class UI_Panel_Currency : BaseView<CurrencyViewModel>
+    public class CurrencyView : BaseView<CurrencyViewModel>
     {
         public TextMeshProUGUI DiamondText;
         public TextMeshProUGUI RedGemText;

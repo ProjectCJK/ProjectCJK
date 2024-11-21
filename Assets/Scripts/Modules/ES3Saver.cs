@@ -29,6 +29,12 @@ namespace Modules
         public int Gold;
         public int Diamond;
         public int RedGem;
+
+        /// <summary>
+        /// PlayerLevelSettings
+        /// </summary>
+        public int CurrentPlayerLevel;
+        public int CurrentPlayerExp;
         
         /// <summary>
         /// InventorySettings

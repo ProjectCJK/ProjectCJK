@@ -25,6 +25,7 @@ namespace ScriptableObjects.Scripts.Levels
         [Space(20), Header("=== UnitSpawner ===")]
         public GameObject PlayerSpawner;
         public GameObject GuestSpawner;
+        public GameObject ZombieSpawner;
         
         [Space(20), Header("=== Level ===")]
         public List<LevelGameObject> Levels;

@@ -15,7 +15,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
     public interface IItemFactory
     {
         public ItemDataSO ItemDataSo { get; }
-        public IItem GetItem(string itemType, int count, Vector3 initializePosition);
+        public IItem GetItem(string itemType, int count, Vector3 initializePosition, bool atRoot);
         public void ReturnItem(IItem item);
     }
 
@@ -41,7 +41,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
         private static string PoolKey => "ItemPool";
         public ItemDataSO ItemDataSo => DataManager.Instance.ItemDataSo;
 
-        public IItem GetItem(string itemType, int count, Vector3 initializePosition)
+        public IItem GetItem(string itemType, int count, Vector3 initializePosition, bool atRoot)
         {
             var item = ObjectPoolManager.Instance.GetObject<IItem>(PoolKey, null);
 
@@ -72,7 +72,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
             if (itemSprite == null) Debug.LogError($"{itemType} is not a valid item type");
 #endif
 
-            item.Initialize(itemType, count, itemSprite, initializePosition);
+            item.Initialize(itemType, count, itemSprite, initializePosition, atRoot);
 
             return item;
         }

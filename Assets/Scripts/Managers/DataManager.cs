@@ -34,6 +34,7 @@ namespace Managers
         public GuestDataSO GuestDataSo;
         public DeliveryManDataSO DeliveryManDataSo;
         public HunterDataSO HunterDataSo;
+        public ZombieDataSO ZombieDataSo;
 
         [Space(20)] [Header("### Building Data ###")]
         public LevelPrefabSO levelPrefabSo;
@@ -50,6 +51,8 @@ namespace Managers
         public ItemDataSO ItemDataSo;
 
         [Space(20), Header("### GameData ###")]
+        [Header("=== Level GameData ===")]
+        public GameData LevelData;
         [Header("=== Quest GameData ===")]
         public GameData QuestData;
         
