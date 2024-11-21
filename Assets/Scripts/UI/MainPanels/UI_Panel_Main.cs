@@ -19,6 +19,7 @@ namespace UI.MainPanels
         public UI_Panel_Costume UI_Panel_Costume;
         public UI_Panel_Costume_Gacha UI_Panel_Costume_Gacha;
         public UI_Panel_StageMap UI_Panel_StageMap;
+        public UI_Panel_LevelUp UI_Panel_LevelUp;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
         
         public Button UI_Button_CostumeGachaPanel;

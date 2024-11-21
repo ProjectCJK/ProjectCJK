@@ -74,10 +74,9 @@ namespace Units.Stages.Managers
             _joystick = UIManager.Instance.Joystick;
             StageController.RegisterReference(_joystick);
             
-            LevelManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.LevelView);
-            CurrencyManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.CurrencyView);
-            
-            QuestManager.Instance.RegisterReference(UIManager.Instance.UI_Panel_Main.UI_Panel_Quest);
+            LevelManager.Instance.RegisterReference();
+            CurrencyManager.Instance.RegisterReference();
+            QuestManager.Instance.RegisterReference();
             CostumeManager.Instance.RegisterReference();
             
             UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.RemoveAllListeners();

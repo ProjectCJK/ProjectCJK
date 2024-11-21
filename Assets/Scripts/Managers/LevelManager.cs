@@ -10,11 +10,13 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class LevelManager : Singleton<LevelManager>, IRegisterReference<LevelView>, IInitializable
+    public class LevelManager : Singleton<LevelManager>, IRegisterReference, IInitializable
     {
         private LevelView _levelView;
         private LevelModel _levelModel;
         private LevelViewModel _levelViewModel;
+        
+        private UI_Panel_LevelUp _ui_Panel_LevelUp;
 
         private int _currentLevel;
         private int _currentExp;
@@ -23,7 +25,7 @@ namespace Managers
         private string[,] _levelData;
 
         private List<Tuple<ECurrencyType, int>> _levelUpRewards = new();
-
+        
         public int CurrentLevel
         {
             get => _currentLevel;
@@ -54,9 +56,11 @@ namespace Managers
             }
         }
 
-        public void RegisterReference(LevelView levelView)
+        public void RegisterReference()
         {
-            _levelView = levelView;
+            _levelView = UIManager.Instance.UI_Panel_Main.LevelView;
+            _ui_Panel_LevelUp = UIManager.Instance.UI_Panel_Main.UI_Panel_LevelUp;
+            
             _levelData = DataManager.Instance.LevelData.GetData();
             
             _levelModel = new LevelModel();

@@ -107,9 +107,9 @@ namespace Managers
         private int CurrentQuestSubIndex;
         private int _maxSubIndexForStage;
 
-        public void RegisterReference(UI_Panel_Quest uiPanelQuest)
+        public void RegisterReference()
         {
-            _uiPanelQuest = uiPanelQuest;
+            _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _gameData = DataManager.Instance.QuestData.GetData();
             CurrentQuestSubIndex = 1;
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;

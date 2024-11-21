@@ -8,10 +8,9 @@ using Units.Stages.Units.Items.Enums;
 
 namespace Managers
 {
-    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<CurrencyView>, IInitializable
+    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference, IInitializable
     {
         private CurrencyView _currencyView;
-        
         private CurrencyModel _currencyModel;
         private CurrencyViewModel _currencyViewModel;
 
@@ -48,9 +47,9 @@ namespace Managers
             }
         }
 
-        public void RegisterReference(CurrencyView currencyView)
+        public void RegisterReference()
         {
-            _currencyView = currencyView;
+            _currencyView = UIManager.Instance.UI_Panel_Main.CurrencyView;
 
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
