@@ -4,6 +4,7 @@ using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Items;
 using Units.Stages.Units.Items.Modules;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Units.Stages.Units.Items.Units
 {
@@ -13,7 +14,7 @@ namespace Units.Stages.Units.Items.Units
         public void Transfer(Vector3 pointA, Transform pointB, Action onArrived);
     }
 
-    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<string, int, Sprite, Vector3>, IPoolable,
+    public interface IItem : IRegisterReference<ItemDataSO>, IInitializable<string, int, Sprite, Vector3, bool>, IPoolable,
         IItemTransfer
     {
         public string Type { get; }
@@ -23,9 +24,13 @@ namespace Units.Stages.Units.Items.Units
 
     public class Item : MonoBehaviour, IItem
     {
+        [SerializeField] private Transform spriteTransform;
+        [SerializeField] private TrailRenderer _trailRenderer;
+        
         private BezierCurveMover _bezierCurveMover;
         private bool _isInitialized;
         private SpriteRenderer _spriteRenderer;
+        private SortingGroup _sortingGroup;
 
         private void Reset()
         {
@@ -34,6 +39,8 @@ namespace Units.Stages.Units.Items.Units
             Type = null;
             Count = 0;
             _isInitialized = false;
+            _spriteRenderer.sortingOrder = 0;
+            _trailRenderer.enabled = false;
         }
 
         private void Update()
@@ -50,11 +57,12 @@ namespace Units.Stages.Units.Items.Units
 
         public void RegisterReference(ItemDataSO _itemDataSo)
         {
-            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            _spriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
+            _sortingGroup = _spriteRenderer.GetComponent<SortingGroup>();
             _bezierCurveMover = new BezierCurveMover(this, _itemDataSo.BaseMovementSpeed);
         }
 
-        public void Initialize(string type, int count, Sprite sprite, Vector3 initialPosition)
+        public void Initialize(string type, int count, Sprite sprite, Vector3 initialPosition, bool setRoot)
         {
             Type = type;
             Count = count;
@@ -62,6 +70,9 @@ namespace Units.Stages.Units.Items.Units
             SetSprite(sprite);
             SetActive(true);
             _isInitialized = true;
+
+            _trailRenderer.enabled = true;
+            _sortingGroup.sortingOrder = setRoot ? 100 : 0;
         }
 
         public void Transfer(Vector3 pointA, Vector3 pointB, Action onArrived)

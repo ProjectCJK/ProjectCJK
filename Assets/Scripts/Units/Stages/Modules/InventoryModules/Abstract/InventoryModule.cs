@@ -57,7 +57,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         {
             IsItemReceiving = true;
 
-            IItem item = ItemFactory.GetItem(inputItemKey, count, currentSenderPosition);
+            IItem item = ItemFactory.GetItem(inputItemKey, count, currentSenderPosition, true);
 
             // 아이템을 전송하고, 이후의 행동을 콜백으로 처리
             item.Transfer(currentSenderPosition, ReceiverTransform, () =>
@@ -71,7 +71,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         {
             IsItemReceiving = true;
 
-            IItem item = ItemFactory.GetItem(inputItemKey, count, ReceiverTransform.position);
+            IItem item = ItemFactory.GetItem(inputItemKey, count, ReceiverTransform.position, true);
             OnItemReceived(inputItemKey, item);
             IsItemReceiving = false;
         }

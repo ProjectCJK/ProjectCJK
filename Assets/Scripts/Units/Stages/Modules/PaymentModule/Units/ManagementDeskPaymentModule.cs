@@ -144,12 +144,16 @@ namespace Units.Stages.Modules.PaymentModule.Units
             if (purchasedItem == null) return;
 
             (EItemType? itemType, EMaterialType? materialType) = ParserModule.ParseStringToEnum<EItemType, EMaterialType>(purchasedItem.Item1);
-            var totalItemPrice = VolatileDataManager.Instance.GetItemPrice(itemType, materialType) * purchasedItem.Item2;
 
-            // 퀘스트 진행 상황 업데이트
+            var extraIncome =
+                VolatileDataManager.Instance.CostumeEquipmentOption.ContainsKey(ECostumeOptionType.All_Product_Income)
+                    ? VolatileDataManager.Instance.CostumeEquipmentOption[ECostumeOptionType.All_Product_Income]
+                    : 100;
+            
+            var totalItemPrice = (int) (VolatileDataManager.Instance.GetItemPrice(itemType, materialType) * purchasedItem.Item2 * (extraIncome /  100));
+            
             QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, purchasedItem.Item2);
-
-            // 아이템 가격 처리
+            
             while (totalItemPrice > 0)
             {
                 var goldAmount = Mathf.Min(totalItemPrice, DataManager.GoldSendingMaximum);

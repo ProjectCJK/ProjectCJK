@@ -91,6 +91,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
                     var goldAmount = Mathf.Min(Inventory[$"{ECurrencyType.Money}"], DataManager.GoldSendingMaximum);
                     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, goldAmount, SenderTransform.position);
                     Inventory[$"{ECurrencyType.Money}"] -= goldAmount;
+                    OnUpdateStackedItem?.Invoke(Inventory[$"{ECurrencyType.Money}"]);
                 }
                 else if (currentItemReceiver.CanReceiveItem())
                 {

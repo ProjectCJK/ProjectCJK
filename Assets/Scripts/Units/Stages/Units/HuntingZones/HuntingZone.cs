@@ -125,7 +125,7 @@ namespace Units.Stages.Units.HuntingZones
         {
             Vector3 receiverPosition = GetRandomItemDropPoint(senderPosition);
 
-            IItem item = itemFactory.GetItem(_itemKey, 1, senderPosition);
+            IItem item = itemFactory.GetItem(_itemKey, 1, senderPosition, false);
             item.Transfer(senderPosition, receiverPosition, () => OnDroppedItem?.Invoke(item));
         }
 

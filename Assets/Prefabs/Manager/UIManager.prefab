@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7436839539697734294
 MonoBehaviour:
@@ -45,15 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootCanvas: {fileID: 2066894877731744750, guid: 8e57575bd14fed24a88f47c58ec3f080, type: 3}
+  _branchCanvasGame: {fileID: 2066894877731744750, guid: 48cbd45231a2947079d9a561a7dddfd3, type: 3}
+  _branchCanvasTutorial: {fileID: 2066894877731744750, guid: 67087b7ab0edf441c8ecac25930e169f, type: 3}
+  _branchCanvasGuide: {fileID: 2066894877731744750, guid: a14f092eb45e146199d68ded4eddd925, type: 3}
   _eventSystemPrefab: {fileID: 2896132484104396301, guid: 0e34008f13b38614cbfeb9c6c7ae57e6, type: 3}
   _joystick: {fileID: 8170153791668043265, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
-  _ui_Button_CostumeGachaPanel: {fileID: 2320485388426185815, guid: dba569a742259d847abf26c4001d7440, type: 3}
-  _ui_Button_CostumePanel: {fileID: 8747128319836481988, guid: 4c133301e6c0cc040b7489ac065a6797, type: 3}
-  _ui_Button_StageMap: {fileID: 6500788735440906003, guid: 526e0516afcdddf4b9518641e82ab276, type: 3}
-  _ui_Panel_Quest: {fileID: 4978901860848282796, guid: 97005c759d6b44c2fb692316fc35f0d6, type: 3}
-  _ui_Panel_BuildingEnhancement: {fileID: 7850059717496280743, guid: 81698a0ccb9c349e3bb7dbcc5c33de8e, type: 3}
-  _ui_Panel_Costume: {fileID: 1127529115198209825, guid: 5308864f165e73a4bb15fd9a0fafb2af, type: 3}
-  _ui_Panel_Currency: {fileID: 3705621065492943871, guid: aad84d2868721402aa8c8eccf9060498, type: 3}
-  _ui_Panel_CostumeGacha: {fileID: 3651990478030823126, guid: 1c3624d1cc4a90e4ea0060f037921a2b, type: 3}
-  _ui_Panel_StageMap: {fileID: 1731934305061684676, guid: 5f2e3bb6e6b74a441a4dc690d9e77f07, type: 3}
+  _ui_Panel_Main: {fileID: 358468559779655773, guid: 12853f0791f874b77be6d7d560df3219, type: 3}
+  _ui_Panel_Tutorial: {fileID: 1906848212404903275, guid: cd90106cce2172842a7da0eb22758d20, type: 3}
   _gameSpeedControlModule: {fileID: -4400400027059966013, guid: 5101813b62b4646a889c0b4f5f855217, type: 3}

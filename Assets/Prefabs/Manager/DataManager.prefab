@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4310855687331078735
 MonoBehaviour:
@@ -49,6 +49,7 @@ MonoBehaviour:
   GuestDataSo: {fileID: 11400000, guid: d93aeec5af232420bb056f0bd621cd83, type: 2}
   DeliveryManDataSo: {fileID: 11400000, guid: b3dc2101d89184dc7862e8c6ac5dc9b0, type: 2}
   HunterDataSo: {fileID: 11400000, guid: ea2279562f66548b59631f9d27cc6c96, type: 2}
+  ZombieDataSo: {fileID: 0}
   levelPrefabSo: {fileID: 11400000, guid: f43e0e1497eb04c1e81f3e828378b2e1, type: 2}
   KitchenDataSo: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
   StandDataSo: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
@@ -58,6 +59,7 @@ MonoBehaviour:
   HuntingZoneDataSo: {fileID: 11400000, guid: feaa878d624614389812ddd4a27156c9, type: 2}
   GuestSpawnZoneDataSo: {fileID: 11400000, guid: dc962c01ce4cd4e2e8dfa155cdaea5e2, type: 2}
   ItemDataSo: {fileID: 11400000, guid: 23ffdff4b2a794eb3999404fb233dca4, type: 2}
+  LevelData: {fileID: 11400000, guid: 8f88d0250d29049dea7f0c2fd83f549a, type: 2}
   QuestData: {fileID: 11400000, guid: 4852fbbb84d21457b9a5cec8de43cfa5, type: 2}
   KitchenData: {fileID: 11400000, guid: 15f3d84ad015948f3bb68f4306922f00, type: 2}
   KitchenOption1ValueData: {fileID: 11400000, guid: cdae95bb639614c0b964c00aa6c27c14, type: 2}

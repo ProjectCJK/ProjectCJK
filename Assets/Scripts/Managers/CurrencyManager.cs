@@ -8,10 +8,10 @@ using Units.Stages.Units.Items.Enums;
 
 namespace Managers
 {
-    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference<UI_Panel_Currency>, IInitializable
+    public class CurrencyManager : Singleton<CurrencyManager>, IRegisterReference, IInitializable
     {
+        private CurrencyView _currencyView;
         private CurrencyModel _currencyModel;
-        private UI_Panel_Currency _uiPanelCurrency;
         private CurrencyViewModel _currencyViewModel;
 
         public int _redGem;
@@ -47,13 +47,13 @@ namespace Managers
             }
         }
 
-        public void RegisterReference(UI_Panel_Currency uiPanelCurrency)
+        public void RegisterReference()
         {
-            _uiPanelCurrency = uiPanelCurrency;
+            _currencyView = UIManager.Instance.UI_Panel_Main.CurrencyView;
 
             _currencyModel = new CurrencyModel();
             _currencyViewModel = new CurrencyViewModel(_currencyModel);
-            _uiPanelCurrency.BindViewModel(_currencyViewModel);
+            _currencyView.BindViewModel(_currencyViewModel);
         }
         
         public void Initialize()
@@ -61,8 +61,8 @@ namespace Managers
             _gold = GameManager.Instance.ES3Saver.Gold;
             _diamond = GameManager.Instance.ES3Saver.Diamond;
             _redGem = GameManager.Instance.ES3Saver.RedGem;
-            
-            _currencyViewModel.UpdateValues(Diamond, RedGem, Gold);
+
+            UpdateViewModel();
         }
 
         public void AddCurrency(ECurrencyType currencyType, int value)

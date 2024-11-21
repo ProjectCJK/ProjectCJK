@@ -1,7 +1,8 @@
 using System.ComponentModel;
 using Modules.DesignPatterns.MVVMs;
+using Units.Stages.UI;
 
-namespace Units.Stages.UI
+namespace UI.CurrencyPanel
 {
     public class CurrencyViewModel : BaseViewModel
     {

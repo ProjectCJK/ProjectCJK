@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -34,6 +35,7 @@ namespace Units.Stages.Controllers
         public Transform VillageSpawner;
         public Transform PlayerSpawner;
         public List<Transform> GuestSpawner;
+        public List<Transform> ZombieSpawner;
     }
 
     public class VillageZoneController : MonoBehaviour, IVillageZoneController
@@ -135,13 +137,18 @@ namespace Units.Stages.Controllers
                     currentSpawnedGuests.Add(guest);
                 }
 #endif
-
-            SpawnDeliveryMan();
-            SetDeliveryManDestination();
-            SpawnHunter();
-            SetHunterDestination();
+            
+            if (GameManager.Instance.ES3Saver.TutorialClear)
+            {
+                SpawnDeliveryMan();
+                SetDeliveryManDestination();
+                SpawnHunter();
+                SetHunterDestination();
+                SpawnGuests();
+            }
+            
             SpawnMonster();
-            SpawnGuests();
+  
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
         }
 

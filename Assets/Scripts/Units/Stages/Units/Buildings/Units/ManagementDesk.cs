@@ -159,22 +159,26 @@ namespace Units.Stages.Units.Buildings.Units
         
         private void HandleOnUpdateStackedItem(int value)
         {
-            var targetIndex = 0;
-            
             foreach (GameObject spawnedItem in _managementDeskCustomSetting.SpawnedItem)
             {
                 spawnedItem.SetActive(false);
             }
 
-            for (var index = 0; index < _managementDeskCustomSetting.triggetCount.Count; index++)
+            if (value > 0)
             {
-                if (_managementDeskCustomSetting.triggetCount[index] <= value)
+                var targetIndex = 0;
+                
+                for (var index = 0; index < _managementDeskCustomSetting.triggetCount.Count; index++)
                 {
-                    targetIndex = index;
+                    if (_managementDeskCustomSetting.triggetCount[index] <= value)
+                    {
+                        targetIndex = index;
+                    }
+                    else if (_managementDeskCustomSetting.triggetCount[index] > value) break;
                 }
-            }
 
-            _managementDeskCustomSetting.SpawnedItem[targetIndex].SetActive(true);
+                _managementDeskCustomSetting.SpawnedItem[targetIndex].SetActive(true);
+            }
         }
     }
 }

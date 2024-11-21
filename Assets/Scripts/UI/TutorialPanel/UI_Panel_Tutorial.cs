@@ -2,19 +2,25 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace UI.TutorialPanel
 {
-    public class UI_Panel_PlayerCharacter_Scripts : MonoBehaviour
+    public class UI_Panel_Tutorial : MonoBehaviour
     {
         public event Action OnScriptsEnded;
         
         [SerializeField] private List<string> _scripts;
         [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] private Button _button;
 
         private int _currentScriptIndex;
         private bool _isEnded;
+        
+        public void RegisterReference()
+        {
+            _button.onClick.AddListener(OnClickPanel);
+        }
         
         public void Initialize()
         {
@@ -24,7 +30,7 @@ namespace UI.TutorialPanel
             UpdateText();
         }
 
-        public void OnClickPanel()
+        private void OnClickPanel()
         {
             if (!_isEnded)
             {
