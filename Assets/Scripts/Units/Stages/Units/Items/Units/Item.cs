@@ -25,6 +25,7 @@ namespace Units.Stages.Units.Items.Units
     public class Item : MonoBehaviour, IItem
     {
         [SerializeField] private Transform spriteTransform;
+        [SerializeField] private TrailRenderer _trailRenderer;
         
         private BezierCurveMover _bezierCurveMover;
         private bool _isInitialized;
@@ -39,6 +40,7 @@ namespace Units.Stages.Units.Items.Units
             Count = 0;
             _isInitialized = false;
             _spriteRenderer.sortingOrder = 0;
+            _trailRenderer.enabled = false;
         }
 
         private void Update()
@@ -69,6 +71,7 @@ namespace Units.Stages.Units.Items.Units
             SetActive(true);
             _isInitialized = true;
 
+            _trailRenderer.enabled = true;
             _sortingGroup.sortingOrder = setRoot ? 100 : 0;
         }
 

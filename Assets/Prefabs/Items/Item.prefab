@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteTransform: {fileID: 6420388811041690694}
+  _trailRenderer: {fileID: 5612898323018663876}
 --- !u!1001 &1703195075299429796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -205,6 +206,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63242a6dd68ec9c43ba3d1ff2fbbc4a3, type: 3}
+--- !u!96 &5612898323018663876 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6505436110737574496, guid: 63242a6dd68ec9c43ba3d1ff2fbbc4a3, type: 3}
+  m_PrefabInstance: {fileID: 1703195075299429796}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8652303713653686189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8048458680950338057, guid: 63242a6dd68ec9c43ba3d1ff2fbbc4a3, type: 3}
