@@ -94,9 +94,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
                 }
                 else if (currentItemReceiver.CanReceiveItem())
                 {
-                    OnUpdateStackedItem?.Invoke(CurrentInventorySize);
                     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, 1, SenderTransform.position);
                     RemoveItem(OutputItemKey);
+                    OnUpdateStackedItem?.Invoke(CurrentInventorySize);
                 }
             }
             else
