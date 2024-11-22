@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoogleSheets;
 using Modules.DesignPatterns.Singletons;
-using UI;
-using UI.ObjectTrackerPanels;
 using UI.QuestPanels;
 using Units.Stages.Controllers;
 using Units.Stages.Enums;
-using Units.Stages.Managers;
 using Units.Stages.Modules;
-using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Enums;
-using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -107,7 +101,6 @@ namespace Managers
         private QuestData _questData;
         
         private UI_Panel_Quest _uiPanelQuest;
-        private UI_Panel_ObjectTracker _uiPanelObjectTracker;
         
         private int CurrentQuestSubIndex;
         private int _maxSubIndexForStage;
@@ -117,18 +110,16 @@ namespace Managers
         public void RegisterReference(StageController stageController)
         {
             _stageController = stageController;
-
-            _uiPanelObjectTracker = UIManager.Instance.UI_Panel_ObjectTracker;
+            
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _gameData = DataManager.Instance.QuestData.GetData();
             CurrentQuestSubIndex = GameManager.Instance.ES3Saver.CurrentQuestSubIndex;
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
-            Debug.Log("QuestManager: RegisterReference completed.");
             
-            _uiPanelObjectTracker.RegisterReference();
+            Debug.Log("QuestManager: RegisterReference completed.");
         }
 
-        public void InitializeQuestData()
+        public void Initialize()
         {
             _maxSubIndexForStage = Enumerable.Range(0, _gameData.GetLength(0))
                 .Where(i => _gameData[i, 1] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString())
@@ -298,8 +289,7 @@ namespace Managers
             var progressRatio = (float)clearedCount / totalCount;
 
             List<UIQuestInfoItem> questInfoItems = _questData.Datas
-                .OrderBy(kvp => IsQuestClear[kvp.Key])
-                .ThenBy(kvp => kvp.Key)
+                .OrderBy(kvp => kvp.Key)
                 .Select(kvp => new UIQuestInfoItem
                 {
                     QuestDescriptionText = kvp.Value.Description,
@@ -380,7 +370,7 @@ namespace Managers
                     break;
             }
             
-            if (target != null) _uiPanelObjectTracker.StartTrackingTarget(target);
+            if (target != null) ObjectTrackerManager.Instance.StartTargetTracking(target);
         }
 
         private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2, int value)
@@ -455,7 +445,7 @@ namespace Managers
                 GameManager.Instance.ES3Saver.QuestProgress.Clear();
                 GameManager.Instance.ES3Saver.CurrentQuestSubIndex = CurrentQuestSubIndex;
 
-                InitializeQuestData();
+                Initialize();
                 UpdateUI();
             }
             else

@@ -12,6 +12,7 @@ using TMPro;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using Object = UnityEngine.Object;
 
 namespace Managers
 {
@@ -25,6 +26,9 @@ namespace Managers
 
     public class DataManager : SingletonMono<DataManager>
     {
+        [Header("### Tracker Prefab ###")]
+        public GameObject ObjectTrackerPrefab;
+        
         [Space(20)] [Header("### Item Data ###")]
         public const int GoldSendingMaximum = 1000;
 

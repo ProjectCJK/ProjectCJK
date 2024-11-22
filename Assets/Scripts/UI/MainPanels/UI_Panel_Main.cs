@@ -4,7 +4,6 @@ using UI.CostumePanels;
 using UI.CurrencyPanel;
 using UI.InventoryPanels;
 using UI.Level;
-using UI.ObjectTrackerPanels;
 using UI.QuestPanels;
 using UI.StageMapPanel;
 using UnityEngine;

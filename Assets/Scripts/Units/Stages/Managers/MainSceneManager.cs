@@ -8,6 +8,7 @@ using UI.BuildingEnhancementPanel;
 using UI.CurrencyPanel;
 using UI.QuestPanels;
 using Units.Stages.Controllers;
+using Units.Stages.Modules;
 using Units.Stages.UI;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -27,7 +28,6 @@ namespace Units.Stages.Managers
         [SerializeField] private MainSceneDefaultSetting _mainSceneDefaultSetting;
         
         public StageController StageController;
-        
         private CameraController _cameraController;
         private Joystick _joystick;
         
@@ -73,7 +73,8 @@ namespace Units.Stages.Managers
         {
             _joystick = UIManager.Instance.Joystick;
             StageController.RegisterReference(_joystick);
-            
+
+            ObjectTrackerManager.Instance.RegisterReference();
             LevelManager.Instance.RegisterReference();
             CurrencyManager.Instance.RegisterReference();
             QuestManager.Instance.RegisterReference(StageController);

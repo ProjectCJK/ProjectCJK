@@ -111,7 +111,8 @@ namespace Units.Stages.Controllers
             HuntingZoneController.Initialize();
             _villageZoneController.Initialize();
             
-            QuestManager.Instance.InitializeQuestData();
+            ObjectTrackerManager.Instance.Initialize();
+            QuestManager.Instance.Initialize();
         }
 
         private void InitializeManager()

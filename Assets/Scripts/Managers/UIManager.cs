@@ -1,21 +1,9 @@
-using System.Collections.Generic;
 using Externals.Joystick.Scripts.Base;
 using Modules.DesignPatterns.Singletons;
-using UI;
-using UI.BuildingEnhancementPanel;
-using UI.BuildingEnhancementPanel.UI;
-using UI.CostumeGachaPanels;
-using UI.CostumePanels;
-using UI.CurrencyPanel;
-using UI.Level;
 using UI.MainPanels;
-using UI.ObjectTrackerPanels;
-using UI.QuestPanels;
-using UI.StageMapPanel;
 using UI.TutorialPanel;
 using Units.Stages.Modules;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Managers
 {
@@ -31,13 +19,11 @@ namespace Managers
         [Space(20), SerializeField] private UI_Panel_Main _ui_Panel_Main;
 
         [SerializeField] private UI_Panel_Tutorial _ui_Panel_Tutorial;
-        [SerializeField] private UI_Panel_ObjectTracker _ui_Panel_ObjectTracker;
         
         [Space(20), SerializeField] private GameSpeedControlModule _gameSpeedControlModule;
 
         public UI_Panel_Main UI_Panel_Main { get; private set; }
         public UI_Panel_Tutorial UI_Panel_Tutorial { get; private set; }
-        public UI_Panel_ObjectTracker UI_Panel_ObjectTracker { get; private set; }
         public Joystick Joystick { get; private set; }
         
         /// <summary>
@@ -58,7 +44,6 @@ namespace Managers
             BranchCanvasGame = Instantiate(_branchCanvasGame);
             Joystick = Instantiate(_joystick, BranchCanvasGame.transform);
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
-            UI_Panel_ObjectTracker = Instantiate(_ui_Panel_ObjectTracker, BranchCanvasGuide.transform);
    
             Instantiate(_gameSpeedControlModule, BranchCanvasGame.transform);
         }
