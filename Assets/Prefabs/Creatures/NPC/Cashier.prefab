@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9093006660469964130}
+  - component: {fileID: 6104812966667583343}
   m_Layer: 10
   m_Name: Cashier
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9093006660469964130
 Transform:
   m_ObjectHideFlags: 0
@@ -32,6 +33,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6104812966667583343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515698731101433470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d330b9ea100443080f5b6c6646a03e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 58484826447969226}
+  paymentView: {fileID: 0}
 --- !u!1 &2993543349633603373
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +195,7 @@ TilemapRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.003937006, y: 0.003937006, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -307,6 +322,11 @@ PrefabInstance:
       addedObject: {fileID: 385400239325933796}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61456ef14f1863c498be5144f12176eb, type: 3}
+--- !u!95 &58484826447969226 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8613276211695175258, guid: 61456ef14f1863c498be5144f12176eb, type: 3}
+  m_PrefabInstance: {fileID: 8594916168325119376}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6264903034275296231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2429180358730272375, guid: 61456ef14f1863c498be5144f12176eb, type: 3}

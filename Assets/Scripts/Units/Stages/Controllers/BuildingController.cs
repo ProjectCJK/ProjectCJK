@@ -40,6 +40,7 @@ namespace Units.Stages.Controllers
     public class BuildingController : MonoBehaviour, IBuildingController
     {
         [SerializeField] private BuildingSpawnData buildingSpawnData;
+        public BuildingSpawnData BuildingSpawnData => buildingSpawnData;
         
         private List<EMaterialType> _currentActiveMaterials;
         public Dictionary<string, BuildingZone> Buildings { get; } = new();

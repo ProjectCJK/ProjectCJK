@@ -30,9 +30,9 @@ namespace Units.Stages.Controllers
 
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
     {
-        [SerializeField] private HuntingZoneSpawnData HuntingZoneSpawnData;
-        
-        private readonly List<IItem> _droppedItems = new();
+        [SerializeField] private HuntingZoneSpawnData _huntingZoneSpawnData;
+
+        public HuntingZoneSpawnData HuntingZoneSpawnData => _huntingZoneSpawnData;
         
         public Dictionary<string, HuntingZone> HuntingZones { get; } = new();
 
@@ -42,6 +42,8 @@ namespace Units.Stages.Controllers
 
         private float _playerItemPickupRange;
         private IItemFactory itemFactory;
+        
+        private readonly List<IItem> _droppedItems = new();
 
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, IPlayer player)
         {

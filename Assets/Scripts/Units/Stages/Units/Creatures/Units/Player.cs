@@ -1,7 +1,9 @@
 using System;
 using Externals.Joystick.Scripts.Base;
 using Interfaces;
+using Managers;
 using ScriptableObjects.Scripts.Creatures.Units;
+using UI.InventoryPanels;
 using Units.Stages.Modules;
 using Units.Stages.Modules.BattleModules;
 using Units.Stages.Modules.BattleModules.Units;
@@ -32,6 +34,7 @@ namespace Units.Stages.Units.Creatures.Units
     public class Player : Creature, IPlayer
     {
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private CurrentInventoryCountView _currentInventoryCountView;
 
         private CreatureStateMachine _creatureStateMachine;
         private IDamageFlashModule _damageFlashModule;
@@ -43,8 +46,9 @@ namespace Units.Stages.Units.Creatures.Units
 
         public PlayerCostumeModule PlayerCostumeModule;
         public PlayerStatsModule PlayerStatsModule;
-        private IPlayerInventoryModule _playerInventoryModule;
-        private IPlayerMovementModule _playerMovementModule;
+        private PlayerInventoryModule _playerInventoryModule;
+        private PlayerMovementModule _playerMovementModule;
+        
         public override Animator Animator { get; protected set; }
         public ICreatureItemReceiver CreatureItemReceiver => _playerInventoryModule;
 
@@ -61,7 +65,7 @@ namespace Units.Stages.Units.Creatures.Units
             PlayerCostumeModule = new PlayerCostumeModule(creatureSpriteModule, _weapon);
             PlayerStatsModule = new PlayerStatsModule(_playerDataSo);
             _playerBattleModule = new PlayerBattleModule(joystick, transform, _weapon);
-            _playerInventoryModule = new PlayerInventoryModule(receiveTransform, receiveTransform, PlayerStatsModule, _itemFactory, CreatureType);
+            _playerInventoryModule = new PlayerInventoryModule(receiveTransform, receiveTransform, PlayerStatsModule, _itemFactory, CreatureType, _currentInventoryCountView);
             _playerMovementModule = new PlayerMovementModule(this, PlayerStatsModule, _creatureStateMachine, joystick, spriteTransform);
             _playerCollisionModule = new PlayerCollisionModule(PlayerStatsModule);
 

@@ -26,8 +26,6 @@ namespace Units.Stages.Modules.FactoryModules.Units
         private readonly Dictionary<EMaterialType, EStageMaterialType> _materialMappings;
 
         private readonly Transform _parentTransform;
-        private Dictionary<string, Sprite> _currencySprites;
-        private Dictionary<string, Sprite> _itemSprites;
 
         public ItemFactory(Transform parentTransform, List<MaterialMapping> materialMappings)
         {
@@ -50,7 +48,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
             if (Enum.TryParse(split[0], out ECurrencyType currencyType))
             {
-                if (_currencySprites.TryGetValue($"{currencyType}", out Sprite currencySprite))
+                if (DataManager.Instance.CurrencySprites.TryGetValue($"{currencyType}", out Sprite currencySprite))
                     itemSprite = currencySprite;
             }
             else
@@ -64,7 +62,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
                     var newKey = $"{_itemType}_{stageMaterialType}";
 
-                    if (_itemSprites.TryGetValue(newKey, out Sprite sprite)) itemSprite = sprite;
+                    if (DataManager.Instance.ItemSprites.TryGetValue(newKey, out Sprite sprite)) itemSprite = sprite;
                 }
             }
 
@@ -102,21 +100,21 @@ namespace Units.Stages.Modules.FactoryModules.Units
         private void CreateSpriteDictionary()
         {
             List<ItemSprite> itemSprites = ItemDataSo.ItemSprites;
-            _itemSprites = new Dictionary<string, Sprite>();
+            DataManager.Instance.ItemSprites = new Dictionary<string, Sprite>();
 
             foreach (ItemSprite data in itemSprites)
             {
                 var dicKey = ParserModule.ParseEnumToString(data.ItemType, data.StageMaterialType);
-                _itemSprites.TryAdd(dicKey, data.Sprite);
+                DataManager.Instance.ItemSprites.TryAdd(dicKey, data.Sprite);
             }
 
             List<CurrencySprite> currencySprites = ItemDataSo.CurrencySprites;
-            _currencySprites = new Dictionary<string, Sprite>();
+            DataManager.Instance.CurrencySprites = new Dictionary<string, Sprite>();
 
             foreach (CurrencySprite data in currencySprites)
             {
                 var dicKey = ParserModule.ParseEnumToString(data.CurrencyType);
-                _currencySprites.TryAdd(dicKey, data.Sprite);
+                DataManager.Instance.CurrencySprites.TryAdd(dicKey, data.Sprite);
             }
         }
     }

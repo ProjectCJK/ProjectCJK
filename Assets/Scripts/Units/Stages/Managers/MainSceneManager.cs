@@ -76,7 +76,7 @@ namespace Units.Stages.Managers
             
             LevelManager.Instance.RegisterReference();
             CurrencyManager.Instance.RegisterReference();
-            QuestManager.Instance.RegisterReference();
+            QuestManager.Instance.RegisterReference(StageController);
             CostumeManager.Instance.RegisterReference();
             StageManager.Instance.RegisterReference();
 

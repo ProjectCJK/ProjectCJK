@@ -1606,6 +1606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelView: {fileID: 8582219934996399464}
   CurrencyView: {fileID: 4727172228055570434}
+  InventoryView: {fileID: 251228642751509}
   UI_Panel_Quest: {fileID: 8280558454294071086}
   UI_Panel_Costume: {fileID: 1866973291528562685}
   UI_Panel_Costume_Gacha: {fileID: 3883401789352326194}
@@ -2147,6 +2148,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81d817ed437444eb085a195b53734509, type: 3}
+--- !u!114 &251228642751509 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 198443435225525054, guid: 81d817ed437444eb085a195b53734509, type: 3}
+  m_PrefabInstance: {fileID: 198694109817478955}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5058283e26e741feb4773e450b62d597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3709734418227869410 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3583309430464260553, guid: 81d817ed437444eb085a195b53734509, type: 3}

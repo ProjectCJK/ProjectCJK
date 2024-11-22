@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 1239851018072292428}
   - component: {fileID: 401866634064381544}
   - component: {fileID: 2725093855437036038}
-  - component: {fileID: 8708719950609371602}
+  - component: {fileID: 8906798129927409132}
   m_Layer: 10
   m_Name: UI_Canvas_Player_Storage
   m_TagString: Untagged
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
---- !u!114 &8708719950609371602
+--- !u!114 &8906798129927409132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,14 +230,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1720410016273338577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Script: {fileID: 11500000, guid: 8070e8bfbc5f4aee943de3162d956903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
+  _text: {fileID: 245981387358525857}
 --- !u!1 &4825123492445085550
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +361,7 @@ MonoBehaviour:
   receiveTransform: {fileID: 3864572591601882370}
   spriteTransform: {fileID: 6757666623912805778}
   _weapon: {fileID: 6339372582470954591}
+  _currentInventoryCountView: {fileID: 8906798129927409132}
 --- !u!208 &891469569689661143
 NavMeshObstacle:
   m_ObjectHideFlags: 0

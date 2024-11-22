@@ -2,7 +2,9 @@ using UI.BuildingEnhancementPanel;
 using UI.CostumeGachaPanels;
 using UI.CostumePanels;
 using UI.CurrencyPanel;
+using UI.InventoryPanels;
 using UI.Level;
+using UI.ObjectTrackerPanels;
 using UI.QuestPanels;
 using UI.StageMapPanel;
 using UnityEngine;
@@ -14,6 +16,7 @@ namespace UI.MainPanels
     {
         public LevelView LevelView;
         public CurrencyView CurrencyView;
+        public InventoryView InventoryView;
         
         public UI_Panel_Quest UI_Panel_Quest;
         public UI_Panel_Costume UI_Panel_Costume;

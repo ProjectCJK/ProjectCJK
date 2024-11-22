@@ -24,7 +24,7 @@ namespace UI.QuestPanels
 
         public void UpdateQuestInfoItems(List<UIQuestInfoItem> questInfoItems)
         {
-            for (int i = 0; i < uiPanelQuestInfoItems.Count; i++)
+            for (var i = 0; i < uiPanelQuestInfoItems.Count; i++)
             {
                 if (i < questInfoItems.Count)
                 {

@@ -11,6 +11,8 @@ using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.UpgradeZones;
+using Units.Stages.Units.Buildings.UI.ManagementDesks;
+using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 
@@ -45,7 +47,7 @@ namespace Units.Stages.Units.Buildings.Units
     {
         [Header("재화 타입")] public ECurrencyType CurrencyType;
 
-        [Header("계산원")] public List<GameObject> Cashier;
+        [Header("계산원")] public List<Cashier> Cashier;
         
         [Space(10)] [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
         [Space(10)] [Header("인벤토리 아이템 활성화 조건")] public List<int> triggetCount;
@@ -55,6 +57,7 @@ namespace Units.Stages.Units.Buildings.Units
     {
         [SerializeField] private ManagementDeskDefaultSetting _managementDeskDefaultSetting;
         [SerializeField] private ManagementDeskCustomSetting _managementDeskCustomSetting;
+        [SerializeField] private List<PaymentView> _paymentView;
         private ItemFactory _itemFactory;
 
         private ManagementDeskDataSO _managementDeskDataSo;
@@ -89,7 +92,7 @@ namespace Units.Stages.Units.Buildings.Units
                 _managementDeskDefaultSetting.managementDeskInventory, _managementDeskStatsModule, _itemFactory,
                 InputItemKey, OutputItemKey);
             _managementDeskPaymentModule = new ManagementDeskPaymentModule(_managementDeskStatsModule,
-                _managementDeskInventoryModule, InputItemKey);
+                _managementDeskInventoryModule, InputItemKey, _paymentView);
 
             _tradeZonePlayer = _managementDeskDefaultSetting.TradeZone_Player.GetComponent<TradeZone>();
             _upgradeZonePlayer = _managementDeskDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
@@ -130,17 +133,16 @@ namespace Units.Stages.Units.Buildings.Units
         {
             if (_managementDeskStatsModule.CurrentBuildingOption2Value > _managementDeskPaymentModule.CurrentSpawnedCashierCount)
             {
-                for (var i = 0; i < _managementDeskStatsModule.CurrentBuildingOption2Value - _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
-                {
-                    _managementDeskPaymentModule.AddCashierPaymentSlot(i + 1);
-                }
-
-                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                var requiredCashier = _managementDeskStatsModule.CurrentBuildingOption2Value - _managementDeskPaymentModule.CurrentSpawnedCashierCount;
+                
+                for (var i = 0; i < requiredCashier; i++)
                 {
                     if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeSelf)
                     {
                         _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
+                        _managementDeskPaymentModule.AddCashierPaymentSlot(i + 1, _managementDeskCustomSetting.Cashier[i].Animator);
                     }
+                    else break;
                 }
             }
         }

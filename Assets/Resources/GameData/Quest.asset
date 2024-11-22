@@ -28,6 +28,7 @@ MonoBehaviour:
   - "\uBCF4\uC0C12 \uAC1C\uC218"
   - "\uBAA9\uB85D \uBCF4\uC0C1 \uD0C0\uC785"
   - "\uBAA9\uB85D \uBCF4\uC0C1 \uAC1C\uC218"
+  - TargetObject
   dataRows:
   - rowData:
     - Index
@@ -45,6 +46,7 @@ MonoBehaviour:
     - Reward2Count
     - ListRewardType
     - ListRewardCount
+    - QuestType2
   - rowData:
     - Int
     - Int
@@ -61,12 +63,64 @@ MonoBehaviour:
     - Int
     - String
     - Int
+    - Enum
   - rowData:
     - 110001
     - 1
     - 1
     - 1
     - St_110001
+    - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC74\uC124"
+    - Build
+    - Kitchen_A
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 50
+    - Kitchen_A
+  - rowData:
+    - 110002
+    - 1
+    - 1
+    - 2
+    - St_110002
+    - "\uC9C4\uC5F4\uB300 A \uAC74\uC124"
+    - Build
+    - Stand_A
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 50
+    - Stand_A
+  - rowData:
+    - 110003
+    - 1
+    - 1
+    - 3
+    - St_110003
+    - "\uC0AC\uB0E5\uD130 \uD574\uAE08"
+    - Build
+    - HuntingZone_A
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 50
+    - HuntingZone_A
+  - rowData:
+    - 110004
+    - 1
+    - 2
+    - 4
+    - St_110004
     - "\uD1A0\uB9C8\uD1A0 \uC218\uD655"
     - Get
     - Material_A
@@ -77,28 +131,30 @@ MonoBehaviour:
     - 2
     - Gold
     - 500
+    - HuntingZone_A
   - rowData:
-    - 110002
-    - 1
+    - 110005
     - 1
     - 2
-    - St_110002
+    - 5
+    - St_110005
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
     - ProductA_A
-    - 5
+    - 1
     - Star
     - 1
     - Diamond
     - 2
     - Gold
-    - 1200
+    - 500
+    - Kitchen_A
   - rowData:
-    - 110003
+    - 110006
     - 1
-    - 2
     - 3
-    - St_110003
+    - 6
+    - St_110006
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
     - ProductA_A
@@ -109,12 +165,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 1200
+    - ManagementDesk
   - rowData:
-    - 110004
+    - 110007
     - 1
-    - 2
-    - 4
-    - St_110004
+    - 3
+    - 7
+    - St_110007
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_A
@@ -124,13 +181,14 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 2000
+    - 1200
+    - Kitchen_A
   - rowData:
-    - 110005
+    - 110008
     - 1
-    - 3
-    - 5
-    - St_110005
+    - 4
+    - 8
+    - St_110008
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC74\uC124"
     - Build
     - Kitchen_B
@@ -141,12 +199,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 2000
+    - Kitchen_B
   - rowData:
-    - 110006
+    - 110009
     - 1
-    - 3
-    - 6
-    - St_110006
+    - 4
+    - 9
+    - St_110009
     - "\uC9C4\uC5F4\uB300 B \uAC74\uC124"
     - Build
     - Stand_B
@@ -157,12 +216,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 2000
+    - Stand_B
   - rowData:
-    - 110007
+    - 110010
     - 1
-    - 4
-    - 7
-    - St_110007
+    - 5
+    - 10
+    - St_110010
     - "\uC2E0\uADDC \uC0AC\uB0E5\uD130 \uD574\uAE08"
     - Build
     - HuntingZone_B
@@ -173,12 +233,13 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - HuntingZone_B
   - rowData:
-    - 110008
+    - 110011
     - 1
-    - 4
-    - 8
-    - St_110008
+    - 5
+    - 11
+    - St_110011
     - "\uC624\uC774 \uC218\uD655"
     - Get
     - Material_B
@@ -189,12 +250,13 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - HuntingZone_B
   - rowData:
-    - 110009
+    - 110012
     - 1
-    - 4
-    - 9
-    - St_110009
+    - 5
+    - 12
+    - St_110012
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_A
@@ -205,12 +267,13 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - Kitchen_A
   - rowData:
-    - 110010
+    - 110013
     - 1
-    - 5
-    - 10
-    - St_110010
+    - 6
+    - 13
+    - St_110013
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uC0DD\uC0B0"
     - Product
     - ProductA_B
@@ -221,12 +284,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - Kitchen_B
   - rowData:
-    - 110011
+    - 110014
     - 1
-    - 5
-    - 11
-    - St_110011
+    - 6
+    - 14
+    - St_110014
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
     - ProductA_B
@@ -237,12 +301,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - ManagementDesk
   - rowData:
-    - 110012
+    - 110015
     - 1
-    - 5
-    - 12
-    - St_110012
+    - 6
+    - 15
+    - St_110015
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - ManagementDesk
@@ -253,12 +318,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - ManagementDesk
   - rowData:
-    - 110013
+    - 110016
     - 1
-    - 6
-    - 13
-    - St_110013
+    - 7
+    - 16
+    - St_110016
     - "\uC624\uC774 \uC218\uD655"
     - Get
     - Material_B
@@ -269,12 +335,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 3000
+    - HuntingZone_B
   - rowData:
-    - 110014
+    - 110017
     - 1
-    - 6
-    - 14
-    - St_110014
+    - 7
+    - 17
+    - St_110017
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
     - ProductA_A
@@ -285,12 +352,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 3000
+    - ManagementDesk
   - rowData:
-    - 110015
+    - 110018
     - 1
-    - 6
-    - 15
-    - St_110015
+    - 7
+    - 18
+    - St_110018
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_A
@@ -301,12 +369,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 3000
+    - Kitchen_A
   - rowData:
-    - 110016
+    - 110019
     - 1
-    - 7
-    - 16
-    - St_110016
+    - 8
+    - 19
+    - St_110019
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_B
@@ -317,12 +386,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - Kitchen_B
   - rowData:
-    - 110017
+    - 110020
     - 1
-    - 7
-    - 17
-    - St_110017
+    - 8
+    - 20
+    - St_110020
     - "\uC624\uC774 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
     - ProductA_B
@@ -333,12 +403,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - ManagementDesk
   - rowData:
-    - 110018
+    - 110021
     - 1
-    - 7
-    - 18
-    - St_110018
+    - 8
+    - 21
+    - St_110021
     - "\uD1A0\uB9C8\uD1A0 \uD1B5\uC870\uB9BC \uD310\uB9E4"
     - Selling
     - ProductA_A
@@ -349,12 +420,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - ManagementDesk
   - rowData:
-    - 110019
+    - 110022
     - 1
-    - 8
-    - 19
-    - St_110019
+    - 9
+    - 22
+    - St_110022
     - "\uB3C8 \uC218\uC9D1"
     - Get
     - Money
@@ -365,12 +437,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
+    - ManagementDesk
   - rowData:
-    - 110020
+    - 110023
     - 1
-    - 8
-    - 20
-    - St_110020
+    - 9
+    - 23
+    - St_110023
     - "\uCE94\uB2DD\uBA38\uC2E0 A \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_A
@@ -381,12 +454,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
+    - Kitchen_A
   - rowData:
-    - 110021
+    - 110024
     - 1
-    - 8
-    - 21
-    - St_110021
+    - 9
+    - 24
+    - St_110024
     - "\uCE94\uB2DD\uBA38\uC2E0 B \uAC00\uACA9 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - Kitchen_B
@@ -397,12 +471,13 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
+    - Kitchen_B
   - rowData:
-    - 110022
+    - 110025
     - 1
     - 9
-    - 22
-    - St_110022
+    - 25
+    - St_110025
     - "\uACC4\uC0B0\uC6D0 \uB2A5\uB960 \uC62C\uB9AC\uAE30"
     - LevelUpOption1
     - ManagementDesk
@@ -413,8 +488,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
+    - ManagementDesk
   - rowData:
-    - 110023
+    - 110026
     - 2
     - 1
     - 26
@@ -429,8 +505,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - HuntingZone_A
   - rowData:
-    - 110024
+    - 110027
     - 2
     - 1
     - 27
@@ -445,8 +522,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - Kitchen_A
   - rowData:
-    - 110025
+    - 110028
     - 2
     - 1
     - 28
@@ -461,8 +539,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - ManagementDesk
   - rowData:
-    - 110026
+    - 110029
     - 2
     - 1
     - 29
@@ -477,8 +556,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 2500
+    - Kitchen_A
   - rowData:
-    - 110027
+    - 110030
     - 2
     - 2
     - 30
@@ -493,8 +573,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - ManagementDesk
   - rowData:
-    - 110028
+    - 110031
     - 2
     - 2
     - 31
@@ -509,8 +590,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - ManagementDesk
   - rowData:
-    - 110029
+    - 110032
     - 2
     - 2
     - 32
@@ -525,8 +607,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - HuntingZone_A
   - rowData:
-    - 110030
+    - 110033
     - 2
     - 2
     - 33
@@ -541,8 +624,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
+    - ManagementDesk
   - rowData:
-    - 110031
+    - 110034
     - 2
     - 3
     - 34
@@ -557,8 +641,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 5000
+    - Kitchen_A
   - rowData:
-    - 110032
+    - 110035
     - 2
     - 3
     - 35
@@ -573,8 +658,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 5000
+    - ManagementDesk
   - rowData:
-    - 110033
+    - 110036
     - 2
     - 3
     - 36
@@ -589,8 +675,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 5000
+    - ManagementDesk
   - rowData:
-    - 110034
+    - 110037
     - 2
     - 4
     - 37
@@ -605,8 +692,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
+    - HuntingZone_B
   - rowData:
-    - 110035
+    - 110038
     - 2
     - 4
     - 38
@@ -621,8 +709,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
+    - Kitchen_B
   - rowData:
-    - 110036
+    - 110039
     - 2
     - 4
     - 39
@@ -637,8 +726,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
+    - Stand_B
   - rowData:
-    - 110037
+    - 110040
     - 2
     - 5
     - 40
@@ -653,8 +743,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - HuntingZone_B
   - rowData:
-    - 110038
+    - 110041
     - 2
     - 5
     - 41
@@ -669,8 +760,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - Kitchen_B
   - rowData:
-    - 110039
+    - 110042
     - 2
     - 5
     - 42
@@ -685,8 +777,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk
   - rowData:
-    - 110040
+    - 110043
     - 2
     - 5
     - 43
@@ -701,8 +794,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk
   - rowData:
-    - 110041
+    - 110044
     - 2
     - 6
     - 44
@@ -717,8 +811,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 9000
+    - DeliveryLodging
   - rowData:
-    - 110042
+    - 110045
     - 2
     - 6
     - 45
@@ -733,8 +828,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 9000
+    - Kitchen_A
   - rowData:
-    - 110043
+    - 110046
     - 2
     - 6
     - 46
@@ -749,8 +845,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 9000
+    - Kitchen_B
   - rowData:
-    - 110044
+    - 110047
     - 2
     - 7
     - 47
@@ -765,8 +862,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - ManagementDesk
   - rowData:
-    - 110045
+    - 110048
     - 2
     - 7
     - 48
@@ -781,8 +879,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - DeliveryLodging
   - rowData:
-    - 110046
+    - 110049
     - 2
     - 7
     - 49
@@ -797,8 +896,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 70
+    - ManagementDesk
   - rowData:
-    - 110047
+    - 110050
     - 2
     - 8
     - 50
@@ -813,8 +913,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 16000
+    - WareHouse
   - rowData:
-    - 110048
+    - 110051
     - 2
     - 8
     - 51
@@ -829,8 +930,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 16000
+    - ManagementDesk
   - rowData:
-    - 110049
+    - 110052
     - 2
     - 8
     - 52
@@ -845,8 +947,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 16000
+    - Kitchen_B
   - rowData:
-    - 110050
+    - 110053
     - 2
     - 9
     - 53
@@ -861,8 +964,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 140
+    - Kitchen_C
   - rowData:
-    - 110051
+    - 110054
     - 2
     - 9
     - 54
@@ -877,8 +981,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 140
+    - Stand_C
   - rowData:
-    - 110052
+    - 110055
     - 2
     - 9
     - 55
@@ -893,8 +998,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 140
+    - WareHouse
   - rowData:
-    - 110053
+    - 110056
     - 2
     - 9
     - 56
@@ -909,8 +1015,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 140
+    - Kitchen_A
   - rowData:
-    - 110054
+    - 110057
     - 2
     - 10
     - 57
@@ -925,8 +1032,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - HuntingZone_C
   - rowData:
-    - 110055
+    - 110058
     - 2
     - 10
     - 58
@@ -941,8 +1049,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - HuntingZone_C
   - rowData:
-    - 110056
+    - 110059
     - 2
     - 10
     - 59
@@ -957,8 +1066,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - Kitchen_C
   - rowData:
-    - 110057
+    - 110060
     - 2
     - 10
     - 60
@@ -973,8 +1083,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - Kitchen_A
   - rowData:
-    - 110058
+    - 110061
     - 2
     - 11
     - 61
@@ -989,8 +1100,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 55000
+    - WareHouse
   - rowData:
-    - 110059
+    - 110062
     - 2
     - 11
     - 62
@@ -1005,8 +1117,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 55000
+    - Kitchen_A
   - rowData:
-    - 110060
+    - 110063
     - 2
     - 11
     - 63
@@ -1021,8 +1134,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 55000
+    - ManagementDesk
   - rowData:
-    - 110061
+    - 110064
     - 2
     - 11
     - 64
@@ -1037,8 +1151,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 55000
+    - DeliveryLodging
   - rowData:
-    - 110062
+    - 110065
     - 2
     - 12
     - 65
@@ -1053,8 +1168,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 210
+    - WareHouse
   - rowData:
-    - 110063
+    - 110066
     - 2
     - 12
     - 66
@@ -1069,8 +1185,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 210
+    - Kitchen_D
   - rowData:
-    - 110064
+    - 110067
     - 2
     - 12
     - 67
@@ -1085,8 +1202,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 210
+    - Stand_D
   - rowData:
-    - 110065
+    - 110068
     - 2
     - 13
     - 68
@@ -1101,8 +1219,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 90000
+    - HuntingZone_C
   - rowData:
-    - 110066
+    - 110069
     - 2
     - 13
     - 69
@@ -1117,8 +1236,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 90000
+    - Kitchen_D
   - rowData:
-    - 110067
+    - 110070
     - 2
     - 13
     - 70
@@ -1133,8 +1253,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 90000
+    - ManagementDesk
   - rowData:
-    - 110068
+    - 110071
     - 2
     - 14
     - 71
@@ -1149,8 +1270,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 280
+    - Kitchen_D
   - rowData:
-    - 110069
+    - 110072
     - 2
     - 14
     - 72
@@ -1165,8 +1287,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 280
+    - Kitchen_B
   - rowData:
-    - 110070
+    - 110073
     - 2
     - 14
     - 73
@@ -1181,8 +1304,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 280
+    - HuntingZone_B
   - rowData:
-    - 110071
+    - 110074
     - 2
     - 14
     - 74
@@ -1197,8 +1321,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 280
+    - Kitchen_C
   - rowData:
-    - 110072
+    - 110075
     - 2
     - 15
     - 75
@@ -1213,8 +1338,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - WareHouse
   - rowData:
-    - 110073
+    - 110076
     - 2
     - 15
     - 76
@@ -1229,8 +1355,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk
   - rowData:
-    - 110074
+    - 110077
     - 2
     - 15
     - 77
@@ -1245,8 +1372,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - Kitchen_C
   - rowData:
-    - 110075
+    - 110078
     - 2
     - 15
     - 78
@@ -1261,8 +1389,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - Kitchen_D
   - rowData:
-    - 110076
+    - 110079
     - 2
     - 16
     - 79
@@ -1277,8 +1406,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 350
+    - ManagementDesk
   - rowData:
-    - 110077
+    - 110080
     - 2
     - 16
     - 80
@@ -1293,8 +1423,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 350
+    - Kitchen_A
   - rowData:
-    - 110078
+    - 110081
     - 2
     - 16
     - 81
@@ -1309,8 +1440,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 350
+    - ManagementDesk
   - rowData:
-    - 110079
+    - 110082
     - 2
     - 17
     - 82
@@ -1325,8 +1457,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 420
+    - ManagementDesk
   - rowData:
-    - 110080
+    - 110083
     - 2
     - 17
     - 83
@@ -1341,8 +1474,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 420
+    - DeliveryLodging
   - rowData:
-    - 110081
+    - 110084
     - 2
     - 17
     - 84
@@ -1357,8 +1491,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 420
+    - Kitchen_B
   - rowData:
-    - 110082
+    - 110085
     - 2
     - 17
     - 85
@@ -1373,8 +1508,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 420
+    - ManagementDesk
   - rowData:
-    - 110083
+    - 110086
     - 2
     - 18
     - 86
@@ -1389,8 +1525,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 160000
+    - Kitchen_D
   - rowData:
-    - 110084
+    - 110087
     - 2
     - 18
     - 87
@@ -1405,8 +1542,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 160000
+    - Kitchen_C
   - rowData:
-    - 110085
+    - 110088
     - 2
     - 18
     - 88
@@ -1421,8 +1559,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 160000
+    - ManagementDesk
   - rowData:
-    - 110086
+    - 110089
     - 2
     - 18
     - 89
@@ -1437,8 +1576,9 @@ MonoBehaviour:
     - 2
     - Gold
     - 160000
+    - WareHouse
   - rowData:
-    - 110087
+    - 110090
     - 2
     - 19
     - 90
@@ -1453,8 +1593,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 490
+    - Kitchen_A
   - rowData:
-    - 110088
+    - 110091
     - 2
     - 19
     - 91
@@ -1469,8 +1610,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 490
+    - Kitchen_A
   - rowData:
-    - 110089
+    - 110092
     - 2
     - 19
     - 92
@@ -1485,8 +1627,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 490
+    - Kitchen_B
   - rowData:
-    - 110090
+    - 110093
     - 2
     - 19
     - 93
@@ -1501,8 +1644,9 @@ MonoBehaviour:
     - 2
     - RedGem
     - 490
+    - Kitchen_B
   - rowData:
-    - 110091
+    - 110094
     - 2
     - 20
     - 94
@@ -1517,8 +1661,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk
   - rowData:
-    - 110092
+    - 110095
     - 2
     - 20
     - 95
@@ -1533,8 +1678,9 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk
   - rowData:
-    - 110093
+    - 110096
     - 2
     - 20
     - 96
@@ -1549,3 +1695,4 @@ MonoBehaviour:
     - 2
     - Dia
     - 5
+    - ManagementDesk

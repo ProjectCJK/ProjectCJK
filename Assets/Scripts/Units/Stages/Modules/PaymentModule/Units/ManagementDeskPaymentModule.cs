@@ -4,6 +4,7 @@ using Managers;
 using Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.Units;
 using Units.Stages.Modules.PaymentModule.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Buildings.Units;
+using Units.Stages.Units.Buildings.UI.ManagementDesks;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using Units.Stages.Units.Creatures.Units;
@@ -20,8 +21,30 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
     public class CashierPayment
     {
+        private static readonly int Idle = Animator.StringToHash("Idle");
+        private static readonly int Run = Animator.StringToHash("Run");
         public float Delay;
         public Guest Guest;
+        public Animator Animator;
+        
+        public CashierPayment(Animator animator)
+        {
+            Animator = animator;
+        }
+
+        public void RunPayment(bool value)
+        {
+            if (value)
+            {
+                Animator.SetBool(Idle, false);
+                Animator.SetBool(Run, true);
+            }
+            else
+            {
+                Animator.SetBool(Idle, true);
+                Animator.SetBool(Run, false);
+            }
+        }
     }
 
     public class ManagementDeskPaymentModule : BuildingPaymentModule, IManagementDeskPaymentModule
@@ -36,16 +59,19 @@ namespace Units.Stages.Modules.PaymentModule.Units
         private Player _player; // 플레이어 참조
         private float _playerPaymentElapsedTime; // 플레이어 결제 대기 시간
         private float _playerPaymentDelay; // 플레이어 결제 딜레이
-
+        private Guest _playerTarget;
+        
         public int CurrentSpawnedCashierCount => _cashierPayments.Count;
+        
+        private readonly List<PaymentView> _paymentViews;
 
-        public ManagementDeskPaymentModule(ManagementDeskStatsModule statsModule, 
-                                           IManagementDeskInventoryModule inventoryModule, 
-                                           string inputKey)
+        public ManagementDeskPaymentModule(ManagementDeskStatsModule statsModule,
+            IManagementDeskInventoryModule inventoryModule, string inputKey, List<PaymentView> paymentViews)
         {
             _npcPaymentDelay = statsModule.CurrentBuildingOption1Value;
             _inventoryModule = inventoryModule;
             _inputKey = inputKey;
+            _paymentViews = paymentViews;
         }
 
         public void Update()
@@ -100,40 +126,74 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         private void ProcessPlayerPayment()
         {
-            if (_player == null) return ;
-            
-            if (_customerQueue.Count == 0) return;
-
-            _playerPaymentElapsedTime += Time.deltaTime;
-
-            if (_playerPaymentElapsedTime >= _playerPaymentDelay)
+            if (_player == null)
             {
-                Guest guest = _customerQueue.Dequeue();
-                ProcessPaymentForGuest(guest);
+                _paymentViews[0].Reset();
+                return;
+            }
 
-                _playerPaymentElapsedTime = 0f; // 결제 딜레이 초기화
+            if (_playerTarget == null)
+            {
+                if (_customerQueue.TryDequeue(out Guest guest))
+                {
+                    _playerTarget = guest;
+                    Tuple<string, int> guestItem = _playerTarget.GetItem();
+                    _paymentViews[0].Initialize(guestItem, _playerPaymentDelay, guest.transform);
+                }
+                else
+                {
+                    _playerPaymentElapsedTime = 0f; // 결제 딜레이 초기화
+                    _paymentViews[0].Reset();
+                }
+            }
+            else
+            {
+                _playerPaymentElapsedTime += Time.deltaTime;
+                _paymentViews[0].UpdateUI(_playerPaymentElapsedTime);
+
+                if (_playerPaymentElapsedTime >= _playerPaymentDelay)
+                {
+                    ProcessPaymentForGuest(_playerTarget);
+                    
+                    _playerTarget = null;
+                    _playerPaymentElapsedTime = 0f; // 결제 딜레이 초기화
+                    _paymentViews[0].Reset();
+                }
             }
         }
 
         private void ProcessCashierPayments()
         {
-            foreach (CashierPayment cashier in _cashierPayments)
+            for (var index = 0; index < _cashierPayments.Count; index++)
             {
+                CashierPayment cashier = _cashierPayments[index];
                 if (cashier.Guest != null)
                 {
                     cashier.Delay += Time.deltaTime;
-
+                    _paymentViews[index + 1].UpdateUI(cashier.Delay);
+                    
                     if (cashier.Delay >= _npcPaymentDelay)
                     {
                         ProcessPaymentForGuest(cashier.Guest);
                         cashier.Guest = null;
                         cashier.Delay = 0f; // 계산원 결제 딜레이 초기화
+                        cashier.RunPayment(false);
+                        _paymentViews[index + 1].Reset();
                     }
                 }
-                else if (_customerQueue.TryDequeue(out var guest))
+                else if (_customerQueue.TryDequeue(out Guest guest))
                 {
                     cashier.Guest = guest;
-                    cashier.Delay = 0f; // 새로운 손님 처리 시작
+                    cashier.Delay = 0f;
+                    cashier.RunPayment(true);
+                    
+                    _paymentViews[index + 1].Initialize(guest.GetItem(), _npcPaymentDelay, guest.transform);
+                }
+                else
+                {
+                    cashier.Delay = 0f;
+                    cashier.RunPayment(false);
+                    _paymentViews[index + 1].Reset();
                 }
             }
         }
@@ -186,11 +246,11 @@ namespace Units.Stages.Modules.PaymentModule.Units
             }
         }
 
-        public void AddCashierPaymentSlot(int slotCount)
+        public void AddCashierPaymentSlot(int slotCount, Animator animator)
         {
             for (var i = 0; i < slotCount; i++)
             {
-                _cashierPayments.Add(new CashierPayment());
+                _cashierPayments.Add(new CashierPayment(animator));
             }
         }
 

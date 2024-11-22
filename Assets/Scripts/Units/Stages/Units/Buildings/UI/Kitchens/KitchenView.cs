@@ -14,7 +14,7 @@ namespace Units.Stages.Units.Buildings.UI.Kitchens
         protected override void BindUIElements()
         {
             UpdateUI(); // 뷰모델의 초기 값을 바인딩
-        }
+        }  
 
         // 뷰모델의 값이 변경될 때 UI를 업데이트
         protected override void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

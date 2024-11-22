@@ -92,7 +92,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         /// <summary>
         ///     아이템을 제거하는 메서드
         /// </summary>
-        public void RemoveItem(string itemKey)
+        public virtual void RemoveItem(string itemKey)
         {
             if (!Inventory.ContainsKey(itemKey)) return;
 

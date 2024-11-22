@@ -41,7 +41,8 @@ namespace Units.Stages.Controllers
     public class VillageZoneController : MonoBehaviour, IVillageZoneController
     {
         [SerializeField] private VillageSpawnData _villageSpawnData;
-
+        public VillageSpawnData VillageSpawnData => _villageSpawnData;
+        
         public Action<IPlayer, bool> OnRegisterPlayer { get; set; }
         public IPlayer Player { get; private set; }
         

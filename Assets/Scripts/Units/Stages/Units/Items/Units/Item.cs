@@ -41,6 +41,7 @@ namespace Units.Stages.Units.Items.Units
             _isInitialized = false;
             _spriteRenderer.sortingOrder = 0;
             _trailRenderer.enabled = false;
+            _trailRenderer.Clear();
         }
 
         private void Update()

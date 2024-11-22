@@ -108,6 +108,12 @@ namespace Managers
         [Header("--- BuildingUpgradePanel GameData ---")]
         public GameData BuildingUpgradePanel;
 
+        [Space(20), Header("### ItemAssets ###")]
+        public Dictionary<string, Sprite> ItemSprites;
+
+        [Space(20), Header("### CurrencyAssets ###")]
+        public Dictionary<string, Sprite> CurrencySprites;
+
         public Sprite GetCurrencyIcon(ECurrencyType currencyType)
         {
             int spriteIndex;

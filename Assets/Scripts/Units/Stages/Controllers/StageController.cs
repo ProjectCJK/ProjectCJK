@@ -73,9 +73,7 @@ namespace Units.Stages.Controllers
 
         public CreatureController CreatureController => _stageDefaultSettings.stageReferences.CreatureController;
         public BuildingController BuildingController => _stageDefaultSettings.stageReferences.BuildingController;
-
-        private HuntingZoneController _huntingZoneController =>
-            _stageDefaultSettings.stageReferences.HuntingZoneController;
+        public HuntingZoneController HuntingZoneController => _stageDefaultSettings.stageReferences.HuntingZoneController;
 
         private IVillageZoneController _villageZoneController =>
             _stageDefaultSettings.stageReferences.VillageZoneController;
@@ -97,10 +95,10 @@ namespace Units.Stages.Controllers
 
             CreatureController.RegisterReference(playerFactory, monsterFactory, guestFactory, deliveryManFactory, hunterFactory);
             BuildingController.RegisterReference(itemFactory);
-            _villageZoneController.RegisterReference(CreatureController, BuildingController, _huntingZoneController, _stageCustomSettings);
-            _huntingZoneController.RegisterReference(CreatureController, itemFactory, _villageZoneController.Player);
+            _villageZoneController.RegisterReference(CreatureController, BuildingController, HuntingZoneController, _stageCustomSettings);
+            HuntingZoneController.RegisterReference(CreatureController, itemFactory, _villageZoneController.Player);
 
-            _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;
+            _villageZoneController.OnRegisterPlayer += HuntingZoneController.HandleOnRegisterPlayer;
             
             InitializeZone();
 
@@ -110,7 +108,7 @@ namespace Units.Stages.Controllers
         public void Initialize()
         {
             BuildingController.Initialize();
-            _huntingZoneController.Initialize();
+            HuntingZoneController.Initialize();
             _villageZoneController.Initialize();
             
             QuestManager.Instance.InitializeQuestData();
@@ -209,7 +207,7 @@ namespace Units.Stages.Controllers
                 GameManager.Instance.ES3Saver.BuildingActiveStatuses[targetBuilding.BuildingKey] = activeStatus;
             }
             // 기존 사냥터 상태 처리
-            else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
+            else if (HuntingZoneController.HuntingZones.ContainsKey(targetKey))
             {
                 if (activeStatus == EActiveStatus.Active)
                 {
@@ -218,7 +216,7 @@ namespace Units.Stages.Controllers
                 }
 
                 // 사냥터 상태 저장
-                HuntingZone huntingZone = _huntingZoneController.HuntingZones[targetKey];
+                HuntingZone huntingZone = HuntingZoneController.HuntingZones[targetKey];
                 GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[huntingZone.HuntingZoneKey] = activeStatus;
             }
 
@@ -244,9 +242,9 @@ namespace Units.Stages.Controllers
                         {
                             GameManager.Instance.ES3Saver.BuildingActiveStatuses[BuildingController.Buildings[nextActiveStatusModule.TargetKey].BuildingKey] = EActiveStatus.Standby;
                         }
-                        else if (_huntingZoneController.HuntingZones.ContainsKey(nextActiveStatusModule.TargetKey))
+                        else if (HuntingZoneController.HuntingZones.ContainsKey(nextActiveStatusModule.TargetKey))
                         {
-                            GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[_huntingZoneController.HuntingZones[nextActiveStatusModule.TargetKey].HuntingZoneKey] = EActiveStatus.Standby;
+                            GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[HuntingZoneController.HuntingZones[nextActiveStatusModule.TargetKey].HuntingZoneKey] = EActiveStatus.Standby;
                         }
                     }
                 }
@@ -271,9 +269,9 @@ namespace Units.Stages.Controllers
                     }
                 }
             }
-            else if (_huntingZoneController.HuntingZones.ContainsKey(targetKey))
+            else if (HuntingZoneController.HuntingZones.ContainsKey(targetKey))
             {
-                HuntingZone huntingZone = _huntingZoneController.HuntingZones[targetKey];
+                HuntingZone huntingZone = HuntingZoneController.HuntingZones[targetKey];
                 VolatileDataManager.Instance.HuntingZoneActiveStatuses[huntingZone] = activeStatus;
             }
         }

@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f5e8974d4b452d86c2e051bdd4f8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HuntingZoneSpawnData:
+  _huntingZoneSpawnData:
     HuntingZoneSpawners:
     - {fileID: 3121102612073639220}
     - {fileID: 4142494014169057933}
@@ -238,6 +238,7 @@ MonoBehaviour:
     - {fileID: 4421094896956723367}
     - {fileID: 534164894332003462}
     - {fileID: 1566012060879552777}
+    ZombieSpawner: []
 --- !u!1 &2474724537981980565
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +575,6 @@ MonoBehaviour:
       BuildingController: {fileID: 4045675308836265243}
       HuntingZoneController: {fileID: 871903875347868169}
       VillageZoneController: {fileID: 1304789147852495917}
-    navigationSurface: {fileID: 403002601943463}
   _stageCustomSettings:
     StageLevel: 2
     materialMappings:
