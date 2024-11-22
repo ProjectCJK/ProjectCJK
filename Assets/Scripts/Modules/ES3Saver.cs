@@ -45,7 +45,6 @@ namespace Modules
         /// <summary>
         /// BuildingSettings
         /// </summary>
-        
         public Dictionary<string, Dictionary<string, int>> BuildingInputItems = new();
         public Dictionary<string, Dictionary<string, int>> BuildingOutputItems = new();
         public Dictionary<string, int> CurrentBuildingLevel = new();
@@ -81,7 +80,7 @@ namespace Modules
             RequiredMoneyForBuildingActive = new Dictionary<string, int>();
             RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>();
             ActiveStatusSettingIndex = 0;
-            CurrentQuestSubIndex = 0;
+            CurrentQuestSubIndex = 1;
             ClearedQuestStatuses = new Dictionary<int, bool>();
             QuestProgress = new Dictionary<int, int>();
         }

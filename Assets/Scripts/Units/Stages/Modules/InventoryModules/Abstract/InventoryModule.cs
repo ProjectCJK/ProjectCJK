@@ -5,7 +5,6 @@ using Interfaces;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Items.Units;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Units.Stages.Modules.InventoryModules.Abstract

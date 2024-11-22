@@ -95,11 +95,9 @@ namespace Units.Stages.Controllers
             var deliveryManFactory = new DeliveryManFactory(itemFactory);
             var hunterFactory = new HunterFactory(itemFactory);
 
-            CreatureController.RegisterReference(playerFactory, monsterFactory, guestFactory, deliveryManFactory,
-                hunterFactory);
+            CreatureController.RegisterReference(playerFactory, monsterFactory, guestFactory, deliveryManFactory, hunterFactory);
             BuildingController.RegisterReference(itemFactory);
-            _villageZoneController.RegisterReference(CreatureController, BuildingController, _huntingZoneController,
-                _stageCustomSettings);
+            _villageZoneController.RegisterReference(CreatureController, BuildingController, _huntingZoneController, _stageCustomSettings);
             _huntingZoneController.RegisterReference(CreatureController, itemFactory, _villageZoneController.Player);
 
             _villageZoneController.OnRegisterPlayer += _huntingZoneController.HandleOnRegisterPlayer;

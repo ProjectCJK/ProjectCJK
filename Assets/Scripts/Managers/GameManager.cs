@@ -56,6 +56,7 @@ namespace Managers
                     TutorialClear = false,
                     CurrentPlayerLevel = 1,
                     CurrentPlayerExp = 0,
+                    CurrentQuestSubIndex = 1,
                     Gold = 10000,
                     Diamond = 0,
                     RedGem = 0,

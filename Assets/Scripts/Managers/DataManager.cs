@@ -53,8 +53,12 @@ namespace Managers
         [Space(20), Header("### GameData ###")]
         [Header("=== Level GameData ===")]
         public GameData LevelData;
+        
         [Header("=== Quest GameData ===")]
         public GameData QuestData;
+
+        [Header("=== Stage GameData ===")]
+        public GameData StageData;
         
         [Space(20), Header("=== Building GameData ===")]
         [Header("--- Kitchen GameData ---")]
@@ -103,5 +107,31 @@ namespace Managers
         [Space(20)] [Header("### UI ###")]
         [Header("--- BuildingUpgradePanel GameData ---")]
         public GameData BuildingUpgradePanel;
+
+        public Sprite GetCurrencyIcon(ECurrencyType currencyType)
+        {
+            int spriteIndex;
+            
+            switch (currencyType)
+            {
+                case ECurrencyType.Money:
+                    spriteIndex = 0;
+                    break;
+                case ECurrencyType.Diamond:
+                    spriteIndex = 2;
+                    break;
+                case ECurrencyType.RedGem:
+                    spriteIndex = 4;
+                    break;
+                    break;
+                case ECurrencyType.Star:
+                    spriteIndex = 58;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(currencyType), currencyType, null);
+            }
+
+            return SpriteDatas[spriteIndex];
+        }
     }
 }

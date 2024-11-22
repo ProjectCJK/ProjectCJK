@@ -60,6 +60,13 @@ namespace Managers
         {
             _levelView = UIManager.Instance.UI_Panel_Main.LevelView;
             _ui_Panel_LevelUp = UIManager.Instance.UI_Panel_Main.UI_Panel_LevelUp;
+            _ui_Panel_LevelUp.RegisterReference(() =>
+            {
+                foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
+                {
+                    CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2);
+                }
+            }); 
             
             _levelData = DataManager.Instance.LevelData.GetData();
             
@@ -91,6 +98,8 @@ namespace Managers
                 GameManager.Instance.ES3Saver.CurrentPlayerLevel = CurrentLevel;
                 
                 CurrentExp -= MaxExp;
+
+                _ui_Panel_LevelUp.Activate(_levelUpRewards);
                 
                 UpdateLevelData();
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using Units.Stages.Managers;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -10,22 +11,29 @@ namespace UI.StageMapPanel
 {
     public class UI_Panel_StageMap : MonoBehaviour
     {
-        [SerializeField] private List<Button> buttons = new();
-
-        public void RegisterReference()
+        [SerializeField] private List<UI_Item_StageMap> _uiItemStageMaps;
+        private List<StageData> _stageDatas;
+        
+        public void RegisterReference(List<StageData> stageDataList, Action<int, int> changeStage)
         {
-            for (var i = 0; i < buttons.Count; i++)
+            _stageDatas = stageDataList;
+            
+            for (var index = 0; index < _uiItemStageMaps.Count; index++)
             {
-                var capturedIndex = i; // 로컬 변수에 i 값 복사
-                buttons[i].onClick.RemoveAllListeners();
-                buttons[i].onClick.AddListener(() => ChangeStage(capturedIndex));
+                UI_Item_StageMap uiItemStageMap = _uiItemStageMaps[index];
+                uiItemStageMap.RegisterReference(() => changeStage(index, _stageDatas[index].UnlockCost));
             }
         }
-
-        private static void ChangeStage(int index)
+        
+        public void Activate()
         {
-            GameManager.Instance.ES3Saver.CurrentStageLevel = index + 2;
-            LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
+            for (var index = 0; index < _uiItemStageMaps.Count; index++)
+            {
+                UI_Item_StageMap stageMap = _uiItemStageMaps[index];
+                stageMap.UpdateUI(_stageDatas[index]);
+            }
+            
+            gameObject.SetActive(true);
         }
     }
 }

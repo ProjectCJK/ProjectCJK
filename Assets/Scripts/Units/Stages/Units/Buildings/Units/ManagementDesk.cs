@@ -128,22 +128,18 @@ namespace Units.Stages.Units.Buildings.Units
 
         private void SpawnCashier()
         {
-            if (_managementDeskStatsModule.CurrentBuildingOption2Value >
-                _managementDeskPaymentModule.CurrentSpawnedCashierCount)
+            if (_managementDeskStatsModule.CurrentBuildingOption2Value > _managementDeskPaymentModule.CurrentSpawnedCashierCount)
             {
-                _managementDeskPaymentModule.CurrentSpawnedCashierCount =
-                    (int)_managementDeskStatsModule.CurrentBuildingOption2Value;
-
-                for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount - _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
+                for (var i = 0; i < _managementDeskStatsModule.CurrentBuildingOption2Value - _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                 {
                     _managementDeskPaymentModule.AddCashierPaymentSlot(i);
                 }
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                 {
-                    if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeInHierarchy)
+                    if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeSelf)
                     {
-                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);   
+                        _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
                     }
                 }
             }
