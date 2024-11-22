@@ -100,7 +100,9 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         private void ProcessPlayerPayment()
         {
-            if (_player == null || _customerQueue.Count == 0) return;
+            if (_player == null) return ;
+            
+            if (_customerQueue.Count == 0) return;
 
             _playerPaymentElapsedTime += Time.deltaTime;
 

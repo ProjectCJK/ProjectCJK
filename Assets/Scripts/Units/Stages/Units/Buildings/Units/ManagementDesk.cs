@@ -132,7 +132,7 @@ namespace Units.Stages.Units.Buildings.Units
             {
                 for (var i = 0; i < _managementDeskStatsModule.CurrentBuildingOption2Value - _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
                 {
-                    _managementDeskPaymentModule.AddCashierPaymentSlot(i);
+                    _managementDeskPaymentModule.AddCashierPaymentSlot(i + 1);
                 }
 
                 for (var i = 0; i < _managementDeskPaymentModule.CurrentSpawnedCashierCount; i++)
