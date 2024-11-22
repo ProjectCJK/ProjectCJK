@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae61f994aa9344f19da2a19395d6929, type: 3}
+  m_Name: Stage
+  m_EditorClassIdentifier: 
+  columnNames:
+  - "\uC778\uB371\uC2A4"
+  - "\uC774\uB984"
+  - "\uCC55\uD130"
+  - "\uC2A4\uD14C\uC774\uC9C0 \uC81C\uBAA9"
+  - "\uC694\uAD6C \uB808\uBCA8"
+  - "\uD574\uAE08 \uBE44\uC6A9"
+  - "\uAC00\uACA9 \uBC30\uC218"
+  - "\uBC30\uACBD\uC74C\uC545"
+  dataRows:
+  - rowData:
+    - Index
+    - Name
+    - Chapter
+    - StageTitle
+    - NeedLevel
+    - UnlockCost
+    - Multiple
+    - StageBG
+  - rowData:
+    - Int
+    - String
+    - Int
+    - String
+    - Int
+    - Int
+    - Int
+    - String
+  - rowData:
+    - 10001
+    - Stage_1
+    - 1
+    - St_30001
+    - 1
+    - 0
+    - 100
+    - NULL
+  - rowData:
+    - 10002
+    - Stage_2
+    - 2
+    - St_30002
+    - 4
+    - 25000
+    - 100
+    - NULL
+  - rowData:
+    - 10003
+    - Stage_3
+    - 3
+    - St_30003
+    - 10
+    - 2000000
+    - 200
+    - NULL
+  - rowData:
+    - 10004
+    - Stage_4
+    - 4
+    - St_30004
+    - 18
+    - 1000000000
+    - 300
+    - NULL
+  - rowData:
+    - 10005
+    - Stage_5
+    - 5
+    - St_30005
+    - 28
+    - 1000000000
+    - 500
+    - NULL
+  - rowData:
+    - 10006
+    - Stage_6
+    - 6
+    - St_30006
+    - 37
+    - 1000000000
+    - 1500
+    - NULL
+  - rowData:
+    - 10007
+    - Stage_7
+    - 7
+    - St_30007
+    - 46
+    - 1000000000
+    - 2500
+    - NULL
+  - rowData:
+    - 10008
+    - Stage_8
+    - 8
+    - St_30008
+    - 56
+    - 1000000000
+    - 5000
+    - NULL

@@ -89,7 +89,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             CurrentBuildingOption1Value = Enumerable.Range(0, BuildingOption1ValueData.GetLength(0))
                 .Where(i =>
                     BuildingOption1ValueData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption1ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption1ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption1ValueData[i, 3] == GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[BuildingKey].ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingOption1ValueData[i, 4], CurrentBuildingOption1Value))
                 .FirstOrDefault();
@@ -97,7 +97,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             CurrentBuildingOption2Value = Enumerable.Range(0, BuildingOption2ValueData.GetLength(0))
                 .Where(i =>
                     BuildingOption2ValueData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption2ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption2ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption2ValueData[i, 3] == GameManager.Instance.ES3Saver.CurrentBuildingOption2Level[BuildingKey].ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingOption2ValueData[i, 4], CurrentBuildingOption2Value))
                 .FirstOrDefault();
@@ -105,7 +105,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             NextBuildingOption1Value = Enumerable.Range(0, BuildingOption1ValueData.GetLength(0))
                 .Where(i =>
                     BuildingOption1ValueData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption1ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption1ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption1ValueData[i, 3] == (GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[BuildingKey] + 1).ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingOption1ValueData[i, 4], NextBuildingOption1Value))
                 .FirstOrDefault();
@@ -115,7 +115,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             NextBuildingOption2Value = Enumerable.Range(0, BuildingOption2ValueData.GetLength(0))
                 .Where(i =>
                     BuildingOption2ValueData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption2ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption2ValueData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption2ValueData[i, 3] == (GameManager.Instance.ES3Saver.CurrentBuildingOption2Level[BuildingKey] + 1).ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingOption2ValueData[i, 4], NextBuildingOption2Value))
                 .FirstOrDefault();
@@ -125,7 +125,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             RequiredGoldToUpgradeBuildingOption1 = Enumerable.Range(0, BuildingOption1CostData.GetLength(0))
                 .Where(i =>
                     BuildingOption1CostData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption1CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption1CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption1CostData[i, 3] == GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[BuildingKey].ToString())
                 .Select(i =>
                     ParserModule.ParseOrDefault(BuildingOption1CostData[i, 4], RequiredGoldToUpgradeBuildingOption1))
@@ -134,7 +134,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             RequiredGoldToUpgradeBuildingOption2 = Enumerable.Range(0, BuildingOption2CostData.GetLength(0))
                 .Where(i =>
                     BuildingOption2CostData[i, 1] == $"{BuildingKey}" &&
-                    BuildingOption2CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingOption2CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingOption2CostData[i, 3] == GameManager.Instance.ES3Saver.CurrentBuildingOption2Level[BuildingKey].ToString())
                 .Select(i =>
                     ParserModule.ParseOrDefault(BuildingOption2CostData[i, 4], RequiredGoldToUpgradeBuildingOption2))
@@ -143,7 +143,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             RequiredBuildingOption1LevelToUpgradeBuildingLevel = Enumerable.Range(0, BuildingData.GetLength(0))
                 .Where(i =>
                     BuildingData[i, 1] == $"{BuildingKey}" &&
-                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                     BuildingData[i, 5] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString())
                 .Select(i =>
                     ParserModule.ParseOrDefault(BuildingData[i, 6], RequiredBuildingOption1LevelToUpgradeBuildingLevel))
@@ -152,7 +152,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             RequiredBuildingLevelToUpgradeOption2Level = Enumerable.Range(0, BuildingOption2CostData.GetLength(0))
             .Where(i =>
                 BuildingOption2CostData[i, 1] == $"{BuildingKey}" &&
-                BuildingOption2CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString() &&
+                BuildingOption2CostData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
                 BuildingOption2CostData[i, 3] == GameManager.Instance.ES3Saver.CurrentBuildingOption2Level[BuildingKey].ToString())
             .Select(i =>
                 ParserModule.ParseOrDefault(BuildingOption2CostData[i, 5], RequiredBuildingLevelToUpgradeOption2Level))
@@ -161,14 +161,14 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
             MaxBuildingOption1Level = Enumerable.Range(0, BuildingData.GetLength(0))
                 .Where(i =>
                     BuildingData[i, 1] == $"{BuildingKey}" &&
-                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString())
+                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingData[i, 3], MaxBuildingOption1Level))
                 .FirstOrDefault();
 
             MaxBuildingOption2Level = Enumerable.Range(0, BuildingData.GetLength(0))
                 .Where(i =>
                     BuildingData[i, 1] == $"{BuildingKey}" &&
-                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentBuildingLevel[BuildingKey].ToString())
+                    BuildingData[i, 2] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString())
                 .Select(i => ParserModule.ParseOrDefault(BuildingData[i, 4], MaxBuildingOption1Level))
                 .FirstOrDefault();
 

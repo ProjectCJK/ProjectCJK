@@ -37,7 +37,7 @@ namespace Units.Stages.Modules.PaymentModule.Units
         private float _playerPaymentElapsedTime; // 플레이어 결제 대기 시간
         private float _playerPaymentDelay; // 플레이어 결제 딜레이
 
-        public int CurrentSpawnedCashierCount { get; set; }
+        public int CurrentSpawnedCashierCount => _cashierPayments.Count;
 
         public ManagementDeskPaymentModule(ManagementDeskStatsModule statsModule, 
                                            IManagementDeskInventoryModule inventoryModule, 
@@ -100,7 +100,9 @@ namespace Units.Stages.Modules.PaymentModule.Units
 
         private void ProcessPlayerPayment()
         {
-            if (_player == null || _customerQueue.Count == 0) return;
+            if (_player == null) return ;
+            
+            if (_customerQueue.Count == 0) return;
 
             _playerPaymentElapsedTime += Time.deltaTime;
 

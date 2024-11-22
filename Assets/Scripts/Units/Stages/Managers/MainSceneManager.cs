@@ -78,10 +78,7 @@ namespace Units.Stages.Managers
             CurrencyManager.Instance.RegisterReference();
             QuestManager.Instance.RegisterReference();
             CostumeManager.Instance.RegisterReference();
-            
-            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.RemoveAllListeners();
-            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.gameObject.SetActive(true));
-            UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.RegisterReference();
+            StageManager.Instance.RegisterReference();
 
             if (Camera.main != null)
             {

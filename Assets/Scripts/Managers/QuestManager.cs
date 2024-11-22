@@ -111,7 +111,7 @@ namespace Managers
         {
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _gameData = DataManager.Instance.QuestData.GetData();
-            CurrentQuestSubIndex = 1;
+            CurrentQuestSubIndex = GameManager.Instance.ES3Saver.CurrentQuestSubIndex;
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             Debug.Log("QuestManager: RegisterReference completed.");
         }
