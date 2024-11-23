@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using Units.Stages.Enums;
+using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Units;
@@ -17,19 +18,19 @@ namespace Units.Stages.Controllers
     public struct BuildingSpawnData
     {
         [Header("=== Kitchen Spawner Position ===")]
-        public List<Transform> KitchenSpawner;
+        public List<ObjectTrackingTargetModule> KitchenSpawner;
         
         [Space(20), Header("=== Stand Spawner Position ===")]
-        public List<Transform> StandSpawner;
+        public List<ObjectTrackingTargetModule> StandSpawner;
         
         [Space(20), Header("=== ManagementDesk Position ===")]
-        public Transform ManagementDeskSpawner;
+        public ObjectTrackingTargetModule ManagementDeskSpawner;
         
         [Space(20), Header("=== DeliveryLodging Position ===")]
-        public Transform DeliveryLodgingSpawner;
+        public ObjectTrackingTargetModule DeliveryLodgingSpawner;
         
         [Space(20), Header("=== WareHouse Position ===")]
-        public Transform WareHouseSpawner;
+        public ObjectTrackingTargetModule WareHouseSpawner;
     }
     
     public interface IBuildingController : IRegisterReference<ItemFactory>, IInitializable
@@ -49,17 +50,17 @@ namespace Units.Stages.Controllers
         {
             for (var i = 0; i < buildingSpawnData.KitchenSpawner.Count; i++)
             {
-                InstantiateBuilding(buildingSpawnData.KitchenSpawner[i], DataManager.Instance.levelPrefabSo.Kitchen[i], itemFactory);
+                InstantiateBuilding(buildingSpawnData.KitchenSpawner[i].transform, DataManager.Instance.levelPrefabSo.Kitchen[i], itemFactory);
             }
             
             for (var i = 0; i < buildingSpawnData.StandSpawner.Count; i++)
             {
-                InstantiateBuilding(buildingSpawnData.StandSpawner[i], DataManager.Instance.levelPrefabSo.Stand[i], itemFactory);
+                InstantiateBuilding(buildingSpawnData.StandSpawner[i].transform, DataManager.Instance.levelPrefabSo.Stand[i], itemFactory);
             }
             
-            InstantiateBuilding(buildingSpawnData.ManagementDeskSpawner, DataManager.Instance.levelPrefabSo.ManagementDesk, itemFactory);
-            InstantiateBuilding(buildingSpawnData.DeliveryLodgingSpawner, DataManager.Instance.levelPrefabSo.DeliveryLodging, itemFactory);
-            InstantiateBuilding(buildingSpawnData.WareHouseSpawner, DataManager.Instance.levelPrefabSo.WareHouse, itemFactory);
+            InstantiateBuilding(buildingSpawnData.ManagementDeskSpawner.transform, DataManager.Instance.levelPrefabSo.ManagementDesk, itemFactory);
+            if (buildingSpawnData.DeliveryLodgingSpawner != null) InstantiateBuilding(buildingSpawnData.DeliveryLodgingSpawner.transform, DataManager.Instance.levelPrefabSo.DeliveryLodging, itemFactory);
+            if (buildingSpawnData.WareHouseSpawner != null) InstantiateBuilding(buildingSpawnData.WareHouseSpawner.transform, DataManager.Instance.levelPrefabSo.WareHouse, itemFactory);
         }
 
         private void InstantiateBuilding(Transform spawnTransform, GameObject prefab, ItemFactory itemFactory)

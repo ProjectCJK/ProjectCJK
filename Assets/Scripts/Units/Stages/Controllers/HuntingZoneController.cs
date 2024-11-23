@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using Units.Stages.Enums;
+using Units.Stages.Modules;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.InventoryModules.Interfaces;
 using Units.Stages.Units.Creatures.Units;
@@ -25,7 +26,7 @@ namespace Units.Stages.Controllers
     public struct HuntingZoneSpawnData
     {
         [Header("=== HuntingZone Position ===")]
-        public List<Transform> HuntingZoneSpawners;
+        public List<ObjectTrackingTargetModule> HuntingZoneSpawners;
     }
 
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
@@ -56,7 +57,7 @@ namespace Units.Stages.Controllers
             for (var i = 0; i < DataManager.Instance.levelPrefabSo.Levels[GameManager.Instance.ES3Saver.CurrentStageLevel - 1].HuntingZones.Count; i++)
             {
                 GameObject huntingZonePrefab = DataManager.Instance.levelPrefabSo.Levels[GameManager.Instance.ES3Saver.CurrentStageLevel - 1].HuntingZones[i];
-                InstantiateHuntingZones(HuntingZoneSpawnData.HuntingZoneSpawners[i], huntingZonePrefab);
+                InstantiateHuntingZones(HuntingZoneSpawnData.HuntingZoneSpawners[i].transform, huntingZonePrefab);
             }
         }
         

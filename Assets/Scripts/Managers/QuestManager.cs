@@ -53,6 +53,39 @@ namespace Managers
         HuntingZone_C
     }
 
+    public enum EQuestTarget
+    {
+        HuntingZone_A_Unlock,
+        HuntingZone_A_Hunt,
+        HuntingZone_B_Unlock,
+        HuntingZone_B_Hunt,
+        HuntingZone_C_Unlock,
+        HuntingZone_C_Hunt,
+        Kitchen_A_Unlock,
+        Kitchen_A_Product,
+        Kitchen_A_Upgrade,
+        Kitchen_B_Unlock,
+        Kitchen_B_Product,
+        Kitchen_B_Upgrade,
+        Kitchen_C_Unlock,
+        Kitchen_C_Product,
+        Kitchen_C_Upgrade,
+        Kitchen_D_Unlock,
+        Kitchen_D_Product,
+        Kitchen_D_Upgrade,
+        Stand_A_Unlock,
+        Stand_B_Unlock,
+        Stand_C_Unlock,
+        Stand_D_Unlock,
+        ManagementDesk_Upgrade,
+        ManagementDesk_Sell,
+        ManagementDesk_GetMoney,
+        WareHouse_Unlock,
+        WareHouse_Upgrade,
+        DeliveryLodging_Unlock,
+        DeliveryLodging_Upgrade
+    }
+
     [Serializable]
     public struct QuestDataBundle
     {
@@ -274,14 +307,24 @@ namespace Managers
             string thumbnailDescription = null;
             var thumbnailCurrentGoal = 0;
             var thumbnailMaxGoal = 0;
-
-            StartTrackingCurrentQuestTarget(smallestUnclearedQuest.Value);
             
             if (smallestUnclearedQuest.Value != null)
             {
                 thumbnailDescription = smallestUnclearedQuest.Value.Description;
                 thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
                 thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
+                
+                // 현재 퀘스트 완료 여부 확인
+                if (thumbnailCurrentGoal >= thumbnailMaxGoal)
+                {
+                    // 퀘스트가 완료된 경우 추적 멈춤
+                    StopTargetTracking();
+                }
+                else
+                {
+                    // 퀘스트가 완료되지 않은 경우 추적 시작
+                    StartTrackingCurrentQuestTarget(smallestUnclearedQuest.Value);
+                }
             }
       
             var clearedCount = IsQuestClear.Values.Count(cleared => cleared);
@@ -318,59 +361,157 @@ namespace Managers
 
         private void StartTrackingCurrentQuestTarget(Data data)
         {
-            EQuestType2? trackingTarget = ParserModule.ParseStringToEnum<EQuestType2>(data.TrackingTarget);
+            if (ObjectTrackerManager.Instance.IsTracking) return;
+            
+            EQuestTarget? trackingTarget = ParserModule.ParseStringToEnum<EQuestTarget>(data.TrackingTarget);
 
             if (trackingTarget == null) return;
 
             Transform target = null;
-            
+
             switch (trackingTarget)
             {
-                case EQuestType2.Kitchen_A:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0];
+                case EQuestTarget.HuntingZone_A_Unlock:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[0];
                     break;
-                case EQuestType2.Kitchen_B:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1];
+                case EQuestTarget.HuntingZone_A_Hunt:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[1];
                     break;
-                case EQuestType2.Kitchen_C:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2];
+                case EQuestTarget.HuntingZone_B_Unlock:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[0];
                     break;
-                case EQuestType2.Kitchen_D:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3];
+                case EQuestTarget.HuntingZone_B_Hunt:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[1];
                     break;
-                case EQuestType2.Stand_A:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0];
+                case EQuestTarget.HuntingZone_C_Unlock:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[0];
                     break;
-                case EQuestType2.Stand_B:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1];
+                case EQuestTarget.HuntingZone_C_Hunt:
+                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[1];
                     break;
-                case EQuestType2.Stand_C:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2];
+                case EQuestTarget.Kitchen_A_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
                     break;
-                case EQuestType2.Stand_D:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3];
+                case EQuestTarget.Kitchen_A_Product:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
                     break;
-                case EQuestType2.HuntingZone_A:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0];
+                case EQuestTarget.Kitchen_A_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
                     break;
-                case EQuestType2.HuntingZone_B:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1];
+                case EQuestTarget.Kitchen_B_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
                     break;
-                case EQuestType2.HuntingZone_C:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2];
+                case EQuestTarget.Kitchen_B_Product:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
                     break;
-                case EQuestType2.WareHouse:
-                    target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner;
+                case EQuestTarget.Kitchen_B_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
                     break;
-                case EQuestType2.ManagementDesk:
-                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner;
+                case EQuestTarget.Kitchen_C_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
                     break;
-                case EQuestType2.DeliveryLodging:
-                    target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner;
+                case EQuestTarget.Kitchen_C_Product:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
+                    break;
+                case EQuestTarget.Kitchen_C_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
+                    break;
+                case EQuestTarget.Kitchen_D_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
+                    break;
+                case EQuestTarget.Kitchen_D_Product:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
+                    break;
+                case EQuestTarget.Kitchen_D_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
+                    break;
+                case EQuestTarget.Stand_A_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
+                    break;
+                case EQuestTarget.Stand_B_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
+                    break;
+                case EQuestTarget.Stand_C_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
+                    break;
+                case EQuestTarget.Stand_D_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
+                    break;
+                case EQuestTarget.ManagementDesk_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[0];
+                    break;
+                case EQuestTarget.ManagementDesk_Sell:
+                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[1];
+                    break;
+                case EQuestTarget.ManagementDesk_GetMoney:
+                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[2];
+                    break;
+                case EQuestTarget.WareHouse_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[0];
+                    break;
+                case EQuestTarget.WareHouse_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[1];
+                    break;
+                case EQuestTarget.DeliveryLodging_Unlock:
+                    target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[0];
+                    break;
+                case EQuestTarget.DeliveryLodging_Upgrade:
+                    target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[1];
                     break;
             }
             
+            // switch (trackingTarget)
+            // {
+            //     case EQuestType2.Kitchen_A:
+            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0];
+            //         break;
+            //     case EQuestType2.Kitchen_B:
+            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1];
+            //         break;
+            //     case EQuestType2.Kitchen_C:
+            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2];
+            //         break;
+            //     case EQuestType2.Kitchen_D:
+            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3];
+            //         break;
+            //     case EQuestType2.Stand_A:
+            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0];
+            //         break;
+            //     case EQuestType2.Stand_B:
+            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1];
+            //         break;
+            //     case EQuestType2.Stand_C:
+            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2];
+            //         break;
+            //     case EQuestType2.Stand_D:
+            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3];
+            //         break;
+            //     case EQuestType2.HuntingZone_A:
+            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0];
+            //         break;
+            //     case EQuestType2.HuntingZone_B:
+            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1];
+            //         break;
+            //     case EQuestType2.HuntingZone_C:
+            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2];
+            //         break;
+            //     case EQuestType2.WareHouse:
+            //         target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner;
+            //         break;
+            //     case EQuestType2.ManagementDesk:
+            //         target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner;
+            //         break;
+            //     case EQuestType2.DeliveryLodging:
+            //         target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner;
+            //         break;
+            // }
+            
             if (target != null) ObjectTrackerManager.Instance.StartTargetTracking(target);
+        }
+
+        private void StopTargetTracking()
+        {
+            ObjectTrackerManager.Instance.StopTargetTracking();
         }
 
         private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2, int value)

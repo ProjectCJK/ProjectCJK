@@ -144,26 +144,22 @@ namespace Units.Stages.Controllers
                     GameManager.Instance.ES3Saver.ActiveStatusSettingIndex = index;
                 }
 
-                GameObject targetChild = activeStatus.GameObject.transform.childCount > 0
-                    ? activeStatus.GameObject.transform.GetChild(0).gameObject
-                    : null;
+                var activeStatusModule = activeStatus.GameObject.transform.GetComponentInChildren<UnlockZoneModule>();
 
-                if (targetChild != null)
+                if (activeStatusModule != null)
                 {
-                    var activeStatusModule = targetChild.GetComponent<UnlockZoneModule>();
-                    
                     if (activeStatusModule != null)
                     {
                         var savedStatus = EActiveStatus.Lock;
                         
-                        if (targetChild.TryGetComponent(out BuildingZone building))
+                        if (activeStatusModule.TryGetComponent(out BuildingZone building))
                         {
                             // 로드된 상태 적용
                             savedStatus = GameManager.Instance.ES3Saver.BuildingActiveStatuses.ContainsKey(building.BuildingKey)
                                 ? GameManager.Instance.ES3Saver.BuildingActiveStatuses[building.BuildingKey]
                                 : activeStatus.InitialActiveStatus;
                         }
-                        else if (targetChild.TryGetComponent(out HuntingZone huntingZone))
+                        else if (activeStatusModule.TryGetComponent(out HuntingZone huntingZone))
                         {
                             savedStatus = GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses.ContainsKey(huntingZone.HuntingZoneKey)
                                 ? GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[huntingZone.HuntingZoneKey]

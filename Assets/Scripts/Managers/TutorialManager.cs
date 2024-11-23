@@ -62,6 +62,7 @@ namespace Managers
         public void Initialize()
         {
             _branchCanvasGame.gameObject.SetActive(false);
+            _branchCanvasGuide.gameObject.SetActive(false);
             
             _tutorialPanel.Initialize();
             CoroutineManager.Instance.StartManagedCoroutine(Tutorial());
@@ -102,6 +103,7 @@ namespace Managers
             UIManager.Instance.DestroyTutorialPanel();
             GameManager.Instance.ES3Saver.TutorialClear = true;
             _branchCanvasGame.gameObject.SetActive(true);
+            _branchCanvasGuide.gameObject.SetActive(true);
         }
     }
 }

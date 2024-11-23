@@ -133,9 +133,7 @@ namespace Units.Stages.Units.Buildings.Units
         {
             if (_managementDeskStatsModule.CurrentBuildingOption2Value > _managementDeskPaymentModule.CurrentSpawnedCashierCount)
             {
-                var requiredCashier = _managementDeskStatsModule.CurrentBuildingOption2Value - _managementDeskPaymentModule.CurrentSpawnedCashierCount;
-                
-                for (var i = 0; i < requiredCashier; i++)
+                for (var i = 0; i < _managementDeskStatsModule.CurrentBuildingOption2Value; i++)
                 {
                     if (!_managementDeskCustomSetting.Cashier[i].gameObject.activeSelf)
                     {

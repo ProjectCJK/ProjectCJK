@@ -9,11 +9,11 @@ namespace Managers
 {
     public class UIManager : SingletonMono<UIManager>
     {
+        [SerializeField] private GameObject _eventSystemPrefab;
         [SerializeField] private Canvas _rootCanvas;
         [SerializeField] private Canvas _branchCanvasGame;
         [SerializeField] private Canvas _branchCanvasTutorial;
         [SerializeField] private Canvas _branchCanvasGuide;
-        [SerializeField] private GameObject _eventSystemPrefab;
         [Space(20), SerializeField] private Joystick _joystick;
 
         [Space(20), SerializeField] private UI_Panel_Main _ui_Panel_Main;
