@@ -18,18 +18,6 @@ namespace Units.Stages.Modules.CostumeModules
             _creatureSpriteModule = creatureSpriteModule;
             _weaponSprite = weapon.WeaponSprite;
         }
-
-        public void EquipCostume(ECostumeType costumeType, CostumeItemData costumeItemData)
-        {
-            if (costumeItemData.IsEquipped) return;
-            
-            if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(costumeType))
-            {
-                UnEquipPreviousCostume(costumeType);
-            }
-
-            EquipCurrentCostume(costumeType, costumeItemData);
-        }
         
         public void UpdateEquippedCostumeStats(CostumeItemData costumeItemData, bool isRemoving)
         {
@@ -57,51 +45,10 @@ namespace Units.Stages.Modules.CostumeModules
                     }
                 }
             }
-        }
 
-
-        private void UnEquipPreviousCostume(ECostumeType costumeType)
-        {
-            VolatileDataManager.Instance.EquippedCostumes[costumeType].IsEquipped = false;
-            DecreaseOptionValues(costumeType);
+            ChangeCostume(costumeItemData.CostumeType, costumeItemData);
         }
         
-        private void EquipCurrentCostume(ECostumeType costumeType, CostumeItemData costumeItemData)
-        {
-            costumeItemData.IsEquipped = true;
-            IncreaseOptionValues(costumeType, costumeItemData);
-            ChangeCostume(costumeType, costumeItemData);
-        }
-
-        private void IncreaseOptionValues(ECostumeType costumeType, CostumeItemData costumeItemData)
-        {
-            List<float> currentOptionValues = costumeItemData.GetCurrentOptionValue();
-                
-            for (var i = 0; i < currentOptionValues.Count; i++)
-            {
-                if (VolatileDataManager.Instance.CostumeEquipmentOption.ContainsKey(costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType))
-                {
-                    VolatileDataManager.Instance.CostumeEquipmentOption[costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType] += currentOptionValues[i];   
-                }
-                else
-                {
-                    VolatileDataManager.Instance.CostumeEquipmentOption.TryAdd(costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType, currentOptionValues[i]);
-                }
-            }
-                
-            VolatileDataManager.Instance.EquippedCostumes[costumeType] = costumeItemData;
-        }
-
-        private void DecreaseOptionValues(ECostumeType costumeType)
-        {
-            List<float> previousOptionValues = VolatileDataManager.Instance.EquippedCostumes[costumeType].GetCurrentOptionValue();
-
-            for (var i = 0; i < previousOptionValues.Count; i++)
-            {
-                VolatileDataManager.Instance.CostumeEquipmentOption[VolatileDataManager.Instance.EquippedCostumes[costumeType].CostumeItemOptionDatas[i].CostumeOptionType] -= previousOptionValues[i];
-            }
-        }
-
         private void ChangeCostume(ECostumeType costumeType, CostumeItemData costumeItemData)
         {
             var currentSprite = _creatureSpriteModule.CreatureSprite;
@@ -131,5 +78,59 @@ namespace Units.Stages.Modules.CostumeModules
 
             _creatureSpriteModule.SetSprites(currentSprite);
         }
+
+        // public void EquipCostume(ECostumeType costumeType, CostumeItemData costumeItemData)
+        // {
+        //     if (costumeItemData.IsEquipped) return;
+        //     
+        //     if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(costumeType))
+        //     {
+        //         UnEquipPreviousCostume(costumeType);
+        //     }
+        //
+        //     EquipCurrentCostume(costumeType, costumeItemData);
+        // }
+        //
+        // private void UnEquipPreviousCostume(ECostumeType costumeType)
+        // {
+        //     VolatileDataManager.Instance.EquippedCostumes[costumeType].IsEquipped = false;
+        //     DecreaseOptionValues(costumeType);
+        // }
+        //
+        // private void EquipCurrentCostume(ECostumeType costumeType, CostumeItemData costumeItemData)
+        // {
+        //     costumeItemData.IsEquipped = true;
+        //     IncreaseOptionValues(costumeType, costumeItemData);
+        //     ChangeCostume(costumeType, costumeItemData);
+        // }
+        //
+        // private void IncreaseOptionValues(ECostumeType costumeType, CostumeItemData costumeItemData)
+        // {
+        //     List<float> currentOptionValues = costumeItemData.GetCurrentOptionValue();
+        //         
+        //     for (var i = 0; i < currentOptionValues.Count; i++)
+        //     {
+        //         if (VolatileDataManager.Instance.CostumeEquipmentOption.ContainsKey(costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType))
+        //         {
+        //             VolatileDataManager.Instance.CostumeEquipmentOption[costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType] += currentOptionValues[i];   
+        //         }
+        //         else
+        //         {
+        //             VolatileDataManager.Instance.CostumeEquipmentOption.TryAdd(costumeItemData.CostumeItemOptionDatas[i].CostumeOptionType, currentOptionValues[i]);
+        //         }
+        //     }
+        //         
+        //     VolatileDataManager.Instance.EquippedCostumes[costumeType] = costumeItemData;
+        // }
+        //
+        // private void DecreaseOptionValues(ECostumeType costumeType)
+        // {
+        //     List<float> previousOptionValues = VolatileDataManager.Instance.EquippedCostumes[costumeType].GetCurrentOptionValue();
+        //
+        //     for (var i = 0; i < previousOptionValues.Count; i++)
+        //     {
+        //         VolatileDataManager.Instance.CostumeEquipmentOption[VolatileDataManager.Instance.EquippedCostumes[costumeType].CostumeItemOptionDatas[i].CostumeOptionType] -= previousOptionValues[i];
+        //     }
+        // }
     }
 }

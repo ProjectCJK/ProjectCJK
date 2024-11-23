@@ -34,11 +34,7 @@ namespace Managers
         ProductA_A,
         ProductA_B,
         ProductA_C,
-        ProductA_D,
         ProductB_A,
-        ProductB_B,
-        ProductB_C,
-        ProductB_D,
         Stand_A,
         Stand_B,
         Stand_C,
@@ -89,6 +85,7 @@ namespace Managers
     [Serializable]
     public struct QuestDataBundle
     {
+        public Sprite QuestIcon;
         public int ClearedCount;
         public int TotalCount;
         public float ProgressRatio;
@@ -98,6 +95,7 @@ namespace Managers
         public int ThumbnailMaxGoal;
         public List<UIQuestInfoItem> QuestInfoItems;
         public Action AdvanceToNextQuestAction;
+        public Sprite RewardSprite;
     }
 
     [Serializable]
@@ -307,9 +305,11 @@ namespace Managers
             string thumbnailDescription = null;
             var thumbnailCurrentGoal = 0;
             var thumbnailMaxGoal = 0;
+            Sprite questIcon = null;
             
             if (smallestUnclearedQuest.Value != null)
             {
+                questIcon = SetQuestIcon(smallestUnclearedQuest.Value.QuestType2);
                 thumbnailDescription = smallestUnclearedQuest.Value.Description;
                 thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
                 thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
@@ -335,7 +335,10 @@ namespace Managers
                 .OrderBy(kvp => kvp.Key)
                 .Select(kvp => new UIQuestInfoItem
                 {
+                    QuestIconImage = SetQuestIcon(kvp.Value.QuestType2),
                     QuestDescriptionText = kvp.Value.Description,
+                    Reward1IconImage = SetRewardIcon(kvp.Value.Reward1Type),
+                    Reward2IconImage = SetRewardIcon(kvp.Value.Reward2Type),
                     Reward1CountText = kvp.Value.Reward1Count.ToString(),
                     Reward2CountText = kvp.Value.Reward2Count.ToString(),
                     QuestProgressText = $"{kvp.Value.CurrentTargetGoal} / {kvp.Value.MaxTargetGoal}",
@@ -343,8 +346,13 @@ namespace Managers
                     MaxProgressCount = kvp.Value.MaxTargetGoal
                 }).ToList();
 
+            Sprite rewardSprite = null;
+
+            if (_questData.ListRewardType != null) rewardSprite = DataManager.Instance.GetCurrencyIcon(_questData.ListRewardType.Value);
+            
             var questDataBundle = new QuestDataBundle
             {
+                QuestIcon = questIcon,
                 ClearedCount = clearedCount,
                 TotalCount = totalCount,
                 ProgressRatio = progressRatio,
@@ -353,6 +361,7 @@ namespace Managers
                 ThumbnailCurrentGoal = thumbnailCurrentGoal,
                 ThumbnailMaxGoal = thumbnailMaxGoal,
                 QuestInfoItems = questInfoItems,
+                RewardSprite = rewardSprite,
                 AdvanceToNextQuestAction = AdvanceToNextQuest
             };
 
@@ -460,52 +469,6 @@ namespace Managers
                     break;
             }
             
-            // switch (trackingTarget)
-            // {
-            //     case EQuestType2.Kitchen_A:
-            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0];
-            //         break;
-            //     case EQuestType2.Kitchen_B:
-            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1];
-            //         break;
-            //     case EQuestType2.Kitchen_C:
-            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2];
-            //         break;
-            //     case EQuestType2.Kitchen_D:
-            //         target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3];
-            //         break;
-            //     case EQuestType2.Stand_A:
-            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0];
-            //         break;
-            //     case EQuestType2.Stand_B:
-            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1];
-            //         break;
-            //     case EQuestType2.Stand_C:
-            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2];
-            //         break;
-            //     case EQuestType2.Stand_D:
-            //         target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3];
-            //         break;
-            //     case EQuestType2.HuntingZone_A:
-            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0];
-            //         break;
-            //     case EQuestType2.HuntingZone_B:
-            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1];
-            //         break;
-            //     case EQuestType2.HuntingZone_C:
-            //         target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2];
-            //         break;
-            //     case EQuestType2.WareHouse:
-            //         target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner;
-            //         break;
-            //     case EQuestType2.ManagementDesk:
-            //         target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner;
-            //         break;
-            //     case EQuestType2.DeliveryLodging:
-            //         target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner;
-            //         break;
-            // }
-            
             if (target != null) ObjectTrackerManager.Instance.StartTargetTracking(target);
         }
 
@@ -608,6 +571,100 @@ namespace Managers
                     LevelManager.Instance.AddExp(reward);
                     break;
             }
+        }
+
+        public Sprite SetQuestIcon(string questType2)
+        {
+            EQuestType2? parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
+            Sprite questIcon = null;
+
+            if (parsedQuestType != null)
+            {
+                switch (parsedQuestType.Value)
+                {
+                    case EQuestType2.Kitchen_A:
+                        questIcon = DataManager.Instance.SpriteDatas[50];
+                        break;
+                    case EQuestType2.Kitchen_B:
+                        questIcon = DataManager.Instance.SpriteDatas[50];
+                        break;
+                    case EQuestType2.Kitchen_C:
+                        questIcon = DataManager.Instance.SpriteDatas[50];
+                        break;
+                    case EQuestType2.Kitchen_D:
+                        questIcon = DataManager.Instance.SpriteDatas[51];
+                        break;
+                    case EQuestType2.Material_A:
+                        questIcon = DataManager.Instance.SpriteDatas[5];
+                        break;
+                    case EQuestType2.Material_B:
+                        questIcon = DataManager.Instance.SpriteDatas[6];
+                        break;
+                    case EQuestType2.Material_C:
+                        questIcon = DataManager.Instance.SpriteDatas[7];
+                        break;
+                    case EQuestType2.ProductA_A:
+                        questIcon = DataManager.Instance.SpriteDatas[8];
+                        break;
+                    case EQuestType2.ProductA_B:
+                        questIcon = DataManager.Instance.SpriteDatas[9];
+                        break;
+                    case EQuestType2.ProductA_C:
+                        questIcon = DataManager.Instance.SpriteDatas[10];
+                        break;
+                    case EQuestType2.ProductB_A:
+                        questIcon = DataManager.Instance.SpriteDatas[11];
+                        break;
+                    case EQuestType2.Stand_A:
+                        questIcon = DataManager.Instance.SpriteDatas[52];
+                        break;
+                    case EQuestType2.Stand_B:
+                        questIcon = DataManager.Instance.SpriteDatas[52];
+                        break;
+                    case EQuestType2.Stand_C:
+                        questIcon = DataManager.Instance.SpriteDatas[52];
+                        break;
+                    case EQuestType2.Stand_D:
+                        questIcon = DataManager.Instance.SpriteDatas[52];
+                        break;
+                    case EQuestType2.HuntingZone_A:
+                        questIcon = DataManager.Instance.SpriteDatas[12];
+                        break;
+                    case EQuestType2.HuntingZone_B:
+                        questIcon = DataManager.Instance.SpriteDatas[13];
+                        break;
+                    case EQuestType2.WareHouse:
+                        questIcon = DataManager.Instance.SpriteDatas[46];
+                        break;
+                    case EQuestType2.ManagementDesk:
+                        questIcon = DataManager.Instance.SpriteDatas[38];
+                        break;
+                    case EQuestType2.DeliveryLodging:
+                        questIcon = DataManager.Instance.SpriteDatas[42];
+                        break;
+                    case EQuestType2.Money:
+                        questIcon = DataManager.Instance.SpriteDatas[0];
+                        break;
+                    case EQuestType2.Zone_Open:
+                        questIcon = DataManager.Instance.SpriteDatas[67];
+                        break;
+                    case EQuestType2.HuntingZone_C:
+                        questIcon = DataManager.Instance.SpriteDatas[14];
+                        break;
+                }   
+            }
+            
+            return questIcon;
+        }
+        
+        private Sprite SetRewardIcon(string rewardType)
+        {
+            ECurrencyType? parsedRewardType = ParserModule.ParseStringToEnum<ECurrencyType>(rewardType);
+            Sprite rewardIcon = null;
+
+            if (parsedRewardType != null) rewardIcon = DataManager.Instance.GetCurrencyIcon(parsedRewardType.Value);
+            
+            return rewardIcon;
         }
     }
 }

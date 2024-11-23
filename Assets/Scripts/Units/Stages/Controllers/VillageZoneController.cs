@@ -350,10 +350,11 @@ namespace Units.Stages.Controllers
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
             
+            
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(targetKey, _buildingController.Buildings[targetKey].TradeZoneNpcTransform),
-                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].TradeZoneNpcTransform),
+                new(targetKey, _buildingController.Buildings[targetKey].transform),
+                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].transform),
                 new(string.Empty, _villageSpawnData.GuestSpawner[randomPosition])
             };
 

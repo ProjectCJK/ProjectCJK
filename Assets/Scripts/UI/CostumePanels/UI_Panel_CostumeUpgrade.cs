@@ -23,6 +23,7 @@ namespace UI.CostumePanels
 
         [Space(20), SerializeField] private TextMeshProUGUI costumeDescription;
         [SerializeField] private Image costumeOption1Icon;
+        [SerializeField] private Image costumeOption1IconLock;
         [SerializeField] private TextMeshProUGUI costumeOption1Description;
 
         [Space(20), SerializeField] private Button upgradeButton_EnoughRedGem;
@@ -283,14 +284,16 @@ namespace UI.CostumePanels
             if (_costumeItemData.CostumeItemOptionDatas.Count > 1)
             {
                 costumeOption1Description.text = $"{_costumeItemData.CostumeItemOptionDatas[1].OptionDescription} +{_costumeItemData.GetCurrentOptionValue()[1]} \u25b6 {_costumeItemData.CostumeItemOptionDatas[1].BaseOptionValue + (_tempCostumeLevel - 1) * _costumeItemData.CostumeItemOptionDatas[1].UpgradeOptionValue}";
-
+                
                 costumeOption1Icon.gameObject.SetActive(true);
+                costumeOption1IconLock.gameObject.SetActive(false);
                 costumeOption1Description.gameObject.SetActive(true);
             }
             else
             {
+                costumeOption1Description.text = $"No Option"; 
                 costumeOption1Icon.gameObject.SetActive(false);
-                costumeOption1Description.gameObject.SetActive(false);
+                costumeOption1IconLock.gameObject.SetActive(true);
             }
         }
 

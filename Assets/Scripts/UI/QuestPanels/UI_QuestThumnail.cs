@@ -16,6 +16,7 @@ namespace UI.QuestPanels
 
         public void UpdateThumbnailQuest(QuestDataBundle questDataBundle)
         {
+            currentTargetQuestImage.sprite = questDataBundle.QuestIcon;
             if (questDataBundle.ThumbnailCurrentGoal >= questDataBundle.ThumbnailMaxGoal)
             {
                 currentTargetQuestImage_Clear.gameObject.SetActive(true);

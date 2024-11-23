@@ -24,26 +24,28 @@ namespace UI.InventoryPanels
 
         private void UpdateUI()
         {
+            if (!transform.parent.gameObject.activeInHierarchy) return;
+            
             if (viewModel.MaxInventorySize == 0) return;
 
             if (viewModel.CurrentInventorySize >= viewModel.MaxInventorySize)
             {
                 _text.text = "<color=red><sprite=35> MAX</color>";
-                
-                if (!gameObject.activeSelf) gameObject.SetActive(true);
+                SetGameObjectActive(true);
             }
             else if (viewModel.CurrentInventorySize == 0)
             {
-                gameObject.SetActive(false);
+                SetGameObjectActive(false);
             }
             else
             {
-                _text.text = $"<sprite=35> {viewModel.CurrentInventorySize.ToString()}/{viewModel.MaxInventorySize.ToString()}";
-                
-                if (_temporaryActivationCoroutine != null) StopCoroutine(_temporaryActivationCoroutine);
-                
-                if (!gameObject.activeSelf) gameObject.SetActive(true);
-                if (gameObject.activeSelf) _temporaryActivationCoroutine = StartCoroutine(TemporaryActivationRoutine());
+                _text.text = $"<sprite=35> {viewModel.CurrentInventorySize}/{viewModel.MaxInventorySize}";
+
+                if (_temporaryActivationCoroutine != null)
+                    StopCoroutine(_temporaryActivationCoroutine);
+
+                SetGameObjectActive(true);
+                _temporaryActivationCoroutine = StartCoroutine(TemporaryActivationRoutine());
             }
         }
 
@@ -52,9 +54,13 @@ namespace UI.InventoryPanels
             yield return new WaitForSeconds(1f);
 
             if (viewModel.CurrentInventorySize < viewModel.MaxInventorySize)
-            {
-                gameObject.SetActive(false);
-            }
+                SetGameObjectActive(false);
+        }
+
+        private void SetGameObjectActive(bool isActive)
+        {
+            if (gameObject.activeSelf != isActive)
+                gameObject.SetActive(isActive);
         }
     }
 }

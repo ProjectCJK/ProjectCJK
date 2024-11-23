@@ -19,6 +19,7 @@ namespace UI.CostumePanels
 
         [Space(20), SerializeField] private TextMeshProUGUI costumeDescriptionText;
         [SerializeField] private Image costumeOption1DescriptionIconImage;
+        [SerializeField] private Image costumeOption1DescriptionIconImageLock;
         [SerializeField] private TextMeshProUGUI costumeOption1DescriptionText;
 
         [Space(20), SerializeField] private Button enhancementButton;
@@ -69,13 +70,15 @@ namespace UI.CostumePanels
             if (costumeItemData.CostumeItemOptionDatas.Count > 1)
             {
                 costumeOption1DescriptionIconImage.gameObject.SetActive(true);
+                costumeOption1DescriptionIconImageLock.gameObject.SetActive(false);
                 costumeOption1DescriptionText.gameObject.SetActive(true);
                 costumeOption1DescriptionText.text = $"{costumeItemData.CostumeItemOptionDatas[1].OptionDescription} +{costumeItemData.GetCurrentOptionValue()[1]}";
             }
             else
             {
                 costumeOption1DescriptionIconImage.gameObject.SetActive(false);
-                costumeOption1DescriptionText.gameObject.SetActive(false);
+                costumeOption1DescriptionIconImageLock.gameObject.SetActive(true);
+                costumeOption1DescriptionText.text = "No Option";
             }
 
             if (costumeItemData.IsEquipped)

@@ -120,7 +120,7 @@ namespace Managers
 
         public Sprite GetCurrencyIcon(ECurrencyType currencyType)
         {
-            int spriteIndex;
+            var spriteIndex = 0;
             
             switch (currencyType)
             {
@@ -133,12 +133,9 @@ namespace Managers
                 case ECurrencyType.RedGem:
                     spriteIndex = 4;
                     break;
-                    break;
                 case ECurrencyType.Star:
-                    spriteIndex = 58;
+                    spriteIndex = 110;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(currencyType), currencyType, null);
             }
 
             return SpriteDatas[spriteIndex];

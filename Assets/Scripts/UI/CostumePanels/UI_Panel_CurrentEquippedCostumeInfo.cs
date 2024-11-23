@@ -14,6 +14,12 @@ namespace UI.CostumePanels
         [SerializeField] private Image equippedHatImage;
         [SerializeField] private Image equippedBagImage;
         
+        [Space(20), SerializeField] private Image playerWeaponImage;
+        [SerializeField] private Image playerClothesImage;
+        [SerializeField] private List<Image> playerShoesImage;
+        [SerializeField] private Image playerHatImage;
+        [SerializeField] private Image playerBagImage;
+        
         [Space(20), SerializeField] private TextMeshProUGUI revenueGrowthText;
         [SerializeField] private TextMeshProUGUI damageGrowthText;
         [SerializeField] private TextMeshProUGUI inventorySizeGrowthText;
@@ -24,6 +30,7 @@ namespace UI.CostumePanels
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Weapon))
             {
                 equippedWeaponImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Weapon].CostumeSprites[0];
+                playerWeaponImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Weapon].CostumeSprites[1];
                 equippedWeaponImage.gameObject.SetActive(true);
             }
             else
@@ -34,6 +41,9 @@ namespace UI.CostumePanels
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Clothes))
             {
                 equippedClothesImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[0];
+                playerClothesImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[1];
+                playerShoesImage[0].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
+                playerShoesImage[1].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
                 equippedClothesImage.gameObject.SetActive(true);
             }
             else
@@ -44,6 +54,7 @@ namespace UI.CostumePanels
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Hat))
             {
                 equippedHatImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Hat].CostumeSprites[0];
+                playerHatImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Hat].CostumeSprites[1];
                 equippedHatImage.gameObject.SetActive(true);
             }
             else
@@ -54,6 +65,7 @@ namespace UI.CostumePanels
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Bag))
             {
                 equippedBagImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Bag].CostumeSprites[0];
+                playerBagImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Bag].CostumeSprites[1];
                 equippedBagImage.gameObject.SetActive(true);
             }
             else

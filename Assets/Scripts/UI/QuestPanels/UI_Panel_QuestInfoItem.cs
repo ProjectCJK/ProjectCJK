@@ -12,7 +12,9 @@ namespace UI.QuestPanels
         public Sprite QuestIconBackgroundImage;
         public Sprite QuestIconImage;
         public string QuestDescriptionText;
+        public Sprite Reward1IconImage;
         public string Reward1CountText;
+        public Sprite Reward2IconImage;
         public string Reward2CountText;
         public string QuestProgressText;
         public int CurrentProgressCount;
@@ -24,7 +26,9 @@ namespace UI.QuestPanels
         [SerializeField] private Image _questIconBackgroundImage;
         [SerializeField] private Image _questIconImage;
         [SerializeField] private TextMeshProUGUI _questDescriptionText;
+        [SerializeField] private Image _reward1IconImage;
         [SerializeField] private TextMeshProUGUI _reward1CountText;
+        [SerializeField] private Image _reward2IconImage;
         [SerializeField] private TextMeshProUGUI _reward2CountText;
         [SerializeField] private TextMeshProUGUI _questProgressText;
         [SerializeField] private Button _buttonClearActive;
@@ -35,11 +39,13 @@ namespace UI.QuestPanels
 
         public void Activate(UIQuestInfoItem uiQuestInfoItem, int questIndex)
         {
-            _questIconBackgroundImage.sprite = uiQuestInfoItem.QuestIconBackgroundImage;
+            // _questIconBackgroundImage.sprite = uiQuestInfoItem.QuestIconBackgroundImage;
             _questIconImage.sprite = uiQuestInfoItem.QuestIconImage;
             _questDescriptionText.text = uiQuestInfoItem.QuestDescriptionText;
-            _reward1CountText.text = uiQuestInfoItem.Reward1CountText;
-            _reward2CountText.text = uiQuestInfoItem.Reward2CountText;
+            _reward1IconImage.sprite = uiQuestInfoItem.Reward1IconImage;
+            _reward1CountText.text = $"x{uiQuestInfoItem.Reward1CountText}";
+            _reward2IconImage.sprite = uiQuestInfoItem.Reward2IconImage;
+            _reward2CountText.text = $"x{uiQuestInfoItem.Reward2CountText}";
             _questProgressText.text = uiQuestInfoItem.QuestProgressText;
 
             _questIndex = questIndex;

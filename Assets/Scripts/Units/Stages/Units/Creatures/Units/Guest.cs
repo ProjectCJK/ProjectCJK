@@ -11,8 +11,10 @@ using Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.Units
 using Units.Stages.Modules.MovementModules.Units;
 using Units.Stages.Modules.SpriteModules;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
+using Units.Stages.Units.Buildings.Abstract;
 using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
 using Units.Stages.Units.Buildings.Modules.TradeZones.Abstract;
+using Units.Stages.Units.Buildings.Modules.TradeZones.Units;
 using Units.Stages.Units.Creatures.Abstract;
 using Units.Stages.Units.Creatures.Enums;
 using UnityEngine;
@@ -34,16 +36,17 @@ namespace Units.Stages.Units.Creatures.Units
 
         private CreatureStateMachine _creatureStateMachine;
         private int _destinationIndex;
-        private List<Tuple<string, Transform>> _destinations;
+        private List<Tuple<string, Transform, Action>> _destinations = new();
         private float _elapsedTime; // 시간 측정 변수
-        private IGuestCollisionModule _guestCollisionModule;
-
         private IGuestInventoryModule _guestInventoryModule;
         private IGuestMovementModule _guestMovementModule;
         private IGuestStatModule _guestStatModule;
         private bool _returnTrigger;
         private bool _waitingTrigger; // 대기 상태 여부
         public override Animator Animator { get; protected set; }
+
+        private ITradeZone _currentTradeZone;
+        private IPaymentZone _currentPaymentZone;
 
         private ENPCType NPCType => _guestStatModule.NPCType;
 
@@ -70,25 +73,16 @@ namespace Units.Stages.Units.Creatures.Units
                 {
                     _returnTrigger = true;
                     _waitingTrigger = false;
+                    HandleOnTriggerTradeZone(_currentTradeZone, false);
                 }
             }
 
-            if (_returnTrigger) _guestMovementModule.SetDestination(_destinations.Last().Item2.position);
+            if (_returnTrigger) _guestMovementModule.SetDestination(_destinations.Last());
         }
 
         private void FixedUpdate()
         {
             _guestMovementModule.FixedUpdate();
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            _guestCollisionModule.OnTriggerEnter2D(other);
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            _guestCollisionModule.OnTriggerExit2D(other);
         }
 
         public override ECreatureType CreatureType => _guestStatModule.CreatureType;
@@ -107,14 +101,8 @@ namespace Units.Stages.Units.Creatures.Units
             _guestStatModule = new GuestStatModule(guestDataSo);
             _guestMovementModule =
                 new GuestMovementModule(this, _guestStatModule, _creatureStateMachine, spriteTransform);
-            _guestCollisionModule = new GuestCollisionModule(_guestStatModule);
             _guestInventoryModule = new GuestInventoryModule(receiveTransform, receiveTransform, _guestStatModule, itemFactory,
                 CreatureType, NPCType);
-
-            _guestCollisionModule.OnCompareWithTarget += HandleOnCompareWithTarget;
-            _guestCollisionModule.OnTriggerTradeZone += HandleOnTriggerTradeZone;
-            _guestCollisionModule.OnTriggerSpawnZone += HandleOnTriggerSpawnZone;
-            _guestCollisionModule.OnTriggerPaymentZone += HandleOnTriggerPaymentZone;
 
             _guestInventoryModule.OnTargetQuantityReceived += CheckNextDestination;
         }
@@ -138,8 +126,29 @@ namespace Units.Stages.Units.Creatures.Units
 
         public void SetDestinations(List<Tuple<string, Transform>> destinations)
         {
-            _destinations = destinations;
-            _guestMovementModule.SetDestination(_destinations[_destinationIndex].Item2.position);
+            _destinations.Clear();
+            
+            var currentTradeZoneTransform = destinations[0].Item2.GetComponent<BuildingZone>().TradeZoneNpcTransform;
+            var currentPaymentZoneTransform = destinations[1].Item2.GetComponent<BuildingZone>().TradeZoneNpcTransform;
+
+            _currentTradeZone = currentTradeZoneTransform.GetComponent<ITradeZone>();
+            _currentPaymentZone = currentPaymentZoneTransform.GetComponent<IPaymentZone>();
+            
+            var newDestination = new List<Tuple<string, Transform, Action>>
+            {
+                new(destinations[0].Item1, currentTradeZoneTransform, () =>
+                {
+                    _waitingTrigger = true;
+                    HandleOnTriggerTradeZone(_currentTradeZone, true);
+                }),
+                
+                new(destinations[1].Item1, currentPaymentZoneTransform, () => HandleOnTriggerPaymentZone(_currentPaymentZone)),
+                new(destinations[2].Item1, destinations[2].Item2, HandleOnTriggerSpawnZone)
+            };
+
+
+            _destinations = newDestination;
+            _guestMovementModule.SetDestination(_destinations[_destinationIndex]);
         }
 
         public void Create()
@@ -165,11 +174,13 @@ namespace Units.Stages.Units.Creatures.Units
                 _elapsedTime = 0f;
             }
 
+            if (_destinationIndex == 0) HandleOnTriggerTradeZone(_currentTradeZone, false);
+
             if (_destinationIndex < _destinations.Count - 1) _destinationIndex++;
 
             if (_destinationIndex == _destinations.Count - 1) _returnTrigger = true;
 
-            _guestMovementModule.SetDestination(_destinations[_destinationIndex].Item2.position);
+            _guestMovementModule.SetDestination(_destinations[_destinationIndex]);
         }
 
         private event Action OnReturnGuest;
@@ -177,18 +188,6 @@ namespace Units.Stages.Units.Creatures.Units
         private void SetActive(bool value)
         {
             if (gameObject.activeInHierarchy != value) gameObject.SetActive(value);
-        }
-
-        private bool HandleOnCompareWithTarget(string buildingKey)
-        {
-            if (string.Equals(buildingKey, _destinations[_destinationIndex].Item1))
-            {
-                if (_destinationIndex == 0 || _destinationIndex == _destinations.Count - 1) _waitingTrigger = true;
-                _guestMovementModule.ActivateNavMeshAgent(false);
-                return true;
-            }
-
-            return false;
         }
 
         private void HandleOnTriggerSpawnZone()
@@ -201,7 +200,7 @@ namespace Units.Stages.Units.Creatures.Units
             _guestInventoryModule.RegisterItemReceiver(zone, isConnected);
         }
 
-        private void HandleOnTriggerPaymentZone(IPaymentZone zone, bool isConnected)
+        private void HandleOnTriggerPaymentZone(IPaymentZone zone)
         {
             if (_destinationIndex != _destinations.Count - 1) zone.RegisterPaymentTarget(this, true);
         }

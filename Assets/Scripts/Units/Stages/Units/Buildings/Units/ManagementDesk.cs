@@ -140,7 +140,6 @@ namespace Units.Stages.Units.Buildings.Units
                         _managementDeskCustomSetting.Cashier[i].gameObject.SetActive(true);
                         _managementDeskPaymentModule.AddCashierPaymentSlot(i + 1, _managementDeskCustomSetting.Cashier[i].Animator);
                     }
-                    else break;
                 }
             }
         }

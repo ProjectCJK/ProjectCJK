@@ -19,7 +19,8 @@ namespace UI.QuestPanels
                 questDataBundle.ClearedCount,
                 questDataBundle.TotalCount,
                 questDataBundle.ProgressRatio,
-                questDataBundle.RewardCount
+                questDataBundle.RewardCount,
+                questDataBundle.RewardSprite
             );
 
             _mainQuest.UpdateQuestInfoItems(questDataBundle.QuestInfoItems);

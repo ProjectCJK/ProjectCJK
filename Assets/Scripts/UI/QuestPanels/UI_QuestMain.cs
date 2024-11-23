@@ -12,14 +12,20 @@ namespace UI.QuestPanels
         [SerializeField] private TextMeshProUGUI TMP_MainQuestProgress;
         [SerializeField] private Slider Slider_MainQuestProgress;
         [SerializeField] private Button Button_Reward;
+        [SerializeField] private GameObject Effect_Reward;
+        [SerializeField] private Image Image_RewardImage;
         [SerializeField] private TextMeshProUGUI Text_RewardCountText;
         [SerializeField] private List<UI_Panel_QuestInfoItem> uiPanelQuestInfoItems;
 
-        public void UpdateMainQuestProgress(int clearedCount, int totalCount, float progressRatio, int rewardCount)
+        public void UpdateMainQuestProgress(int clearedCount, int totalCount, float progressRatio, int rewardCount, Sprite rewardIcon)
         {
             TMP_MainQuestProgress.text = $"{clearedCount}/{totalCount}";
+            Image_RewardImage.sprite = rewardIcon;
             Text_RewardCountText.text = $"{rewardCount}";
             Slider_MainQuestProgress.value = progressRatio;
+            
+            Button_Reward.interactable = clearedCount >= totalCount;
+            Effect_Reward.gameObject.SetActive(clearedCount >= totalCount);
         }
 
         public void UpdateQuestInfoItems(List<UIQuestInfoItem> questInfoItems)
@@ -41,6 +47,7 @@ namespace UI.QuestPanels
         public void EnableRewardButton()
         {
             Button_Reward.interactable = true;
+            Effect_Reward.gameObject.SetActive(true);
         }
 
         public void SetAdvanceQuestAction(Action advanceQuestAction)
@@ -49,7 +56,6 @@ namespace UI.QuestPanels
             Button_Reward.onClick.AddListener(() => 
             {
                 advanceQuestAction();
-                Button_Reward.interactable = false;
             });
         }
     }

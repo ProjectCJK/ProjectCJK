@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using Units.Stages.Modules.FSMModules.Units.Creature;
 using Units.Stages.Modules.MovementModules.Abstract;
@@ -12,7 +13,7 @@ namespace Units.Stages.Modules.MovementModules.Units
     {
         void Update();
         void FixedUpdate();
-        void SetDestination(Vector3 destination);
+        void SetDestination(Tuple<string, Transform, Action> destination);
         void ActivateNavMeshAgent(bool value);
     }
 
@@ -27,6 +28,7 @@ namespace Units.Stages.Modules.MovementModules.Units
         private Vector3 _destination;
         private bool _isFacingRight;
         private bool _isMoving;
+        private Action _onArrived;
 
         public GuestMovementModule(
             Guest guest,
@@ -64,10 +66,12 @@ namespace Units.Stages.Modules.MovementModules.Units
             }
         }
 
-        public void SetDestination(Vector3 destination)
+        public void SetDestination(Tuple<string, Transform, Action> destination)
         {
-            _destination = destination;
-            if (TryCalculateAndSetPath(destination))
+            _destination = destination.Item2.position;
+            _onArrived = destination.Item3;
+            
+            if (TryCalculateAndSetPath(_destination))
             {
                 ActivateNavMeshAgent(true);
             }
@@ -75,9 +79,11 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         public void Update()
         {
-            if (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
             {
-                ActivateNavMeshAgent(true);
+                ActivateNavMeshAgent(false);
+                _onArrived?.Invoke();
+                _onArrived = null;
             }
             
             // 이동 상태가 변하지 않았으면 로직을 건너뛰기

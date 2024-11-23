@@ -65,6 +65,10 @@ namespace UI.CostumePanels
             {
                 var item = ObjectPoolManager.Instance.GetObject<UI_Panel_CostumeInventoryItem>(PoolKey, null);
                 _inventoryItems.Add(item);
+
+                item.transform.SetParent(_itemPrefabInstancePosition, false);
+                item.transform.SetSiblingIndex(_inventoryItems.Count - 1);
+
                 item.Activate(costumeItem);
             }
         }
