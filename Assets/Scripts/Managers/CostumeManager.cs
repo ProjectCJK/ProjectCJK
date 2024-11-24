@@ -123,9 +123,6 @@ namespace Managers
         private readonly Dictionary<ECostumeGrade, Sprite> _backgroundImageCache = new();
         private readonly Dictionary<Tuple<ECostumeType, ECostumeGrade>, Sprite> _frontGroundImageCache = new();
 
-        private readonly UI_Panel_Costume_Gacha _uiPanelCostumeGacha = UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha;
-        private readonly UI_Panel_Costume _uiPanelCostume = UIManager.Instance.UI_Panel_Main.UI_Panel_Costume;
-
         private List<CostumeItemData> _currentCostumeItemData;
 
         public void RegisterReference()
@@ -143,8 +140,8 @@ namespace Managers
             CacheGachaBackgroundSprites();
             LoadCostumeData();
 
-            _uiPanelCostumeGacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
-            _uiPanelCostume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
+            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
+            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
 
             UIManager.Instance.UI_Panel_Main.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
             UIManager.Instance.UI_Panel_Main.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
@@ -252,7 +249,7 @@ namespace Managers
             var gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
 
             SortCostumeItems();
-            _uiPanelCostumeGacha.Activate(gachaItems);
+            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.Activate(gachaItems);
         }
 
         private List<CostumeItemData> GetRandomItem(int maxCommonGet, int maxRareGet)
@@ -295,7 +292,7 @@ namespace Managers
 
         private void ActivateCostumePanel()
         {
-            _uiPanelCostume.Activate();
+            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume.Activate();
         }
 
         public void SortCostumeItems()
