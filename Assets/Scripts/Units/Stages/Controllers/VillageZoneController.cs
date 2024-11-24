@@ -146,11 +146,32 @@ namespace Units.Stages.Controllers
                 SpawnHunter();
                 SetHunterDestination();
                 SpawnGuests();
+                PopUpGuestRush();
+                PopUpSuperHunter();
             }
             
             SpawnMonster();
   
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
+        }
+
+        private void PopUpGuestRush()
+        {
+            var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
+
+            var currentStandProductCount = materialTypes
+                .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.Stand}_{material}"))
+                .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.Stand}_{material}"].Values.Sum());
+
+            if (currentStandProductCount >= 10)
+            {
+                UIManager.Instance.UI_Panel_Main.UI_Button_CustomerWave.gameObject.SetActive(true);
+            }
+        }
+        
+        private void PopUpSuperHunter()
+        {
+            
         }
 
         private void SetDeliveryManDestination()
@@ -257,8 +278,7 @@ namespace Units.Stages.Controllers
                     // 가장 가까운 몬스터를 타겟으로 지정
                     if (closestMonster != null)
                     {
-                        hunter.SetDestinations(new Tuple<string, Transform>($"{ECreatureType.Monster}",
-                            closestMonster.Transform));
+                        hunter.SetDestinations(new Tuple<string, Transform>($"{ECreatureType.Monster}", closestMonster.Transform));
                         hunter.CommandState = CommandState.MoveTo;
                     }
                 }
@@ -276,10 +296,13 @@ namespace Units.Stages.Controllers
 
         private void SpawnDeliveryMan()
         {
-            if (_buildingController.Buildings.TryGetValue($"{EBuildingType.DeliveryLodging}",
-                    out BuildingZone buildingZone))
+            if (_buildingController.Buildings.TryGetValue($"{EBuildingType.DeliveryLodging}", out BuildingZone buildingZone))
+            {
                 if (buildingZone is DeliveryLodging deliveryLodging)
+                {
                     deliveryLodging.SpawnDeliveryMan(_creatureController, currentSpawnedDeliveryMans);
+                }   
+            }
         }
 
         private void SpawnHunter()

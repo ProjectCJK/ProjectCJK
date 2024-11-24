@@ -567,7 +567,7 @@ namespace Managers
                 CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
             }
 
-            if (CurrentQuestSubIndex < _maxSubIndexForStage)
+            if (CurrentQuestSubIndex <= _maxSubIndexForStage)
             {
                 CurrentQuestSubIndex++;
                 
