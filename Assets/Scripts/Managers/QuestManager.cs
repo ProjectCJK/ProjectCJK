@@ -81,6 +81,25 @@ namespace Managers
         DeliveryLodging_Unlock,
         DeliveryLodging_Upgrade
     }
+    
+    [Serializable]
+    public class ParseQuestData
+    {
+        public int StageIndex;
+        public int ListIndex;
+        public int QuestIndex;
+        public string Quest;
+        public EQuestType1 QuestType1;
+        public EQuestType2 QuestType2;
+        public int Goal;
+        public ECurrencyType RewardType1;
+        public int RewardType1Count;
+        public ECurrencyType RewardType2;
+        public int RewardType2Count;
+        public ECurrencyType ListRewardType;
+        public int ListRewardCount;
+        public EQuestTarget TrackingTarget;
+    }
 
     [Serializable]
     public struct QuestDataBundle
@@ -297,7 +316,13 @@ namespace Managers
 
         private void UpdateUI()
         {
-            KeyValuePair<int, Data> smallestUnclearedQuest = _questData.Datas
+            if (GameManager.Instance.ES3Saver.CurrentQuestSubIndex >= _maxSubIndexForStage)
+            {
+                _uiPanelQuest.UpdateStageLastQuestPanel();
+            }
+            else
+            {
+             KeyValuePair<int, Data> smallestUnclearedQuest = _questData.Datas
                 .Where(kvp => !IsQuestClear[kvp.Key])
                 .OrderBy(kvp => kvp.Key)
                 .FirstOrDefault();
@@ -366,6 +391,7 @@ namespace Managers
             };
 
             _uiPanelQuest.UpdateQuestPanel(questDataBundle);
+            }
         }
 
         private void StartTrackingCurrentQuestTarget(Data data)
@@ -554,7 +580,14 @@ namespace Managers
             }
             else
             {
-                Debug.Log("QuestManager: All quests for the current stage are complete!");
+                if (_questData.ListRewardType != null)
+                {
+                    CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
+                }
+                
+                GameManager.Instance.ES3Saver.CurrentQuestSubIndex = _maxSubIndexForStage;
+                
+                UpdateUI();
             }
         }
         

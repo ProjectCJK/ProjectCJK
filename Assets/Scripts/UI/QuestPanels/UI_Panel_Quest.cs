@@ -26,5 +26,10 @@ namespace UI.QuestPanels
             _mainQuest.UpdateQuestInfoItems(questDataBundle.QuestInfoItems);
             _mainQuest.SetAdvanceQuestAction(questDataBundle.AdvanceToNextQuestAction);
         }
+
+        public void UpdateStageLastQuestPanel()
+        {
+            
+        }
     }
 }
