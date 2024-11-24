@@ -42,8 +42,10 @@ namespace Managers
 
         [Space(20)] [Header("### Building Data ###")]
         public LevelPrefabSO levelPrefabSo;
-        public KitchenDataSO KitchenDataSo;
-        public StandDataSO StandDataSo;
+        public KitchenDataSO KitchenADataSo;
+        public KitchenDataSO KitchenBDataSo;
+        public StandDataSO StandADataSo;
+        public StandDataSO StandBDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
         public WareHouseDataSO WareHouseDataSo;

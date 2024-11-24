@@ -98,6 +98,11 @@ namespace Managers
             _tutorialPanel.gameObject.SetActive(true);
         }
 
+        public void ActivePopUpTutorialPanel()
+        {
+            
+        }
+
         private void HandleOnScriptsEnded()
         {
             UIManager.Instance.DestroyTutorialPanel();

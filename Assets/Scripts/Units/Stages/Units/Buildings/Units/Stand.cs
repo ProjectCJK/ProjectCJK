@@ -96,7 +96,9 @@ namespace Units.Stages.Units.Buildings.Units
 
         public void RegisterReference(ItemFactory itemFactory)
         {
-            _standDataSo = DataManager.Instance.StandDataSo;
+            _standDataSo = _standCustomSetting.InputItemType == EItemType.ProductA
+                ? DataManager.Instance.StandADataSo
+                : DataManager.Instance.StandBDataSo; 
 
             _itemFactory = itemFactory;
             MaterialType = _standCustomSetting.MaterialType;

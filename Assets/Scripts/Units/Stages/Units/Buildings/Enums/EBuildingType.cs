@@ -2,8 +2,10 @@ namespace Units.Stages.Units.Buildings.Enums
 {
     public enum EBuildingType
     {
-        Kitchen,
-        Stand,
+        KitchenA,
+        KitchenB,
+        StandA,
+        StandB,
         ManagementDesk,
         DeliveryLodging,
         WareHouse

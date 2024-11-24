@@ -160,8 +160,8 @@ namespace Units.Stages.Controllers
             var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
 
             var currentStandProductCount = materialTypes
-                .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.Stand}_{material}"))
-                .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.Stand}_{material}"].Values.Sum());
+                .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.StandA}_{material}"))
+                .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.StandA}_{material}"].Values.Sum());
 
             if (currentStandProductCount >= 10)
             {
@@ -195,7 +195,7 @@ namespace Units.Stages.Controllers
                 foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
                     if (deliveryMan.CommandState is CommandState.NoOrder or CommandState.Standby)
                     {
-                        var defaultDestinationKey = $"{EBuildingType.Kitchen}_{EMaterialType.A}";
+                        var defaultDestinationKey = $"{EBuildingType.KitchenA}_{EMaterialType.A}";
                         var defaultDestination = new Tuple<string, Transform>(defaultDestinationKey,
                             _buildingController.Buildings[defaultDestinationKey].gameObject.transform);
 
@@ -221,7 +221,7 @@ namespace Units.Stages.Controllers
                     (EBuildingType?, EMaterialType?) parsedKey =
                         ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
 
-                    var standKey = $"{EBuildingType.Stand}_{parsedKey.Item2}";
+                    var standKey = $"{EBuildingType.StandA}_{parsedKey.Item2}";
                     var standDestination = new Tuple<string, Transform>(standKey,
                         _buildingController.Buildings[standKey].gameObject.transform);
 
@@ -368,7 +368,7 @@ namespace Units.Stages.Controllers
         {
             List<EMaterialType> materialsList = VolatileDataManager.Instance.CurrentActiveMaterials.ToList();
             var randomIndex = new Random().Next(materialsList.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, materialsList[randomIndex]);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.StandA, materialsList[randomIndex]);
 
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);

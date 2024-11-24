@@ -24,10 +24,10 @@ namespace Managers
 
     public enum EQuestType2
     {
-        Kitchen_A,
-        Kitchen_B,
-        Kitchen_C,
-        Kitchen_D,
+        KitchenA_A,
+        KitchenA_B,
+        KitchenA_C,
+        KitchenB_A,
         Material_A,
         Material_B,
         Material_C,
@@ -35,10 +35,10 @@ namespace Managers
         ProductA_B,
         ProductA_C,
         ProductB_A,
-        Stand_A,
-        Stand_B,
-        Stand_C,
-        Stand_D,
+        StandA_A,
+        StandA_B,
+        StandA_C,
+        StandB_A,
         HuntingZone_A,
         HuntingZone_B,
         WareHouse,
@@ -57,22 +57,22 @@ namespace Managers
         HuntingZone_B_Hunt,
         HuntingZone_C_Unlock,
         HuntingZone_C_Hunt,
-        Kitchen_A_Unlock,
-        Kitchen_A_Product,
-        Kitchen_A_Upgrade,
-        Kitchen_B_Unlock,
-        Kitchen_B_Product,
-        Kitchen_B_Upgrade,
-        Kitchen_C_Unlock,
-        Kitchen_C_Product,
-        Kitchen_C_Upgrade,
-        Kitchen_D_Unlock,
-        Kitchen_D_Product,
-        Kitchen_D_Upgrade,
-        Stand_A_Unlock,
-        Stand_B_Unlock,
-        Stand_C_Unlock,
-        Stand_D_Unlock,
+        KitchenA_A_Unlock,
+        KitchenA_A_Product,
+        KitchenA_A_Upgrade,
+        KitchenA_B_Unlock,
+        KitchenA_B_Product,
+        KitchenA_B_Upgrade,
+        KitchenA_C_Unlock,
+        KitchenA_C_Product,
+        KitchenA_C_Upgrade,
+        KitchenB_A_Unlock,
+        KitchenB_A_Product,
+        KitchenB_A_Upgrade,
+        StandA_A_Unlock,
+        StandA_B_Unlock,
+        StandA_C_Unlock,
+        StandB_A_Unlock,
         ManagementDesk_Upgrade,
         ManagementDesk_Sell,
         ManagementDesk_GetMoney,
@@ -209,6 +209,14 @@ namespace Managers
                 ParsedListQuestDatas = new List<ParsedListQuestData>(),
                 ParsedQuestDatas = new List<ParsedQuestData>()
             };
+            
+            if (stageIndex == 2)
+            {
+                for (var i = 0; i < _parsedStageQuestDatas[1].ParsedQuestDatas.Count; i++)
+                {
+                    newStageData.ParsedQuestDatas.Add(new ParsedQuestData());
+                }
+            }
 
             _parsedStageQuestDatas.TryAdd(stageIndex, newStageData);
             return newStageData;
@@ -274,7 +282,7 @@ namespace Managers
 
             var value = parsedEnum.Item1 switch
             {
-                EBuildingType.Kitchen when parsedEnum.Item2.HasValue =>
+                EBuildingType.KitchenA when parsedEnum.Item2.HasValue =>
                     VolatileDataManager.Instance.KitchenStatsModule != null &&
                     VolatileDataManager.Instance.KitchenStatsModule.ContainsKey(parsedEnum.Item2.Value)
                         ? GetBuildingLevel(VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey)
@@ -405,22 +413,22 @@ namespace Managers
             else if (questTarget == EQuestTarget.HuntingZone_B_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[1];
             else if (questTarget == EQuestTarget.HuntingZone_C_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[0];
             else if (questTarget == EQuestTarget.HuntingZone_C_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[1];
-            else if (questTarget == EQuestTarget.Kitchen_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
-            else if (questTarget == EQuestTarget.Kitchen_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
-            else if (questTarget == EQuestTarget.Kitchen_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
-            else if (questTarget == EQuestTarget.Kitchen_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
-            else if (questTarget == EQuestTarget.Kitchen_B_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
-            else if (questTarget == EQuestTarget.Kitchen_B_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
-            else if (questTarget == EQuestTarget.Kitchen_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
-            else if (questTarget == EQuestTarget.Kitchen_C_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
-            else if (questTarget == EQuestTarget.Kitchen_C_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
-            else if (questTarget == EQuestTarget.Kitchen_D_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
-            else if (questTarget == EQuestTarget.Kitchen_D_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
-            else if (questTarget == EQuestTarget.Kitchen_D_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
-            else if (questTarget == EQuestTarget.Stand_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
-            else if (questTarget == EQuestTarget.Stand_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
-            else if (questTarget == EQuestTarget.Stand_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
-            else if (questTarget == EQuestTarget.Stand_D_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
+            else if (questTarget == EQuestTarget.KitchenA_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
+            else if (questTarget == EQuestTarget.KitchenA_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
+            else if (questTarget == EQuestTarget.KitchenA_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
+            else if (questTarget == EQuestTarget.KitchenA_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
+            else if (questTarget == EQuestTarget.KitchenA_B_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
+            else if (questTarget == EQuestTarget.KitchenA_B_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
+            else if (questTarget == EQuestTarget.KitchenA_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
+            else if (questTarget == EQuestTarget.KitchenA_C_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
+            else if (questTarget == EQuestTarget.KitchenA_C_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
+            else if (questTarget == EQuestTarget.KitchenB_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
+            else if (questTarget == EQuestTarget.KitchenB_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
+            else if (questTarget == EQuestTarget.KitchenB_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
+            else if (questTarget == EQuestTarget.StandA_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
+            else if (questTarget == EQuestTarget.StandA_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
+            else if (questTarget == EQuestTarget.StandA_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
+            else if (questTarget == EQuestTarget.StandB_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
             else if (questTarget == EQuestTarget.ManagementDesk_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[0];
             else if (questTarget == EQuestTarget.ManagementDesk_Sell) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[1];
             else if (questTarget == EQuestTarget.ManagementDesk_GetMoney) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[2];
@@ -453,10 +461,10 @@ namespace Managers
                 
                     List<int> targetQuestIndex = targetStageQuestData.ParsedListQuestDatas[GameManager.Instance.ES3Saver.CurrentListQuestIndex].ParsedQuestDataIndex;
 
-                    var targetQuests = targetQuestIndex
+                    IEnumerable<ParsedQuestData> targetQuests = targetQuestIndex
                         .Select(index => targetStageQuestData.ParsedQuestDatas[index])
                         .Where(t => t.QuestType1 == questType1 && t.QuestType2 == parsedQuestType);
-                
+                    
                     foreach (var quest in targetQuests)
                     {
                         quest.CurrentGoal += value;
@@ -587,10 +595,10 @@ namespace Managers
         {
             Sprite questIcon = null;
 
-            if (questType2 == EQuestType2.Kitchen_A) questIcon = DataManager.Instance.SpriteDatas[50];
-            else if (questType2 == EQuestType2.Kitchen_B) questIcon = DataManager.Instance.SpriteDatas[50];
-            else if (questType2 == EQuestType2.Kitchen_C) questIcon = DataManager.Instance.SpriteDatas[50];
-            else if (questType2 == EQuestType2.Kitchen_D) questIcon = DataManager.Instance.SpriteDatas[51];
+            if (questType2 == EQuestType2.KitchenA_A) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.KitchenA_B) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.KitchenA_C) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.KitchenB_A) questIcon = DataManager.Instance.SpriteDatas[51];
             else if (questType2 == EQuestType2.Material_A) questIcon = DataManager.Instance.SpriteDatas[5];
             else if (questType2 == EQuestType2.Material_B) questIcon = DataManager.Instance.SpriteDatas[6];
             else if (questType2 == EQuestType2.Material_C) questIcon = DataManager.Instance.SpriteDatas[7];
@@ -598,10 +606,10 @@ namespace Managers
             else if (questType2 == EQuestType2.ProductA_B) questIcon = DataManager.Instance.SpriteDatas[9];
             else if (questType2 == EQuestType2.ProductA_C) questIcon = DataManager.Instance.SpriteDatas[10];
             else if (questType2 == EQuestType2.ProductB_A) questIcon = DataManager.Instance.SpriteDatas[11];
-            else if (questType2 == EQuestType2.Stand_A) questIcon = DataManager.Instance.SpriteDatas[52];
-            else if (questType2 == EQuestType2.Stand_B) questIcon = DataManager.Instance.SpriteDatas[52];
-            else if (questType2 == EQuestType2.Stand_C) questIcon = DataManager.Instance.SpriteDatas[52];
-            else if (questType2 == EQuestType2.Stand_D) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.StandA_A) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.StandA_B) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.StandA_C) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.StandB_A) questIcon = DataManager.Instance.SpriteDatas[52];
             else if (questType2 == EQuestType2.HuntingZone_A) questIcon = DataManager.Instance.SpriteDatas[12];
             else if (questType2 == EQuestType2.HuntingZone_B) questIcon = DataManager.Instance.SpriteDatas[13];
             else if (questType2 == EQuestType2.WareHouse) questIcon = DataManager.Instance.SpriteDatas[46];
