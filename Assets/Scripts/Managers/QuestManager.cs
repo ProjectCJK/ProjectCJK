@@ -327,7 +327,9 @@ namespace Managers
             ParsedListQuestData currentListQuestData = currentStageQuestData.ParsedListQuestDatas[GameManager.Instance.ES3Saver.CurrentListQuestIndex];
             
             var currentQuestData = currentListQuestData.ParsedQuestDataIndex
-                .Select(index => currentStageQuestData.ParsedQuestDatas[index])
+                .Select(index => currentStageQuestData.ParsedQuestDatas
+                    .FirstOrDefault(quest => quest.QuestIndex == index)) // QuestIndex로 필터링
+                .Where(quest => quest != null) 
                 .OrderBy(q => q.IsClear) // IsClear가 false인 항목이 상위로
                 .ThenByDescending(q => q.CurrentGoal >= q.MaxGoal) // IsClear가 false이면서 목표를 달성한 항목이 더 상단으로
                 .ThenBy(q => q.QuestIndex) // QuestIndex 기준으로 오름차순 정렬
