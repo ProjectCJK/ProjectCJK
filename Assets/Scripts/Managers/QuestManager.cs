@@ -81,81 +81,69 @@ namespace Managers
         DeliveryLodging_Unlock,
         DeliveryLodging_Upgrade
     }
-    
+
     [Serializable]
-    public class ParseQuestData
+    public class ParsedStageQuestData
     {
         public int StageIndex;
+        public Sprite StageIcon;
+        public string StageName;
+        
+        public List<ParsedListQuestData> ParsedListQuestDatas;
+        public List<ParsedQuestData> ParsedQuestDatas;
+        
+        public ParsedStageQuestData(int stageIndex, Sprite stageIcon, string stageName)
+        {
+            StageIndex = stageIndex;
+            StageIcon = stageIcon;
+            StageName = stageName;
+        }
+    }
+
+    [Serializable]
+    public class ParsedListQuestData
+    {
         public int ListIndex;
+        public ECurrencyType ListRewardType;
+        public int ListRewardCount;
+        public bool IsClear;
+
+        public List<int> ParsedQuestDataIndex;
+    }
+    
+    [Serializable]
+    public class ParsedQuestData
+    {
+        public Sprite QuestIcon;
         public int QuestIndex;
-        public string Quest;
+        
+        public string QuestDescription;
+        
         public EQuestType1 QuestType1;
         public EQuestType2 QuestType2;
-        public int Goal;
+        
+        public int CurrentGoal;
+        public int MaxGoal;
+        public bool IsClear;
+        
         public ECurrencyType RewardType1;
         public int RewardType1Count;
         public ECurrencyType RewardType2;
         public int RewardType2Count;
-        public ECurrencyType ListRewardType;
-        public int ListRewardCount;
+        
         public EQuestTarget TrackingTarget;
-    }
-
-    [Serializable]
-    public struct QuestDataBundle
-    {
-        public Sprite QuestIcon;
-        public int ClearedCount;
-        public int TotalCount;
-        public float ProgressRatio;
-        public int RewardCount;
-        public string ThumbnailDescription;
-        public int ThumbnailCurrentGoal;
-        public int ThumbnailMaxGoal;
-        public List<UIQuestInfoItem> QuestInfoItems;
-        public Action AdvanceToNextQuestAction;
-        public Sprite RewardSprite;
-    }
-
-    [Serializable]
-    public struct QuestData
-    {
-        public int Stage { get; set; }
-        public ECurrencyType? ListRewardType { get; set; }
-        public int ListRewardCount { get; set; }
-        public Dictionary<int, Data> Datas;
-    }
-
-    [Serializable]
-    public class Data
-    {
-        public string Description { get; set; }
-        public string QuestType1 { get; set; }
-        public string QuestType2 { get; set; }
-        public int CurrentTargetGoal { get; set; }
-        public int MaxTargetGoal { get; set; }
-        public string Reward1Type { get; set; }
-        public int Reward1Count { get; set; }
-        public string Reward2Type { get; set; }
-        public int Reward2Count { get; set; }
-        public string TrackingTarget { get; set; }
     }
 
     public class QuestManager : Singleton<QuestManager>
     {
         public Action<EQuestType1, string, int> OnUpdateCurrentQuestProgress;
-
-        public Dictionary<int, bool> IsQuestClear;
         
         private string[,] _gameData;
-        private QuestData _questData;
         
         private UI_Panel_Quest _uiPanelQuest;
-        
-        private int CurrentQuestSubIndex;
-        private int _maxSubIndexForStage;
-        
         private StageController _stageController;
+
+        private readonly Dictionary<int, ParsedStageQuestData> _parsedStageQuestDatas = new();
 
         public void RegisterReference(StageController stageController)
         {
@@ -163,338 +151,282 @@ namespace Managers
             
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _gameData = DataManager.Instance.QuestData.GetData();
-            CurrentQuestSubIndex = GameManager.Instance.ES3Saver.CurrentQuestSubIndex;
+            
+            _uiPanelQuest.RegisterReference();
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             
             Debug.Log("QuestManager: RegisterReference completed.");
         }
-
+        
         public void Initialize()
         {
-            _maxSubIndexForStage = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString())
-                .Select(i => int.Parse(_gameData[i, 2]))
-                .Max();
-
-            List<List<string>> questData = Enumerable.Range(0, _gameData.GetLength(0))
-                .Where(i => _gameData[i, 1] == GameManager.Instance.ES3Saver.CurrentStageLevel.ToString() &&
-                            _gameData[i, 2] == CurrentQuestSubIndex.ToString())
+            List<List<string>> rawDatas = Enumerable.Range(2, _gameData.GetLength(0) - 2)
                 .Select(i => Enumerable.Range(0, _gameData.GetLength(1)).Select(j => _gameData[i, j]).ToList())
                 .ToList();
 
-            if (questData.Count > 0)
+            var currentStageIndex = -1;
+            var currentListIndex = -1;
+
+            ParsedStageQuestData currentStageData = null;
+            ParsedListQuestData currentListData = null;
+
+            foreach (List<string> rawData in rawDatas)
             {
-                _questData = new QuestData
+                // 1. 스테이지 데이터 추가
+                var stageIndex = int.Parse(rawData[1]);
+                if (stageIndex != currentStageIndex)
                 {
-                    Stage = int.Parse(questData[0][1]),
-                    ListRewardType = ParserModule.ParseStringToEnum<ECurrencyType>(questData[0][13]),
-                    ListRewardCount = int.Parse(questData[0][14]),
-                    Datas = new Dictionary<int, Data>()
-                };
-
-                for (var i = 0; i < questData.Count; i++)
-                {
-                    if (!_questData.Datas.ContainsKey(i))
-                    {
-                        _questData.Datas.Add(i, new Data
-                        {
-                            Description = questData[i][5],
-                            QuestType1 = questData[i][6],
-                            QuestType2 = questData[i][7],
-                            MaxTargetGoal = int.Parse(questData[i][8]),
-                            Reward1Type = questData[i][9],
-                            Reward1Count = int.Parse(questData[i][10]),
-                            Reward2Type = questData[i][11],
-                            Reward2Count = int.Parse(questData[i][12]),
-                            TrackingTarget = questData[i][15]
-                        });
-
-                        // 저장 대상 제외 (SetLevelUpOption1Goal 관련)
-                        if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.LevelUpOption1 || ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[i].QuestType1) == EQuestType1.Build)
-                        {
-                            SetLevelUpOption1Goal(i);
-                        }
-                        else
-                        {
-                            // 저장된 진행도 로드
-                            _questData.Datas[i].CurrentTargetGoal = GameManager.Instance.ES3Saver.QuestProgress.ContainsKey(i)
-                                ? GameManager.Instance.ES3Saver.QuestProgress[i]
-                                : 0;
-                        }
-                    }
+                    currentStageData = AddNewStage(stageIndex);
+                    currentStageIndex = stageIndex;
                 }
 
-                // 클리어 상태 로드
-                IsQuestClear = _questData.Datas.Keys.ToDictionary(
-                    questNumber => questNumber,
-                    questNumber => GameManager.Instance.ES3Saver.ClearedQuestStatuses.ContainsKey(questNumber) &&
-                                   GameManager.Instance.ES3Saver.ClearedQuestStatuses[questNumber]
-                );
+                // 2. 리스트 데이터 추가
+                var listIndex = int.Parse(rawData[2]);
+                if (listIndex != currentListIndex)
+                {
+                    currentListData = AddNewList(currentStageData, stageIndex, listIndex, rawData);
+                    currentListIndex = listIndex;
+                }
 
-                UpdateUI();
+                // 3. 퀘스트 데이터 추가
+                ParsedQuestData questData = CreateQuestData(rawData, stageIndex);
+                _parsedStageQuestDatas[stageIndex].ParsedQuestDatas.Add(questData);
+                currentListData?.ParsedQuestDataIndex.Add(questData.QuestIndex);
             }
+
+            if (GameManager.Instance.ES3Saver.CurrentListQuestIndex == -1) GameManager.Instance.ES3Saver.CurrentListQuestIndex = 0;
+
+            UpdateUI();
+        }
+        
+        private ParsedStageQuestData AddNewStage(int stageIndex)
+        {
+            Sprite stageIcon = DataManager.Instance.MapSprites[stageIndex - 1];
+            var stageName = stageIndex == 1 ? "Dangerous vacant lot" : "Dilapidated road";
+
+            var newStageData = new ParsedStageQuestData(stageIndex, stageIcon, stageName)
+            {
+                ParsedListQuestDatas = new List<ParsedListQuestData>(),
+                ParsedQuestDatas = new List<ParsedQuestData>()
+            };
+
+            _parsedStageQuestDatas.TryAdd(stageIndex, newStageData);
+            return newStageData;
         }
 
-        private void SetLevelUpOption1Goal(int questIndex)
+        private ParsedListQuestData AddNewList(ParsedStageQuestData currentStageData, int stageIndex, int listIndex, List<string> rawData)
         {
-            if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[questIndex].QuestType1) == EQuestType1.LevelUpOption1)
+            var listRewardType = Enum.Parse<ECurrencyType>(rawData[13]);
+            var listRewardCount = int.Parse(rawData[14]);
+
+            var newListData = new ParsedListQuestData
             {
-                (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
+                ListIndex = listIndex,
+                ListRewardType = listRewardType,
+                ListRewardCount = listRewardCount,
+                ParsedQuestDataIndex = new List<int>(),
+                IsClear = GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.ListQuestClearStatuses, stageIndex, new Dictionary<int, bool>()), listIndex, false)
+            };
 
-                switch (parsedEnum.Item1)
-                {
-                    case EBuildingType.Kitchen:
-                    {
-                        if (parsedEnum.Item2 != null)
-                        {
-                            var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey];
-                            _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                                ? _questData.Datas[questIndex].MaxTargetGoal
-                                : value;
-                        }
-
-                        break;
-                    }
-                    case EBuildingType.ManagementDesk:
-                    {
-                        var value= GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey];
-                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].MaxTargetGoal
-                            : value;
-                        break;
-                    }
-                    case EBuildingType.WareHouse:
-                    {
-                        var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.WareHouseStatsModule.BuildingKey];
-                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].MaxTargetGoal
-                            : value;
-                        break;
-                    }
-                    case EBuildingType.DeliveryLodging:
-                    {
-                        var value = GameManager.Instance.ES3Saver.CurrentBuildingOption1Level[VolatileDataManager.Instance.DeliveryLodgingStatsModule.BuildingKey];
-                        _questData.Datas[questIndex].CurrentTargetGoal = value >= _questData.Datas[questIndex].MaxTargetGoal
-                            ? _questData.Datas[questIndex].MaxTargetGoal
-                            : value;
-                        break;
-                    }
-                }
-            }
-            else if (ParserModule.ParseStringToEnum<EQuestType1>(_questData.Datas[questIndex].QuestType1) == EQuestType1.Build)
+            currentStageData?.ParsedListQuestDatas.Add(newListData);
+            return newListData;
+        }
+        
+        private ParsedQuestData CreateQuestData(List<string> rawData, int stageIndex)
+        {
+            var questData = new ParsedQuestData
             {
-                (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(_questData.Datas[questIndex].QuestType2);
+                QuestIndex = int.Parse(rawData[3]),
+                QuestDescription = rawData[5],
+                QuestType1 = Enum.Parse<EQuestType1>(rawData[6]),
+                QuestType2 = Enum.Parse<EQuestType2>(rawData[7]),
+                CurrentGoal = 0,
+                MaxGoal = int.Parse(rawData[8]),
+                IsClear = false,
+                RewardType1 = Enum.Parse<ECurrencyType>(rawData[9]),
+                RewardType1Count = int.Parse(rawData[10]),
+                RewardType2 = Enum.Parse<ECurrencyType>(rawData[11]),
+                RewardType2Count = int.Parse(rawData[12]),
+                TrackingTarget = Enum.Parse<EQuestTarget>(rawData[15])
+            };
 
-                if (parsedEnum.Item1 != null)
-                {
-                    foreach (KeyValuePair<string, EActiveStatus> obj in GameManager.Instance.ES3Saver.BuildingActiveStatuses)
-                    {
-                        if (obj.Key == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
-                        {
-                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
-                            break;
-                        }
+            questData.IsClear = GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.QuestClearStatuses, stageIndex, new Dictionary<int, bool>()), questData.QuestIndex, false);
+            questData.CurrentGoal = questData.QuestType1 is EQuestType1.LevelUpOption1 or EQuestType1.Build ? SetLevelUpOption1Goal(questData) : GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.QuestCurrentGoalCounts, stageIndex, new Dictionary<int, int>()), questData.QuestIndex, 0);
 
-                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
-                    }
-                }
-                else
-                {
-                    foreach (KeyValuePair<string, EActiveStatus> obj in GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses)
-                    {
-                        if (obj.Key == _questData.Datas[questIndex].QuestType2 && obj.Value == EActiveStatus.Active)
-                        {
-                            _questData.Datas[questIndex].CurrentTargetGoal = 1;
-                            break;
-                        }
+            return questData;
+        }
 
-                        _questData.Datas[questIndex].CurrentTargetGoal = 0;
-                    }
-                }
-            }
+        private int SetLevelUpOption1Goal(ParsedQuestData parsedQuestData)
+        {
+            return parsedQuestData.QuestType1 switch
+            {
+                EQuestType1.LevelUpOption1 => CalculateLevelUpGoal(parsedQuestData),
+                EQuestType1.Build => CalculateBuildGoal(parsedQuestData),
+                _ => 0
+            };
+        }
+
+        private int CalculateLevelUpGoal(ParsedQuestData parsedQuestData)
+        {
+            (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(parsedQuestData.QuestType2.ToString());
+
+            if (parsedEnum.Item1 == null) return 0;
+
+            var value = parsedEnum.Item1 switch
+            {
+                EBuildingType.Kitchen when parsedEnum.Item2.HasValue =>
+                    VolatileDataManager.Instance.KitchenStatsModule != null &&
+                    VolatileDataManager.Instance.KitchenStatsModule.ContainsKey(parsedEnum.Item2.Value)
+                        ? GetBuildingLevel(VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey)
+                        : 0,
+                EBuildingType.ManagementDesk => 
+                    VolatileDataManager.Instance.ManagementDeskStatsModule != null
+                        ? GetBuildingLevel(VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey)
+                        : 0,
+                EBuildingType.WareHouse => 
+                    VolatileDataManager.Instance.WareHouseStatsModule != null
+                        ? GetBuildingLevel(VolatileDataManager.Instance.WareHouseStatsModule.BuildingKey)
+                        : 0,
+                EBuildingType.DeliveryLodging => 
+                    VolatileDataManager.Instance.DeliveryLodgingStatsModule != null
+                        ? GetBuildingLevel(VolatileDataManager.Instance.DeliveryLodgingStatsModule.BuildingKey)
+                        : 0,
+                _ => 0
+            };
+
+            return Math.Min(value, parsedQuestData.MaxGoal);
+        }
+
+        private int CalculateBuildGoal(ParsedQuestData parsedQuestData)
+        {
+            var questType2 = $"{parsedQuestData.QuestType2}";
+            (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(questType2);
+            
+            Dictionary<string, EActiveStatus> activeStatuses = parsedEnum.Item1 != null ? GameManager.Instance.ES3Saver.BuildingActiveStatuses : GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses;
+
+            return activeStatuses.TryGetValue(questType2, out var status) && status == EActiveStatus.Active ? 1 : 0;
+        }
+
+        private int GetBuildingLevel(string buildingKey)
+        {
+            return GameManager.Instance.ES3Saver.CurrentBuildingOption1Level.GetValueOrDefault(buildingKey, 0);
         }
 
         private void UpdateUI()
         {
-            if (GameManager.Instance.ES3Saver.CurrentQuestSubIndex >= _maxSubIndexForStage)
+            var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
+            
+            if (currentListIndex + 1 > _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas.Count)
             {
                 _uiPanelQuest.UpdateStageLastQuestPanel();
+                return;
             }
-            else
-            {
-             KeyValuePair<int, Data> smallestUnclearedQuest = _questData.Datas
-                .Where(kvp => !IsQuestClear[kvp.Key])
-                .OrderBy(kvp => kvp.Key)
-                .FirstOrDefault();
-
-            string thumbnailDescription = null;
-            var thumbnailCurrentGoal = 0;
-            var thumbnailMaxGoal = 0;
-            Sprite questIcon = null;
             
-            if (smallestUnclearedQuest.Value != null)
+            ParsedStageQuestData currentStageQuestData = _parsedStageQuestDatas[GameManager.Instance.ES3Saver.CurrentStageLevel];
+            ParsedListQuestData currentListQuestData = currentStageQuestData.ParsedListQuestDatas[GameManager.Instance.ES3Saver.CurrentListQuestIndex];
+            
+            var currentQuestData = currentListQuestData.ParsedQuestDataIndex
+                .Select(index => currentStageQuestData.ParsedQuestDatas[index])
+                .OrderBy(q => q.IsClear) // IsClear가 false인 항목이 상위로
+                .ThenByDescending(q => q.CurrentGoal >= q.MaxGoal) // IsClear가 false이면서 목표를 달성한 항목이 더 상단으로
+                .ThenBy(q => q.QuestIndex) // QuestIndex 기준으로 오름차순 정렬
+                .ToList();
+
+            if (currentQuestData.Count > 0)
             {
-                questIcon = SetQuestIcon(smallestUnclearedQuest.Value.QuestType2);
-                thumbnailDescription = smallestUnclearedQuest.Value.Description;
-                thumbnailCurrentGoal = smallestUnclearedQuest.Value.CurrentTargetGoal;
-                thumbnailMaxGoal = smallestUnclearedQuest.Value.MaxTargetGoal;
+                ParsedQuestData trackingTargetQuest = currentQuestData.First();
                 
-                // 현재 퀘스트 완료 여부 확인
-                if (thumbnailCurrentGoal >= thumbnailMaxGoal)
+                if (trackingTargetQuest.CurrentGoal >= currentQuestData.First().MaxGoal)
                 {
-                    // 퀘스트가 완료된 경우 추적 멈춤
                     StopTargetTracking();
                 }
                 else
                 {
-                    // 퀘스트가 완료되지 않은 경우 추적 시작
-                    StartTrackingCurrentQuestTarget(smallestUnclearedQuest.Value);
+                    StartTrackingCurrentQuestTarget(trackingTargetQuest.TrackingTarget);
                 }
             }
-      
-            var clearedCount = IsQuestClear.Values.Count(cleared => cleared);
-            var totalCount = IsQuestClear.Count;
-            var progressRatio = (float)clearedCount / totalCount;
 
-            List<UIQuestInfoItem> questInfoItems = _questData.Datas
-                .OrderBy(kvp => kvp.Key)
-                .Select(kvp => new UIQuestInfoItem
+            var stageIcon = currentStageQuestData.StageIcon;
+            var stageDescription = currentStageQuestData.StageName;
+            var listQuestCurrentIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex + 1;
+            var listQuestMaxIndex = currentStageQuestData.ParsedListQuestDatas.Count;
+      
+            var questClearCount = currentQuestData.Count(obj => obj.IsClear);
+            var questTotalCount = currentQuestData.Count;
+            var progressRatio = (float)questClearCount / questTotalCount;
+            
+            var rewardSprite = DataManager.Instance.GetCurrencyIcon(currentListQuestData.ListRewardType);
+            var rewardCount = currentListQuestData.ListRewardCount;
+            
+            List<UIQuestInfoItem> questInfoItems = currentQuestData
+                .Select(data => new UIQuestInfoItem
                 {
-                    QuestIconImage = SetQuestIcon(kvp.Value.QuestType2),
-                    QuestDescriptionText = kvp.Value.Description,
-                    Reward1IconImage = SetRewardIcon(kvp.Value.Reward1Type),
-                    Reward2IconImage = SetRewardIcon(kvp.Value.Reward2Type),
-                    Reward1CountText = kvp.Value.Reward1Count.ToString(),
-                    Reward2CountText = kvp.Value.Reward2Count.ToString(),
-                    QuestProgressText = $"{kvp.Value.CurrentTargetGoal} / {kvp.Value.MaxTargetGoal}",
-                    CurrentProgressCount = kvp.Value.CurrentTargetGoal,
-                    MaxProgressCount = kvp.Value.MaxTargetGoal
+                    QuestIndex = data.QuestIndex,
+                    QuestIconImage = SetQuestIcon(data.QuestType2),
+                    QuestDescriptionText = data.QuestDescription,
+                    Reward1IconImage = SetRewardIcon(data.RewardType1),
+                    Reward2IconImage = SetRewardIcon(data.RewardType2),
+                    Reward1CountText = $"{data.RewardType1}",
+                    Reward2CountText = $"{data.RewardType2}",
+                    QuestProgressText = $"{data.CurrentGoal} / {data.MaxGoal}",
+                    CurrentProgressCount = data.CurrentGoal,
+                    MaxProgressCount = data.MaxGoal
                 }).ToList();
 
-            Sprite rewardSprite = null;
-
-            if (_questData.ListRewardType != null) rewardSprite = DataManager.Instance.GetCurrencyIcon(_questData.ListRewardType.Value);
-            
-            var questDataBundle = new QuestDataBundle
+            var listQuestInfoItem = new UIListQuestInfoItem
             {
-                QuestIcon = questIcon,
-                ClearedCount = clearedCount,
-                TotalCount = totalCount,
+                StageIcon = stageIcon,
+                StageDescription = stageDescription,
+                ListQuestCurrentIndex = listQuestCurrentIndex,
+                ListQuestMaxIndex = listQuestMaxIndex,
+                QuestClearCount = questClearCount,
+                QuestTotalCount = questTotalCount,
                 ProgressRatio = progressRatio,
-                RewardCount = _questData.ListRewardCount,
-                ThumbnailDescription = thumbnailDescription,
-                ThumbnailCurrentGoal = thumbnailCurrentGoal,
-                ThumbnailMaxGoal = thumbnailMaxGoal,
-                QuestInfoItems = questInfoItems,
                 RewardSprite = rewardSprite,
-                AdvanceToNextQuestAction = AdvanceToNextQuest
+                RewardCount = rewardCount,
+                UiQuestInfoItems = questInfoItems
             };
 
-            _uiPanelQuest.UpdateQuestPanel(questDataBundle);
-            }
+            _uiPanelQuest.UpdateQuestPanel(listQuestInfoItem);
         }
-
-        private void StartTrackingCurrentQuestTarget(Data data)
+        
+        private void StartTrackingCurrentQuestTarget(EQuestTarget questTarget)
         {
             if (ObjectTrackerManager.Instance.IsTracking) return;
-            
-            EQuestTarget? trackingTarget = ParserModule.ParseStringToEnum<EQuestTarget>(data.TrackingTarget);
-
-            if (trackingTarget == null) return;
 
             Transform target = null;
 
-            switch (trackingTarget)
-            {
-                case EQuestTarget.HuntingZone_A_Unlock:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[0];
-                    break;
-                case EQuestTarget.HuntingZone_A_Hunt:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[1];
-                    break;
-                case EQuestTarget.HuntingZone_B_Unlock:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[0];
-                    break;
-                case EQuestTarget.HuntingZone_B_Hunt:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[1];
-                    break;
-                case EQuestTarget.HuntingZone_C_Unlock:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[0];
-                    break;
-                case EQuestTarget.HuntingZone_C_Hunt:
-                    target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[1];
-                    break;
-                case EQuestTarget.Kitchen_A_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
-                    break;
-                case EQuestTarget.Kitchen_A_Product:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
-                    break;
-                case EQuestTarget.Kitchen_A_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
-                    break;
-                case EQuestTarget.Kitchen_B_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
-                    break;
-                case EQuestTarget.Kitchen_B_Product:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
-                    break;
-                case EQuestTarget.Kitchen_B_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
-                    break;
-                case EQuestTarget.Kitchen_C_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
-                    break;
-                case EQuestTarget.Kitchen_C_Product:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
-                    break;
-                case EQuestTarget.Kitchen_C_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
-                    break;
-                case EQuestTarget.Kitchen_D_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
-                    break;
-                case EQuestTarget.Kitchen_D_Product:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
-                    break;
-                case EQuestTarget.Kitchen_D_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
-                    break;
-                case EQuestTarget.Stand_A_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
-                    break;
-                case EQuestTarget.Stand_B_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
-                    break;
-                case EQuestTarget.Stand_C_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
-                    break;
-                case EQuestTarget.Stand_D_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
-                    break;
-                case EQuestTarget.ManagementDesk_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[0];
-                    break;
-                case EQuestTarget.ManagementDesk_Sell:
-                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[1];
-                    break;
-                case EQuestTarget.ManagementDesk_GetMoney:
-                    target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[2];
-                    break;
-                case EQuestTarget.WareHouse_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[0];
-                    break;
-                case EQuestTarget.WareHouse_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[1];
-                    break;
-                case EQuestTarget.DeliveryLodging_Unlock:
-                    target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[0];
-                    break;
-                case EQuestTarget.DeliveryLodging_Upgrade:
-                    target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[1];
-                    break;
-            }
-            
+            if (questTarget == EQuestTarget.HuntingZone_A_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[0];
+            else if (questTarget == EQuestTarget.HuntingZone_A_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[1];
+            else if (questTarget == EQuestTarget.HuntingZone_B_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[0];
+            else if (questTarget == EQuestTarget.HuntingZone_B_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[1];
+            else if (questTarget == EQuestTarget.HuntingZone_C_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[0];
+            else if (questTarget == EQuestTarget.HuntingZone_C_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[1];
+            else if (questTarget == EQuestTarget.Kitchen_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
+            else if (questTarget == EQuestTarget.Kitchen_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
+            else if (questTarget == EQuestTarget.Kitchen_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
+            else if (questTarget == EQuestTarget.Kitchen_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
+            else if (questTarget == EQuestTarget.Kitchen_B_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
+            else if (questTarget == EQuestTarget.Kitchen_B_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
+            else if (questTarget == EQuestTarget.Kitchen_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
+            else if (questTarget == EQuestTarget.Kitchen_C_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
+            else if (questTarget == EQuestTarget.Kitchen_C_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
+            else if (questTarget == EQuestTarget.Kitchen_D_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
+            else if (questTarget == EQuestTarget.Kitchen_D_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
+            else if (questTarget == EQuestTarget.Kitchen_D_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
+            else if (questTarget == EQuestTarget.Stand_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
+            else if (questTarget == EQuestTarget.Stand_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
+            else if (questTarget == EQuestTarget.Stand_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
+            else if (questTarget == EQuestTarget.Stand_D_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
+            else if (questTarget == EQuestTarget.ManagementDesk_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[0];
+            else if (questTarget == EQuestTarget.ManagementDesk_Sell) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[1];
+            else if (questTarget == EQuestTarget.ManagementDesk_GetMoney) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[2];
+            else if (questTarget == EQuestTarget.WareHouse_Unlock) target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[0];
+            else if (questTarget == EQuestTarget.WareHouse_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[1];
+            else if (questTarget == EQuestTarget.DeliveryLodging_Unlock) target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[0];
+            else if (questTarget == EQuestTarget.DeliveryLodging_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[1];
+
             if (target != null) ObjectTrackerManager.Instance.StartTargetTracking(target);
         }
 
@@ -505,90 +437,133 @@ namespace Managers
 
         private void HandleOnUpdateCurrentQuestProgress(EQuestType1 questType1, string questType2, int value)
         {
-            EQuestType2? parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
-
-            if (parsedQuestType != null)
+            var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
+            
+            if (!(currentListIndex + 1 > _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas.Count))
             {
-                var questUpdated = false;
+                EQuestType2? parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
 
-                foreach (KeyValuePair<int, Data> kvp in _questData.Datas.Where(kvp => kvp.Value.QuestType1 == questType1.ToString() && kvp.Value.QuestType2 == questType2).Where(kvp => kvp.Value.CurrentTargetGoal < kvp.Value.MaxTargetGoal))
+                if (parsedQuestType != null)
                 {
-                    kvp.Value.CurrentTargetGoal += value;
+                    var questUpdated = false;
+                    ParsedStageQuestData targetStageQuestData = _parsedStageQuestDatas[GameManager.Instance.ES3Saver.CurrentStageLevel];
+                
+                    List<int> targetQuestIndex = targetStageQuestData.ParsedListQuestDatas[GameManager.Instance.ES3Saver.CurrentListQuestIndex].ParsedQuestDataIndex;
 
-                    if (kvp.Value.CurrentTargetGoal >= kvp.Value.MaxTargetGoal)
+                    var targetQuests = targetQuestIndex
+                        .Select(index => targetStageQuestData.ParsedQuestDatas[index])
+                        .Where(t => t.QuestType1 == questType1 && t.QuestType2 == parsedQuestType);
+                
+                    foreach (var quest in targetQuests)
                     {
-                        kvp.Value.CurrentTargetGoal = kvp.Value.MaxTargetGoal;
-                    }
-                            
-                    GameManager.Instance.ES3Saver.QuestProgress[kvp.Key] = kvp.Value.CurrentTargetGoal;
-                            
-                    questUpdated = true;
-                }
+                        quest.CurrentGoal += value;
 
-                if (questUpdated)
-                {
-                    UpdateUI();
+                        if (quest.CurrentGoal >= quest.MaxGoal)
+                        {
+                            quest.CurrentGoal = quest.MaxGoal;
+                        }
+
+                        // 저장된 퀘스트 진행 상태 업데이트
+                        GameManager.Instance.ES3Saver.QuestCurrentGoalCounts[GameManager.Instance.ES3Saver.CurrentStageLevel][quest.QuestIndex] = quest.CurrentGoal;
+
+                        questUpdated = true;
+                    }
+
+                    if (questUpdated)
+                    {
+                        UpdateUI();
+                    }
                 }
             }
         }
 
         public void MarkQuestAsCleared(int questIndex)
         {
-            ECurrencyType? questReward1Type = ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward1Type);
-            if (questReward1Type != null)
-            {
-                AddQuestReward(questReward1Type.Value, _questData.Datas[questIndex].Reward1Count);
-            }
+            var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
 
-            ECurrencyType? questReward2Type = ParserModule.ParseStringToEnum<ECurrencyType>(_questData.Datas[questIndex].Reward2Type);
-            if (questReward2Type != null)
-            {
-                AddQuestReward(questReward2Type.Value, _questData.Datas[questIndex].Reward2Count);
-            }
+            // 현재 리스트와 퀘스트 데이터 가져오기
+            var listData = _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas[currentListIndex];
+            var questData = _parsedStageQuestDatas[currentStageIndex].ParsedQuestDatas[questIndex];
             
-            if (_questData.Datas.ContainsKey(questIndex) && IsQuestClear[questIndex] == false)
-            {
-                IsQuestClear[questIndex] = true;
-                UpdateUI();
+            AddQuestReward(questData.RewardType1, questData.RewardType1Count);
+            AddQuestReward(questData.RewardType2, questData.RewardType2Count);
 
-                GameManager.Instance.ES3Saver.ClearedQuestStatuses[questIndex] = true;
-                
-                if (IsQuestClear.Values.All(status => status))
-                {
-                    _uiPanelQuest.MainQuest.EnableRewardButton();
-                }
+            // 퀘스트 상태 업데이트
+            questData.IsClear = true;
+            GameManager.Instance.ES3Saver.QuestClearStatuses[currentStageIndex][questIndex] = true;
+
+            // UI 갱신
+            UpdateUI();
+
+            // 현재 리스트의 모든 퀘스트가 클리어되었는지 확인
+            var allQuestsCleared = listData.ParsedQuestDataIndex
+                .All(index => GameManager.Instance.ES3Saver.QuestClearStatuses[currentStageIndex]
+                    .TryGetValue(index, out var isClear) && isClear);
+
+            if (allQuestsCleared)
+            {
+                _uiPanelQuest.MainQuest.EnableRewardButton();
             }
         }
 
-        private void AdvanceToNextQuest()
+        public void GetNextQuest()
         {
-            if (_questData.ListRewardType != null)
-            {
-                CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
-            }
+            var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
+            var listData = _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas[currentListIndex];
+    
+            CurrencyManager.Instance.AddCurrency(listData.ListRewardType, listData.ListRewardCount);
 
-            if (CurrentQuestSubIndex <= _maxSubIndexForStage)
+            // 현재 스테이지의 퀘스트 리스트를 모두 완료했는지 확인
+            if (currentListIndex + 1 >= _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas.Count)
             {
-                CurrentQuestSubIndex++;
+                GameManager.Instance.ES3Saver.ListQuestClearStatuses[currentStageIndex][currentListIndex] = true;
+                GameManager.Instance.ES3Saver.CurrentListQuestIndex++;
                 
-                GameManager.Instance.ES3Saver.ClearedQuestStatuses.Clear();
-                GameManager.Instance.ES3Saver.QuestProgress.Clear();
-                GameManager.Instance.ES3Saver.CurrentQuestSubIndex = CurrentQuestSubIndex;
-
-                Initialize();
-                UpdateUI();
+                _uiPanelQuest.MainQuest.gameObject.SetActive(false);
+                Debug.Log("모든 스테이지 퀘스트가 완료되었습니다.");
             }
             else
             {
-                if (_questData.ListRewardType != null)
-                {
-                    CurrencyManager.Instance.AddCurrency(_questData.ListRewardType.Value, _questData.ListRewardCount);
-                }
-                
-                GameManager.Instance.ES3Saver.CurrentQuestSubIndex = _maxSubIndexForStage;
-                
-                UpdateUI();
+                GameManager.Instance.ES3Saver.ListQuestClearStatuses[currentStageIndex][currentListIndex] = true;
+                GameManager.Instance.ES3Saver.CurrentListQuestIndex++;
+
+                // 다음 퀘스트 초기화
+                InitializeNextQuests(currentStageIndex);   
             }
+
+            UpdateUI();
+        }
+        
+        private void InitializeNextQuests(int stageIndex)
+        {
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
+
+            if (currentListIndex >= _parsedStageQuestDatas[stageIndex].ParsedListQuestDatas.Count) return;
+
+            var nextQuestIndices = _parsedStageQuestDatas[stageIndex].ParsedListQuestDatas[currentListIndex].ParsedQuestDataIndex;
+
+            foreach (var questIndex in nextQuestIndices)
+            {
+                var questData = _parsedStageQuestDatas[stageIndex].ParsedQuestDatas[questIndex];
+                if (questData.QuestType1 is EQuestType1.LevelUpOption1 or EQuestType1.Build)
+                {
+                    questData.CurrentGoal = SetLevelUpOption1Goal(questData);
+                }
+            }
+        }
+        
+        private T GetOrAdd<T>(Dictionary<int, T> dictionary, int key, T defaultValue)
+        {
+            if (!dictionary.TryGetValue(key, out T value))
+            {
+                dictionary[key] = defaultValue;
+                return defaultValue;
+            }
+
+            return value;
         }
         
         private void AddQuestReward(ECurrencyType currencyType, int reward)
@@ -606,98 +581,40 @@ namespace Managers
             }
         }
 
-        public Sprite SetQuestIcon(string questType2)
+        public Sprite SetQuestIcon(EQuestType2 questType2)
         {
-            EQuestType2? parsedQuestType = ParserModule.ParseStringToEnum<EQuestType2>(questType2);
             Sprite questIcon = null;
 
-            if (parsedQuestType != null)
-            {
-                switch (parsedQuestType.Value)
-                {
-                    case EQuestType2.Kitchen_A:
-                        questIcon = DataManager.Instance.SpriteDatas[50];
-                        break;
-                    case EQuestType2.Kitchen_B:
-                        questIcon = DataManager.Instance.SpriteDatas[50];
-                        break;
-                    case EQuestType2.Kitchen_C:
-                        questIcon = DataManager.Instance.SpriteDatas[50];
-                        break;
-                    case EQuestType2.Kitchen_D:
-                        questIcon = DataManager.Instance.SpriteDatas[51];
-                        break;
-                    case EQuestType2.Material_A:
-                        questIcon = DataManager.Instance.SpriteDatas[5];
-                        break;
-                    case EQuestType2.Material_B:
-                        questIcon = DataManager.Instance.SpriteDatas[6];
-                        break;
-                    case EQuestType2.Material_C:
-                        questIcon = DataManager.Instance.SpriteDatas[7];
-                        break;
-                    case EQuestType2.ProductA_A:
-                        questIcon = DataManager.Instance.SpriteDatas[8];
-                        break;
-                    case EQuestType2.ProductA_B:
-                        questIcon = DataManager.Instance.SpriteDatas[9];
-                        break;
-                    case EQuestType2.ProductA_C:
-                        questIcon = DataManager.Instance.SpriteDatas[10];
-                        break;
-                    case EQuestType2.ProductB_A:
-                        questIcon = DataManager.Instance.SpriteDatas[11];
-                        break;
-                    case EQuestType2.Stand_A:
-                        questIcon = DataManager.Instance.SpriteDatas[52];
-                        break;
-                    case EQuestType2.Stand_B:
-                        questIcon = DataManager.Instance.SpriteDatas[52];
-                        break;
-                    case EQuestType2.Stand_C:
-                        questIcon = DataManager.Instance.SpriteDatas[52];
-                        break;
-                    case EQuestType2.Stand_D:
-                        questIcon = DataManager.Instance.SpriteDatas[52];
-                        break;
-                    case EQuestType2.HuntingZone_A:
-                        questIcon = DataManager.Instance.SpriteDatas[12];
-                        break;
-                    case EQuestType2.HuntingZone_B:
-                        questIcon = DataManager.Instance.SpriteDatas[13];
-                        break;
-                    case EQuestType2.WareHouse:
-                        questIcon = DataManager.Instance.SpriteDatas[46];
-                        break;
-                    case EQuestType2.ManagementDesk:
-                        questIcon = DataManager.Instance.SpriteDatas[38];
-                        break;
-                    case EQuestType2.DeliveryLodging:
-                        questIcon = DataManager.Instance.SpriteDatas[42];
-                        break;
-                    case EQuestType2.Money:
-                        questIcon = DataManager.Instance.SpriteDatas[0];
-                        break;
-                    case EQuestType2.Zone_Open:
-                        questIcon = DataManager.Instance.SpriteDatas[67];
-                        break;
-                    case EQuestType2.HuntingZone_C:
-                        questIcon = DataManager.Instance.SpriteDatas[14];
-                        break;
-                }   
-            }
-            
+            if (questType2 == EQuestType2.Kitchen_A) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.Kitchen_B) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.Kitchen_C) questIcon = DataManager.Instance.SpriteDatas[50];
+            else if (questType2 == EQuestType2.Kitchen_D) questIcon = DataManager.Instance.SpriteDatas[51];
+            else if (questType2 == EQuestType2.Material_A) questIcon = DataManager.Instance.SpriteDatas[5];
+            else if (questType2 == EQuestType2.Material_B) questIcon = DataManager.Instance.SpriteDatas[6];
+            else if (questType2 == EQuestType2.Material_C) questIcon = DataManager.Instance.SpriteDatas[7];
+            else if (questType2 == EQuestType2.ProductA_A) questIcon = DataManager.Instance.SpriteDatas[8];
+            else if (questType2 == EQuestType2.ProductA_B) questIcon = DataManager.Instance.SpriteDatas[9];
+            else if (questType2 == EQuestType2.ProductA_C) questIcon = DataManager.Instance.SpriteDatas[10];
+            else if (questType2 == EQuestType2.ProductB_A) questIcon = DataManager.Instance.SpriteDatas[11];
+            else if (questType2 == EQuestType2.Stand_A) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.Stand_B) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.Stand_C) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.Stand_D) questIcon = DataManager.Instance.SpriteDatas[52];
+            else if (questType2 == EQuestType2.HuntingZone_A) questIcon = DataManager.Instance.SpriteDatas[12];
+            else if (questType2 == EQuestType2.HuntingZone_B) questIcon = DataManager.Instance.SpriteDatas[13];
+            else if (questType2 == EQuestType2.WareHouse) questIcon = DataManager.Instance.SpriteDatas[46];
+            else if (questType2 == EQuestType2.ManagementDesk) questIcon = DataManager.Instance.SpriteDatas[38];
+            else if (questType2 == EQuestType2.DeliveryLodging) questIcon = DataManager.Instance.SpriteDatas[42];
+            else if (questType2 == EQuestType2.Money) questIcon = DataManager.Instance.SpriteDatas[0];
+            else if (questType2 == EQuestType2.Zone_Open) questIcon = DataManager.Instance.SpriteDatas[67];
+            else if (questType2 == EQuestType2.HuntingZone_C) questIcon = DataManager.Instance.SpriteDatas[14];
+
             return questIcon;
         }
         
-        private Sprite SetRewardIcon(string rewardType)
+        private Sprite SetRewardIcon(ECurrencyType rewardType)
         {
-            ECurrencyType? parsedRewardType = ParserModule.ParseStringToEnum<ECurrencyType>(rewardType);
-            Sprite rewardIcon = null;
-
-            if (parsedRewardType != null) rewardIcon = DataManager.Instance.GetCurrencyIcon(parsedRewardType.Value);
-            
-            return rewardIcon;
+            return DataManager.Instance.GetCurrencyIcon(rewardType);
         }
     }
 }

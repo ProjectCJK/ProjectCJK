@@ -117,6 +117,9 @@ namespace Managers
 
         [Space(20), Header("### CurrencyAssets ###")]
         public Dictionary<string, Sprite> CurrencySprites;
+        
+        [Space(20), Header("### MapAssets ###")]
+        public List<Sprite> MapSprites;
 
         public Sprite GetCurrencyIcon(ECurrencyType currencyType)
         {

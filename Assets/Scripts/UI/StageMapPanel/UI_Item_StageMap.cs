@@ -54,7 +54,7 @@ namespace UI.StageMapPanel
 
             if (GameManager.Instance.ES3Saver.CurrentStageLevel < stageData.StageLevel)
             {
-                if (GameManager.Instance.ES3Saver.CurrentPlayerLevel > stageData.RequiredLevel)
+                if (GameManager.Instance.ES3Saver.CurrentPlayerLevel >= stageData.RequiredLevel)
                 {
                     if (GameManager.Instance.ES3Saver.Gold >= stageData.UnlockCost)
                     {

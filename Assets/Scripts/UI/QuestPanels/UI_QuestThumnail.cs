@@ -14,22 +14,23 @@ namespace UI.QuestPanels
         [SerializeField] private TextMeshProUGUI currentTargetQuestDescriptionProgressText;
         [SerializeField] private TextMeshProUGUI currentMainQuestClearText;
 
-        public void UpdateThumbnailQuest(QuestDataBundle questDataBundle)
+        public void UpdateThumbnailQuest(UIListQuestInfoItem questDataBundle)
         {
-            currentTargetQuestImage.sprite = questDataBundle.QuestIcon;
-            if (questDataBundle.ThumbnailCurrentGoal >= questDataBundle.ThumbnailMaxGoal)
+            currentTargetQuestImage.sprite = questDataBundle.UiQuestInfoItems[0].QuestIconImage;
+            
+            if (questDataBundle.UiQuestInfoItems[0].CurrentProgressCount >= questDataBundle.UiQuestInfoItems[0].MaxProgressCount)
             {
                 currentTargetQuestImage_Clear.gameObject.SetActive(true);
                 currentTargetQuestImage_NotClear.gameObject.SetActive(false);
                 
-                if (questDataBundle.ClearedCount + 1 >= questDataBundle.TotalCount)
+                if (questDataBundle.QuestClearCount + 1 >= questDataBundle.QuestTotalCount)
                 {
                     currentMainQuestClearText.gameObject.SetActive(true);
                     currentTargetQuestImage.gameObject.SetActive(false);
                     currentTargetQuestDescriptionText.gameObject.SetActive(false);
                     currentTargetQuestDescriptionProgressText.gameObject.SetActive(false);
                     
-                    currentMainQuestClearText.text = "모든 퀘스트 클리어!";   
+                    currentMainQuestClearText.text = "Get your work reward!";   
                 }
                 else
                 {
@@ -40,9 +41,9 @@ namespace UI.QuestPanels
                     currentTargetQuestImage.gameObject.SetActive(true);
                     currentTargetQuestDescriptionText.gameObject.SetActive(true);
                     currentTargetQuestDescriptionProgressText.gameObject.SetActive(true);
-                    
-                    currentTargetQuestDescriptionText.text = questDataBundle.ThumbnailDescription;
-                    currentTargetQuestDescriptionProgressText.text = $"( {questDataBundle.ThumbnailCurrentGoal} / {questDataBundle.ThumbnailMaxGoal} )";
+
+                    currentTargetQuestDescriptionText.text = questDataBundle.UiQuestInfoItems[0].QuestDescriptionText;
+                    currentTargetQuestDescriptionProgressText.text = $"( {questDataBundle.UiQuestInfoItems[0].CurrentProgressCount} / {questDataBundle.UiQuestInfoItems[0].MaxProgressCount} )";
                 }
             }
             else
@@ -55,9 +56,21 @@ namespace UI.QuestPanels
                 currentTargetQuestDescriptionText.gameObject.SetActive(true);
                 currentTargetQuestDescriptionProgressText.gameObject.SetActive(true);
 
-                currentTargetQuestDescriptionText.text = questDataBundle.ThumbnailDescription;
-                currentTargetQuestDescriptionProgressText.text = $"( {questDataBundle.ThumbnailCurrentGoal} / {questDataBundle.ThumbnailMaxGoal} )";
+                currentTargetQuestDescriptionText.text = questDataBundle.UiQuestInfoItems[0].QuestDescriptionText;
+                currentTargetQuestDescriptionProgressText.text = $"( {questDataBundle.UiQuestInfoItems[0].CurrentProgressCount} / {questDataBundle.UiQuestInfoItems[0].MaxProgressCount} )";
             }
+        }
+
+        public void UpdateLastQuest()
+        {
+            currentTargetQuestImage_Clear.gameObject.SetActive(true);
+            currentTargetQuestImage_NotClear.gameObject.SetActive(false);
+            currentMainQuestClearText.gameObject.SetActive(true);
+            currentTargetQuestImage.gameObject.SetActive(false);
+            currentTargetQuestDescriptionText.gameObject.SetActive(false);
+            currentTargetQuestDescriptionProgressText.gameObject.SetActive(false);
+
+            currentMainQuestClearText.text = "Let's go to the next stage!";
         }
     }
 }

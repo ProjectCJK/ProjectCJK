@@ -9,6 +9,7 @@ namespace UI.QuestPanels
     [Serializable]
     public class UIQuestInfoItem
     {
+        public int QuestIndex;
         public Sprite QuestIconBackgroundImage;
         public Sprite QuestIconImage;
         public string QuestDescriptionText;
@@ -37,7 +38,7 @@ namespace UI.QuestPanels
 
         private int _questIndex;
 
-        public void Activate(UIQuestInfoItem uiQuestInfoItem, int questIndex)
+        public void Activate(UIQuestInfoItem uiQuestInfoItem)
         {
             // _questIconBackgroundImage.sprite = uiQuestInfoItem.QuestIconBackgroundImage;
             _questIconImage.sprite = uiQuestInfoItem.QuestIconImage;
@@ -48,11 +49,11 @@ namespace UI.QuestPanels
             _reward2CountText.text = $"x{uiQuestInfoItem.Reward2CountText}";
             _questProgressText.text = uiQuestInfoItem.QuestProgressText;
 
-            _questIndex = questIndex;
+            _questIndex = uiQuestInfoItem.QuestIndex;
 
             if (uiQuestInfoItem.CurrentProgressCount >= uiQuestInfoItem.MaxProgressCount)
             {
-                if (QuestManager.Instance.IsQuestClear[_questIndex] == false)
+                if (GameManager.Instance.ES3Saver.QuestClearStatuses[GameManager.Instance.ES3Saver.CurrentStageLevel][_questIndex] == false)
                 {
                     _buttonClearActive.gameObject.SetActive(true);
                     _buttonClearInactive.gameObject.SetActive(false);

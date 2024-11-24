@@ -1,5 +1,6 @@
 using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.QuestPanels
 {
@@ -10,26 +11,40 @@ namespace UI.QuestPanels
         
         public UI_QuestThumnail ThumbnailQuest => _thumbnailQuest;
         public UI_QuestMain MainQuest => _mainQuest;
-        
-        public void UpdateQuestPanel(QuestDataBundle questDataBundle)
+
+        public void RegisterReference()
         {
+            _mainQuest.RegisterReference();
+        }
+        
+        public void UpdateQuestPanel(UIListQuestInfoItem questDataBundle)
+        {
+            ThumbnailQuest.GetComponent<Button>().onClick.RemoveAllListeners();
+            ThumbnailQuest.GetComponent<Button>().onClick.AddListener(() => MainQuest.gameObject.SetActive(true));
+            
             _thumbnailQuest.UpdateThumbnailQuest(questDataBundle);
 
             _mainQuest.UpdateMainQuestProgress(
-                questDataBundle.ClearedCount,
-                questDataBundle.TotalCount,
+                questDataBundle.StageIcon,
+                questDataBundle.StageDescription,
+                questDataBundle.ListQuestCurrentIndex,
+                questDataBundle.ListQuestMaxIndex,
+                questDataBundle.QuestClearCount,
+                questDataBundle.QuestTotalCount,
                 questDataBundle.ProgressRatio,
-                questDataBundle.RewardCount,
-                questDataBundle.RewardSprite
+                questDataBundle.RewardSprite,
+                questDataBundle.RewardCount
             );
 
-            _mainQuest.UpdateQuestInfoItems(questDataBundle.QuestInfoItems);
-            _mainQuest.SetAdvanceQuestAction(questDataBundle.AdvanceToNextQuestAction);
+            _mainQuest.UpdateQuestInfoItems(questDataBundle.UiQuestInfoItems);
         }
 
         public void UpdateStageLastQuestPanel()
         {
+            ThumbnailQuest.GetComponent<Button>().onClick.RemoveAllListeners();
+            ThumbnailQuest.GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.Activate());
             
+            _thumbnailQuest.UpdateLastQuest();
         }
     }
 }
