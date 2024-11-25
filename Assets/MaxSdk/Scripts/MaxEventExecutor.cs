@@ -94,7 +94,7 @@ namespace AppLovinMax.Internal
                     catch (Exception exception)
                     {
                         MaxSdkLogger.UserError("Caught exception in publisher event: " + maxAction.eventName + ", exception: " + exception);
-                        MaxSdkLogger.LogException(exception);
+                        Debug.LogException(exception);
                     }
                 }
             }

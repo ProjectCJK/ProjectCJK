@@ -27,6 +27,22 @@ public static class MaxSdkCallbacks
         }
     }
 
+    // Fire when the Consent Dialog has been dismissed.
+    private static Action _onSdkConsentDialogDismissedEvent;
+    public static event Action OnSdkConsentDialogDismissedEvent
+    {
+        add
+        {
+            LogSubscribedToEvent("OnSdkConsentDialogDismissedEvent");
+            _onSdkConsentDialogDismissedEvent += value;
+        }
+        remove
+        {
+            LogUnsubscribedToEvent("OnSdkConsentDialogDismissedEvent");
+            _onSdkConsentDialogDismissedEvent -= value;
+        }
+    }
+
     private static Action<bool> _onApplicationStateChangedEvent;
     /// <summary>
     /// Fired when the application is paused or resumed.
@@ -1220,6 +1236,10 @@ public static class MaxSdkCallbacks
             var sdkConfiguration = MaxSdkBase.SdkConfiguration.Create(eventProps);
             InvokeEvent(_onSdkInitializedEvent, sdkConfiguration, eventName, keepInBackground);
         }
+        else if (eventName == "OnSdkConsentDialogDismissedEvent")
+        {
+            InvokeEvent(_onSdkConsentDialogDismissedEvent, eventName, keepInBackground);
+        }
         else if (eventName == "OnCmpCompletedEvent")
         {
             var errorProps = MaxSdkUtils.GetDictionaryFromDictionary(eventProps, "error");
@@ -1517,7 +1537,7 @@ public static class MaxSdkCallbacks
             catch (Exception exception)
             {
                 MaxSdkLogger.UserError("Caught exception in publisher event: " + eventName + ", exception: " + exception);
-                MaxSdkLogger.LogException(exception);
+                Debug.LogException(exception);
             }
         }
         else
@@ -1540,7 +1560,7 @@ public static class MaxSdkCallbacks
             catch (Exception exception)
             {
                 MaxSdkLogger.UserError("Caught exception in publisher event: " + eventName + ", exception: " + exception);
-                MaxSdkLogger.LogException(exception);
+                Debug.LogException(exception);
             }
         }
         else
@@ -1563,7 +1583,7 @@ public static class MaxSdkCallbacks
             catch (Exception exception)
             {
                 MaxSdkLogger.UserError("Caught exception in publisher event: " + eventName + ", exception: " + exception);
-                MaxSdkLogger.LogException(exception);
+                Debug.LogException(exception);
             }
         }
         else
@@ -1586,7 +1606,7 @@ public static class MaxSdkCallbacks
             catch (Exception exception)
             {
                 MaxSdkLogger.UserError("Caught exception in publisher event: " + eventName + ", exception: " + exception);
-                MaxSdkLogger.LogException(exception);
+                Debug.LogException(exception);
             }
         }
         else
@@ -1631,6 +1651,7 @@ public static class MaxSdkCallbacks
     private static void ResetOnDomainReload()
     {
         _onSdkInitializedEvent = null;
+        _onSdkConsentDialogDismissedEvent = null;
 
         _onInterstitialAdLoadedEventV2 = null;
         _onInterstitialAdLoadFailedEventV2 = null;

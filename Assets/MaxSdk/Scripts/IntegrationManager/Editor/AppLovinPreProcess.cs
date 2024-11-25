@@ -7,10 +7,10 @@
 //
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using UnityEngine;
 
 namespace AppLovinMax.Scripts.IntegrationManager.Editor
 {
@@ -26,39 +26,6 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             NewLineHandling = NewLineHandling.Replace
         };
 
-        private static string AppLovinDependenciesFilePath
-        {
-            get { return AppLovinIntegrationManager.IsPluginInPackageManager ? Path.Combine("Assets", AppLovinDependenciesFileExportPath) : MaxSdkUtils.GetAssetPathForExportPath(AppLovinDependenciesFileExportPath); }
-        }
-
-        /// <summary>
-        /// Creates a Dependencies.xml file under Assets/MaxSdk/AppLovin/Editor/ directory if the plugin is in the package manager.
-        /// This is needed since the Dependencies.xml file in the package manager is immutable.
-        /// </summary>
-        protected static void CreateAppLovinDependenciesFileIfNeeded()
-        {
-            if (!AppLovinIntegrationManager.IsPluginInPackageManager) return;
-
-            var dependenciesFilePath = AppLovinDependenciesFilePath;
-            if (File.Exists(dependenciesFilePath)) return;
-
-            var directory = Path.GetDirectoryName(dependenciesFilePath);
-            Directory.CreateDirectory(directory);
-
-            var dependencies = new XDocument(
-                new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("dependencies",
-                    new XElement("androidPackages", ""),
-                    new XElement("iosPods", "")
-                )
-            );
-
-            using (var xmlWriter = XmlWriter.Create(dependenciesFilePath, DependenciesFileXmlWriterSettings))
-            {
-                dependencies.Save(xmlWriter);
-            }
-        }
-
         /// <summary>
         /// Adds a string into AppLovin's Dependencies.xml file inside the containerElementString if it doesn't exist
         /// </summary>
@@ -68,7 +35,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         {
             try
             {
-                var dependenciesFilePath = AppLovinDependenciesFilePath;
+                var dependenciesFilePath = MaxSdkUtils.GetAssetPathForExportPath(AppLovinDependenciesFileExportPath);
                 var dependencies = XDocument.Load(dependenciesFilePath);
                 // Get the container where we are going to insert the line
                 var containerElement = dependencies.Descendants(containerElementString).FirstOrDefault();
@@ -107,9 +74,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         {
             try
             {
-                var dependenciesFilePath = AppLovinDependenciesFilePath;
-                if (!File.Exists(dependenciesFilePath)) return;
-
+                var dependenciesFilePath = MaxSdkUtils.GetAssetPathForExportPath(AppLovinDependenciesFileExportPath);
                 var dependencies = XDocument.Load(dependenciesFilePath);
                 var containerElement = dependencies.Descendants(containerElementString).FirstOrDefault();
 

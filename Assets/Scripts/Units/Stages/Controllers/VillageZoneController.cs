@@ -393,19 +393,40 @@ namespace Units.Stages.Controllers
 
         private List<Tuple<string, Transform>> GetRandomDestinationForGuest()
         {
-            List<EMaterialType> materialsList = VolatileDataManager.Instance.CurrentActiveMaterials.ToList();
-            var randomIndex = new Random().Next(materialsList.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.StandA, materialsList[randomIndex]);
+            // 활성화된 Stand 건물을 필터링
+            List<Tuple<string, Transform>> activeStands = _buildingController.Buildings
+                .Where(building => building.Value is Stand { ActiveStatus: EActiveStatus.Active })
+                .Select(building => new Tuple<string, Transform>(building.Key, building.Value.gameObject.transform))
+                .ToList();
 
+            // 활성화된 Stand가 없으면 기본값으로 반환
+            if (activeStands.Count == 0)
+            {
+                Debug.LogWarning("No active stands available. Returning default destinations.");
+                return new List<Tuple<string, Transform>>
+                {
+                    new(string.Empty, _villageSpawnData.GuestSpawner[0]) // Default fallback destination
+                };
+            }
+
+            // 활성화된 Stand 중 랜덤 선택
+            var randomIndex = UnityEngine.Random.Range(0, activeStands.Count);
+            Tuple<string, Transform> randomStand = activeStands[randomIndex];
+
+            // ManagementDesk 키 생성
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
-            var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
-            
-            
+            Transform managementDeskTransform = _buildingController.Buildings[managementDeskKey].transform;
+
+            // GuestSpawner 중 랜덤 위치 선택
+            var randomGuestSpawnerIndex = UnityEngine.Random.Range(0, _villageSpawnData.GuestSpawner.Count);
+            Transform randomGuestSpawner = _villageSpawnData.GuestSpawner[randomGuestSpawnerIndex];
+
+            // 목적지 리스트 구성
             var destinations = new List<Tuple<string, Transform>>
             {
-                new(targetKey, _buildingController.Buildings[targetKey].transform),
-                new(managementDeskKey, _buildingController.Buildings[managementDeskKey].transform),
-                new(string.Empty, _villageSpawnData.GuestSpawner[randomPosition])
+                randomStand, // 랜덤으로 선택된 활성화된 Stand
+                new(managementDeskKey, managementDeskTransform), // ManagementDesk
+                new(string.Empty, randomGuestSpawner) // 랜덤 GuestSpawner
             };
 
             return destinations;

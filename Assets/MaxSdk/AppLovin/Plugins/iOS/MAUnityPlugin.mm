@@ -8,13 +8,12 @@
 
 #import "MAUnityAdManager.h"
 
-#define VERSION @"8.0.1"
+#define VERSION @"6.6.3"
 #define NSSTRING(_X) ( (_X != NULL) ? [NSString stringWithCString: _X encoding: NSStringEncodingConversionAllowLossy].al_stringByTrimmingWhitespace : nil)
 
 @interface NSString (ALUtils)
 @property (nonatomic, copy, readonly) NSString *al_stringByTrimmingWhitespace;
 @property (assign, readonly, getter=al_isValidString) BOOL al_validString;
-- (BOOL)al_isEqualToStringIgnoringCase:(nullable NSString *)otherString;
 @end
 
 @interface ALSdkInitializationConfigurationBuilder (ALUtils)
@@ -36,13 +35,11 @@ extern "C"
 
     static bool _isSdkInitialized = false;
     static bool _initializeSdkCalled = false;
-    static bool _disableAllLogs = false;
     
     // Helper method to create C string copy
     static const char * cStringCopy(NSString *string);
     // Helper method to log errors
     void logUninitializedAccessError(const char *callingMethod);
-    void e(NSString *message);
 
     ALSdk *getSdk()
     {
@@ -73,11 +70,6 @@ extern "C"
         }
         
         return _initConfigurationBuilder;
-    }
-
-    bool max_unity_should_disable_all_logs()
-    {
-        return _disableAllLogs;
     }
 
     int getConsentStatusValue(NSNumber *consentStatus)
@@ -208,7 +200,7 @@ extern "C"
     {
         if ( !_initializeSdkCalled )
         {
-            e(@"Failed to show mediation debugger - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!");
+            NSLog(@"[%@] Failed to show mediation debugger - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!", TAG);
             return;
         }
         
@@ -219,13 +211,18 @@ extern "C"
     {
         if ( !_initializeSdkCalled )
         {
-            e(@"Failed to show creative debugger - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!");
+            NSLog(@"[%@] Failed to show creative debugger - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!", TAG);
             return;
         }
         
         [getSdk() showCreativeDebugger];
     }
-
+    
+    void _MaxShowConsentDialog()
+    {
+        NSLog(@"[%@] Failed to show consent dialog - Unavailable on iOS, please use the consent flow: https://developers.applovin.com/en/unity/overview/terms-and-privacy-policy-flow", TAG);
+    }
+    
     int _MaxConsentDialogState()
     {
         if ( !_isSdkInitialized ) return ALConsentDialogStateUnknown;
@@ -242,7 +239,7 @@ extern "C"
     {
         if ( _initializeSdkCalled )
         {
-            e(@"Segment collection must be set before MAX SDK is initialized");
+            NSLog(@"[%@] Segment collection must be set before MAX SDK is initialized", TAG);
             return;
         }
         
@@ -284,6 +281,21 @@ extern "C"
         return [ALPrivacySettings isUserConsentSet];
     }
 
+    void _MaxSetIsAgeRestrictedUser(bool isAgeRestrictedUser)
+    {
+        [ALPrivacySettings setIsAgeRestrictedUser: isAgeRestrictedUser];
+    }
+    
+    bool _MaxIsAgeRestrictedUser()
+    {
+        return [ALPrivacySettings isAgeRestrictedUser];
+    }
+
+    bool _MaxIsAgeRestrictedUserSet()
+    {
+        return [ALPrivacySettings isAgeRestrictedUserSet];
+    }
+    
     void _MaxSetDoNotSell(bool doNotSell)
     {
         [ALPrivacySettings setDoNotSell: doNotSell];
@@ -1069,7 +1081,7 @@ extern "C"
     {
         if ( _initializeSdkCalled )
         {
-            e(@"Test device advertising IDs must be set before MAX SDK is initialized");
+            NSLog(@"[%@] Test device advertising IDs must be set before MAX SDK is initialized", TAG);
             return;
         }
         
@@ -1086,7 +1098,7 @@ extern "C"
     {
         if ( _initializeSdkCalled )
         {
-            e(@"Exception handler must be enabled/disabled before MAX SDK is initialized");
+            NSLog(@"[%@] Exception handler must be enabled/disabled before MAX SDK is initialized", TAG);
             return;
         }
         
@@ -1098,19 +1110,12 @@ extern "C"
         NSString *stringKey = NSSTRING(key);
         if ( ![stringKey al_isValidString] )
         {
-            NSString *message = [NSString stringWithFormat:@"Failed to set extra parameter for nil or empty key: %@", stringKey];
-            e(message);
+            NSLog(@"[%@] Failed to set extra parameter for nil or empty key: %@", TAG, stringKey);
             return;
         }
         
-        NSString *stringValue = NSSTRING(value);
-        if ( [@"disable_all_logs" isEqualToString: stringKey] )
-        {
-            _disableAllLogs = [@"true" al_isEqualToStringIgnoringCase: stringValue];
-        }
-        
         ALSdkSettings *settings = getSdk().settings;
-        [settings setExtraParameterForKey: stringKey value: stringValue];
+        [settings setExtraParameterForKey: stringKey value: NSSTRING(value)];
     }
 
     int * _MaxGetSafeAreaInsets()
@@ -1149,16 +1154,7 @@ extern "C"
 
     void logUninitializedAccessError(const char *callingMethod)
     {
-        NSString *message = [NSString stringWithFormat:@"Failed to execute: %s - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!", callingMethod];
-        e(message);
-    }
-
-    void e(NSString *message)
-    {
-        if (_disableAllLogs) return;
-        
-        NSString *logMessage = [NSString stringWithFormat: @"[%@] %@", TAG, message];
-        NSLog(@"%@", logMessage);
+        NSLog(@"[%@] Failed to execute: %s - please ensure the AppLovin MAX Unity Plugin has been initialized by calling 'MaxSdk.InitializeSdk();'!", TAG, callingMethod);
     }
 }
 

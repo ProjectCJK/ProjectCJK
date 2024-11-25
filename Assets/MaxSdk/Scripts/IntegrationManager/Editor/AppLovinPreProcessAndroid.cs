@@ -49,7 +49,6 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
 
             if (AppLovinInternalSettings.Instance.ConsentFlowEnabled)
             {
-                CreateAppLovinDependenciesFileIfNeeded();
                 TryAddStringToDependencyFile(UmpDependencyLine, AndroidPackagesContainerElementString);
             }
             else

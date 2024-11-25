@@ -38,12 +38,17 @@ namespace Managers
 
         public void RegisterReference()
         {
-            RootCanvas = Instantiate(_rootCanvas);
-            RootCanvas.GetComponent<Canvas>().worldCamera = Camera.main;
+            // RootCanvas = Instantiate(_rootCanvas);
+            // RootCanvas.GetComponent<Canvas>().worldCamera = Camera.main;
             
             Instantiate(_eventSystemPrefab);
             BranchCanvasGuide = Instantiate(_branchCanvasGuide);
             BranchCanvasGame = Instantiate(_branchCanvasGame);
+            var branchCanvasGame = BranchCanvasGame.GetComponent<Canvas>();
+            branchCanvasGame.worldCamera = Camera.main;
+            branchCanvasGame.sortingLayerName = "UI";
+            branchCanvasGame.sortingOrder = 10;
+            
             Joystick = Instantiate(_joystick, BranchCanvasGame.transform);
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
    
