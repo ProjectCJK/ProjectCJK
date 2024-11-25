@@ -128,6 +128,12 @@ namespace Units.Stages.Modules.PaymentModule.Units
         {
             if (_player == null)
             {
+                if (_playerTarget != null)
+                {
+                    _customerQueue.Enqueue(_playerTarget);   
+                    _playerTarget = null;
+                }
+                
                 _paymentViews[0].Reset();
                 return;
             }

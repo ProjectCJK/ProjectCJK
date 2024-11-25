@@ -19881,7 +19881,10 @@ MonoBehaviour:
     InteractionModule: {fileID: 6938830979410065683}
     Animator: {fileID: 0}
   _wareHouseCustomSetting:
-    SpawnedItem: []
+    SpawnedItem:
+    - {fileID: 3299971454953668318}
+    - {fileID: 3527817932509024035}
+    - {fileID: 7360630256398321619}
 --- !u!114 &6223478581122722479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20311,7 +20314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _image: {fileID: 867966332420847044}
   _itemCount: {fileID: 4283995703027024478}
-  _button: {fileID: 0}
+  _button: {fileID: 3864763086643606823}
 --- !u!1 &3527817932509024035
 GameObject:
   m_ObjectHideFlags: 0
@@ -20450,7 +20453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _image: {fileID: 1556835228003574080}
   _itemCount: {fileID: 6573493252375439061}
-  _button: {fileID: 0}
+  _button: {fileID: 929141200027826543}
 --- !u!1 &3571389383782845378
 GameObject:
   m_ObjectHideFlags: 0
@@ -22463,7 +22466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _image: {fileID: 8709529395308673075}
   _itemCount: {fileID: 3769278140584245990}
-  _button: {fileID: 0}
+  _button: {fileID: 8589460217316367349}
 --- !u!1 &7782098017200765518
 GameObject:
   m_ObjectHideFlags: 0

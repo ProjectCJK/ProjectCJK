@@ -190,7 +190,7 @@ namespace Units.Stages.Controllers
 
                     // 재료 관련 데이터 추가
                     (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
-                    if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
+                    if (parsedKey is { Item1: EBuildingType.StandA, Item2: not null })
                     {
                         VolatileDataManager.Instance.CurrentActiveMaterials.Add(parsedKey.Item2.Value);
                     }
@@ -260,7 +260,7 @@ namespace Units.Stages.Controllers
                 {
                     (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(targetKey);
 
-                    if (parsedKey is { Item1: EBuildingType.Stand, Item2: not null })
+                    if (parsedKey is { Item1: EBuildingType.StandA, Item2: not null })
                     {
                         VolatileDataManager.Instance.CurrentActiveMaterials.Add(parsedKey.Item2.Value);
                     }

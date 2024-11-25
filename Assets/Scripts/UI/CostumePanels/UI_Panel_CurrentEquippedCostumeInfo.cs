@@ -31,11 +31,12 @@ namespace UI.CostumePanels
             {
                 equippedWeaponImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Weapon].CostumeSprites[0];
                 playerWeaponImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Weapon].CostumeSprites[1];
-                equippedWeaponImage.gameObject.SetActive(true);
+                
+                if (equippedWeaponImage != null) equippedWeaponImage.gameObject.SetActive(true);
             }
             else
             {
-                equippedWeaponImage.gameObject.SetActive(false);
+                if (equippedWeaponImage != null) equippedWeaponImage.gameObject.SetActive(false);
             }
             
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Clothes))
@@ -44,33 +45,33 @@ namespace UI.CostumePanels
                 playerClothesImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[1];
                 playerShoesImage[0].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
                 playerShoesImage[1].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
-                equippedClothesImage.gameObject.SetActive(true);
+                if (equippedClothesImage != null) equippedClothesImage.gameObject.SetActive(true);
             }
             else
             {
-                equippedClothesImage.gameObject.SetActive(false);
+                if (equippedClothesImage != null) equippedClothesImage.gameObject.SetActive(false);
             }
             
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Hat))
             {
                 equippedHatImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Hat].CostumeSprites[0];
                 playerHatImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Hat].CostumeSprites[1];
-                equippedHatImage.gameObject.SetActive(true);
+                if (equippedHatImage != null) equippedHatImage.gameObject.SetActive(true);
             }
             else
             {
-                equippedHatImage.gameObject.SetActive(false);
+                if (equippedHatImage != null) equippedHatImage.gameObject.SetActive(false);
             }
 
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Bag))
             {
                 equippedBagImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Bag].CostumeSprites[0];
                 playerBagImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Bag].CostumeSprites[1];
-                equippedBagImage.gameObject.SetActive(true);
+                if (equippedBagImage != null) equippedBagImage.gameObject.SetActive(true);
             }
             else
             {
-                equippedBagImage.gameObject.SetActive(false);
+                if (equippedBagImage != null) equippedBagImage.gameObject.SetActive(false);
             }
 
             damageGrowthText.text = $"{VolatileDataManager.Instance.Player.PlayerStatsModule.Damage}";

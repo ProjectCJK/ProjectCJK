@@ -38,12 +38,15 @@ namespace Managers
         public GuestDataSO GuestDataSo;
         public DeliveryManDataSO DeliveryManDataSo;
         public HunterDataSO HunterDataSo;
+        public HunterDataSO SuperHunterDataSo;
         public ZombieDataSO ZombieDataSo;
 
         [Space(20)] [Header("### Building Data ###")]
         public LevelPrefabSO levelPrefabSo;
-        public KitchenDataSO KitchenDataSo;
-        public StandDataSO StandDataSo;
+        public KitchenDataSO KitchenADataSo;
+        public KitchenDataSO KitchenBDataSo;
+        public StandDataSO StandADataSo;
+        public StandDataSO StandBDataSo;
         public ManagementDeskDataSO ManagementDeskDataSo;
         public DeliveryLodgingDataSO DeliveryLodgingDataSo;
         public WareHouseDataSO WareHouseDataSo;
@@ -117,6 +120,9 @@ namespace Managers
 
         [Space(20), Header("### CurrencyAssets ###")]
         public Dictionary<string, Sprite> CurrencySprites;
+        
+        [Space(20), Header("### MapAssets ###")]
+        public List<Sprite> MapSprites;
 
         public Sprite GetCurrencyIcon(ECurrencyType currencyType)
         {

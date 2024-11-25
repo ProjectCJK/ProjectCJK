@@ -9,11 +9,6 @@ namespace Modules
     public class ES3Saver
     {
         /// <summary>
-        /// GameSettings
-        /// </summary>
-        public bool InitializeES3Saver;
-
-        /// <summary>
         /// TutorialSettings
         /// </summary>
         public bool TutorialClear;
@@ -59,30 +54,34 @@ namespace Modules
         public Dictionary<string, EActiveStatus> HuntingZoneActiveStatuses = new();
         public Dictionary<string, int> RequiredMoneyForBuildingActive = new();
         public Dictionary<string, int> RequiredMoneyForHuntingZoneActive = new();
-        
-        
+
+
         /// <summary>
         /// QuestSettings
         /// </summary>
-        public int CurrentQuestSubIndex; // 현재 진행 중인 퀘스트 인덱스
-        public Dictionary<int, bool> ClearedQuestStatuses = new(); // 퀘스트 클리어 상태
-        public Dictionary<int, int> QuestProgress = new(); // 퀘스트 진행 상태 (현재 목표 값)
+        public int CurrentListQuestIndex;
+        public Dictionary<int, Dictionary<int, bool>> ListQuestClearStatuses = new();
+        public Dictionary<int, Dictionary<int, bool>> QuestClearStatuses = new();
+        public Dictionary<int, Dictionary<int, int>> QuestCurrentGoalCounts = new();
 
         public void ResetStageData()
         {
-            BuildingActiveStatuses = new Dictionary<string, EActiveStatus>();
-            HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>();
             BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingOutputItems = new Dictionary<string, Dictionary<string, int>>();
             CurrentBuildingLevel = new Dictionary<string, int>();
             CurrentBuildingOption1Level = new Dictionary<string, int>();
             CurrentBuildingOption2Level = new Dictionary<string, int>();
+            
+            ActiveStatusSettingIndex = 0;
+            BuildingActiveStatuses = new Dictionary<string, EActiveStatus>();
+            HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>();
             RequiredMoneyForBuildingActive = new Dictionary<string, int>();
             RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>();
-            ActiveStatusSettingIndex = 0;
-            CurrentQuestSubIndex = 1;
-            ClearedQuestStatuses = new Dictionary<int, bool>();
-            QuestProgress = new Dictionary<int, int>();
+
+            CurrentListQuestIndex = -1;
+            ListQuestClearStatuses = new Dictionary<int, Dictionary<int, bool>>();
+            QuestClearStatuses = new Dictionary<int, Dictionary<int, bool>>();
+            QuestCurrentGoalCounts = new Dictionary<int, Dictionary<int, int>>();
         }
     }
 }
