@@ -6,7 +6,7 @@ using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Level
+namespace UI.LevelPanels
 {
     public class UI_Panel_LevelUp : MonoBehaviour
     {
@@ -20,10 +20,13 @@ namespace UI.Level
         [Space(20), SerializeField] private Button skipButton;
         [SerializeField] private Button adButton;
 
-        public void RegisterReference(Action action)
+        public void RegisterReference(Action action, Action onClickAdRewarded)
         {
+            adButton.onClick.AddListener(() => onClickAdRewarded?.Invoke());
+            
             skipButton.onClick.AddListener(() =>
             {
+                // AdsManager.Instance.G
                 action?.Invoke();
                 gameObject.SetActive(false);
             });

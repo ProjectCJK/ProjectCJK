@@ -69,6 +69,7 @@ namespace Managers
 
         private void Start()
         {
+            AdsManager.Instance.InitializeRewardedAds();
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
 
