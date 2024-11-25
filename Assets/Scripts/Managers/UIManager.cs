@@ -19,11 +19,13 @@ namespace Managers
         [Space(20), SerializeField] private UI_Panel_Main _ui_Panel_Main;
 
         [SerializeField] private UI_Panel_Tutorial _ui_Panel_Tutorial;
+        [SerializeField] private UI_Panel_PopUpTutorial _ui_Panel_PopUpTutorial;
         
         [Space(20), SerializeField] private GameSpeedControlModule _gameSpeedControlModule;
 
         public UI_Panel_Main UI_Panel_Main { get; private set; }
         public UI_Panel_Tutorial UI_Panel_Tutorial { get; private set; }
+        public UI_Panel_PopUpTutorial UI_Panel_PopUpTutorial { get; private set; }
         public Joystick Joystick { get; private set; }
         
         /// <summary>
@@ -52,6 +54,7 @@ namespace Managers
         {
             BranchCanvasTutorial = Instantiate(_branchCanvasTutorial);
             UI_Panel_Tutorial = Instantiate(_ui_Panel_Tutorial, BranchCanvasTutorial.transform);
+            UI_Panel_PopUpTutorial = Instantiate(_ui_Panel_PopUpTutorial, BranchCanvasTutorial.transform);
         }
 
         public void DestroyTutorialPanel()

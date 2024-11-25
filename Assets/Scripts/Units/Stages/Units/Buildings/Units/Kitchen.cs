@@ -118,7 +118,9 @@ namespace Units.Stages.Units.Buildings.Units
         public void RegisterReference(ItemFactory itemController)
         {
             _itemFactory = itemController;
-            _kitchenDataSO = DataManager.Instance.KitchenDataSo;
+            _kitchenDataSO = _kitchenCustomSetting.OutputItemType == EItemType.ProductA
+                ? DataManager.Instance.KitchenADataSo
+                : DataManager.Instance.KitchenBDataSo; 
             _kitchenStatsModule = new KitchenStatsModule(_kitchenDataSO, _kitchenCustomSetting);
             VolatileDataManager.Instance.KitchenStatsModule.TryAdd(_kitchenStatsModule.MaterialType, _kitchenStatsModule);
 

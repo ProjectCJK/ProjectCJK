@@ -7,10 +7,10 @@ namespace Managers
 {
     public struct StageData
     {
-        public int StageLevel;
-        public int RequiredLevel;
-        public int UnlockCost;
-        public int RevenueMultiplier;
+        public readonly int StageLevel;
+        public readonly int RequiredLevel;
+        public readonly int UnlockCost;
+        public readonly int RevenueMultiplier;
 
         public StageData(int stageLevel, int requiredLevel, int unlockCost, int revenueMultiplier)
         {

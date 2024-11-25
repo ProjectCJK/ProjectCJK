@@ -25,7 +25,7 @@ namespace Units.Stages.Units.Buildings.Abstract
         
         public void HandleOnTriggerBuildingAnimation(EBuildingAnimatorParameter animatorParameter)
         {
-            Animator.SetTrigger($"{animatorParameter}");
+            if (Animator != null) Animator.SetTrigger($"{animatorParameter}");
         }
     }
 }

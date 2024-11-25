@@ -8,7 +8,6 @@ namespace Units.Stages.Modules.FSMModules.Abstract
     public abstract class CreatureBaseState : BaseState
     {
         protected readonly Creature Creature;
-
         protected readonly CreatureStateMachine CreatureStateMachine;
 
         protected CreatureBaseState(CreatureStateMachine creatureStateMachine)
@@ -19,58 +18,25 @@ namespace Units.Stages.Modules.FSMModules.Abstract
 
         protected override Animator Animator => Creature.Animator;
 
-        public override void Enter()
-        {
-            if (Animator == null)
-            {
-                Debug.LogError($"{Creature.CreatureType} Animator is null");
-                return;
-            }
-        }
+        public override void Enter() { }
         
-        public override void Update()
-        {
-            if (Animator == null)
-            {
-                Debug.LogError($"{Creature.CreatureType} Animator is null");
-                return;
-            }
-        }
+        public override void Update() { }
         
-        public override void FixedUpdate()
-        {
-            if (Animator == null)
-            {
-                Debug.LogError($"{Creature.CreatureType} Animator is null");
-                return;
-            }
-        }
+        public override void FixedUpdate() { }
         
-        public override void LateUpdate()
-        {
-            if (Animator == null)
-            {
-                Debug.LogError($"{Creature.CreatureType} Animator is null");
-                return;
-            }
-        }
+        public override void LateUpdate() { }
         
-        public override void Exit()
-        {
-            if (Animator == null)
-            {
-                Debug.LogError($"{Creature.CreatureType} Animator is null");
-                return;
-            }
-        }
+        public override void Exit() { }
 
-        protected virtual void StartAnimationWithBool(int animationHash)
+        protected void StartAnimationWithBool(int animationHash)
         {
+            if (Animator == null) return;
             Creature.Animator.SetBool(animationHash, true);
         }
 
-        protected virtual void StopAnimationWithBool(int animationHash)
+        protected void StopAnimationWithBool(int animationHash)
         {
+            if (Animator == null) return;
             Creature.Animator.SetBool(animationHash, false);
         }
     }

@@ -52,8 +52,10 @@ MonoBehaviour:
   HunterDataSo: {fileID: 11400000, guid: ea2279562f66548b59631f9d27cc6c96, type: 2}
   ZombieDataSo: {fileID: 0}
   levelPrefabSo: {fileID: 11400000, guid: f43e0e1497eb04c1e81f3e828378b2e1, type: 2}
-  KitchenDataSo: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
-  StandDataSo: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
+  KitchenADataSo: {fileID: 11400000, guid: 381ca62b0f387455a8fad45a7024faf6, type: 2}
+  KitchenBDataSo: {fileID: 11400000, guid: 6f6b930c61e384b1e870f9a7f1d528b2, type: 2}
+  StandADataSo: {fileID: 11400000, guid: d914c9f64972b4d3a96947a03cbd9943, type: 2}
+  StandBDataSo: {fileID: 11400000, guid: e41c5ca5c01b548a48e0df2688e49bee, type: 2}
   ManagementDeskDataSo: {fileID: 11400000, guid: 5f80df1fa3fb04f37aaf200ff1d77ab0, type: 2}
   DeliveryLodgingDataSo: {fileID: 11400000, guid: b9c160bb941064ae6ac6f75cf543d125, type: 2}
   WareHouseDataSo: {fileID: 11400000, guid: 94fa8fe81671c46ffb71428604af9b91, type: 2}
@@ -204,3 +206,6 @@ MonoBehaviour:
   - {fileID: -1614118818, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   - {fileID: -1236379089, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
   BuildingUpgradePanel: {fileID: 11400000, guid: de6036642226b4647b421500472545a9, type: 2}
+  MapSprites:
+  - {fileID: 21300000, guid: bc85d7b28130fc24a9ad6f78c9cc3d60, type: 3}
+  - {fileID: 21300000, guid: 87b08a77d2a14c942b368df9c9239df4, type: 3}

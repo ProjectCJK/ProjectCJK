@@ -146,6 +146,8 @@ namespace Units.Stages.Controllers
                 SpawnHunter();
                 SetHunterDestination();
                 SpawnGuests();
+                PopUpGuestRush();
+                PopUpSuperHunter();
             }
             
             SpawnMonster();
@@ -153,60 +155,106 @@ namespace Units.Stages.Controllers
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
         }
 
+        private void PopUpGuestRush()
+        {
+            var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
+
+            var currentStandProductCount = materialTypes
+                .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.StandA}_{material}"))
+                .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.StandA}_{material}"].Values.Sum());
+
+            if (currentStandProductCount >= 10)
+            {
+                UIManager.Instance.UI_Panel_Main.UI_Button_CustomerWave.gameObject.SetActive(true);
+            }
+        }
+        
+        private void PopUpSuperHunter()
+        {
+            
+        }
+
         private void SetDeliveryManDestination()
         {
+            // 현재 생성된 배달원 리스트가 비어있으면 함수를 종료한다.
             if (currentSpawnedDeliveryMans.Count <= 0) return;
 
+            // 배달 대상 큐 초기화
             _deliveryTargetQueue.Clear();
 
+            // 활성화된 주방(Kitchen) 중 재고가 있는 건물을 배달 대상 큐에 추가
             foreach (KeyValuePair<string, BuildingZone> building in _buildingController.Buildings)
-                if (building.Value is Kitchen
-                    {
-                        ActiveStatus: EActiveStatus.Active, IsAnyItemOnInventory: true
-                    } kitchen)
+            {
+                if (building.Value is Kitchen { ActiveStatus: EActiveStatus.Active, IsAnyItemOnInventory: true } kitchen)
                 {
                     var target = new Tuple<string, Transform>(kitchen.BuildingKey, kitchen.TradeZoneNpcTransform);
-                    if (!_deliveryTargetQueue.Contains(target)) _deliveryTargetQueue.Enqueue(target);
-                }
 
+                    if (!_deliveryTargetQueue.Contains(target))
+                    {
+                        _deliveryTargetQueue.Enqueue(target); // 중복되지 않으면 큐에 추가   
+                    }
+                }   
+            }
+
+            // 배달 대상이 없을 경우
             if (_deliveryTargetQueue.Count == 0)
             {
+                // 모든 배달원의 상태를 확인하여 "명령 없음" 또는 "대기" 상태일 경우 기본 목적지를 설정
                 foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
+                {
                     if (deliveryMan.CommandState is CommandState.NoOrder or CommandState.Standby)
                     {
-                        var defaultDestinationKey = $"{EBuildingType.Kitchen}_{EMaterialType.A}";
-                        var defaultDestination = new Tuple<string, Transform>(defaultDestinationKey,
+                        // 기본 목적지는 특정 키에 해당하는 주방으로 설정
+                        var defaultDestinationKey = $"{EBuildingType.KitchenA}_{EMaterialType.A}";
+                        var defaultDestination = new Tuple<string, Transform>(
+                            defaultDestinationKey,
                             _buildingController.Buildings[defaultDestinationKey].gameObject.transform);
 
+                        // 기본 목적지 설정 및 상태를 대기로 변경
                         deliveryMan.SetDestinations(defaultDestination);
                         deliveryMan.CommandState = CommandState.Standby;
-                    }
+                    }   
+                }
             }
             else
             {
+                // 배달 대상이 있을 경우
                 foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
                     if (deliveryMan.CommandState is CommandState.NoOrder or CommandState.Standby)
                     {
+                        // 배달 대상 큐에서 첫 번째 항목을 가져와 배달원에게 설정
                         Tuple<string, Transform> target = _deliveryTargetQueue.Peek();
                         deliveryMan.SetDestinations(target);
-                        deliveryMan.CommandState = CommandState.MoveTo;
+                        deliveryMan.CommandState = CommandState.MoveTo; // 상태를 이동 중으로 변경
                     }
             }
 
+            // 배달원들의 상태를 확인하고 인벤토리가 가득 찼을 경우
             foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
                 if (deliveryMan.IsInventoryFull() && deliveryMan.CommandState == CommandState.MoveTo)
                 {
+                    // 현재 목적지 정보를 가져와 파싱
                     Tuple<string, Transform> destination = deliveryMan.GetDestination();
                     (EBuildingType?, EMaterialType?) parsedKey =
                         ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
 
-                    var standKey = $"{EBuildingType.Stand}_{parsedKey.Item2}";
-                    var standDestination = new Tuple<string, Transform>(standKey,
-                        _buildingController.Buildings[standKey].gameObject.transform);
+                    // 가공된 상품을 판매할 Stand 건물의 키와 위치를 생성
+                    if (parsedKey.Item1 != null)
+                    {
+                        var targetBuilding = parsedKey.Item1 == EBuildingType.KitchenA
+                            ? EBuildingType.StandA
+                            : EBuildingType.StandB;
+                        var standKey =  $"{targetBuilding}_{parsedKey.Item2}";
+                        var standDestination = new Tuple<string, Transform>(
+                            standKey,
+                            _buildingController.Buildings[standKey].gameObject.transform);
 
-                    deliveryMan.SetDestinations(standDestination);
-                    deliveryMan.CommandState = CommandState.Deliver;
+                        // 목적지를 Stand 건물로 설정하고 상태를 "배송 중"으로 변경
+                        deliveryMan.SetDestinations(standDestination);
+                        deliveryMan.CommandState = CommandState.Deliver;
+                    }
                 }
+                // 배달원의 인벤토리가 비었고, 상태가 "배송 중"일 경우 명령 없음으로 상태 변경
                 else if (!deliveryMan.HaveAnyItem() && deliveryMan.CommandState == CommandState.Deliver)
                 {
                     deliveryMan.CommandState = CommandState.NoOrder;
@@ -257,8 +305,7 @@ namespace Units.Stages.Controllers
                     // 가장 가까운 몬스터를 타겟으로 지정
                     if (closestMonster != null)
                     {
-                        hunter.SetDestinations(new Tuple<string, Transform>($"{ECreatureType.Monster}",
-                            closestMonster.Transform));
+                        hunter.SetDestinations(new Tuple<string, Transform>($"{ECreatureType.Monster}", closestMonster.Transform));
                         hunter.CommandState = CommandState.MoveTo;
                     }
                 }
@@ -276,10 +323,13 @@ namespace Units.Stages.Controllers
 
         private void SpawnDeliveryMan()
         {
-            if (_buildingController.Buildings.TryGetValue($"{EBuildingType.DeliveryLodging}",
-                    out BuildingZone buildingZone))
+            if (_buildingController.Buildings.TryGetValue($"{EBuildingType.DeliveryLodging}", out BuildingZone buildingZone))
+            {
                 if (buildingZone is DeliveryLodging deliveryLodging)
+                {
                     deliveryLodging.SpawnDeliveryMan(_creatureController, currentSpawnedDeliveryMans);
+                }   
+            }
         }
 
         private void SpawnHunter()
@@ -345,7 +395,7 @@ namespace Units.Stages.Controllers
         {
             List<EMaterialType> materialsList = VolatileDataManager.Instance.CurrentActiveMaterials.ToList();
             var randomIndex = new Random().Next(materialsList.Count);
-            var targetKey = ParserModule.ParseEnumToString(EBuildingType.Stand, materialsList[randomIndex]);
+            var targetKey = ParserModule.ParseEnumToString(EBuildingType.StandA, materialsList[randomIndex]);
 
             var managementDeskKey = ParserModule.ParseEnumToString(EBuildingType.ManagementDesk);
             var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
