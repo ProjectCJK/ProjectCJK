@@ -2748,10 +2748,10 @@ RectTransform:
   m_Father: {fileID: 6470837486363232076}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 192.00002, y: 0.000015258789}
-  m_SizeDelta: {x: -384, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 507.3775, y: -123}
+  m_SizeDelta: {x: 313.245, y: 246}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6936315777167460331
 CanvasRenderer:
@@ -2781,7 +2781,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC15\uD654"
+  m_text: Upgrade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
   m_sharedMaterial: {fileID: 1859963639648239295, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
@@ -3126,6 +3126,11 @@ MonoBehaviour:
   equippedClothesImage: {fileID: 3314229413558583404}
   equippedHatImage: {fileID: 7468408006929017552}
   equippedBagImage: {fileID: 2574944893913686251}
+  playerWeaponImage: {fileID: 0}
+  playerClothesImage: {fileID: 0}
+  playerShoesImage: []
+  playerHatImage: {fileID: 0}
+  playerBagImage: {fileID: 0}
   revenueGrowthText: {fileID: 8590282526082536073}
   damageGrowthText: {fileID: 7134547274038278953}
   inventorySizeGrowthText: {fileID: 3859560727347391763}
@@ -6687,6 +6692,7 @@ MonoBehaviour:
   costumeCurrentExp: {fileID: 8607553490738673117}
   costumeDescription: {fileID: 5991393606129929484}
   costumeOption1Icon: {fileID: 1013467377277305277}
+  costumeOption1IconLock: {fileID: 0}
   costumeOption1Description: {fileID: 1986890719495117639}
   upgradeButton_EnoughRedGem: {fileID: 2889415220227735100}
   upgradeButton_EnoughRedGemText: {fileID: 8903582252706280265}
@@ -8121,7 +8127,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -230, y: -73}
+  m_AnchoredPosition: {x: 0, y: -73}
   m_SizeDelta: {x: -640, y: 145}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7645971267953454510
@@ -9869,8 +9875,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 531.175, y: -123}
-  m_SizeDelta: {x: 345.65, y: 246}
+  m_AnchoredPosition: {x: 529.02496, y: -123}
+  m_SizeDelta: {x: 349.94998, y: 246}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5524826242690844745
 CanvasRenderer:
@@ -9900,7 +9906,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enhance
+  m_text: Upgrade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
   m_sharedMaterial: {fileID: 1859963639648239295, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
@@ -11415,8 +11421,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 189.17499, y: -123}
-  m_SizeDelta: {x: 298.34998, y: 246}
+  m_AnchoredPosition: {x: 187.025, y: -123}
+  m_SizeDelta: {x: 294.05, y: 246}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3942906886918060793
 CanvasRenderer:
@@ -12086,7 +12092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7250013396446899721
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12404,6 +12410,7 @@ MonoBehaviour:
   costumeBackgroundImage: {fileID: 619109837580387381}
   costumeDescriptionText: {fileID: 750054686089003769}
   costumeOption1DescriptionIconImage: {fileID: 7644669583906904032}
+  costumeOption1DescriptionIconImageLock: {fileID: 0}
   costumeOption1DescriptionText: {fileID: 7068953053979157890}
   enhancementButton: {fileID: 5877402736262292764}
   equipButton: {fileID: 8515499573862417570}
@@ -13642,10 +13649,10 @@ RectTransform:
   m_Father: {fileID: 6470837486363232076}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -137, y: 0.000015258789}
-  m_SizeDelta: {x: -274, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200.3775, y: -123}
+  m_SizeDelta: {x: 300.755, y: 246}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1906284801528320973
 CanvasRenderer:
