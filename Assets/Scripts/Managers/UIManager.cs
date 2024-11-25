@@ -43,11 +43,16 @@ namespace Managers
             
             Instantiate(_eventSystemPrefab);
             BranchCanvasGuide = Instantiate(_branchCanvasGuide);
+            var branchCanvasGuide = BranchCanvasGame.GetComponent<Canvas>();
+            branchCanvasGuide.worldCamera = Camera.main;
+            branchCanvasGuide.sortingLayerName = "UI";
+            branchCanvasGuide.sortingOrder = 50;
+            
             BranchCanvasGame = Instantiate(_branchCanvasGame);
             var branchCanvasGame = BranchCanvasGame.GetComponent<Canvas>();
             branchCanvasGame.worldCamera = Camera.main;
             branchCanvasGame.sortingLayerName = "UI";
-            branchCanvasGame.sortingOrder = 10;
+            branchCanvasGame.sortingOrder = 100;
             
             Joystick = Instantiate(_joystick, BranchCanvasGame.transform);
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
