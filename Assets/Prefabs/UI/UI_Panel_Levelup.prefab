@@ -410,7 +410,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5541406812998839548}
+  m_Father: {fileID: 2373191741658097473}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -581,7 +581,7 @@ RectTransform:
   m_Children:
   - {fileID: 1910239512534941619}
   - {fileID: 3787578744241249369}
-  m_Father: {fileID: 5541406812998839548}
+  m_Father: {fileID: 2373191741658097473}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -5772,7 +5772,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DOUBLE!
+  m_text: 'Double
+
+    Rewards!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
   m_sharedMaterial: {fileID: 1859963639648239295, guid: dc82a042d3c6b4e45b9c24b3cbbd265a, type: 2}
@@ -5799,10 +5801,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 72
   m_fontSizeBase: 80
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -6087,6 +6089,7 @@ RectTransform:
   - {fileID: 1365152639926843882}
   - {fileID: 3494817047316789119}
   - {fileID: 7560219826164297261}
+  - {fileID: 4508020621686576328}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
