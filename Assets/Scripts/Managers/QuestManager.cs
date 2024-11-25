@@ -74,12 +74,15 @@ namespace Managers
         StandA_C_Unlock,
         StandB_A_Unlock,
         ManagementDesk_Upgrade,
-        ManagementDesk_Sell,
         ManagementDesk_GetMoney,
         WareHouse_Unlock,
         WareHouse_Upgrade,
         DeliveryLodging_Unlock,
-        DeliveryLodging_Upgrade
+        DeliveryLodging_Upgrade,
+        ProductA_A_Sell,
+        ProductA_B_Sell,
+        ProductA_C_Sell,
+        ProductB_A_Sell
     }
 
     [Serializable]
@@ -405,37 +408,106 @@ namespace Managers
         {
             if (ObjectTrackerManager.Instance.IsTracking) return;
 
-            Transform target = null;
-
-            if (questTarget == EQuestTarget.HuntingZone_A_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[0];
-            else if (questTarget == EQuestTarget.HuntingZone_A_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[0].Target[1];
-            else if (questTarget == EQuestTarget.HuntingZone_B_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[0];
-            else if (questTarget == EQuestTarget.HuntingZone_B_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[1].Target[1];
-            else if (questTarget == EQuestTarget.HuntingZone_C_Unlock) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[0];
-            else if (questTarget == EQuestTarget.HuntingZone_C_Hunt) target = _stageController.HuntingZoneController.HuntingZoneSpawnData.HuntingZoneSpawners[2].Target[1];
-            else if (questTarget == EQuestTarget.KitchenA_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[0];
-            else if (questTarget == EQuestTarget.KitchenA_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[1];
-            else if (questTarget == EQuestTarget.KitchenA_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[0].Target[2];
-            else if (questTarget == EQuestTarget.KitchenA_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[0];
-            else if (questTarget == EQuestTarget.KitchenA_B_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[1];
-            else if (questTarget == EQuestTarget.KitchenA_B_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[1].Target[2];
-            else if (questTarget == EQuestTarget.KitchenA_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[0];
-            else if (questTarget == EQuestTarget.KitchenA_C_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[1];
-            else if (questTarget == EQuestTarget.KitchenA_C_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[2].Target[2];
-            else if (questTarget == EQuestTarget.KitchenB_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[0];
-            else if (questTarget == EQuestTarget.KitchenB_A_Product) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[1];
-            else if (questTarget == EQuestTarget.KitchenB_A_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.KitchenSpawner[3].Target[2];
-            else if (questTarget == EQuestTarget.StandA_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[0].Target[0];
-            else if (questTarget == EQuestTarget.StandA_B_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[1].Target[0];
-            else if (questTarget == EQuestTarget.StandA_C_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[2].Target[0];
-            else if (questTarget == EQuestTarget.StandB_A_Unlock) target = _stageController.BuildingController.BuildingSpawnData.StandSpawner[3].Target[0];
-            else if (questTarget == EQuestTarget.ManagementDesk_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[0];
-            else if (questTarget == EQuestTarget.ManagementDesk_Sell) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[1];
-            else if (questTarget == EQuestTarget.ManagementDesk_GetMoney) target = _stageController.BuildingController.BuildingSpawnData.ManagementDeskSpawner.Target[2];
-            else if (questTarget == EQuestTarget.WareHouse_Unlock) target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[0];
-            else if (questTarget == EQuestTarget.WareHouse_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.WareHouseSpawner.Target[1];
-            else if (questTarget == EQuestTarget.DeliveryLodging_Unlock) target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[0];
-            else if (questTarget == EQuestTarget.DeliveryLodging_Upgrade) target = _stageController.BuildingController.BuildingSpawnData.DeliveryLodgingSpawner.Target[1];
+            Transform target = questTarget switch
+            {
+                EQuestTarget.HuntingZone_A_Unlock => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[0]
+                    .Target[0],
+                EQuestTarget.HuntingZone_A_Hunt => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[0]
+                    .Target[1],
+                EQuestTarget.HuntingZone_B_Unlock => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[1]
+                    .Target[0],
+                EQuestTarget.HuntingZone_B_Hunt => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[1]
+                    .Target[1],
+                EQuestTarget.HuntingZone_C_Unlock => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[2]
+                    .Target[0],
+                EQuestTarget.HuntingZone_C_Hunt => _stageController.HuntingZoneController.HuntingZoneSpawnData
+                    .HuntingZoneSpawners[2]
+                    .Target[1],
+                EQuestTarget.KitchenA_A_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[0]
+                    .Target[0],
+                EQuestTarget.KitchenA_A_Product => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[0]
+                    .Target[1],
+                EQuestTarget.KitchenA_A_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[0]
+                    .Target[2],
+                EQuestTarget.KitchenA_B_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[1]
+                    .Target[0],
+                EQuestTarget.KitchenA_B_Product => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[1]
+                    .Target[1],
+                EQuestTarget.KitchenA_B_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[1]
+                    .Target[2],
+                EQuestTarget.KitchenA_C_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[2]
+                    .Target[0],
+                EQuestTarget.KitchenA_C_Product => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[2]
+                    .Target[1],
+                EQuestTarget.KitchenA_C_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[2]
+                    .Target[2],
+                EQuestTarget.KitchenB_A_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[3]
+                    .Target[0],
+                EQuestTarget.KitchenB_A_Product => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[3]
+                    .Target[1],
+                EQuestTarget.KitchenB_A_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .KitchenSpawner[3]
+                    .Target[2],
+                EQuestTarget.StandA_A_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[0]
+                    .Target[0],
+                EQuestTarget.StandA_B_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[1]
+                    .Target[0],
+                EQuestTarget.StandA_C_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[2]
+                    .Target[0],
+                EQuestTarget.StandB_A_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[3]
+                    .Target[0],
+                EQuestTarget.ManagementDesk_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .ManagementDeskSpawner
+                    .Target[0],
+                EQuestTarget.ManagementDesk_GetMoney => _stageController.BuildingController.BuildingSpawnData
+                    .ManagementDeskSpawner
+                    .Target[1],
+                EQuestTarget.WareHouse_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .WareHouseSpawner
+                    .Target[0],
+                EQuestTarget.WareHouse_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .WareHouseSpawner
+                    .Target[1],
+                EQuestTarget.DeliveryLodging_Unlock => _stageController.BuildingController.BuildingSpawnData
+                    .DeliveryLodgingSpawner
+                    .Target[0],
+                EQuestTarget.DeliveryLodging_Upgrade => _stageController.BuildingController.BuildingSpawnData
+                    .DeliveryLodgingSpawner
+                    .Target[1],
+                EQuestTarget.ProductA_A_Sell => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[0]
+                    .Target[1],
+                EQuestTarget.ProductA_B_Sell => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[1]
+                    .Target[1],
+                EQuestTarget.ProductA_C_Sell => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[2]
+                    .Target[1],
+                EQuestTarget.ProductB_A_Sell => _stageController.BuildingController.BuildingSpawnData
+                    .StandSpawner[3]
+                    .Target[1],
+                _ => null
+            };
 
             if (target != null) ObjectTrackerManager.Instance.StartTargetTracking(target);
         }

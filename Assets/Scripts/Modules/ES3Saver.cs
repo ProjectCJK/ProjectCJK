@@ -66,16 +66,17 @@ namespace Modules
 
         public void ResetStageData()
         {
-            BuildingActiveStatuses = new Dictionary<string, EActiveStatus>();
-            HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>();
             BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingOutputItems = new Dictionary<string, Dictionary<string, int>>();
             CurrentBuildingLevel = new Dictionary<string, int>();
             CurrentBuildingOption1Level = new Dictionary<string, int>();
             CurrentBuildingOption2Level = new Dictionary<string, int>();
+            
+            ActiveStatusSettingIndex = 0;
+            BuildingActiveStatuses = new Dictionary<string, EActiveStatus>();
+            HuntingZoneActiveStatuses = new Dictionary<string, EActiveStatus>();
             RequiredMoneyForBuildingActive = new Dictionary<string, int>();
             RequiredMoneyForHuntingZoneActive = new Dictionary<string, int>();
-            ActiveStatusSettingIndex = 0;
 
             CurrentListQuestIndex = -1;
             ListQuestClearStatuses = new Dictionary<int, Dictionary<int, bool>>();

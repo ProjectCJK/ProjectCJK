@@ -38,6 +38,7 @@ namespace Managers
         public GuestDataSO GuestDataSo;
         public DeliveryManDataSO DeliveryManDataSo;
         public HunterDataSO HunterDataSo;
+        public HunterDataSO SuperHunterDataSo;
         public ZombieDataSO ZombieDataSo;
 
         [Space(20)] [Header("### Building Data ###")]

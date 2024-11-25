@@ -82,7 +82,7 @@ Transform:
   - {fileID: 448058471211548456}
   - {fileID: 4451388504347356215}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4005790427514570073
 Rigidbody2D:
@@ -629,6 +629,22 @@ PrefabInstance:
     - target: {fileID: 5426655516986845127, guid: 1099ad0971784446798524d70d712225, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9180939366421844437, guid: 1099ad0971784446798524d70d712225, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9180939366421844437, guid: 1099ad0971784446798524d70d712225, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9180939366421844437, guid: 1099ad0971784446798524d70d712225, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9180939366421844437, guid: 1099ad0971784446798524d70d712225, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

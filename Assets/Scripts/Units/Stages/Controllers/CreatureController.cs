@@ -76,5 +76,13 @@ namespace Units.Stages.Controllers
 
             return hunter;
         }
+
+
+        public IHunter GetSuperHunter(Vector3 startPosition)
+        {
+            IHunter hunter = _hunterManFactory.GetSuperHunter(startPosition);
+
+            return hunter;
+        }
     }
 }
