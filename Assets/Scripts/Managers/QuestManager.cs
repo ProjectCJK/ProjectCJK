@@ -349,6 +349,8 @@ namespace Managers
             if (currentQuestData.Count > 0)
             {
                 ParsedQuestData trackingTargetQuest = currentQuestData.First();
+
+                ActivateTutorialPanel(trackingTargetQuest.QuestIndex);
                 
                 if (trackingTargetQuest.CurrentGoal >= currentQuestData.First().MaxGoal)
                 {
@@ -403,7 +405,26 @@ namespace Managers
 
             _uiPanelQuest.UpdateQuestPanel(listQuestInfoItem);
         }
-        
+
+        private void ActivateTutorialPanel(int questIndex)
+        {
+            switch (questIndex)
+            {
+                case 3:
+                    TutorialManager.Instance.ActivePopUpTutorialPanel(1);
+                    break;
+                case 5:
+                    TutorialManager.Instance.ActivePopUpTutorialPanel(2);
+                    break;
+                case 12:
+                    TutorialManager.Instance.ActivePopUpTutorialPanel(3);
+                    break;
+                case 43 or 49:
+                    TutorialManager.Instance.ActivePopUpTutorialPanel(4);
+                    break;
+            }
+        }
+
         private void StartTrackingCurrentQuestTarget(EQuestTarget questTarget)
         {
             if (ObjectTrackerManager.Instance.IsTracking) return;

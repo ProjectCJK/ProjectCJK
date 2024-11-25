@@ -66,10 +66,5 @@ namespace Managers
             UI_Panel_Tutorial = Instantiate(_ui_Panel_Tutorial, BranchCanvasTutorial.transform);
             UI_Panel_PopUpTutorial = Instantiate(_ui_Panel_PopUpTutorial, BranchCanvasTutorial.transform);
         }
-
-        public void DestroyTutorialPanel()
-        {
-            Destroy(BranchCanvasTutorial);
-        }
     }
 }

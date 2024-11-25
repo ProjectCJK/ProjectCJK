@@ -54,8 +54,7 @@ namespace Modules
         public Dictionary<string, EActiveStatus> HuntingZoneActiveStatuses = new();
         public Dictionary<string, int> RequiredMoneyForBuildingActive = new();
         public Dictionary<string, int> RequiredMoneyForHuntingZoneActive = new();
-
-
+        
         /// <summary>
         /// QuestSettings
         /// </summary>
@@ -63,6 +62,8 @@ namespace Modules
         public Dictionary<int, Dictionary<int, bool>> ListQuestClearStatuses = new();
         public Dictionary<int, Dictionary<int, bool>> QuestClearStatuses = new();
         public Dictionary<int, Dictionary<int, int>> QuestCurrentGoalCounts = new();
+        
+        public Dictionary<int, bool> PopUpTutorialClear = new();
 
         public void ResetStageData()
         {

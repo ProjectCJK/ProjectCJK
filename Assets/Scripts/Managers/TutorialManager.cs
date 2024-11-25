@@ -12,11 +12,13 @@ namespace Managers
     {
         private Action OnCameraMovementEnded;
         
-        private UI_Panel_Tutorial _tutorialPanel;
         private Canvas _branchCanvasGame;
         private Canvas _branchCanvasTutorial;
         private Canvas _branchCanvasGuide;
-
+        
+        private UI_Panel_Tutorial _tutorialPanel;
+        private UI_Panel_PopUpTutorial _popUpTutorialPanel;
+        
         private Vector3 _zombieZonePosition;
         private Vector3 _huntingZonePosition;
         
@@ -26,9 +28,12 @@ namespace Managers
         private List<Vector3> _secondTargets;
 
         private float _zPosition;
+        private bool isScriptEnded;
         
         public void RegisterReference(CameraController cameraController, Action onCameraMovementEnded)
         {
+            GameManager.Instance.ES3Saver.PopUpTutorialClear = new ();
+            
             OnCameraMovementEnded = onCameraMovementEnded;
             
             _cameraController = cameraController;
@@ -49,14 +54,19 @@ namespace Managers
             _cameraController.transform.position = _firstTargets[0];
             
             UIManager.Instance.InstantiateTutorialPanel();
-
-            _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
+            
             _branchCanvasGame = UIManager.Instance.BranchCanvasGame;
             _branchCanvasTutorial = UIManager.Instance.BranchCanvasTutorial;
             _branchCanvasGuide = UIManager.Instance.BranchCanvasGuide;
             
+            _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
+            _popUpTutorialPanel = UIManager.Instance.UI_Panel_PopUpTutorial;
+            
             _tutorialPanel.RegisterReference();
             _tutorialPanel.OnScriptsEnded += HandleOnScriptsEnded;
+            
+            _popUpTutorialPanel.RegisterReference();
+            _popUpTutorialPanel.OnClickExitButton += HandleOnClickExitButton;
         }
 
         public void Initialize()
@@ -70,6 +80,7 @@ namespace Managers
 
         private IEnumerator Tutorial()
         {
+            isScriptEnded = false;
             var firstTarget = false;
             var secondTarget = false;
             
@@ -80,8 +91,6 @@ namespace Managers
                 yield return null;   
             }
             
-            // yield return new WaitForSeconds(0.7f);
-            
             _cameraController.transform.position = _secondTargets[0];
             _cameraController.FollowTempTarget(_secondTargets[1], () => secondTarget = true);
 
@@ -90,25 +99,48 @@ namespace Managers
                 yield return null;   
             }
             
-            // yield return new WaitForSeconds(0.7f);
-            
             _cameraController.UnregisterReference();
             OnCameraMovementEnded?.Invoke();
             
             _tutorialPanel.gameObject.SetActive(true);
+
+            while (!isScriptEnded)
+            {
+                yield return null;
+            }
+            
+            _tutorialPanel.gameObject.SetActive(false);
+            
+            ActivePopUpTutorialPanel(0);
         }
 
-        public void ActivePopUpTutorialPanel()
+        public void ActivePopUpTutorialPanel(int index)
         {
+            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.TryGetValue(index, out var value))
+            {
+                if (value) return;
+                
+                GameManager.Instance.ES3Saver.PopUpTutorialClear[index] = true;
+                
+                _branchCanvasGame.gameObject.SetActive(false);
+                _branchCanvasGuide.gameObject.SetActive(false);
+                _branchCanvasTutorial.gameObject.SetActive(true);
             
+                _popUpTutorialPanel.ActivatePanel(index);
+            }
         }
 
         private void HandleOnScriptsEnded()
         {
-            UIManager.Instance.DestroyTutorialPanel();
             GameManager.Instance.ES3Saver.TutorialClear = true;
+            isScriptEnded = true;
+        }
+        
+        private void HandleOnClickExitButton()
+        {
             _branchCanvasGame.gameObject.SetActive(true);
             _branchCanvasGuide.gameObject.SetActive(true);
+            _branchCanvasTutorial.gameObject.SetActive(false);
         }
     }
 }
