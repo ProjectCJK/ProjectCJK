@@ -31,7 +31,7 @@ namespace Managers
         /// <summary>
         /// Canvas Settings
         /// </summary>
-        public Canvas RootCanvas { get; set; }
+        public Canvas RootCanvas { get; set; }  
         public Canvas BranchCanvasGuide { get; set; }
         public Canvas BranchCanvasGame { get; set; }
         public Canvas BranchCanvasTutorial { get; set; }
@@ -43,7 +43,7 @@ namespace Managers
             
             Instantiate(_eventSystemPrefab);
             BranchCanvasGuide = Instantiate(_branchCanvasGuide);
-            var branchCanvasGuide = BranchCanvasGame.GetComponent<Canvas>();
+            var branchCanvasGuide = BranchCanvasGuide.GetComponent<Canvas>();
             branchCanvasGuide.worldCamera = Camera.main;
             branchCanvasGuide.sortingLayerName = "UI";
             branchCanvasGuide.sortingOrder = 50;

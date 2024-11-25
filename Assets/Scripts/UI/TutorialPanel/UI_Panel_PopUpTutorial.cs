@@ -6,14 +6,13 @@ namespace UI.TutorialPanel
 {
     public class UI_Panel_PopUpTutorial : MonoBehaviour
     {
-        [SerializeField] private List<UI_Panel_PopUpTutorialItem> uiPanelPopUpTutorialItem;
+        [SerializeField] private List<GameObject> uiPanelPopUpTutorialItem;
         
         public void RegisterReference()
         {
-            foreach (UI_Panel_PopUpTutorialItem t in uiPanelPopUpTutorialItem)
+            foreach (GameObject tutorialPanelItem in uiPanelPopUpTutorialItem)
             {
-                t.RegisterReference();
-                t.gameObject.SetActive(false);
+                tutorialPanelItem.gameObject.SetActive(false);
             }
         }
 
