@@ -77,6 +77,7 @@ namespace UI.CostumeGachaPanels
                     if (currentIndex == maxIndex && costumeBoxController.IsEndedOpenIdleAnimation)
                     {
                         currentIndex++;
+                        _skipButton.gameObject.SetActive(false);
                         costumeBoxController.Animator.SetTrigger(Result);
                     }
                     else if ((currentIndex == maxIndex + 1 || isSkipped) && costumeBoxController.IsEndedResultAnimation)

@@ -15,6 +15,7 @@ namespace Managers
         private Canvas _branchCanvasGame;
         private Canvas _branchCanvasTutorial;
         private Canvas _branchCanvasGuide;
+        private Canvas _branchCanvasJoystick;
         
         private UI_Panel_Tutorial _tutorialPanel;
         private UI_Panel_PopUpTutorial _popUpTutorialPanel;
@@ -58,6 +59,7 @@ namespace Managers
             _branchCanvasGame = UIManager.Instance.BranchCanvasGame;
             _branchCanvasTutorial = UIManager.Instance.BranchCanvasTutorial;
             _branchCanvasGuide = UIManager.Instance.BranchCanvasGuide;
+            _branchCanvasJoystick = UIManager.Instance.BranchCanvasJoystick;
             
             _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
             _popUpTutorialPanel = UIManager.Instance.UI_Panel_PopUpTutorial;
@@ -71,8 +73,7 @@ namespace Managers
 
         public void Initialize()
         {
-            _branchCanvasGame.gameObject.SetActive(false);
-            _branchCanvasGuide.gameObject.SetActive(false);
+            TransferTutorialCanvas(true);
             
             _tutorialPanel.Initialize();
             CoroutineManager.Instance.StartManagedCoroutine(Tutorial());
@@ -121,10 +122,8 @@ namespace Managers
                 if (value) return;
                 
                 GameManager.Instance.ES3Saver.PopUpTutorialClear[index] = true;
-                
-                _branchCanvasGame.gameObject.SetActive(false);
-                _branchCanvasGuide.gameObject.SetActive(false);
-                _branchCanvasTutorial.gameObject.SetActive(true);
+
+                TransferTutorialCanvas(true);
             
                 _popUpTutorialPanel.ActivatePanel(index);
             }
@@ -138,9 +137,15 @@ namespace Managers
         
         private void HandleOnClickExitButton()
         {
-            _branchCanvasGame.gameObject.SetActive(true);
-            _branchCanvasGuide.gameObject.SetActive(true);
-            _branchCanvasTutorial.gameObject.SetActive(false);
+            TransferTutorialCanvas(false);
+        }
+
+        private void TransferTutorialCanvas(bool value)
+        {
+            _branchCanvasJoystick.gameObject.SetActive(!value);
+            _branchCanvasGame.gameObject.SetActive(!value);
+            _branchCanvasGuide.gameObject.SetActive(!value);
+            _branchCanvasTutorial.gameObject.SetActive(value);
         }
     }
 }

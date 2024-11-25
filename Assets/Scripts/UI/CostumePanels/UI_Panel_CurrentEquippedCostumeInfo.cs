@@ -27,6 +27,8 @@ namespace UI.CostumePanels
 
         public void Activate()
         {
+            gameObject.SetActive(false);
+            
             if (VolatileDataManager.Instance.EquippedCostumes.ContainsKey(ECostumeType.Weapon))
             {
                 equippedWeaponImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Weapon].CostumeSprites[0];
@@ -43,6 +45,7 @@ namespace UI.CostumePanels
             {
                 equippedClothesImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[0];
                 playerClothesImage.sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[1];
+                
                 playerShoesImage[0].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
                 playerShoesImage[1].sprite = VolatileDataManager.Instance.EquippedCostumes[ECostumeType.Clothes].CostumeSprites[2];
                 if (equippedClothesImage != null) equippedClothesImage.gameObject.SetActive(true);

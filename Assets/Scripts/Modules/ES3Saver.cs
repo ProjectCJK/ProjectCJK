@@ -67,6 +67,8 @@ namespace Modules
 
         public void ResetStageData()
         {
+            Gold = 600;
+            
             BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingOutputItems = new Dictionary<string, Dictionary<string, int>>();
             CurrentBuildingLevel = new Dictionary<string, int>();

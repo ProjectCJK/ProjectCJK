@@ -52,7 +52,7 @@ namespace Units.Stages.Units.Buildings.Units
     [Serializable]
     public struct WareHouseCustomSetting
     {
-        [Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
+        [Space(20), Header("인벤토리 아이템 진열")] public List<GameObject> SpawnedItem;
     }
 
     public class WareHouse : UnlockableBuildingZone, IWareHouse
@@ -150,6 +150,7 @@ namespace Units.Stages.Units.Buildings.Units
         {
             HandleOnUpdateStackedItem(_wareHouseInventoryModule.CurrentInventorySize);
             isSendingItemToPlayer = false;
+            UnlockZoneModule.UpdateViewModel();
         }
 
         public void SpawnHunter(ICreatureController creatureController, HashSet<IHunter> currentSpawnedHunters)

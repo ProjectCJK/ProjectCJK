@@ -11,6 +11,7 @@ namespace Managers
     {
         [SerializeField] private GameObject _eventSystemPrefab;
         [SerializeField] private Canvas _rootCanvas;
+        [SerializeField] private Canvas _branchCanvasJoystick;
         [SerializeField] private Canvas _branchCanvasGame;
         [SerializeField] private Canvas _branchCanvasTutorial;
         [SerializeField] private Canvas _branchCanvasGuide;
@@ -35,31 +36,39 @@ namespace Managers
         public Canvas BranchCanvasGuide { get; set; }
         public Canvas BranchCanvasGame { get; set; }
         public Canvas BranchCanvasTutorial { get; set; }
-
+        public Canvas BranchCanvasJoystick { get; set; }
+        
         public void RegisterReference()
         {
             // RootCanvas = Instantiate(_rootCanvas);
             // RootCanvas.GetComponent<Canvas>().worldCamera = Camera.main;
             
             Instantiate(_eventSystemPrefab);
+            
+            BranchCanvasJoystick = Instantiate(_branchCanvasJoystick);
+            var branchCanvasJoystick = BranchCanvasJoystick.GetComponent<Canvas>();
+            branchCanvasJoystick.worldCamera = Camera.main;
+            branchCanvasJoystick.sortingLayerName = "UI";
+            branchCanvasJoystick.sortingOrder = 50;
+            
             BranchCanvasGuide = Instantiate(_branchCanvasGuide);
             var branchCanvasGuide = BranchCanvasGuide.GetComponent<Canvas>();
             branchCanvasGuide.worldCamera = Camera.main;
             branchCanvasGuide.sortingLayerName = "UI";
-            branchCanvasGuide.sortingOrder = 50;
+            branchCanvasGuide.sortingOrder = 100;
             
             BranchCanvasGame = Instantiate(_branchCanvasGame);
             var branchCanvasGame = BranchCanvasGame.GetComponent<Canvas>();
             branchCanvasGame.worldCamera = Camera.main;
             branchCanvasGame.sortingLayerName = "UI";
-            branchCanvasGame.sortingOrder = 100;
+            branchCanvasGame.sortingOrder = 150;
             
-            Joystick = Instantiate(_joystick, BranchCanvasGame.transform);
+            Joystick = Instantiate(_joystick, BranchCanvasJoystick.transform);
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
    
             Instantiate(_gameSpeedControlModule, BranchCanvasGame.transform);
         }
-        
+
         public void InstantiateTutorialPanel()
         {
             BranchCanvasTutorial = Instantiate(_branchCanvasTutorial);
