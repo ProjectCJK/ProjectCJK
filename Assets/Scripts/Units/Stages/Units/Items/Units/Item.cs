@@ -27,34 +27,15 @@ namespace Units.Stages.Units.Items.Units
         [SerializeField] private Transform spriteTransform;
         [SerializeField] private TrailRenderer _trailRenderer;
         
-        private BezierCurveMover _bezierCurveMover;
-        private bool _isInitialized;
-        private SpriteRenderer _spriteRenderer;
-        private SortingGroup _sortingGroup;
-
-        private void Reset()
-        {
-            SetSprite(null);
-            SetActive(false);
-            Type = null;
-            Count = 0;
-            _isInitialized = false;
-            _spriteRenderer.sortingOrder = 0;
-            _trailRenderer.enabled = false;
-            _trailRenderer.Clear();
-        }
-
-        private void Update()
-        {
-            if (!_isInitialized) return;
-
-            _bezierCurveMover.Transfer();
-        }
-
         public string Type { get; private set; }
         public int Count { get; private set; }
 
         public Transform Transform => transform;
+        
+        private BezierCurveMover _bezierCurveMover;
+        private bool _isInitialized;
+        private SpriteRenderer _spriteRenderer;
+        private SortingGroup _sortingGroup;
 
         public void RegisterReference(ItemDataSO _itemDataSo)
         {
@@ -74,6 +55,25 @@ namespace Units.Stages.Units.Items.Units
 
             _trailRenderer.enabled = true;
             _sortingGroup.sortingOrder = setRoot ? 100 : 0;
+        }
+        
+        private void Update()
+        {
+            if (!_isInitialized) return;
+
+            _bezierCurveMover.Transfer();
+        }
+        
+        private void Reset()
+        {
+            SetSprite(null);
+            SetActive(false);
+            Type = null;
+            Count = 0;
+            _isInitialized = false;
+            _spriteRenderer.sortingOrder = 0;
+            _trailRenderer.enabled = false;
+            _trailRenderer.Clear();
         }
 
         public void Transfer(Vector3 pointA, Vector3 pointB, Action onArrived)

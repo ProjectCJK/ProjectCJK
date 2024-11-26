@@ -45,7 +45,7 @@ namespace Units.Stages.Units.Items.Modules
 
         private void InitializeCommon(Vector3 pointA, Vector3 pointB, Transform pointBTransform, Action onArrived)
         {
-            if (pointA == pointB) pointA.y += 3f;
+            if (pointA == pointB) pointA.y += 2f;
 
             _isRunning = true;
             _pointA = pointA;
@@ -53,14 +53,14 @@ namespace Units.Stages.Units.Items.Modules
             _pointBTransform = pointBTransform;
             OnArrived = onArrived;
 
-            // A와 B의 중간 좌표qqqq
+            // A와 B의 중간 좌표
             Vector2 middlePoint = (_pointA + _pointB) / 2;
 
             // A와 B의 방향 벡터 계산 (A에서 B로 향하는 방향)
             Vector2 direction = Vector2.up;
 
             // 중간 좌표에서 방향으로 5단위 이동한 제어점 위치
-            _controlPoint = middlePoint + direction * 5f; // A와 B 사이 방향으로 5단위 이동
+            _controlPoint = middlePoint + direction * 2f; // A와 B 사이 방향으로 5단위 이동
 
             var distance = Vector2.Distance(_pointA, _pointB);
 

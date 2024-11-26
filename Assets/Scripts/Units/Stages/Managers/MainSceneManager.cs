@@ -88,10 +88,7 @@ namespace Units.Stages.Managers
                 CameraController.RegisterReference(StageController.PlayerTransform);
             }
             
-            if (GameManager.Instance.ES3Saver.TutorialClear == false)
-            {
-                TutorialManager.Instance.RegisterReference(CameraController);
-            }
+            TutorialManager.Instance.RegisterReference(CameraController);
         }
 
         private void Initialize()
