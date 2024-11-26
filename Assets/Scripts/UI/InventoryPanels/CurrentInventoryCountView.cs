@@ -45,16 +45,7 @@ namespace UI.InventoryPanels
                     StopCoroutine(_temporaryActivationCoroutine);
 
                 SetGameObjectActive(true);
-                _temporaryActivationCoroutine = StartCoroutine(TemporaryActivationRoutine());
             }
-        }
-
-        private IEnumerator TemporaryActivationRoutine()
-        {
-            yield return new WaitForSeconds(1f);
-
-            if (viewModel.CurrentInventorySize < viewModel.MaxInventorySize)
-                SetGameObjectActive(false);
         }
 
         private void SetGameObjectActive(bool isActive)
