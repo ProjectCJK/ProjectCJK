@@ -85,17 +85,12 @@ namespace Units.Stages.Managers
             {
                 Camera.main.orthographicSize = 15;
                 CameraController = Camera.main.GetComponent<CameraController>();
-                CameraController.RegisterReference();
-
-                if (GameManager.Instance.ES3Saver.TutorialClear)
-                {
-                    SetPlayerToCameraTarget();
-                }
+                CameraController.RegisterReference(StageController.PlayerTransform);
             }
             
             if (GameManager.Instance.ES3Saver.TutorialClear == false)
             {
-                TutorialManager.Instance.RegisterReference(CameraController, SetPlayerToCameraTarget);
+                TutorialManager.Instance.RegisterReference(CameraController);
             }
         }
 
@@ -163,12 +158,6 @@ namespace Units.Stages.Managers
             //     QuestManager.Instance.UpdateCurrentQuestProgress(EQuestType1.Build, $"{EQuestType2.Stand_B}");
             // }
 #endif
-        }
-
-        private void SetPlayerToCameraTarget()
-        {
-            CameraController.Transform.position = new Vector3(StageController.PlayerTransform.position.x, StageController.PlayerTransform.position.y, CameraController.Transform.position.z);
-            CameraController.FollowTarget(StageController.PlayerTransform);
         }
     }
 }

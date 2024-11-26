@@ -10,8 +10,6 @@ namespace Managers
 {
     public class TutorialManager : Singleton<TutorialManager>
     {
-        private Action OnCameraMovementEnded;
-        
         private Canvas _branchCanvasGame;
         private Canvas _branchCanvasTutorial;
         private Canvas _branchCanvasGuide;
@@ -31,11 +29,9 @@ namespace Managers
         private float _zPosition;
         private bool isScriptEnded;
         
-        public void RegisterReference(CameraController cameraController, Action onCameraMovementEnded)
+        public void RegisterReference(CameraController cameraController)
         {
-            GameManager.Instance.ES3Saver.PopUpTutorialClear = new ();
-            
-            OnCameraMovementEnded = onCameraMovementEnded;
+            GameManager.Instance.ES3Saver.PopUpTutorialClear = new Dictionary<int, bool>();
             
             _cameraController = cameraController;
             _zPosition = _cameraController.transform.position.z;
@@ -51,8 +47,6 @@ namespace Managers
                 new(9, 18, _zPosition),
                 new(9, 25, _zPosition)
             };
-
-            _cameraController.transform.position = _firstTargets[0];
             
             UIManager.Instance.InstantiateTutorialPanel();
             
@@ -76,32 +70,28 @@ namespace Managers
             TransferTutorialCanvas(true);
             
             _tutorialPanel.Initialize();
-            CoroutineManager.Instance.StartManagedCoroutine(Tutorial());
+            CoroutineManager.Instance.StartManagedCoroutine(TutorialInitialDialog());
         }
 
-        private IEnumerator Tutorial()
+        private IEnumerator TutorialInitialDialog()
         {
             isScriptEnded = false;
             var firstTarget = false;
             var secondTarget = false;
             
-            _cameraController.FollowTempTarget(_firstTargets[1], () => firstTarget = true);
+            _cameraController.ActivateFollowCamera(_firstTargets[0], _firstTargets[1], () => firstTarget = true);
 
             while (!firstTarget)
             {
                 yield return null;   
             }
             
-            _cameraController.transform.position = _secondTargets[0];
-            _cameraController.FollowTempTarget(_secondTargets[1], () => secondTarget = true);
+            _cameraController.ActivateFollowCamera(_secondTargets[0], _secondTargets[1], () => secondTarget = true);
 
             while (!secondTarget)
             {
                 yield return null;   
             }
-            
-            _cameraController.UnregisterReference();
-            OnCameraMovementEnded?.Invoke();
             
             _tutorialPanel.gameObject.SetActive(true);
 
