@@ -34,6 +34,7 @@
         _ColorMask ("Color Mask", Float) = 15
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
+        _Alpha_Clip_Threshold("Alpha Clip Threshold", Float) = 0.001
     }
 
     SubShader
@@ -124,6 +125,8 @@
             fixed4 _LerpColor;
             float _LerpProgress;
 
+            float _Alpha_Clip_Threshold;
+
             // 버텍스 쉐이더
             v2f vert(appdata_t v) //버텍스 구조체를 가져와서 v2f 함수에 담았다.
             {
@@ -184,7 +187,7 @@
                 #endif
 
                 #ifdef UNITY_UI_ALPHACLIP
-                    clip (Out_color.a - 0.001);
+                    clip (Out_color.a - _Alpha_Clip_Threshold);
                 #endif
 
                 Out_color.rgb *= Out_color.a;
