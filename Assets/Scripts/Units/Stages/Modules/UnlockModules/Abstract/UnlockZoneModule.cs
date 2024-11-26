@@ -29,6 +29,7 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         public abstract EUnlockZoneType UnlockZoneType { get; }
         public EActiveStatus ActiveStatus { get; protected set; }
         public int CurrentGoldForUnlock { get; set; }
+        public int TempGold { get; set; }
         public int RequiredGoldForUnlock { get; set; }
 
         public abstract void SetCurrentState(EActiveStatus state);

@@ -21,23 +21,23 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
     public class ItemFactory : Factory, IItemFactory
     {
+        public ItemDataSO ItemDataSo => DataManager.Instance.ItemDataSo;
+        
+        private static string PoolKey => "ItemPool";
+        
         private const int DefaultPoolSize = 20;
         private const int MaxPoolSize = 20;
+        
         private readonly Dictionary<EMaterialType, EStageMaterialType> _materialMappings;
-
         private readonly Transform _parentTransform;
-
+        
         public ItemFactory(Transform parentTransform, List<MaterialMapping> materialMappings)
         {
             _parentTransform = parentTransform;
-            _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings, key => key.MaterialType,
-                value => value.StageMaterialType);
+            _materialMappings = ListParerModule.ConvertListToDictionary(materialMappings, key => key.MaterialType, value => value.StageMaterialType);
             CreateItemPools();
             CreateSpriteDictionary();
         }
-
-        private static string PoolKey => "ItemPool";
-        public ItemDataSO ItemDataSo => DataManager.Instance.ItemDataSo;
 
         public IItem GetItem(string itemType, int count, Vector3 initializePosition, bool atRoot)
         {

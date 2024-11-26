@@ -17,6 +17,7 @@ namespace Units.Stages.Units.Buildings.Abstract
         public abstract EActiveStatus ActiveStatus { get; }
         public abstract int RequiredGoldForUnlock { get; }
         public abstract int CurrentGoldForUnlock { get; set; }
+        public int TempGold { get; set; }
 
         public override void Initialize()
         {
@@ -28,6 +29,10 @@ namespace Units.Stages.Units.Buildings.Abstract
         protected void HandleOnMoneyReceived(int value)
         {
             CurrentGoldForUnlock += value;
+            
+            TempGold -= value;
+            if (TempGold < 0) TempGold = 0;
+            
             UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
 
             UnlockZoneModule.UpdateViewModel();
