@@ -17,10 +17,11 @@ namespace Units.Stages.Units.Buildings.Abstract
         public abstract EActiveStatus ActiveStatus { get; }
         public abstract int RequiredGoldForUnlock { get; }
         public abstract int CurrentGoldForUnlock { get; set; }
-        public int TempGold { get; set; }
+        private bool IsUnlocked;
 
         public override void Initialize()
         {
+            IsUnlocked = false;
             GameManager.Instance.ES3Saver.RequiredMoneyForBuildingActive.TryAdd(BuildingKey, 100);
             CurrentGoldForUnlock = GameManager.Instance.ES3Saver.RequiredMoneyForBuildingActive[BuildingKey];
             UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
@@ -30,14 +31,15 @@ namespace Units.Stages.Units.Buildings.Abstract
         {
             CurrentGoldForUnlock += value;
             
-            TempGold -= value;
-            if (TempGold < 0) TempGold = 0;
-            
             UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
 
             UnlockZoneModule.UpdateViewModel();
 
-            if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+            if (CurrentGoldForUnlock >= RequiredGoldForUnlock && IsUnlocked == false)
+            {
+                UnlockZoneModule.SetCurrentState(EActiveStatus.Active);
+                IsUnlocked = true;
+            }
         }
     }
 }

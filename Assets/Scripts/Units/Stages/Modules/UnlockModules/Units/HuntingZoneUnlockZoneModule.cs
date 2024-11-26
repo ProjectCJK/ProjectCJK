@@ -21,21 +21,24 @@ namespace Units.Stages.Modules.UnlockModules.Units
                 case EActiveStatus.Active:
                     ActiveStatus = state;
                     if (_playerCollision != null && _playerCollision.activeInHierarchy) _playerCollision.GetComponentInChildren<HuntingAreaObstacleAnimator>().SetBool(IsActive, false, IsAnimationEnded);
-                    if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
-                    if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
+                    unlockZoneAnimator.SetBool(Lock, false);
+                    unlockZoneAnimator.SetBool(Standby, false);
+                    unlockZoneAnimator.SetBool(Unlock, true);
                     OnChangeActiveStatus?.Invoke(TargetKey, EActiveStatus.Active);
                     break;
                 case EActiveStatus.Standby:
                     ActiveStatus = state;
                     if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
-                    if (StandbyObject != null && !StandbyObject.activeInHierarchy) StandbyObject.SetActive(true);
-                    if (LockObject != null && LockObject.activeInHierarchy) LockObject.SetActive(false);
+                    unlockZoneAnimator.SetBool(Lock, false);
+                    unlockZoneAnimator.SetBool(Standby, true);
+                    unlockZoneAnimator.SetBool(Unlock, false);
                     break;
                 case EActiveStatus.Lock:
                     ActiveStatus = state;
                     if (_playerCollision != null && !_playerCollision.activeInHierarchy) _playerCollision.SetActive(true);
-                    if (StandbyObject != null && StandbyObject.activeInHierarchy) StandbyObject.SetActive(false);
-                    if (LockObject != null && !LockObject.activeInHierarchy) LockObject.SetActive(true);
+                    unlockZoneAnimator.SetBool(Lock, true);
+                    unlockZoneAnimator.SetBool(Standby, false);
+                    unlockZoneAnimator.SetBool(Unlock, false);
                     break;
             }
         }

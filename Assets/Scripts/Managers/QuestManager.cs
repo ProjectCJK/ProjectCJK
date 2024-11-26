@@ -82,7 +82,8 @@ namespace Managers
         ProductA_A_Sell,
         ProductA_B_Sell,
         ProductA_C_Sell,
-        ProductB_A_Sell
+        ProductB_A_Sell,
+        Temp_ManagementDesk
     }
 
     [Serializable]
@@ -408,20 +409,9 @@ namespace Managers
 
         private void ActivateTutorialPanel(int questIndex)
         {
-            switch (questIndex)
+            if (questIndex is 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8)
             {
-                case 3:
-                    TutorialManager.Instance.ActivePopUpTutorialPanel(1);
-                    break;
-                case 5:
-                    TutorialManager.Instance.ActivePopUpTutorialPanel(2);
-                    break;
-                case 12:
-                    TutorialManager.Instance.ActivePopUpTutorialPanel(3);
-                    break;
-                case 43 or 49:
-                    TutorialManager.Instance.ActivePopUpTutorialPanel(4);
-                    break;
+                TutorialManager.Instance.ActivePopUpTutorialPanel(questIndex);
             }
         }
 
@@ -527,6 +517,9 @@ namespace Managers
                 EQuestTarget.ProductB_A_Sell => _stageController.BuildingController.BuildingSpawnData
                     .StandSpawner[3]
                     .Target[1],
+                EQuestTarget.Temp_ManagementDesk => _stageController.BuildingController.BuildingSpawnData
+                    .ManagementDeskSpawner
+                    .Target[2],
                 _ => null
             };
 

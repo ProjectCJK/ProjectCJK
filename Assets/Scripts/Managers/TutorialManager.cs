@@ -16,7 +16,7 @@ namespace Managers
         private Canvas _branchCanvasJoystick;
         
         private UI_Panel_Tutorial _tutorialPanel;
-        private UI_Panel_PopUpTutorial _popUpTutorialPanel;
+        private UI_Panel_Tutorial_PopUp _tutorialPopUpPanel;
         
         private Vector3 _zombieZonePosition;
         private Vector3 _huntingZonePosition;
@@ -56,13 +56,13 @@ namespace Managers
             _branchCanvasJoystick = UIManager.Instance.BranchCanvasJoystick;
             
             _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
-            _popUpTutorialPanel = UIManager.Instance.UI_Panel_PopUpTutorial;
+            _tutorialPopUpPanel = UIManager.Instance.UIPanelTutorialPopUp;
             
             _tutorialPanel.RegisterReference();
             _tutorialPanel.OnScriptsEnded += HandleOnScriptsEnded;
             
-            _popUpTutorialPanel.RegisterReference();
-            _popUpTutorialPanel.OnClickExitButton += HandleOnClickExitButton;
+            _tutorialPopUpPanel.RegisterReference();
+            _tutorialPopUpPanel.OnClickExitButton += HandleOnClickExitButton;
         }
 
         public void Initialize()
@@ -76,6 +76,8 @@ namespace Managers
         private IEnumerator TutorialInitialDialog()
         {
             isScriptEnded = false;
+
+            // 컷씬 카메라
             var firstTarget = false;
             var secondTarget = false;
             
@@ -103,6 +105,8 @@ namespace Managers
             _tutorialPanel.gameObject.SetActive(false);
             
             ActivePopUpTutorialPanel(0);
+
+            yield return isScriptEnded;
         }
 
         public void ActivePopUpTutorialPanel(int index)
@@ -115,7 +119,7 @@ namespace Managers
 
                 TransferTutorialCanvas(true);
             
-                _popUpTutorialPanel.ActivatePanel(index);
+                _tutorialPopUpPanel.ActivatePanel(index);
             }
         }
 

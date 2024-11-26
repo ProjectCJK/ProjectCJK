@@ -130,11 +130,16 @@ namespace Units.Stages.Modules.CollisionModules.Units
 
         private void EnterTradeZone(ITradeZone tradeZone)
         {
-            if (_tradeZones.Count == 0 || !ReferenceEquals(_tradeZones.Peek(), tradeZone))
+            if (_tradeZones.Count != 0)
             {
-                _tradeZones.Enqueue(tradeZone);
-                StartWaitingForTrigger(tradeZone);
+                while (_tradeZones.Count > 0)
+                {
+                    OnTriggerTradeZone?.Invoke(_tradeZones.Dequeue(), false);
+                }
             }
+
+            _tradeZones.Enqueue(tradeZone);
+            StartWaitingForTrigger(tradeZone);
         }
 
         private void ExitTradeZone(ITradeZone tradeZone)

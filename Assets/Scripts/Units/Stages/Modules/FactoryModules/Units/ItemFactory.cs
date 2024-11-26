@@ -9,6 +9,7 @@ using Units.Stages.Units.Items.Enums;
 using Units.Stages.Units.Items.Units;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Units.Stages.Modules.FactoryModules.Units
 {
@@ -62,7 +63,18 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
                     var newKey = $"{_itemType}_{stageMaterialType}";
 
-                    if (DataManager.Instance.ItemSprites.TryGetValue(newKey, out Sprite sprite)) itemSprite = sprite;
+                    if (DataManager.Instance.ItemSprites.TryGetValue(newKey, out List<Sprite> sprites))
+                    {
+                        if (_itemType == EItemType.Material)
+                        {
+                            var index = Random.Range(1, sprites.Count);
+                            itemSprite = sprites[index];
+                        }
+                        else
+                        {
+                            itemSprite = sprites[0];
+                        }
+                    }
                 }
             }
 
@@ -100,7 +112,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
         private void CreateSpriteDictionary()
         {
             List<ItemSprite> itemSprites = ItemDataSo.ItemSprites;
-            DataManager.Instance.ItemSprites = new Dictionary<string, Sprite>();
+            DataManager.Instance.ItemSprites = new Dictionary<string, List<Sprite>>();
 
             foreach (ItemSprite data in itemSprites)
             {

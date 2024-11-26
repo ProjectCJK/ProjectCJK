@@ -64,6 +64,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
+                        TempMoney -= item.Count;
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }

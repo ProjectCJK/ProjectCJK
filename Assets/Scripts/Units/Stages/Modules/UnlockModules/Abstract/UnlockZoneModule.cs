@@ -17,10 +17,8 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
     public abstract class UnlockZoneModule : MonoBehaviour, IUnlockZoneModule
     {
         [SerializeField] private UnlockZoneView _unlockZoneView;
-     
         [SerializeField] protected GameObject _playerCollision;
-        public GameObject StandbyObject;
-        public GameObject LockObject;
+        [SerializeField] protected Animator unlockZoneAnimator;
         
         private UnlockZoneModel _unlockZoneModel;
         private UnlockZoneViewModel _unlockZoneViewModel;
@@ -31,6 +29,10 @@ namespace Units.Stages.Modules.UnlockModules.Abstract
         public int CurrentGoldForUnlock { get; set; }
         public int TempGold { get; set; }
         public int RequiredGoldForUnlock { get; set; }
+        
+        protected static readonly int Lock = Animator.StringToHash("Lock");
+        protected static readonly int Standby = Animator.StringToHash("Standby");
+        protected static readonly int Unlock = Animator.StringToHash("Unlock");
 
         public abstract void SetCurrentState(EActiveStatus state);
 

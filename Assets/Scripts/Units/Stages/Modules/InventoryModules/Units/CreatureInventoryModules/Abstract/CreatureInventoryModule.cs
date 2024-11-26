@@ -39,11 +39,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
 
         protected override void SendItem()
         {
-            if (!IsReadyToSend() || interactionTradeZones.Count == 0) return;
+            if (interactionTradeZones.Count == 0) return;
 
             foreach (ITradeZone targetZone in interactionTradeZones.ToList()) ProcessInteractionZone(targetZone);
-
-            SetLastSendTime();
         }
 
         private void ProcessInteractionZone(ITradeZone zone)
@@ -63,7 +61,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
                         targetMoney = targetMoney >= CurrencyManager.Instance.Gold
                             ? CurrencyManager.Instance.Gold
                             : targetMoney;
-
+                        
+                        zone.TempMoney += targetMoney;
+                        
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, targetMoney, SenderTransform.position);
 
                         CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, targetMoney);

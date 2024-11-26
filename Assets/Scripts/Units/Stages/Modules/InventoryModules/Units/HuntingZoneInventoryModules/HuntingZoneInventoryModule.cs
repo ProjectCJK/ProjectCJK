@@ -64,6 +64,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.HuntingZoneInventoryModule
                 switch (currencyType)
                 {
                     case ECurrencyType.Money:
+                        TempMoney -= item.Count;
                         OnMoneyReceived?.Invoke(item.Count);
                         break;
                 }

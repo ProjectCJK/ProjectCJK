@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2064592563612170107
 Transform:
   m_ObjectHideFlags: 0
@@ -9760,8 +9760,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -625507981
-  m_SortingLayer: 5
+  m_SortingLayerID: 1758947133
+  m_SortingLayer: 2
   m_SortingOrder: -5
   m_RenderMode: 1
   m_MeshDistribution: 0
@@ -9804,6 +9804,7 @@ GameObject:
   - component: {fileID: 8789454415842706293}
   - component: {fileID: 6985948577314139619}
   - component: {fileID: 2196554791494155027}
+  - component: {fileID: 1022687888441708154}
   m_Layer: 0
   m_Name: VFX_Death_Cucumber
   m_TagString: Untagged
@@ -9827,7 +9828,7 @@ Transform:
   - {fileID: 2064592563612170107}
   - {fileID: 4778783339126418685}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6985948577314139619
 ParticleSystem:
@@ -9846,7 +9847,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -14649,9 +14650,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 34659191
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -521500183
+  m_SortingLayer: 3
+  m_SortingOrder: -10
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14682,6 +14683,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &1022687888441708154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6680102009678484214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05cbdda591b24dab9e967cb54b825a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8596226494656356312
 GameObject:
   m_ObjectHideFlags: 0

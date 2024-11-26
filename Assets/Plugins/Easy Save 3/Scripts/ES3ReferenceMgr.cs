@@ -13,7 +13,6 @@ using System.Linq;
 
 #if UNITY_VISUAL_SCRIPTING
 using Unity.VisualScripting;
-[IncludeInSettings(true)]
 #endif
 public class ES3ReferenceMgr : ES3ReferenceMgrBase
 {

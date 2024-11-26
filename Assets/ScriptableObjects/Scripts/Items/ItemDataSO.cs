@@ -13,7 +13,7 @@ namespace ScriptableObjects.Scripts.Items
         [Header("재료 타입")] 
         public EStageMaterialType StageMaterialType;
         [Header("아이템 이미지")] 
-        public Sprite Sprite;
+        public List<Sprite> Sprite;
     }
     
     [Serializable]

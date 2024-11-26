@@ -68,8 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unlockZoneView: {fileID: 6492425157593173114}
   _playerCollision: {fileID: 8480423095896879836}
-  StandbyObject: {fileID: 1095436867177797729}
-  LockObject: {fileID: 4105173537435823588}
+  unlockZoneAnimator: {fileID: 0}
 --- !u!1 &3382011132453244061
 GameObject:
   m_ObjectHideFlags: 0
@@ -29195,19 +29194,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 958158077242383823, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
   m_PrefabInstance: {fileID: 896288901246407467}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1095436867177797729 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 235176771607399242, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
-  m_PrefabInstance: {fileID: 896288901246407467}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3066498014994942445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2809720271800113862, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
-  m_PrefabInstance: {fileID: 896288901246407467}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4105173537435823588 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3785490530697805519, guid: 025ffaeccb98b41539662e062ad50aac, type: 3}
   m_PrefabInstance: {fileID: 896288901246407467}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &6492425157593173114 stripped
