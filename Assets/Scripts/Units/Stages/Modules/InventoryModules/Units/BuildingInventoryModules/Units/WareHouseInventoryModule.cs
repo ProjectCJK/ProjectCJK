@@ -70,13 +70,9 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
             if (!itemReceiver.CanReceiveItem()) return;
 
-            IItem item = PopSpawnedItem();
-            if (item != null)
-            {
-                itemReceiver.ReceiveItemThroughTransfer(outputItemKey, item.Count, item.Transform.position);
-                ItemFactory.ReturnItem(item);
-                RemoveItem(outputItemKey);
-            }
+            itemReceiver.ReceiveItemThroughTransfer(outputItemKey, 1, SenderTransform.position);
+            RemoveItem(outputItemKey);
+            OnUpdateStackedItem?.Invoke(CurrentInventorySize);
 
             SetLastSendTime();
         }

@@ -55,7 +55,7 @@ namespace Managers
                     TutorialClear = false,
                     CurrentPlayerLevel = 1,
                     CurrentPlayerExp = 0,
-                    Gold = 10000,
+                    Gold = 6,
                     Diamond = 0,
                     RedGem = 0,
                     ActiveStatusSettingIndex = 0
@@ -69,6 +69,7 @@ namespace Managers
 
         private void Start()
         {
+            AdsManager.Instance.InitializeRewardedAds();
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
 

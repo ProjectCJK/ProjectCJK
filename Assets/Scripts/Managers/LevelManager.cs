@@ -4,6 +4,7 @@ using Interfaces;
 using Modules.DesignPatterns.Singletons;
 using UI.CurrencyPanel;
 using UI.Level;
+using UI.LevelPanels;
 using Units.Stages.UI.Level;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace Managers
         private string[,] _levelData;
 
         private List<Tuple<ECurrencyType, int>> _levelUpRewards = new();
+        private const string LevelUpPanelAD = "AD_LevelUpPanel";
         
         public int CurrentLevel
         {
@@ -60,16 +62,34 @@ namespace Managers
         {
             _levelView = UIManager.Instance.UI_Panel_Main.LevelView;
             _ui_Panel_LevelUp = UIManager.Instance.UI_Panel_Main.UI_Panel_LevelUp;
-            _ui_Panel_LevelUp.RegisterReference(() =>
-            {
-                foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
+
+            // 보상 지급 콜백 등록
+            _ui_Panel_LevelUp.RegisterReference(
+                // 스킵 버튼: 기본 보상 지급
+                () =>
                 {
-                    CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2);
-                }
-            }); 
-            
+                    foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
+                    {
+                        CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2);
+                    }
+                },
+                // 광고 보기 버튼: 2배 보상 지급
+                () =>
+                {
+                    AdsManager.Instance.ShowRewardedAd(LevelUpPanelAD, (reward, info) =>
+                    {
+                        foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
+                        {
+                            CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2 * 2);
+                        }
+
+                        Debug.Log("광고 시청 완료! 2배 보상이 지급되었습니다.");
+                        _ui_Panel_LevelUp.gameObject.SetActive(false); // 광고 이후 패널 닫기
+                    });
+                });
+
             _levelData = DataManager.Instance.LevelData.GetData();
-            
+
             _levelModel = new LevelModel();
             _levelViewModel = new LevelViewModel(_levelModel);
             _levelView.BindViewModel(_levelViewModel);

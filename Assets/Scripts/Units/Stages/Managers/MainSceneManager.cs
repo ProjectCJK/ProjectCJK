@@ -28,7 +28,7 @@ namespace Units.Stages.Managers
         [SerializeField] private MainSceneDefaultSetting _mainSceneDefaultSetting;
         
         public StageController StageController;
-        private CameraController _cameraController;
+        public CameraController CameraController;
         private Joystick _joystick;
         
         public bool Initialized { get; set; }
@@ -83,9 +83,9 @@ namespace Units.Stages.Managers
 
             if (Camera.main != null)
             {
-                Camera.main.orthographicSize = 10;
-                _cameraController = Camera.main.GetComponent<CameraController>();
-                _cameraController.RegisterReference();
+                Camera.main.orthographicSize = 15;
+                CameraController = Camera.main.GetComponent<CameraController>();
+                CameraController.RegisterReference();
 
                 if (GameManager.Instance.ES3Saver.TutorialClear)
                 {
@@ -95,7 +95,7 @@ namespace Units.Stages.Managers
             
             if (GameManager.Instance.ES3Saver.TutorialClear == false)
             {
-                TutorialManager.Instance.RegisterReference(_cameraController, SetPlayerToCameraTarget);
+                TutorialManager.Instance.RegisterReference(CameraController, SetPlayerToCameraTarget);
             }
         }
 
@@ -167,8 +167,8 @@ namespace Units.Stages.Managers
 
         private void SetPlayerToCameraTarget()
         {
-            _cameraController.Transform.position = new Vector3(StageController.PlayerTransform.position.x, StageController.PlayerTransform.position.y, _cameraController.Transform.position.z);
-            _cameraController.FollowTarget(StageController.PlayerTransform);
+            CameraController.Transform.position = new Vector3(StageController.PlayerTransform.position.x, StageController.PlayerTransform.position.y, CameraController.Transform.position.z);
+            CameraController.FollowTarget(StageController.PlayerTransform);
         }
     }
 }

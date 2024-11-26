@@ -246,10 +246,13 @@ namespace Managers
 
         private void ActivateCostumeGacha()
         {
-            var gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
+            if (GameManager.Instance.ES3Saver.Diamond >= 10)
+            {
+                List<CostumeItemData> gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
 
-            SortCostumeItems();
-            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.Activate(gachaItems);
+                SortCostumeItems();
+                UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.Activate(gachaItems);
+            }
         }
 
         private List<CostumeItemData> GetRandomItem(int maxCommonGet, int maxRareGet)
