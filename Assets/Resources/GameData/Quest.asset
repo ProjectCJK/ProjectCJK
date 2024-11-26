@@ -121,7 +121,7 @@ MonoBehaviour:
     - 1
     - 3
     - St_110004
-    - Grather Tomato
+    - Gather Tomatoes
     - Get
     - Material_A
     - 5
@@ -223,10 +223,10 @@ MonoBehaviour:
     - 4
     - 9
     - St_110010
-    - Grather Cucumber
-    - Get
-    - Material_B
-    - 5
+    - Unlock a new area
+    - Build
+    - HuntingZone_B
+    - 1
     - Star
     - 1
     - Diamond
@@ -240,10 +240,10 @@ MonoBehaviour:
     - 4
     - 10
     - St_110011
-    - Increase Canning Machine A Price
-    - LevelUpOption1
-    - KitchenA_A
-    - 10
+    - Gather Cucumbers
+    - Get
+    - Material_B
+    - 5
     - Star
     - 1
     - Diamond
@@ -257,10 +257,10 @@ MonoBehaviour:
     - 4
     - 11
     - St_110012
-    - Unlock a new area
-    - Build
-    - HuntingZone_B
-    - 1
+    - Increase Canning Machine A Price
+    - LevelUpOption1
+    - KitchenA_A
+    - 10
     - Star
     - 1
     - Diamond
@@ -325,7 +325,7 @@ MonoBehaviour:
     - 6
     - 15
     - St_110016
-    - Grather Cucumber
+    - Gather Cucumbers
     - Get
     - Material_B
     - 5
@@ -437,7 +437,7 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
-    - ManagementDesk_GetMoney
+    - ManagementDesk_Upgrade
   - rowData:
     - 110023
     - 1
@@ -478,7 +478,7 @@ MonoBehaviour:
     - 8
     - 24
     - St_110025
-    - Collect Money
+    - Collect Gold
     - Get
     - Money
     - 3000
@@ -488,14 +488,14 @@ MonoBehaviour:
     - 2
     - Gold
     - 30000
-    - ManagementDesk_Upgrade
+    - ManagementDesk_GetMoney
   - rowData:
     - 110026
     - 2
     - 0
     - 25
     - St_110026
-    - Grather Tomato
+    - Gather Tomatoes
     - Get
     - Material_A
     - 3
@@ -563,7 +563,7 @@ MonoBehaviour:
     - 1
     - 29
     - St_110030
-    - Grather Tomato
+    - Gather Tomatoes
     - Get
     - Material_A
     - 10
@@ -573,7 +573,7 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
-    - ManagementDesk_GetMoney
+    - HuntingZone_A_Hunt
   - rowData:
     - 110031
     - 2
@@ -590,7 +590,7 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
-    - ManagementDesk_Upgrade
+    - ProductA_A_Sell
   - rowData:
     - 110032
     - 2
@@ -607,14 +607,14 @@ MonoBehaviour:
     - 2
     - Gold
     - 4000
-    - HuntingZone_A_Hunt
+    - ManagementDesk_Upgrade
   - rowData:
     - 110033
     - 2
     - 1
     - 32
     - St_110033
-    - Collect Money
+    - Collect Gold
     - Get
     - Money
     - 1000
@@ -658,14 +658,14 @@ MonoBehaviour:
     - 2
     - Gold
     - 5000
-    - ManagementDesk_GetMoney
+    - ProductA_A_Sell
   - rowData:
     - 110036
     - 2
     - 2
     - 35
     - St_110036
-    - Collect Money
+    - Collect Gold
     - Get
     - Money
     - 3000
@@ -692,7 +692,7 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
-    - HuntingZone_B_Unlock
+    - KitchenA_B_Unlock
   - rowData:
     - 110038
     - 2
@@ -709,7 +709,7 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
-    - KitchenA_A_Unlock
+    - StandA_B_Unlock
   - rowData:
     - 110039
     - 2
@@ -726,14 +726,14 @@ MonoBehaviour:
     - 2
     - Gold
     - 6000
-    - StandA_B_Unlock
+    - HuntingZone_B_Unlock
   - rowData:
     - 110040
     - 2
     - 4
     - 39
     - St_110040
-    - Grather Cucumber
+    - Gather Cucumbers
     - Get
     - Material_B
     - 10
@@ -777,7 +777,7 @@ MonoBehaviour:
     - 2
     - Diamond
     - 5
-    - ProductA_A_Sell
+    - ProductA_B_Sell
   - rowData:
     - 110043
     - 2
@@ -801,7 +801,7 @@ MonoBehaviour:
     - 5
     - 43
     - St_110044
-    - Build Server House
+    - Build Server's House
     - Build
     - DeliveryLodging
     - 1
@@ -988,7 +988,7 @@ MonoBehaviour:
     - 8
     - 54
     - St_110055
-    - Increase Hunter Power
+    - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
     - 5
@@ -1022,7 +1022,7 @@ MonoBehaviour:
     - 9
     - 56
     - St_110057
-    - Grather Bean
+    - Gather Beans
     - Get
     - Material_C
     - 10
@@ -1032,7 +1032,7 @@ MonoBehaviour:
     - 2
     - Diamond
     - 5
-    - HuntingZone_C_Unlock
+    - HuntingZone_C_Hunt
   - rowData:
     - 110058
     - 2
@@ -1049,7 +1049,7 @@ MonoBehaviour:
     - 2
     - Diamond
     - 5
-    - HuntingZone_C_Hunt
+    - KitchenA_C_Product
   - rowData:
     - 110059
     - 2
@@ -1066,7 +1066,7 @@ MonoBehaviour:
     - 2
     - Diamond
     - 5
-    - KitchenA_C_Product
+    - KitchenA_C_Upgrade
   - rowData:
     - 110060
     - 2
@@ -1083,14 +1083,14 @@ MonoBehaviour:
     - 2
     - Diamond
     - 5
-    - KitchenA_C_Upgrade
+    - HuntingZone_C_Unlock
   - rowData:
     - 110061
     - 2
     - 10
     - 60
     - St_110061
-    - Increase Hunter Power
+    - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
     - 10
@@ -1158,7 +1158,7 @@ MonoBehaviour:
     - 11
     - 64
     - St_110065
-    - Increase Hunter Power
+    - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
     - 15
@@ -1209,7 +1209,7 @@ MonoBehaviour:
     - 12
     - 67
     - St_110068
-    - Grather Bean
+    - Gather Beans
     - Get
     - Material_C
     - 10
@@ -1226,7 +1226,7 @@ MonoBehaviour:
     - 12
     - 68
     - St_110069
-    - Produce Tomato Stews
+    - Produce Tomato Stew
     - Product
     - ProductB_A
     - 5
@@ -1243,7 +1243,7 @@ MonoBehaviour:
     - 12
     - 69
     - St_110070
-    - Sell Tomato Stews
+    - Sell Tomato Stew
     - Selling
     - ProductB_A
     - 5
@@ -1294,7 +1294,7 @@ MonoBehaviour:
     - 13
     - 72
     - St_110073
-    - Grather Cucumber
+    - Gather Cucumbers
     - Get
     - Material_B
     - 10
@@ -1304,7 +1304,7 @@ MonoBehaviour:
     - 2
     - RedGem
     - 280
-    - HuntingZone_C_Hunt
+    - HuntingZone_B_Hunt
   - rowData:
     - 110074
     - 2
@@ -1328,7 +1328,7 @@ MonoBehaviour:
     - 14
     - 74
     - St_110075
-    - Increase Hunter Power
+    - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
     - 20
@@ -1379,7 +1379,7 @@ MonoBehaviour:
     - 14
     - 77
     - St_110078
-    - Produce Tomato Stews
+    - Produce Tomato Stew
     - Product
     - ProductB_A
     - 5
@@ -1498,7 +1498,7 @@ MonoBehaviour:
     - 16
     - 84
     - St_110085
-    - Collect Money
+    - Collect Gold
     - Get
     - Money
     - 36000
@@ -1566,7 +1566,7 @@ MonoBehaviour:
     - 17
     - 88
     - St_110089
-    - Increase Hunter Power
+    - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
     - 25
@@ -1660,7 +1660,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Diamond
-    - 5
+    - 8
     - ProductA_B_Sell
   - rowData:
     - 110095
@@ -1668,7 +1668,7 @@ MonoBehaviour:
     - 19
     - 94
     - St_110095
-    - Sell Tomato Stews
+    - Sell Tomato Stew
     - Selling
     - ProductB_A
     - 10
@@ -1677,7 +1677,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Diamond
-    - 5
+    - 8
     - ProductB_A_Sell
   - rowData:
     - 110096
@@ -1685,7 +1685,7 @@ MonoBehaviour:
     - 19
     - 95
     - St_110096
-    - Collect Money
+    - Collect Gold
     - Get
     - Money
     - 144000
@@ -1694,5 +1694,5 @@ MonoBehaviour:
     - Diamond
     - 2
     - Diamond
-    - 5
+    - 8
     - ManagementDesk_GetMoney
