@@ -146,7 +146,7 @@ namespace Managers
 
         public void ActivePopUpTutorialPanel(int index)
         {
-            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index) && GameManager.Instance.ES3Saver.PopUpTutorialClear[index]) return;
+            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index)) return;
          
             OnActivateUIByCurrentTutorialIndex?.Invoke(index);
             GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, false);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using Managers;
 using UI.BuildingEnhancementPanel;
 using UI.CostumeGachaPanels;
 using UI.CostumePanels;
@@ -43,35 +44,41 @@ namespace UI.MainPanels
 
         public void RegisterReference()
         {
-            foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
+            if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
             {
-                item.gameObject.SetActive(false);
-            }
+                foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
+                {
+                    item.gameObject.SetActive(false);
+                }
             
-            foreach (Button button in UI_Panel_MainButtons.UI_Button_LockButton)
-            {
-                button.gameObject.SetActive(true);
-            }
+                foreach (Button button in UI_Panel_MainButtons.UI_Button_LockButton)
+                {
+                    button.gameObject.SetActive(true);
+                }
             
-            UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(false);
-            UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(false);
-            UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(false);
+                UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(false);
+                UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(false);
+                UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(false);
+            }
         }
         
         public void OnActivateUIByCurrentTutorialIndex(int index)
         {
-            foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
+            if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
             {
-                item.gameObject.SetActive(false);
-            }
-            
-            for (var i = 0; i < UI_Item_QuestGuide.Count; i++)
-            {
-                if (UI_Item_QuestGuide[i].index == index)
+                foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
                 {
-                    foreach (GameObject item in UI_Item_QuestGuide[i].items)
+                    item.gameObject.SetActive(false);
+                }
+                
+                for (var i = 0; i < UI_Item_QuestGuide.Count; i++)
+                {
+                    if (UI_Item_QuestGuide[i].index == index)
                     {
-                        item.gameObject.SetActive(true);
+                        foreach (GameObject item in UI_Item_QuestGuide[i].items)
+                        {
+                            item.gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -125,9 +132,23 @@ namespace UI.MainPanels
 
         public void OnInactivateUIByCurrentTutorialIndex(int index)
         {
-            foreach (GameObject item in UI_Item_QuestGuide.Where(guide => index == guide.index).SelectMany(guide => guide.items))
+            // foreach (GameObject item in UI_Item_QuestGuide.Where(guide => index == guide.index).SelectMany(guide => guide.items))
+            // {
+            //     item.gameObject.SetActive(false);
+            // }
+
+            if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
             {
-                item.gameObject.SetActive(false);
+                foreach (UI_Item_QuestGuide itemQuestGuide in UI_Item_QuestGuide)
+                {
+                    if (itemQuestGuide.index == index)
+                    {
+                        foreach (GameObject obj in itemQuestGuide.items)
+                        {
+                            obj.SetActive(false);
+                        }
+                    }
+                }
             }
         }
     }
