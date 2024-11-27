@@ -37,5 +37,10 @@ namespace ScriptableObjects.Scripts.Creatures.Units
         [Space(20), Header("### 아이템 스탯 ###")]
         [Header("아이템 드롭 최소 거리")] public float MinimumRange;
         [Header("아이템 드롭 최대 거리")] public float MaxRange;
+
+        [Space(20), Header("### 사망 이펙트 ###")]
+        public GameObject tomatoDeathEffectPrefab;
+        public GameObject cucumberDeathEffectPrefab;
+        public GameObject beanDeathEffectPrefab;
     }
 }

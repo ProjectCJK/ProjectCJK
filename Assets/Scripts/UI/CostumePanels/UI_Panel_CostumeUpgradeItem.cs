@@ -30,6 +30,7 @@ namespace UI.CostumePanels
 
         public void Activate(CostumeItemData costumeItem, Action<CostumeItemData, bool> onSelectCallback)
         {
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
             IsSelected = false;
             CostumeItemData = costumeItem;
             _onSelectCallback = onSelectCallback;

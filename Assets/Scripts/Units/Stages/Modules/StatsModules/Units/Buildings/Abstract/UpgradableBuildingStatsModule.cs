@@ -51,8 +51,11 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         public int RequiredGoldForUpgradeOption1IconIndex;
         public int RequiredRedGemForUpgradeOption2IconIndex;
         public int RequiredBuildingLevelToUpgradeOption2LevelIndex;
-        
-        protected UpgradableBuildingStatsModule(BuildingDataSO buildingDataSo) : base(buildingDataSo) { }
+
+        protected UpgradableBuildingStatsModule(BuildingDataSO buildingDataSo) : base(buildingDataSo)
+        {
+            UIManager.Instance.Joystick.OnClickPanel += () => UIManager.Instance.UI_Panel_Main.UI_Panel_BuildingEnhancement.gameObject.SetActive(false);
+        }
         
         protected void UpdateDefaultValue()
         {

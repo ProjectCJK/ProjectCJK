@@ -60,6 +60,7 @@ namespace Units.Stages.Units.HuntingZones
 
         public string HuntingZoneKey;
         private string _itemKey;
+        private string effectKey;
 
         private ITradeZone _unlockZonePlayer;
         private IItemFactory itemFactory;
@@ -118,6 +119,7 @@ namespace Units.Stages.Units.HuntingZones
         private void ReturnMonster(IMonster monster)
         {
             CurrentSpawnedMonsters.Remove(monster);
+            SetEffects(monster.Transform.position);
             DropItems(monster.Transform.position);
         }
 
@@ -127,6 +129,12 @@ namespace Units.Stages.Units.HuntingZones
 
             IItem item = itemFactory.GetItem(_itemKey, 1, senderPosition, false);
             item.Transfer(senderPosition, receiverPosition, () => OnDroppedItem?.Invoke(item));
+        }
+        
+        private void SetEffects(Vector3 transformPosition)
+        {
+            //  item = itemFactory.GetItem(_itemKey, 1, senderPosition, false);
+            // item.Transfer(senderPosition, receiverPosition, () => OnDroppedItem?.Invoke(item));
         }
 
         private Vector3 GetRandomItemDropPoint(Vector3 senderPosition)
@@ -165,7 +173,6 @@ namespace Units.Stages.Units.HuntingZones
         {
             CurrentGoldForUnlock += value;
             UnlockZoneModule.CurrentGoldForUnlock = CurrentGoldForUnlock;
-
             UnlockZoneModule.UpdateViewModel();
 
             if (CurrentGoldForUnlock >= RequiredGoldForUnlock) UnlockZoneModule.SetCurrentState(EActiveStatus.Active);

@@ -40836,6 +40836,10 @@ PrefabInstance:
       propertyPath: _kitchenCustomSetting.SpawnedItem.Array.data[11]
       value: 
       objectReference: {fileID: 5339218323011506650}
+    - target: {fileID: 9136046364464168069, guid: ed162529e02914c6c83e8a964eb7d857, type: 3}
+      propertyPath: unlockZoneAnimator
+      value: 
+      objectReference: {fileID: 5865734725989130813}
     - target: {fileID: 9137829337408384573, guid: ed162529e02914c6c83e8a964eb7d857, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size
       value: 35
@@ -48192,5 +48196,10 @@ PrefabInstance:
 --- !u!4 &4339713093700633986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8397831238388808679, guid: ed162529e02914c6c83e8a964eb7d857, type: 3}
+  m_PrefabInstance: {fileID: 5238483600188685925}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5865734725989130813 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1861556420809710680, guid: ed162529e02914c6c83e8a964eb7d857, type: 3}
   m_PrefabInstance: {fileID: 5238483600188685925}
   m_PrefabAsset: {fileID: 0}

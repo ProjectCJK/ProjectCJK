@@ -17,7 +17,7 @@ using UnityEngine;
 namespace Units.Stages.Units.Creatures.Units
 {
     public interface IMonster : ICreature, IPoolable, IRegisterReference<MonsterDataSO>,
-        IInitializable<Vector3, MonsterSprite, Action>, ITakeDamage
+        IInitializable<EMaterialType, Vector3, MonsterSprite, Action>, ITakeDamage
     {
     }
 
@@ -25,7 +25,7 @@ namespace Units.Stages.Units.Creatures.Units
     {
         private CreatureStateMachine _creatureStateMachine;
         private IDamageFlashModule _damageFlashModule;
-        private EMaterialType _materialType;
+        public EMaterialType _materialType;
         private IMonsterHealthModule _monsterHealthModule;
         private IMonsterMovementModule _monsterMovementModule;
 
@@ -64,7 +64,7 @@ namespace Units.Stages.Units.Creatures.Units
             _damageFlashModule.RegisterReference();
         }
 
-        public void Initialize(Vector3 randomSpawnPoint, MonsterSprite monsterSprites, Action action)
+        public void Initialize(EMaterialType type, Vector3 randomSpawnPoint, MonsterSprite monsterSprites, Action action)
         {
             // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
             // _spriteRenderer.sprite = monsterSprite;

@@ -153,7 +153,7 @@ namespace Units.Stages.Units.Buildings.Units
         
         private void HandleOnUpdateStackedItem(int value)
         {
-            var targetIndex = Mathf.Min(_managementDeskCustomSetting.SpawnedItem.Count,  value / 10 + 1) - 1;
+            var targetIndex = Mathf.Min(_managementDeskCustomSetting.SpawnedItem.Count,  value / 10) - 1;
 
             foreach (GameObject spawnedItem in _managementDeskCustomSetting.SpawnedItem)
             {

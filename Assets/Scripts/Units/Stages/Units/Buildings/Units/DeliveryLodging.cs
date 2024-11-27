@@ -77,7 +77,7 @@ namespace Units.Stages.Units.Buildings.Units
             _deliveryLodgingInventoryModule = new DeliveryLodgingInventoryModule(null,
                 _deliveryLodgingDefaultSetting.UnlockZone_Player, _itemFactory, _deliveryLodgingStatsModule, null,
                 null);
-
+            
             UnlockZoneModule = GetComponent<UnlockZoneModule>();
             _upgradeZonePlayer = _deliveryLodgingDefaultSetting.UpgradeZone_Player.GetComponent<UpgradeZone>();
             _unlockZonePlayer = _deliveryLodgingDefaultSetting.UnlockZone_Player.GetComponent<TradeZone>();

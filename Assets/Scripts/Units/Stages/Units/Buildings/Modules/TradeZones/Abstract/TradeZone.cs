@@ -12,6 +12,7 @@ namespace Units.Stages.Units.Buildings.Modules.TradeZones.Abstract
     {
         public string BuildingKey { get; }
         public string InputItemKey { get; }
+        public int TempMoney { get; set; }
         public bool RegisterItemReceiver(ICreatureItemReceiver itemReceiver, bool register);
 
         public int CanReceiveMoney();
@@ -28,6 +29,11 @@ namespace Units.Stages.Units.Buildings.Modules.TradeZones.Abstract
 
         public string BuildingKey { get; private set; }
         public string InputItemKey { get; private set; }
+        public int TempMoney
+        {
+            get => _buildingReceiverInventoryModule.TempMoney;
+            set => _buildingReceiverInventoryModule.TempMoney = value;
+        }
 
         public void RegisterReference(
             IUnlockZoneProperty buildingZone,
@@ -52,10 +58,8 @@ namespace Units.Stages.Units.Buildings.Modules.TradeZones.Abstract
 
         public int CanReceiveMoney()
         {
-            if (_buildingReceiverInventoryModule.IsItemReceiving) return 0;
-
             if (_building is { } unlockZoneProperty)
-                return unlockZoneProperty.RequiredGoldForUnlock - unlockZoneProperty.CurrentGoldForUnlock;
+                return unlockZoneProperty.RequiredGoldForUnlock - (unlockZoneProperty.CurrentGoldForUnlock + TempMoney);
 
             return 0;
         }

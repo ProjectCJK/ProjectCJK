@@ -38,7 +38,10 @@ namespace Units.Stages.Units.Buildings.UI.WareHouses
 
                 foreach (ItemSprite itemSprite in DataManager.Instance.ItemDataSo.ItemSprites.Where(itemSprite =>
                              itemSprite.ItemType == EItemType.Material &&
-                             itemSprite.StageMaterialType == stageMaterialType)) sprite = itemSprite.Sprite;
+                             itemSprite.StageMaterialType == stageMaterialType))
+                {
+                    sprite = itemSprite.Sprite[0];
+                }
 
                 var buttonData = new ButtonData(sprite, materialType, OnClickButton);
 

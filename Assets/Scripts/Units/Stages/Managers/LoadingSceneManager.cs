@@ -27,7 +27,8 @@ namespace Units.Stages.Managers
         private const string loadingSceneName = "LoadingScene";
 
         private readonly List<Coroutine> activeCoroutines = new(); // 모든 실행 중인 코루틴을 저장
-
+        private WaitForSeconds InitialLoadingWait = new(3f);
+        
         public void LoadSceneWithLoadingScreen(ESceneName sceneName)
         {
             if (isLoading) return; // 이미 로드 중이면 무시
@@ -80,15 +81,17 @@ namespace Units.Stages.Managers
                 GameManager.Instance.InGameTrigger = true;
                 Debug.Log("Creating loading UI (InGameTrigger: false).");
                 // Loading Prefab 0 생성
-                var loadingModule = Instantiate(_loadingPrefabs[0], _rootCanvas.transform);
+                LoadingModule loadingModule = Instantiate(_loadingPrefabs[0], _rootCanvas.transform);
                 progressBar = loadingModule.Slider; // Slider 연결
+
+                yield return InitialLoadingWait;
             }
             else
             {
                 Debug.Log("Creating loading UI (InGameTrigger: true).");
 
                 // Loading Prefab 1 생성
-                var loadingModule = Instantiate(_loadingPrefabs[1], _rootCanvas.transform);
+                LoadingModule loadingModule = Instantiate(_loadingPrefabs[1], _rootCanvas.transform);
                 progressBar = loadingModule.Slider; // Slider 연결
             }
 

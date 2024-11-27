@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
@@ -6,6 +7,8 @@ namespace Externals.Joystick.Scripts.Base
 {
     public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
+        public event Action OnClickPanel;
+        
         [SerializeField] private float handleRange = 1;
         [SerializeField] private float deadZone;
         [SerializeField] private AxisOptions axisOptions = AxisOptions.Both;
@@ -89,6 +92,7 @@ namespace Externals.Joystick.Scripts.Base
 
         public virtual void OnPointerDown(PointerEventData eventData)
         {
+            OnClickPanel?.Invoke();
             OnDrag(eventData);
         }
 

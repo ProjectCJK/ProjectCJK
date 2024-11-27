@@ -30,7 +30,7 @@ namespace Managers
         public GameObject ObjectTrackerPrefab;
         
         [Space(20)] [Header("### Item Data ###")]
-        public const int GoldSendingMaximum = 1000;
+        public const int GoldSendingMaximum = 10;
 
         [Header("### Unit Data ###")]
         public PlayerDataSO PlayerDataSo;
@@ -116,7 +116,7 @@ namespace Managers
         public GameData BuildingUpgradePanel;
 
         [Space(20), Header("### ItemAssets ###")]
-        public Dictionary<string, Sprite> ItemSprites;
+        public Dictionary<string, List<Sprite>> ItemSprites;
 
         [Space(20), Header("### CurrencyAssets ###")]
         public Dictionary<string, Sprite> CurrencySprites;

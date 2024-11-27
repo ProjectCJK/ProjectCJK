@@ -55,6 +55,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
+            TempMoney -= item.Count;
             AddItem(inputItemKey, item.Count);
             ItemFactory.ReturnItem(item);
             OnUpdateStackedItem?.Invoke(Inventory[inputItemKey]);

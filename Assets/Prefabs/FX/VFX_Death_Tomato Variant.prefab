@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 912593355168903670, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1827492517833062433, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.06666667
@@ -19,6 +23,22 @@ PrefabInstance:
     - target: {fileID: 1827492517833062433, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.69411767
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196554791494155027, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196554791494155027, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196554791494155027, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_SortingOrder
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196554791494155027, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -521500183
       objectReference: {fileID: 0}
     - target: {fileID: 5700329859978035509, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: UVModule.sprites.Array.data[0].sprite
@@ -36,9 +56,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Death_Tomato Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6985948577314139619, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8789454415842706293, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8789454415842706293, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -79,6 +103,14 @@ PrefabInstance:
     - target: {fileID: 8789454415842706293, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8984814040823409451, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8984814040823409451, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1758947133
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

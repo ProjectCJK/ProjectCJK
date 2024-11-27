@@ -148,32 +148,29 @@ namespace Units.Stages.Controllers
 
                 if (activeStatusModule != null)
                 {
-                    if (activeStatusModule != null)
-                    {
-                        var savedStatus = EActiveStatus.Lock;
+                    var savedStatus = EActiveStatus.Lock;
                         
-                        if (activeStatusModule.TryGetComponent(out BuildingZone building))
-                        {
-                            // 로드된 상태 적용
-                            savedStatus = GameManager.Instance.ES3Saver.BuildingActiveStatuses.ContainsKey(building.BuildingKey)
-                                ? GameManager.Instance.ES3Saver.BuildingActiveStatuses[building.BuildingKey]
-                                : activeStatus.InitialActiveStatus;
-                        }
-                        else if (activeStatusModule.TryGetComponent(out HuntingZone huntingZone))
-                        {
-                            savedStatus = GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses.ContainsKey(huntingZone.HuntingZoneKey)
-                                ? GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[huntingZone.HuntingZoneKey]
-                                : activeStatus.InitialActiveStatus;
-                        }
+                    if (activeStatusModule.TryGetComponent(out BuildingZone building))
+                    {
+                        // 로드된 상태 적용
+                        savedStatus = GameManager.Instance.ES3Saver.BuildingActiveStatuses.ContainsKey(building.BuildingKey)
+                            ? GameManager.Instance.ES3Saver.BuildingActiveStatuses[building.BuildingKey]
+                            : activeStatus.InitialActiveStatus;
+                    }
+                    else if (activeStatusModule.TryGetComponent(out HuntingZone huntingZone))
+                    {
+                        savedStatus = GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses.ContainsKey(huntingZone.HuntingZoneKey)
+                            ? GameManager.Instance.ES3Saver.HuntingZoneActiveStatuses[huntingZone.HuntingZoneKey]
+                            : activeStatus.InitialActiveStatus;
+                    }
                     
 
-                        activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
-                        activeStatusModule.SetCurrentState(savedStatus);
-                        activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
+                    activeStatusModule.RequiredGoldForUnlock = activeStatus.RequiredGoldCountForUnlock;
+                    activeStatusModule.SetCurrentState(savedStatus);
+                    activeStatusModule.OnChangeActiveStatus += HandleOnChangeActiveStatus;
 
-                        // 상태 동기화
-                        SyncActiveStatus(activeStatusModule.TargetKey, savedStatus);
-                    }
+                    // 상태 동기화
+                    SyncActiveStatus(activeStatusModule.TargetKey, savedStatus);
                 }
             }
         }

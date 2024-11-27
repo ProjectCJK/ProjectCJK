@@ -11,6 +11,8 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 {
     public interface IInventoryModule : IInitializable, IItemReceiver
     {
+        
+        public int TempMoney { get; set; }
         public bool IsItemReceiving { get; set; }
         public IItemFactory ItemFactory { get; }
         public int MaxInventorySize { get; }
@@ -27,7 +29,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
     public abstract class InventoryModule : IInventoryModule
     {
-        private const float SendItemInterval = 0.2f;
+        private const float SendItemInterval = 0.1f;
 
         public abstract Dictionary<string, int> Inventory { get; set; }
 
@@ -43,6 +45,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
         public int CurrentInventorySize => Inventory.Values.Sum();
 
+        public int TempMoney { get; set; }
         public bool IsItemReceiving { get; set; }
 
         public abstract void Initialize();
@@ -87,7 +90,10 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
         protected abstract void SendItem();
 
-        protected abstract void OnItemReceived(string inputItemKey, IItem item);
+        protected virtual void OnItemReceived(string inputItemKey, IItem item)
+        {
+            
+        }
 
         /// <summary>
         ///     아이템을 제거하는 메서드
