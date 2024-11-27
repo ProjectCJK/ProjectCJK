@@ -11,7 +11,8 @@ namespace Modules
         /// <summary>
         /// TutorialSettings
         /// </summary>
-        public bool TutorialClear;
+        public bool InitialTutorialClear;
+        public Dictionary<int, bool> PopUpTutorialClear = new();
 
         /// <summary>
         /// StageSettings
@@ -63,8 +64,6 @@ namespace Modules
         public Dictionary<int, Dictionary<int, bool>> QuestClearStatuses = new();
         public Dictionary<int, Dictionary<int, int>> QuestCurrentGoalCounts = new();
         
-        public Dictionary<int, bool> PopUpTutorialClear = new();
-
         public void ResetStageData()
         {
             Gold = 600;

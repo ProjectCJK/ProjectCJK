@@ -14,7 +14,7 @@ namespace UI.TutorialPanel
         
         private List<string> textLists = new();
         
-        public Action OnClickExitButton;
+        public Action<int> OnClickExitButton;
 
         public void RegisterReference()
         {
@@ -38,18 +38,19 @@ namespace UI.TutorialPanel
             //         GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(i, false);
             //     }
             // }
-            
-            closeButton.onClick.AddListener(() =>
-            {
-                OnClickExitButton?.Invoke();
-                gameObject.SetActive(false);
-            });
         }
 
         public void ActivatePanel(int index)
         {
             _balloonText.text = textLists[index];
             gameObject.SetActive(true);
+            
+            closeButton.onClick.RemoveAllListeners();;
+            closeButton.onClick.AddListener(() =>
+            {
+                OnClickExitButton?.Invoke(index);
+                gameObject.SetActive(false);
+            });
         }
     }
 }

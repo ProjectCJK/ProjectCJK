@@ -43,16 +43,19 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
         }
         
         private readonly StandStatsModule _standStatsModule;
-        
+        private readonly string _buildingKey;
+
         public StandInventoryModule(
             Transform senderTransform,
             Transform receiverTransform,
             StandStatsModule standStatsModule,
             IItemFactory itemFactory,
             string inputItemKey,
-            string outputItemKey)
+            string outputItemKey,
+            string buildingKey)
             : base(senderTransform, receiverTransform, itemFactory, standStatsModule, inputItemKey, outputItemKey)
         {
+            _buildingKey = buildingKey;
             _standStatsModule = standStatsModule;
         }
 
@@ -74,6 +77,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             }
             else
             {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Display, _buildingKey, item.Count);
                 AddItem(inputItemKey, item.Count);
                 ItemFactory.ReturnItem(item);
                 OnUpdateStackedItem?.Invoke(Inventory[inputItemKey]);

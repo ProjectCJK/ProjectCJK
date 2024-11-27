@@ -8,7 +8,7 @@ namespace UI.TutorialPanel
 {
     public class UI_Panel_Tutorial : MonoBehaviour
     {
-        public event Action OnScriptsEnded;
+        public event Action OnClickExitButton;
         
         [SerializeField] private List<string> _scripts;
         [SerializeField] private TextMeshProUGUI _text;
@@ -38,7 +38,7 @@ namespace UI.TutorialPanel
             }
             else
             {
-                OnScriptsEnded?.Invoke();
+                OnClickExitButton?.Invoke();
             }
         }
 

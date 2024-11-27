@@ -52,7 +52,7 @@ namespace Managers
             {
                 ES3Saver = new ES3Saver
                 {
-                    TutorialClear = false,
+                    InitialTutorialClear = false,
                     CurrentPlayerLevel = 1,
                     CurrentPlayerExp = 0,
                     Gold = 6,

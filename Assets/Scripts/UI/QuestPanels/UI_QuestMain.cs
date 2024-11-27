@@ -45,6 +45,7 @@ namespace UI.QuestPanels
             Button_Reward.onClick.AddListener(() => 
             {
                 QuestManager.Instance.GetNextQuest();
+                gameObject.SetActive(false);
             });
         }
         

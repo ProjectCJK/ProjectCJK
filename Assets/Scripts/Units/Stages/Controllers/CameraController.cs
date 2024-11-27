@@ -8,8 +8,8 @@ namespace Units.Stages.Controllers
     {
         private const float defaultSmoothTime = 0.3f;
         private const float specificSmoothTime = 1.3f;
-        private const float specificZoomInDepth = 1f;
-        private const float specificZoomInZoomSpeed = 0.2f;
+        private const float specificZoomInDepth = 2f;
+        private const float specificZoomInZoomSpeed = 2f;
 
         private Transform _playerTransform;
 
@@ -66,13 +66,31 @@ namespace Units.Stages.Controllers
 
             var newTargetPosition = new Vector3(targetPosition.x, targetPosition.y, transform.position.z);
 
-            while (Vector3.Distance(transform.position, newTargetPosition) > 0.1f || (zoomIn && Math.Abs(_camera.orthographicSize - targetSize) > 0.01f))
+            var zoomStarted = false; // 줌 시작 여부 플래그
+            var startDistance = Vector3.Distance(transform.position, newTargetPosition);
+
+            float zoomSpeed = 0; // 초기 줌 속도
+            const float zoomAcceleration = 0.1f; // 줌 가속도
+
+            while (Vector3.Distance(transform.position, newTargetPosition) > 0.1f)
             {
                 transform.position = Vector3.SmoothDamp(transform.position, newTargetPosition, ref _velocity, specificSmoothTime);
 
-                if (zoomIn)
+                // 줌인 조건: 전체 거리의 80%에 도달했을 때 시작
+                if (zoomIn && !zoomStarted)
                 {
-                    _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, targetSize, specificZoomInZoomSpeed * Time.deltaTime);
+                    var currentDistance = Vector3.Distance(transform.position, newTargetPosition);
+                    if (currentDistance <= startDistance * 0.6f)
+                    {
+                        zoomStarted = true; // 줌 시작
+                    }
+                }
+
+                // 줌인 진행
+                if (zoomIn && zoomStarted)
+                {
+                    zoomSpeed += zoomAcceleration * Time.deltaTime; // 줌 속도 증가
+                    _camera.orthographicSize = Mathf.MoveTowards(_camera.orthographicSize, targetSize, zoomSpeed * Time.deltaTime);
                 }
 
                 yield return null;
@@ -80,7 +98,7 @@ namespace Units.Stages.Controllers
 
             if (zoomIn)
             {
-                _camera.orthographicSize = targetSize;
+                _camera.orthographicSize = targetSize; // 줌 최종 크기 설정
             }
 
             onArrived?.Invoke();

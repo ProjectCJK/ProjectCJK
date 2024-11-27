@@ -19,7 +19,8 @@ namespace Managers
         LevelUpOption1,
         Product,
         Selling,
-        Zone_Open
+        Display,
+        LevelUpOption2
     }
 
     public enum EQuestType2
@@ -145,6 +146,8 @@ namespace Managers
         private string[,] _gameData;
         
         private UI_Panel_Quest _uiPanelQuest;
+        private UI_Panel_QuestClear _uiPanelReward;
+        
         private StageController _stageController;
 
         private readonly Dictionary<int, ParsedStageQuestData> _parsedStageQuestDatas = new();
@@ -154,9 +157,12 @@ namespace Managers
             _stageController = stageController;
             
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
+            _uiPanelReward = UIManager.Instance.UI_Panel_Main.UI_Panel_QuestClear;
             _gameData = DataManager.Instance.QuestData.GetData();
             
             _uiPanelQuest.RegisterReference();
+            _uiPanelReward.RegisterReference();
+            
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             
             Debug.Log("QuestManager: RegisterReference completed.");
@@ -263,7 +269,7 @@ namespace Managers
             };
 
             questData.IsClear = GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.QuestClearStatuses, stageIndex, new Dictionary<int, bool>()), questData.QuestIndex, false);
-            questData.CurrentGoal = questData.QuestType1 is EQuestType1.LevelUpOption1 or EQuestType1.Build ? SetLevelUpOption1Goal(questData) : GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.QuestCurrentGoalCounts, stageIndex, new Dictionary<int, int>()), questData.QuestIndex, 0);
+            questData.CurrentGoal = questData.QuestType1 is EQuestType1.LevelUpOption1 or EQuestType1.LevelUpOption2 or EQuestType1.Build ? SetLevelUpOption1Goal(questData) : GetOrAdd(GetOrAdd(GameManager.Instance.ES3Saver.QuestCurrentGoalCounts, stageIndex, new Dictionary<int, int>()), questData.QuestIndex, 0);
 
             return questData;
         }
@@ -272,13 +278,14 @@ namespace Managers
         {
             return parsedQuestData.QuestType1 switch
             {
-                EQuestType1.LevelUpOption1 => CalculateLevelUpGoal(parsedQuestData),
+                EQuestType1.LevelUpOption1 => CalculateOption1LevelUpGoal(parsedQuestData),
+                EQuestType1.LevelUpOption2 => CalculateOption2LevelUpGoal(parsedQuestData),
                 EQuestType1.Build => CalculateBuildGoal(parsedQuestData),
                 _ => 0
             };
         }
 
-        private int CalculateLevelUpGoal(ParsedQuestData parsedQuestData)
+        private int CalculateOption1LevelUpGoal(ParsedQuestData parsedQuestData)
         {
             (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(parsedQuestData.QuestType2.ToString());
 
@@ -289,19 +296,37 @@ namespace Managers
                 EBuildingType.KitchenA when parsedEnum.Item2.HasValue =>
                     VolatileDataManager.Instance.KitchenStatsModule != null &&
                     VolatileDataManager.Instance.KitchenStatsModule.ContainsKey(parsedEnum.Item2.Value)
-                        ? GetBuildingLevel(VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey)
+                        ? GetBuildingOption1Level(VolatileDataManager.Instance.KitchenStatsModule[parsedEnum.Item2.Value].BuildingKey)
                         : 0,
                 EBuildingType.ManagementDesk => 
                     VolatileDataManager.Instance.ManagementDeskStatsModule != null
-                        ? GetBuildingLevel(VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey)
+                        ? GetBuildingOption1Level(VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey)
                         : 0,
                 EBuildingType.WareHouse => 
                     VolatileDataManager.Instance.WareHouseStatsModule != null
-                        ? GetBuildingLevel(VolatileDataManager.Instance.WareHouseStatsModule.BuildingKey)
+                        ? GetBuildingOption1Level(VolatileDataManager.Instance.WareHouseStatsModule.BuildingKey)
                         : 0,
                 EBuildingType.DeliveryLodging => 
                     VolatileDataManager.Instance.DeliveryLodgingStatsModule != null
-                        ? GetBuildingLevel(VolatileDataManager.Instance.DeliveryLodgingStatsModule.BuildingKey)
+                        ? GetBuildingOption1Level(VolatileDataManager.Instance.DeliveryLodgingStatsModule.BuildingKey)
+                        : 0,
+                _ => 0
+            };
+
+            return Math.Min(value, parsedQuestData.MaxGoal);
+        }
+        
+        private int CalculateOption2LevelUpGoal(ParsedQuestData parsedQuestData)
+        {
+            (EBuildingType?, EMaterialType?) parsedEnum = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(parsedQuestData.QuestType2.ToString());
+
+            if (parsedEnum.Item1 == null) return 0;
+
+            var value = parsedEnum.Item1 switch
+            {
+                EBuildingType.ManagementDesk => 
+                    VolatileDataManager.Instance.ManagementDeskStatsModule != null
+                        ? GetBuildingOption2Level(VolatileDataManager.Instance.ManagementDeskStatsModule.BuildingKey)
                         : 0,
                 _ => 0
             };
@@ -319,9 +344,14 @@ namespace Managers
             return activeStatuses.TryGetValue(questType2, out var status) && status == EActiveStatus.Active ? 1 : 0;
         }
 
-        private int GetBuildingLevel(string buildingKey)
+        private int GetBuildingOption1Level(string buildingKey)
         {
             return GameManager.Instance.ES3Saver.CurrentBuildingOption1Level.GetValueOrDefault(buildingKey, 0);
+        }
+        
+        private int GetBuildingOption2Level(string buildingKey)
+        {
+            return GameManager.Instance.ES3Saver.CurrentBuildingOption2Level.GetValueOrDefault(buildingKey, 0);
         }
 
         private void UpdateUI()
@@ -409,7 +439,7 @@ namespace Managers
 
         private void ActivateTutorialPanel(int questIndex)
         {
-            if (questIndex is 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8)
+            if (questIndex is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8)
             {
                 TutorialManager.Instance.ActivePopUpTutorialPanel(questIndex);
             }
@@ -609,10 +639,15 @@ namespace Managers
             var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
             var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
             var listData = _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas[currentListIndex];
-    
-            CurrencyManager.Instance.AddCurrency(listData.ListRewardType, listData.ListRewardCount);
+            
+            _uiPanelReward.Activate(listData.ListRewardType, listData.ListRewardCount);
+        }
 
-            // 현재 스테이지의 퀘스트 리스트를 모두 완료했는지 확인
+        public void CheckNextQuestData()
+        {
+            var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
+            var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
+            
             if (currentListIndex + 1 >= _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas.Count)
             {
                 GameManager.Instance.ES3Saver.ListQuestClearStatuses[currentStageIndex][currentListIndex] = true;
@@ -632,7 +667,7 @@ namespace Managers
 
             UpdateUI();
         }
-        
+
         private void InitializeNextQuests(int stageIndex)
         {
             var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;

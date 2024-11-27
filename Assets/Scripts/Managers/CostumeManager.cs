@@ -143,8 +143,8 @@ namespace Managers
             UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
             UIManager.Instance.UI_Panel_Main.UI_Panel_Costume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
 
-            UIManager.Instance.UI_Panel_Main.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
-            UIManager.Instance.UI_Panel_Main.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
+            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.onClick.AddListener(ActivateCostumeGacha);
+            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
         }
 
         private void CacheGachaBackgroundSprites()

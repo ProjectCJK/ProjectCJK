@@ -97,7 +97,7 @@ namespace Units.Stages.Managers
             CurrencyManager.Instance.Initialize();
             StageController.Initialize();
             
-            if (GameManager.Instance.ES3Saver.TutorialClear == false)
+            if (GameManager.Instance.ES3Saver.InitialTutorialClear == false)
             {
                 TutorialManager.Instance.Initialize();
             }

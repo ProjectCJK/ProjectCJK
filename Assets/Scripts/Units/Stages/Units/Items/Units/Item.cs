@@ -49,6 +49,9 @@ namespace Units.Stages.Units.Items.Units
             Type = type;
             Count = count;
             transform.position = initialPosition;
+            
+            transform.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(0f, 360f));
+            
             SetSprite(sprite);
             SetActive(true);
             _isInitialized = true;
