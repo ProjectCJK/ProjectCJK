@@ -80,7 +80,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
 
         protected override void SendItem()
         {
-            if (_itemReceiverQueue.Count == 0 || !IsReadyToSend()) return;
+            if (_itemReceiverQueue.Count == 0) return;
 
             if (!Inventory.TryGetValue(OutputItemKey, out var itemCount) || itemCount <= 0) return;
 
@@ -88,16 +88,22 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
             {
                 if (string.Equals(OutputItemKey, $"{ECurrencyType.Money}"))
                 {
+                    if (!IsReadyToSend(true)) return;
+                    
                     var goldAmount = Mathf.Min(Inventory[$"{ECurrencyType.Money}"], DataManager.GoldSendingMaximum);
                     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, goldAmount, SenderTransform.position);
                     Inventory[$"{ECurrencyType.Money}"] -= goldAmount;
                     OnUpdateStackedItem?.Invoke(Inventory[$"{ECurrencyType.Money}"]);
+                    
+                    SetLastSendTime();
                 }
                 else if (currentItemReceiver.CanReceiveItem())
                 {
+                    if (!IsReadyToSend(false)) return;
                     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, 1, SenderTransform.position);
                     RemoveItem(OutputItemKey);
                     OnUpdateStackedItem?.Invoke(CurrentInventorySize);
+                    SetLastSendTime();
                 }
             }
             else

@@ -131,7 +131,7 @@ namespace UI.BuildingEnhancementPanel
             _text_Slot2_NotEnoughButton_RequiredValue.text = $"<sprite={data.RequiredGoldForUpgradeOption1IconIndex}> {data.RequiredGoldToUpgradeOption1Level}";
             _text_Slot3_NotEnoughButton_RequiredValue.text = $"<sprite={data.RequiredRedGemForUpgradeOption2IconIndex}> {data.RequiredRedGemToUpgradeOption2Level}";
             
-            _text_Slot3_NotEnoughLevelButton_RequiredValue.text = $"<sprite={data.RequiredBuildingLevelToUpgradeOption2LevelIndex}>\nRequired\nBuilding Level {data.RequiredBuildingLevelToUpgradeOption2Level}";
+            _text_Slot3_NotEnoughLevelButton_RequiredValue.text = $"<sprite={data.RequiredBuildingLevelToUpgradeOption2LevelIndex}>Building Level {data.RequiredBuildingLevelToUpgradeOption2Level}\nRequired";
 
             if (data.CurrentBuildingOption1Level >= data.MaxBuildingOption1Level)
             {
