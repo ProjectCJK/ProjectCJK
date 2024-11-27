@@ -151,7 +151,7 @@ namespace Managers
             OnActivateUIByCurrentTutorialIndex?.Invoke(index);
             GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, false);
             
-            if (index is 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11)
+            if (index is 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 48 or 54)
             {
                 _tutorialPopUpPanel.ActivatePanel(index);
                 GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, true);

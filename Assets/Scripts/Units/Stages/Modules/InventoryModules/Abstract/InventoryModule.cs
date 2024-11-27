@@ -139,6 +139,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
         protected void PushSpawnedItem(Transform receiveTransform, IItem item, bool isVisible)
         {
             item.Transform.gameObject.SetActive(isVisible);
+            item.Transform.rotation = Quaternion.identity;
             item.Transform.SetParent(receiveTransform);
             spawnedItemStack.Push(item);
         }

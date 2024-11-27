@@ -100,23 +100,24 @@ namespace UI.MainPanels
                     UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
                     break;
                 case 10:
+                    UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
                     UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
 
-                    foreach (Button button in UI_Panel_MainButtons.UI_Button_LockButton.Where(button => button.gameObject.activeSelf))
-                    {
-                        button.gameObject.SetActive(false);
-                        break;
-                    }
+                    UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[1].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[2].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[3].gameObject.SetActive(true);
 
                     break;
                 case 15:
+                    UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
                     UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(true);
 
-                    foreach (Button button in UI_Panel_MainButtons.UI_Button_LockButton.Where(button => button.gameObject.activeSelf))
-                    {
-                        button.gameObject.SetActive(false);
-                        break;
-                    }
+                    UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[1].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[2].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[3].gameObject.SetActive(true);
 
                     break;
             }
