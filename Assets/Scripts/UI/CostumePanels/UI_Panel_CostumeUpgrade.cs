@@ -59,7 +59,11 @@ namespace UI.CostumePanels
             _frontGroundImageCache = frontGroundImageCachePara;
             _currentCostumeItemData = currentCostumeItemData;
 
-            upgradeButton_EnoughRedGem.onClick.AddListener(OnClickUpgradeButton);
+            upgradeButton_EnoughRedGem.onClick.AddListener(() =>
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Upgrade, "Quest", 1);
+                OnClickUpgradeButton();
+            });
 
             ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateCostumeUpgradeItem(_costumeUpgradeItemPrefab), _itemPrefabInstancePosition);
         }

@@ -20,7 +20,10 @@ namespace Managers
         Product,
         Selling,
         Display,
-        LevelUpOption2
+        LevelUpOption2,
+        Open,
+        Equip,
+        Upgrade
     }
 
     public enum EQuestType2
@@ -47,7 +50,8 @@ namespace Managers
         DeliveryLodging,
         Money,
         Zone_Open,
-        HuntingZone_C
+        HuntingZone_C,
+        Quest
     }
 
     public enum EQuestTarget
@@ -84,7 +88,8 @@ namespace Managers
         ProductA_B_Sell,
         ProductA_C_Sell,
         ProductB_A_Sell,
-        Temp_ManagementDesk
+        Temp_ManagementDesk,
+        Quest
     }
 
     [Serializable]
@@ -165,6 +170,7 @@ namespace Managers
             
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             
+            UIManager.Instance.Joystick.OnClickPanel += () => _uiPanelQuest.MainQuest.gameObject.SetActive(false);
             Debug.Log("QuestManager: RegisterReference completed.");
         }
         

@@ -8,7 +8,7 @@ namespace Units.Stages.Controllers
     {
         private const float defaultSmoothTime = 0.3f;
         private const float specificSmoothTime = 1.3f;
-        private const float specificZoomInDepth = 2f;
+        private const float specificZoomInDepth = 5f;
         private const float specificZoomInZoomSpeed = 2f;
 
         private Transform _playerTransform;

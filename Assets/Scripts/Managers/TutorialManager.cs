@@ -34,6 +34,7 @@ namespace Managers
         public void RegisterReference(CameraController cameraController)
         {
             GameManager.Instance.ES3Saver.PopUpTutorialClear = new Dictionary<int, bool>();
+            UIManager.Instance.UI_Panel_Main.RegisterReference();
             
             _cameraController = cameraController;
             _zPosition = _cameraController.transform.position.z;
@@ -53,6 +54,11 @@ namespace Managers
             UIManager.Instance.InstantiateTutorialPanel();
 
             OnActivateUIByCurrentTutorialIndex += UIManager.Instance.UI_Panel_Main.OnActivateUIByCurrentTutorialIndex;
+
+            foreach (KeyValuePair<int, bool> popUpTutorialClear in GameManager.Instance.ES3Saver.PopUpTutorialClear)
+            {
+                OnActivateUIByCurrentTutorialIndex?.Invoke(popUpTutorialClear.Key);
+            }
             
             _branchCanvasGame = UIManager.Instance.BranchCanvasGame;
             _branchCanvasTutorial = UIManager.Instance.BranchCanvasTutorial;
@@ -147,7 +153,8 @@ namespace Managers
         public void ActivePopUpTutorialPanel(int index)
         {
             if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index) && GameManager.Instance.ES3Saver.PopUpTutorialClear[index]) return;
-            
+
+            GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, true);
             OnActivateUIByCurrentTutorialIndex?.Invoke(index);
             
             _tutorialPopUpPanel.ActivatePanel(index);

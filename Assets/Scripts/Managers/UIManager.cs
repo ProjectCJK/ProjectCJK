@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class UIManager : SingletonMono<UIManager>
+    public class UIManager : SingletonMono<UIManager> 
     {
         [SerializeField] private GameObject _eventSystemPrefab;
         [SerializeField] private Canvas _rootCanvas;
