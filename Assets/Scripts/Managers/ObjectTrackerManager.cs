@@ -5,13 +5,16 @@ namespace Managers
 {
     public class ObjectTrackerManager : SceneSingleton<ObjectTrackerManager>
     {
+        public Transform TargetTransform;
         public bool IsTracking { get; private set; }
         
         private GameObject _objectTracker;
         private Camera mainCamera;
-        private Transform targetTransform;
 
         private const float yOffset = 1f;
+        private const float offScreenScale = 1f;
+        private const float onScreenScale = 1.5f;
+        private const float scaleLerpSpeed = 5f;
 
         public void RegisterReference()
         {
@@ -27,22 +30,22 @@ namespace Managers
         public void StartTargetTracking(Transform target)
         {
             IsTracking = true;
-            targetTransform = target;
+            TargetTransform = target;
             _objectTracker.gameObject.SetActive(true);
         }
 
         public void StopTargetTracking()
         {
             IsTracking = false;
-            targetTransform = null;
+            TargetTransform = null;
             _objectTracker.gameObject.SetActive(false);
         }
 
         private void Update()
         {
-            if (targetTransform != null)
+            if (TargetTransform != null)
             {
-                Vector3 targetPosition = targetTransform.position;
+                Vector3 targetPosition = TargetTransform.position;
                 Vector3 viewportPoint = mainCamera.WorldToViewportPoint(targetPosition);
 
                 var isOffScreen = viewportPoint.x < 0 || viewportPoint.x > 1 ||
@@ -62,6 +65,9 @@ namespace Managers
                     Vector3 directionToTarget = (targetPosition - cameraCenter).normalized;
                     var angleToTarget = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
                     _objectTracker.transform.rotation = Quaternion.Euler(0, 0, angleToTarget - 90f);
+
+                    // 크기를 부드럽게 줄임
+                    _objectTracker.transform.localScale = Vector3.Lerp(_objectTracker.transform.localScale, Vector3.one * offScreenScale, Time.deltaTime * scaleLerpSpeed);
                 }
                 else
                 {
@@ -72,8 +78,10 @@ namespace Managers
                     // 손가락이 아래를 가리키도록 설정 (180도 회전)
                     Quaternion handRotation = Quaternion.Euler(0, 0, 180); // 아래를 바라보는 기본 회전값
                     _objectTracker.transform.rotation = Quaternion.Lerp(_objectTracker.transform.rotation, handRotation, Time.deltaTime * 5f);
-                }
 
+                    // 크기를 부드럽게 키움
+                    _objectTracker.transform.localScale = Vector3.Lerp(_objectTracker.transform.localScale, Vector3.one * onScreenScale, Time.deltaTime * scaleLerpSpeed);
+                }
             }
         }
     }

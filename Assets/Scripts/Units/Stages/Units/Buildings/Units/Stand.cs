@@ -113,7 +113,7 @@ namespace Units.Stages.Units.Buildings.Units
 
             _standStatsModule = new StandStatsModule(_standDataSo, _standCustomSetting);
             _standInventoryModule = new StandInventoryModule(_standDefaultSetting.standInventory,
-                _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutputItemKey);
+                _standDefaultSetting.standInventory, _standStatsModule, _itemFactory, InputItemKey, OutputItemKey, BuildingKey);
 
             _standModel = new StandModel();
             _standViewModel = new StandViewModel(_standModel);

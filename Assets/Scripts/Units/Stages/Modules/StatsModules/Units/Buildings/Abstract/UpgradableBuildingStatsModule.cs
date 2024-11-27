@@ -257,7 +257,7 @@ namespace Units.Stages.Modules.StatsModules.Units.Buildings.Abstract
         private void IncreaseCurrentBuildingOption2Level()
         {
             GameManager.Instance.ES3Saver.CurrentBuildingOption2Level[BuildingKey]++;
-
+            QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.LevelUpOption2, BuildingKey, 1);
             UpdateBuildingStatsModule();
             GetUIBuildingEnhancement();
             

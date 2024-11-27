@@ -139,7 +139,7 @@ namespace Units.Stages.Controllers
                 }
 #endif
             
-            if (GameManager.Instance.ES3Saver.TutorialClear)
+            if (GameManager.Instance.ES3Saver.InitialTutorialClear)
             {
                 SpawnDeliveryMan();
                 SetDeliveryManDestination();
@@ -165,7 +165,7 @@ namespace Units.Stages.Controllers
 
             if (currentStandProductCount >= 10)
             {
-                UIManager.Instance.UI_Panel_Main.UI_Button_CustomerWave.gameObject.SetActive(true);
+                UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.gameObject.SetActive(true);
             }
         }
         

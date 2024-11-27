@@ -1,3 +1,4 @@
+using System;
 using UI.BuildingEnhancementPanel;
 using UI.CostumeGachaPanels;
 using UI.CostumePanels;
@@ -7,6 +8,7 @@ using UI.Level;
 using UI.LevelPanels;
 using UI.QuestPanels;
 using UI.StageMapPanel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,13 +24,34 @@ namespace UI.MainPanels
         public UI_Panel_Costume UI_Panel_Costume;
         public UI_Panel_Costume_Gacha UI_Panel_Costume_Gacha;
         public UI_Panel_StageMap UI_Panel_StageMap;
+        public UI_Panel_QuestClear UI_Panel_QuestClear;
         public UI_Panel_LevelUp UI_Panel_LevelUp;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
-        
-        public Button UI_Button_CostumeGachaPanel;
-        public Button UI_Button_CostumePanel;
-        public Button UI_Button_StageMap;
-        public Button UI_Button_SuperHunter;
-        public Button UI_Button_CustomerWave;
+        public UI_Panel_MainButtons UI_Panel_MainButtons;
+
+        public void OnActivateUIByCurrentTutorialIndex(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+            }
+        }
     }
 }

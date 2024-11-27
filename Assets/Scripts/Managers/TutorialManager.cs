@@ -10,6 +10,8 @@ namespace Managers
 {
     public class TutorialManager : Singleton<TutorialManager>
     {
+        public Action<int> OnActivateUIByCurrentTutorialIndex;
+        
         private Canvas _branchCanvasGame;
         private Canvas _branchCanvasTutorial;
         private Canvas _branchCanvasGuide;
@@ -49,6 +51,8 @@ namespace Managers
             };
             
             UIManager.Instance.InstantiateTutorialPanel();
+
+            OnActivateUIByCurrentTutorialIndex += UIManager.Instance.UI_Panel_Main.OnActivateUIByCurrentTutorialIndex;
             
             _branchCanvasGame = UIManager.Instance.BranchCanvasGame;
             _branchCanvasTutorial = UIManager.Instance.BranchCanvasTutorial;
@@ -59,14 +63,17 @@ namespace Managers
             _tutorialPopUpPanel = UIManager.Instance.UIPanelTutorialPopUp;
             
             _tutorialPanel.RegisterReference();
-            _tutorialPanel.OnScriptsEnded += HandleOnScriptsEnded;
+            _tutorialPanel.OnClickExitButton += HandleOnClickTutorialPanelExitButton;
             
             _tutorialPopUpPanel.RegisterReference();
-            _tutorialPopUpPanel.OnClickExitButton += HandleOnClickExitButton;
+            _tutorialPopUpPanel.OnClickExitButton += HandleOnClickPopUpTutorialExitButton;
         }
 
         public void Initialize()
         {
+            TransferJoystickCanvas(false);
+            TransferGameCanvas(false);
+            TransferGuideCanvas(false);
             TransferTutorialCanvas(true);
             
             _tutorialPanel.Initialize();
@@ -77,24 +84,24 @@ namespace Managers
         {
             isScriptEnded = false;
 
-            // 컷씬 카메라
-            var firstTarget = false;
-            var secondTarget = false;
+            // 컷씬 카메라 연출
+            yield return PlayCameraCutscenes();
             
-            _cameraController.ActivateFollowCamera(_firstTargets[0], _firstTargets[1], () => firstTarget = true);
+            // 컷씬 다이어로그
+            yield return PlayInitialCutscenes();
 
-            while (!firstTarget)
-            {
-                yield return null;   
-            }
-            
-            _cameraController.ActivateFollowCamera(_secondTargets[0], _secondTargets[1], () => secondTarget = true);
+            // 첫 팝업 튜토리얼 다이어로그
+            yield return PlayFirstPopUpTutorial();
+        }
 
-            while (!secondTarget)
-            {
-                yield return null;   
-            }
-            
+        private IEnumerator PlayCameraCutscenes()
+        {
+            yield return FollowCameraToTargets(_firstTargets[0], _firstTargets[1]);
+            yield return FollowCameraToTargets(_secondTargets[0], _secondTargets[1]);
+        }
+        
+        private IEnumerator PlayInitialCutscenes()
+        {
             _tutorialPanel.gameObject.SetActive(true);
 
             while (!isScriptEnded)
@@ -103,42 +110,77 @@ namespace Managers
             }
             
             _tutorialPanel.gameObject.SetActive(false);
-            
-            ActivePopUpTutorialPanel(0);
+        }
 
-            yield return isScriptEnded;
+        private IEnumerator PlayFirstPopUpTutorial()
+        {
+            var cameraTracking = false;
+            
+            _branchCanvasGuide.gameObject.SetActive(true);
+
+            _cameraController.ActivateFollowCamera(ObjectTrackerManager.Instance.TargetTransform.position, true, () => cameraTracking = true);
+
+            while (!cameraTracking)
+            {
+                yield return null;
+            }
+            
+            _tutorialPopUpPanel.gameObject.SetActive(true);
+            _branchCanvasGame.gameObject.SetActive(true);
+            _branchCanvasJoystick.gameObject.SetActive(true);
+
+            ActivePopUpTutorialPanel(0);
+        }
+        
+        private IEnumerator FollowCameraToTargets(Vector3 start, Vector3 end)
+        {
+            var isComplete = false;
+
+            _cameraController.ActivateFollowCamera(start, end, () => isComplete = true);
+
+            while (!isComplete)
+            {
+                yield return null;
+            }
         }
 
         public void ActivePopUpTutorialPanel(int index)
         {
-            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.TryGetValue(index, out var value))
-            {
-                if (value) return;
-                
-                GameManager.Instance.ES3Saver.PopUpTutorialClear[index] = true;
-
-                TransferTutorialCanvas(true);
+            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index) && GameManager.Instance.ES3Saver.PopUpTutorialClear[index]) return;
             
-                _tutorialPopUpPanel.ActivatePanel(index);
-            }
+            OnActivateUIByCurrentTutorialIndex?.Invoke(index);
+            
+            _tutorialPopUpPanel.ActivatePanel(index);
         }
 
-        private void HandleOnScriptsEnded()
+        private void HandleOnClickTutorialPanelExitButton()
         {
-            GameManager.Instance.ES3Saver.TutorialClear = true;
+            GameManager.Instance.ES3Saver.InitialTutorialClear = true;
             isScriptEnded = true;
         }
         
-        private void HandleOnClickExitButton()
+        private void HandleOnClickPopUpTutorialExitButton(int index)
         {
-            TransferTutorialCanvas(false);
+            GameManager.Instance.ES3Saver.PopUpTutorialClear[index] = true;
         }
 
+        private void TransferJoystickCanvas(bool value)
+        {
+            _branchCanvasJoystick.gameObject.SetActive(value);
+        }
+        
+        private void TransferGameCanvas(bool value)
+        {
+            _branchCanvasGame.gameObject.SetActive(value);
+        }
+        
+        private void TransferGuideCanvas(bool value)
+        {
+            _branchCanvasGuide.gameObject.SetActive(value);
+        }
+        
         private void TransferTutorialCanvas(bool value)
         {
-            _branchCanvasJoystick.gameObject.SetActive(!value);
-            _branchCanvasGame.gameObject.SetActive(!value);
-            _branchCanvasGuide.gameObject.SetActive(!value);
             _branchCanvasTutorial.gameObject.SetActive(value);
         }
     }

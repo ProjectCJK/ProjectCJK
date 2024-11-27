@@ -34,8 +34,8 @@ namespace Managers
             ExtractStageData();
             
             UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.RegisterReference(_stageDataList, ChangeStage);
-            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.RemoveAllListeners();
-            UIManager.Instance.UI_Panel_Main.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.Activate());
+            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_StageMap.onClick.RemoveAllListeners();
+            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_StageMap.onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_StageMap.Activate());
         }
 
         private void ExtractStageData()
