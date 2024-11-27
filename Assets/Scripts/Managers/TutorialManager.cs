@@ -75,7 +75,7 @@ namespace Managers
             _tutorialPopUpPanel.OnClickExitButton += HandleOnClickPopUpTutorialExitButton;
         }
 
-        public void Initialize()
+        public IEnumerator TutorialInitialDialog()
         {
             TransferJoystickCanvas(false);
             TransferGameCanvas(false);
@@ -83,11 +83,7 @@ namespace Managers
             TransferTutorialCanvas(true);
             
             _tutorialPanel.Initialize();
-            CoroutineManager.Instance.StartManagedCoroutine(TutorialInitialDialog());
-        }
-
-        private IEnumerator TutorialInitialDialog()
-        {
+            
             isScriptEnded = false;
 
             // 컷씬 카메라 연출
@@ -150,14 +146,15 @@ namespace Managers
 
         public void ActivePopUpTutorialPanel(int index)
         {
-            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index)) return;
-            
-            GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, true);
+            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index) && GameManager.Instance.ES3Saver.PopUpTutorialClear[index]) return;
+         
             OnActivateUIByCurrentTutorialIndex?.Invoke(index);
+            GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, false);
             
             if (index is 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11)
             {
                 _tutorialPopUpPanel.ActivatePanel(index);
+                GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, true);
             }
         }
 

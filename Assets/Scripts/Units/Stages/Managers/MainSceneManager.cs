@@ -99,7 +99,7 @@ namespace Units.Stages.Managers
             
             if (GameManager.Instance.ES3Saver.InitialTutorialClear == false)
             {
-                TutorialManager.Instance.Initialize();
+                StartCoroutine(TutorialManager.Instance.TutorialInitialDialog());
             }
         }
 

@@ -121,5 +121,13 @@ namespace UI.MainPanels
                     break;
             }
         }
+
+        public void OnInactivateUIByCurrentTutorialIndex(int index)
+        {
+            foreach (GameObject item in UI_Item_QuestGuide.Where(guide => index == guide.index).SelectMany(guide => guide.items))
+            {
+                item.gameObject.SetActive(false);
+            }
+        }
     }
 }

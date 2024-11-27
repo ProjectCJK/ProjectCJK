@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Modules.DesignPatterns.Singletons;
+using UI.MainPanels;
 using UI.QuestPanels;
 using Units.Stages.Controllers;
 using Units.Stages.Enums;
@@ -419,8 +420,8 @@ namespace Managers
                     QuestDescriptionText = data.QuestDescription,
                     Reward1IconImage = SetRewardIcon(data.RewardType1),
                     Reward2IconImage = SetRewardIcon(data.RewardType2),
-                    Reward1CountText = $"{data.RewardType1}",
-                    Reward2CountText = $"{data.RewardType2}",
+                    Reward1CountText = $"{data.RewardType1Count}",
+                    Reward2CountText = $"{data.RewardType2Count}",
                     QuestProgressText = $"{data.CurrentGoal} / {data.MaxGoal}",
                     CurrentProgressCount = data.CurrentGoal,
                     MaxProgressCount = data.MaxGoal
@@ -591,6 +592,7 @@ namespace Managers
                         if (quest.CurrentGoal >= quest.MaxGoal)
                         {
                             quest.CurrentGoal = quest.MaxGoal;
+                            UIManager.Instance.UI_Panel_Main.OnInactivateUIByCurrentTutorialIndex(quest.QuestIndex);
                         }
 
                         // 저장된 퀘스트 진행 상태 업데이트
@@ -622,7 +624,7 @@ namespace Managers
             // 퀘스트 상태 업데이트
             questData.IsClear = true;
             GameManager.Instance.ES3Saver.QuestClearStatuses[currentStageIndex][questIndex] = true;
-
+            
             // UI 갱신
             UpdateUI();
 
@@ -630,7 +632,7 @@ namespace Managers
             var allQuestsCleared = listData.ParsedQuestDataIndex
                 .All(index => GameManager.Instance.ES3Saver.QuestClearStatuses[currentStageIndex]
                     .TryGetValue(index, out var isClear) && isClear);
-
+            
             if (allQuestsCleared)
             {
                 _uiPanelQuest.MainQuest.EnableRewardButton();
