@@ -141,7 +141,7 @@ MonoBehaviour:
     - Produce Canned Tomatoes
     - Product
     - ProductA_A
-    - 1
+    - 5
     - Star
     - 1
     - Diamond
@@ -158,7 +158,7 @@ MonoBehaviour:
     - Displaying Canned Tomatoes
     - Display
     - StandA_A
-    - 1
+    - 5
     - Star
     - 1
     - Diamond
@@ -175,7 +175,7 @@ MonoBehaviour:
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
-    - 1
+    - 5
     - Star
     - 1
     - Diamond
@@ -209,7 +209,7 @@ MonoBehaviour:
     - Hire a Cashier
     - LevelUpOption2
     - ManagementDesk
-    - 1
+    - 2
     - Star
     - 1
     - Diamond
@@ -223,6 +223,57 @@ MonoBehaviour:
     - 9
     - 9
     - St_110010
+    - "\uCF54\uC2A4\uD2AC \uC0C1\uC790\uC5F4\uAE30"
+    - Open
+    - Quest
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 10
+    - Quest
+  - rowData:
+    - 110011
+    - 1
+    - 9
+    - 10
+    - St_110011
+    - "\uCF54\uC2A4\uD2AC \uC7A5\uCC29\uD558\uAE30"
+    - Equip
+    - Quest
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 15
+    - Quest
+  - rowData:
+    - 110012
+    - 1
+    - 9
+    - 11
+    - St_110012
+    - "\uCF54\uC2A4\uD2AC \uAC15\uD654\uD558\uAE30"
+    - Upgrade
+    - Quest
+    - 1
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Gold
+    - 20
+    - Quest
+  - rowData:
+    - 110013
+    - 1
+    - 10
+    - 12
+    - St_110013
     - Build Canning Machine B
     - Build
     - KitchenA_B
@@ -235,11 +286,11 @@ MonoBehaviour:
     - 2000
     - KitchenA_B_Unlock
   - rowData:
-    - 110011
+    - 110014
     - 1
-    - 9
     - 10
-    - St_110011
+    - 13
+    - St_110014
     - Build Can Stand B
     - Build
     - StandA_B
@@ -252,11 +303,11 @@ MonoBehaviour:
     - 2000
     - StandA_B_Unlock
   - rowData:
-    - 110012
+    - 110015
     - 1
-    - 10
     - 11
-    - St_110012
+    - 14
+    - St_110015
     - Unlock a new area
     - Build
     - HuntingZone_B
@@ -269,11 +320,11 @@ MonoBehaviour:
     - 70
     - HuntingZone_B_Unlock
   - rowData:
-    - 110013
+    - 110016
     - 1
-    - 10
-    - 12
-    - St_110013
+    - 11
+    - 15
+    - St_110016
     - Gather Cucumbers
     - Get
     - Material_B
@@ -286,11 +337,11 @@ MonoBehaviour:
     - 70
     - HuntingZone_B_Hunt
   - rowData:
-    - 110014
+    - 110017
     - 1
-    - 10
-    - 13
-    - St_110014
+    - 11
+    - 16
+    - St_110017
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -303,11 +354,11 @@ MonoBehaviour:
     - 70
     - KitchenA_A_Upgrade
   - rowData:
-    - 110015
+    - 110018
     - 1
-    - 11
-    - 14
-    - St_110015
+    - 12
+    - 17
+    - St_110018
     - Produce Canned Cucumbers
     - Product
     - ProductA_B
@@ -320,11 +371,11 @@ MonoBehaviour:
     - 2500
     - KitchenA_B_Product
   - rowData:
-    - 110016
+    - 110019
     - 1
-    - 11
-    - 15
-    - St_110016
+    - 12
+    - 18
+    - St_110019
     - Sell Canned Cucumbers
     - Selling
     - ProductA_B
@@ -337,11 +388,11 @@ MonoBehaviour:
     - 2500
     - ProductA_B_Sell
   - rowData:
-    - 110017
+    - 110020
     - 1
-    - 11
-    - 16
-    - St_110017
+    - 12
+    - 19
+    - St_110020
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -354,11 +405,11 @@ MonoBehaviour:
     - 2500
     - ManagementDesk_Upgrade
   - rowData:
-    - 110018
+    - 110021
     - 1
-    - 12
-    - 17
-    - St_110018
+    - 13
+    - 20
+    - St_110021
     - Gather Cucumbers
     - Get
     - Material_B
@@ -371,11 +422,11 @@ MonoBehaviour:
     - 3000
     - HuntingZone_B_Hunt
   - rowData:
-    - 110019
+    - 110022
     - 1
-    - 12
-    - 18
-    - St_110019
+    - 13
+    - 21
+    - St_110022
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -388,11 +439,11 @@ MonoBehaviour:
     - 3000
     - ProductA_A_Sell
   - rowData:
-    - 110020
+    - 110023
     - 1
-    - 12
-    - 19
-    - St_110020
+    - 13
+    - 22
+    - St_110023
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -405,11 +456,11 @@ MonoBehaviour:
     - 3000
     - KitchenA_A_Upgrade
   - rowData:
-    - 110021
+    - 110024
     - 1
-    - 13
-    - 20
-    - St_110021
+    - 14
+    - 23
+    - St_110024
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -422,11 +473,11 @@ MonoBehaviour:
     - 4000
     - KitchenA_B_Upgrade
   - rowData:
-    - 110022
+    - 110025
     - 1
-    - 13
-    - 21
-    - St_110022
+    - 14
+    - 24
+    - St_110025
     - Sell Canned Cucumbers
     - Selling
     - ProductA_B
@@ -439,11 +490,11 @@ MonoBehaviour:
     - 4000
     - ProductA_B_Sell
   - rowData:
-    - 110023
+    - 110026
     - 1
-    - 13
-    - 22
-    - St_110023
+    - 14
+    - 25
+    - St_110026
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -456,11 +507,11 @@ MonoBehaviour:
     - 4000
     - ProductA_A_Sell
   - rowData:
-    - 110024
+    - 110027
     - 1
-    - 14
-    - 23
-    - St_110024
+    - 15
+    - 26
+    - St_110027
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -473,11 +524,11 @@ MonoBehaviour:
     - 30000
     - ManagementDesk_Upgrade
   - rowData:
-    - 110025
+    - 110028
     - 1
-    - 14
-    - 24
-    - St_110025
+    - 15
+    - 27
+    - St_110028
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -490,11 +541,11 @@ MonoBehaviour:
     - 30000
     - KitchenA_A_Upgrade
   - rowData:
-    - 110026
+    - 110029
     - 1
-    - 14
-    - 25
-    - St_110026
+    - 15
+    - 28
+    - St_110029
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -507,11 +558,11 @@ MonoBehaviour:
     - 30000
     - KitchenA_B_Upgrade
   - rowData:
-    - 110027
+    - 110030
     - 1
-    - 14
-    - 26
-    - St_110027
+    - 15
+    - 29
+    - St_110030
     - Collect Gold
     - Get
     - Money
@@ -524,11 +575,11 @@ MonoBehaviour:
     - 30000
     - ManagementDesk_GetMoney
   - rowData:
-    - 110028
+    - 110031
     - 2
     - 0
-    - 27
-    - St_110028
+    - 30
+    - St_110031
     - Gather Tomatoes
     - Get
     - Material_A
@@ -541,11 +592,11 @@ MonoBehaviour:
     - 2500
     - HuntingZone_A_Hunt
   - rowData:
-    - 110029
+    - 110032
     - 2
     - 0
-    - 28
-    - St_110029
+    - 31
+    - St_110032
     - Produce Canned Tomatoes
     - Product
     - ProductA_A
@@ -558,11 +609,11 @@ MonoBehaviour:
     - 2500
     - KitchenA_A_Product
   - rowData:
-    - 110030
+    - 110033
     - 2
     - 0
-    - 29
-    - St_110030
+    - 32
+    - St_110033
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -575,11 +626,11 @@ MonoBehaviour:
     - 2500
     - ProductA_A_Sell
   - rowData:
-    - 110031
+    - 110034
     - 2
     - 0
-    - 30
-    - St_110031
+    - 33
+    - St_110034
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -592,11 +643,11 @@ MonoBehaviour:
     - 2500
     - KitchenA_A_Upgrade
   - rowData:
-    - 110032
+    - 110035
     - 2
     - 1
-    - 31
-    - St_110032
+    - 34
+    - St_110035
     - Gather Tomatoes
     - Get
     - Material_A
@@ -609,11 +660,11 @@ MonoBehaviour:
     - 4000
     - HuntingZone_A_Hunt
   - rowData:
-    - 110033
+    - 110036
     - 2
     - 1
-    - 32
-    - St_110033
+    - 35
+    - St_110036
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -626,11 +677,11 @@ MonoBehaviour:
     - 4000
     - ProductA_A_Sell
   - rowData:
-    - 110034
+    - 110037
     - 2
     - 1
-    - 33
-    - St_110034
+    - 36
+    - St_110037
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -643,11 +694,11 @@ MonoBehaviour:
     - 4000
     - ManagementDesk_Upgrade
   - rowData:
-    - 110035
+    - 110038
     - 2
     - 1
-    - 34
-    - St_110035
+    - 37
+    - St_110038
     - Collect Gold
     - Get
     - Money
@@ -660,11 +711,11 @@ MonoBehaviour:
     - 4000
     - ManagementDesk_GetMoney
   - rowData:
-    - 110036
+    - 110039
     - 2
     - 2
-    - 35
-    - St_110036
+    - 38
+    - St_110039
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -677,11 +728,11 @@ MonoBehaviour:
     - 5000
     - KitchenA_A_Upgrade
   - rowData:
-    - 110037
+    - 110040
     - 2
     - 2
-    - 36
-    - St_110037
+    - 39
+    - St_110040
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -694,11 +745,11 @@ MonoBehaviour:
     - 5000
     - ProductA_A_Sell
   - rowData:
-    - 110038
+    - 110041
     - 2
     - 2
-    - 37
-    - St_110038
+    - 40
+    - St_110041
     - Collect Gold
     - Get
     - Money
@@ -711,11 +762,11 @@ MonoBehaviour:
     - 5000
     - ManagementDesk_GetMoney
   - rowData:
-    - 110039
+    - 110042
     - 2
     - 3
-    - 38
-    - St_110039
+    - 41
+    - St_110042
     - Build Canning Machine B
     - Build
     - KitchenA_B
@@ -728,11 +779,11 @@ MonoBehaviour:
     - 6000
     - KitchenA_B_Unlock
   - rowData:
-    - 110040
+    - 110043
     - 2
     - 3
-    - 39
-    - St_110040
+    - 42
+    - St_110043
     - Build Can Stand B
     - Build
     - StandA_B
@@ -745,11 +796,11 @@ MonoBehaviour:
     - 6000
     - StandA_B_Unlock
   - rowData:
-    - 110041
+    - 110044
     - 2
     - 3
-    - 40
-    - St_110041
+    - 43
+    - St_110044
     - Unlock a new area
     - Build
     - HuntingZone_B
@@ -762,11 +813,11 @@ MonoBehaviour:
     - 6000
     - HuntingZone_B_Unlock
   - rowData:
-    - 110042
+    - 110045
     - 2
     - 4
-    - 41
-    - St_110042
+    - 44
+    - St_110045
     - Gather Cucumbers
     - Get
     - Material_B
@@ -779,11 +830,11 @@ MonoBehaviour:
     - 5
     - HuntingZone_B_Hunt
   - rowData:
-    - 110043
+    - 110046
     - 2
     - 4
-    - 42
-    - St_110043
+    - 45
+    - St_110046
     - Produce Canned Cucumbers
     - Product
     - ProductA_B
@@ -796,11 +847,11 @@ MonoBehaviour:
     - 5
     - KitchenA_B_Product
   - rowData:
-    - 110044
+    - 110047
     - 2
     - 4
-    - 43
-    - St_110044
+    - 46
+    - St_110047
     - Sell Canned Cucumbers
     - Selling
     - ProductA_B
@@ -813,11 +864,11 @@ MonoBehaviour:
     - 5
     - ProductA_B_Sell
   - rowData:
-    - 110045
+    - 110048
     - 2
     - 4
-    - 44
-    - St_110045
+    - 47
+    - St_110048
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -830,11 +881,11 @@ MonoBehaviour:
     - 5
     - ManagementDesk_Upgrade
   - rowData:
-    - 110046
+    - 110049
     - 2
     - 5
-    - 45
-    - St_110046
+    - 48
+    - St_110049
     - Build Server's House
     - Build
     - DeliveryLodging
@@ -847,11 +898,11 @@ MonoBehaviour:
     - 9000
     - DeliveryLodging_Unlock
   - rowData:
-    - 110047
+    - 110050
     - 2
     - 5
-    - 46
-    - St_110047
+    - 49
+    - St_110050
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -864,11 +915,11 @@ MonoBehaviour:
     - 9000
     - KitchenA_A_Upgrade
   - rowData:
-    - 110048
+    - 110051
     - 2
     - 5
-    - 47
-    - St_110048
+    - 50
+    - St_110051
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -881,11 +932,11 @@ MonoBehaviour:
     - 9000
     - KitchenA_B_Upgrade
   - rowData:
-    - 110049
+    - 110052
     - 2
     - 6
-    - 48
-    - St_110049
+    - 51
+    - St_110052
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -898,11 +949,11 @@ MonoBehaviour:
     - 70
     - ProductA_A_Sell
   - rowData:
-    - 110050
+    - 110053
     - 2
     - 6
-    - 49
-    - St_110050
+    - 52
+    - St_110053
     - Increase Server Speed
     - LevelUpOption1
     - DeliveryLodging
@@ -915,11 +966,11 @@ MonoBehaviour:
     - 70
     - DeliveryLodging_Upgrade
   - rowData:
-    - 110051
+    - 110054
     - 2
     - 6
-    - 50
-    - St_110051
+    - 53
+    - St_110054
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -932,11 +983,11 @@ MonoBehaviour:
     - 70
     - ManagementDesk_Upgrade
   - rowData:
-    - 110052
+    - 110055
     - 2
     - 7
-    - 51
-    - St_110052
+    - 54
+    - St_110055
     - Build Warehouse
     - Build
     - WareHouse
@@ -949,11 +1000,11 @@ MonoBehaviour:
     - 16000
     - WareHouse_Unlock
   - rowData:
-    - 110053
+    - 110056
     - 2
     - 7
-    - 52
-    - St_110053
+    - 55
+    - St_110056
     - Sell Canned Cucumbers
     - Selling
     - ProductA_B
@@ -966,11 +1017,11 @@ MonoBehaviour:
     - 16000
     - ProductA_B_Sell
   - rowData:
-    - 110054
+    - 110057
     - 2
     - 7
-    - 53
-    - St_110054
+    - 56
+    - St_110057
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -983,11 +1034,11 @@ MonoBehaviour:
     - 16000
     - KitchenA_B_Upgrade
   - rowData:
-    - 110055
+    - 110058
     - 2
     - 8
-    - 54
-    - St_110055
+    - 57
+    - St_110058
     - Build Canning Machine C
     - Build
     - KitchenA_C
@@ -1000,11 +1051,11 @@ MonoBehaviour:
     - 140
     - KitchenA_C_Unlock
   - rowData:
-    - 110056
+    - 110059
     - 2
     - 8
-    - 55
-    - St_110056
+    - 58
+    - St_110059
     - Build Can Stand C
     - Build
     - StandA_C
@@ -1017,11 +1068,11 @@ MonoBehaviour:
     - 140
     - StandA_C_Unlock
   - rowData:
-    - 110057
+    - 110060
     - 2
     - 8
-    - 56
-    - St_110057
+    - 59
+    - St_110060
     - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
@@ -1034,11 +1085,11 @@ MonoBehaviour:
     - 140
     - WareHouse_Upgrade
   - rowData:
-    - 110058
+    - 110061
     - 2
     - 8
-    - 57
-    - St_110058
+    - 60
+    - St_110061
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -1051,11 +1102,11 @@ MonoBehaviour:
     - 140
     - KitchenA_A_Upgrade
   - rowData:
-    - 110059
+    - 110062
     - 2
     - 9
-    - 58
-    - St_110059
+    - 61
+    - St_110062
     - Gather Beans
     - Get
     - Material_C
@@ -1068,11 +1119,11 @@ MonoBehaviour:
     - 5
     - HuntingZone_C_Hunt
   - rowData:
-    - 110060
+    - 110063
     - 2
     - 9
-    - 59
-    - St_110060
+    - 62
+    - St_110063
     - Produce Canned Beans
     - Product
     - ProductA_C
@@ -1085,11 +1136,11 @@ MonoBehaviour:
     - 5
     - KitchenA_C_Product
   - rowData:
-    - 110061
+    - 110064
     - 2
     - 9
-    - 60
-    - St_110061
+    - 63
+    - St_110064
     - Increase Canning Machine C Price
     - LevelUpOption1
     - KitchenA_A
@@ -1102,11 +1153,11 @@ MonoBehaviour:
     - 5
     - KitchenA_C_Upgrade
   - rowData:
-    - 110062
+    - 110065
     - 2
     - 9
-    - 61
-    - St_110062
+    - 64
+    - St_110065
     - Unlock a new area
     - Build
     - HuntingZone_C
@@ -1119,11 +1170,11 @@ MonoBehaviour:
     - 5
     - HuntingZone_C_Unlock
   - rowData:
-    - 110063
+    - 110066
     - 2
     - 10
-    - 62
-    - St_110063
+    - 65
+    - St_110066
     - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
@@ -1136,11 +1187,11 @@ MonoBehaviour:
     - 55000
     - WareHouse_Upgrade
   - rowData:
-    - 110064
+    - 110067
     - 2
     - 10
-    - 63
-    - St_110064
+    - 66
+    - St_110067
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -1153,11 +1204,11 @@ MonoBehaviour:
     - 55000
     - KitchenA_A_Upgrade
   - rowData:
-    - 110065
+    - 110068
     - 2
     - 10
-    - 64
-    - St_110065
+    - 67
+    - St_110068
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -1170,11 +1221,11 @@ MonoBehaviour:
     - 55000
     - ManagementDesk_Upgrade
   - rowData:
-    - 110066
+    - 110069
     - 2
     - 10
-    - 65
-    - St_110066
+    - 68
+    - St_110069
     - Increase Server Speed
     - LevelUpOption1
     - DeliveryLodging
@@ -1187,11 +1238,11 @@ MonoBehaviour:
     - 55000
     - DeliveryLodging_Upgrade
   - rowData:
-    - 110067
+    - 110070
     - 2
     - 11
-    - 66
-    - St_110067
+    - 69
+    - St_110070
     - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
@@ -1204,11 +1255,11 @@ MonoBehaviour:
     - 210
     - WareHouse_Upgrade
   - rowData:
-    - 110068
+    - 110071
     - 2
     - 11
-    - 67
-    - St_110068
+    - 70
+    - St_110071
     - Build Stew Pot
     - Build
     - KitchenB_A
@@ -1221,11 +1272,11 @@ MonoBehaviour:
     - 210
     - KitchenB_A_Unlock
   - rowData:
-    - 110069
+    - 110072
     - 2
     - 11
-    - 68
-    - St_110069
+    - 71
+    - St_110072
     - Build Stew Stand
     - Build
     - StandB_A
@@ -1238,11 +1289,11 @@ MonoBehaviour:
     - 210
     - StandB_A_Unlock
   - rowData:
-    - 110070
+    - 110073
     - 2
     - 12
-    - 69
-    - St_110070
+    - 72
+    - St_110073
     - Gather Beans
     - Get
     - Material_C
@@ -1255,11 +1306,11 @@ MonoBehaviour:
     - 90000
     - HuntingZone_C_Hunt
   - rowData:
-    - 110071
+    - 110074
     - 2
     - 12
-    - 70
-    - St_110071
+    - 73
+    - St_110074
     - Produce Tomato Stew
     - Product
     - ProductB_A
@@ -1272,11 +1323,11 @@ MonoBehaviour:
     - 90000
     - KitchenB_A_Product
   - rowData:
-    - 110072
+    - 110075
     - 2
     - 12
-    - 71
-    - St_110072
+    - 74
+    - St_110075
     - Sell Tomato Stew
     - Selling
     - ProductB_A
@@ -1289,11 +1340,11 @@ MonoBehaviour:
     - 90000
     - ProductB_A_Sell
   - rowData:
-    - 110073
+    - 110076
     - 2
     - 13
-    - 72
-    - St_110073
+    - 75
+    - St_110076
     - Increase Stew Pot Price
     - LevelUpOption1
     - KitchenB_A
@@ -1306,11 +1357,11 @@ MonoBehaviour:
     - 280
     - KitchenB_A_Upgrade
   - rowData:
-    - 110074
+    - 110077
     - 2
     - 13
-    - 73
-    - St_110074
+    - 76
+    - St_110077
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -1323,11 +1374,11 @@ MonoBehaviour:
     - 280
     - KitchenA_B_Upgrade
   - rowData:
-    - 110075
+    - 110078
     - 2
     - 13
-    - 74
-    - St_110075
+    - 77
+    - St_110078
     - Gather Cucumbers
     - Get
     - Material_B
@@ -1340,11 +1391,11 @@ MonoBehaviour:
     - 280
     - HuntingZone_B_Hunt
   - rowData:
-    - 110076
+    - 110079
     - 2
     - 13
-    - 75
-    - St_110076
+    - 78
+    - St_110079
     - Increase Canning Machine C Price
     - LevelUpOption1
     - KitchenA_C
@@ -1357,11 +1408,11 @@ MonoBehaviour:
     - 280
     - KitchenA_C_Upgrade
   - rowData:
-    - 110077
+    - 110080
     - 2
     - 14
-    - 76
-    - St_110077
+    - 79
+    - St_110080
     - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
@@ -1374,11 +1425,11 @@ MonoBehaviour:
     - 5
     - WareHouse_Upgrade
   - rowData:
-    - 110078
+    - 110081
     - 2
     - 14
-    - 77
-    - St_110078
+    - 80
+    - St_110081
     - Sell Canned Beans
     - Selling
     - ProductA_C
@@ -1391,11 +1442,11 @@ MonoBehaviour:
     - 5
     - ProductA_C_Sell
   - rowData:
-    - 110079
+    - 110082
     - 2
     - 14
-    - 78
-    - St_110079
+    - 81
+    - St_110082
     - Produce Canned Cucumbers
     - Product
     - ProductA_B
@@ -1408,11 +1459,11 @@ MonoBehaviour:
     - 5
     - KitchenA_B_Product
   - rowData:
-    - 110080
+    - 110083
     - 2
     - 14
-    - 79
-    - St_110080
+    - 82
+    - St_110083
     - Produce Tomato Stew
     - Product
     - ProductB_A
@@ -1425,11 +1476,11 @@ MonoBehaviour:
     - 5
     - KitchenB_A_Product
   - rowData:
-    - 110081
+    - 110084
     - 2
     - 15
-    - 80
-    - St_110081
+    - 83
+    - St_110084
     - Sell Canned Cucumbers
     - Selling
     - ProductA_B
@@ -1442,11 +1493,11 @@ MonoBehaviour:
     - 350
     - ProductA_B_Sell
   - rowData:
-    - 110082
+    - 110085
     - 2
     - 15
-    - 81
-    - St_110082
+    - 84
+    - St_110085
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -1459,11 +1510,11 @@ MonoBehaviour:
     - 350
     - KitchenA_A_Upgrade
   - rowData:
-    - 110083
+    - 110086
     - 2
     - 15
-    - 82
-    - St_110083
+    - 85
+    - St_110086
     - Increase Cashier Speed
     - LevelUpOption1
     - ManagementDesk
@@ -1476,11 +1527,11 @@ MonoBehaviour:
     - 350
     - ManagementDesk_Upgrade
   - rowData:
-    - 110084
+    - 110087
     - 2
     - 16
-    - 83
-    - St_110084
+    - 86
+    - St_110087
     - Sell Canned Tomatoes
     - Selling
     - ProductA_A
@@ -1493,11 +1544,11 @@ MonoBehaviour:
     - 420
     - ProductA_A_Sell
   - rowData:
-    - 110085
+    - 110088
     - 2
     - 16
-    - 84
-    - St_110085
+    - 87
+    - St_110088
     - Increase Server Speed
     - LevelUpOption1
     - DeliveryLodging
@@ -1510,11 +1561,11 @@ MonoBehaviour:
     - 420
     - DeliveryLodging_Upgrade
   - rowData:
-    - 110086
+    - 110089
     - 2
     - 16
-    - 85
-    - St_110086
+    - 88
+    - St_110089
     - Increase Canning Machine B Price
     - LevelUpOption1
     - KitchenA_B
@@ -1527,11 +1578,11 @@ MonoBehaviour:
     - 420
     - KitchenA_B_Upgrade
   - rowData:
-    - 110087
+    - 110090
     - 2
     - 16
-    - 86
-    - St_110087
+    - 89
+    - St_110090
     - Collect Gold
     - Get
     - Money
@@ -1544,11 +1595,11 @@ MonoBehaviour:
     - 420
     - ManagementDesk_GetMoney
   - rowData:
-    - 110088
+    - 110091
     - 2
     - 17
-    - 87
-    - St_110088
+    - 90
+    - St_110091
     - Increase Stew Pot Price
     - LevelUpOption1
     - KitchenB_A
@@ -1561,11 +1612,11 @@ MonoBehaviour:
     - 160000
     - KitchenB_A_Upgrade
   - rowData:
-    - 110089
+    - 110092
     - 2
     - 17
-    - 88
-    - St_110089
+    - 91
+    - St_110092
     - Increase Canning Machine C Price
     - LevelUpOption1
     - KitchenA_C
@@ -1578,11 +1629,11 @@ MonoBehaviour:
     - 160000
     - KitchenA_C_Upgrade
   - rowData:
-    - 110090
+    - 110093
     - 2
     - 17
-    - 89
-    - St_110090
+    - 92
+    - St_110093
     - Sell Canned Beans
     - Selling
     - ProductA_C
@@ -1595,11 +1646,11 @@ MonoBehaviour:
     - 160000
     - ProductA_C_Sell
   - rowData:
-    - 110091
+    - 110094
     - 2
     - 17
-    - 90
-    - St_110091
+    - 93
+    - St_110094
     - Increase Hunter ATK
     - LevelUpOption1
     - WareHouse
@@ -1612,11 +1663,11 @@ MonoBehaviour:
     - 160000
     - WareHouse_Upgrade
   - rowData:
-    - 110092
+    - 110095
     - 2
     - 18
-    - 91
-    - St_110092
+    - 94
+    - St_110095
     - Increase Canning Machine A Price
     - LevelUpOption1
     - KitchenA_A
@@ -1629,11 +1680,11 @@ MonoBehaviour:
     - 490
     - KitchenA_A_Upgrade
   - rowData:
-    - 110093
+    - 110096
     - 2
     - 18
-    - 92
-    - St_110093
+    - 95
+    - St_110096
     - Produce Canned Tomatoes
     - Product
     - ProductA_A
@@ -1645,54 +1696,3 @@ MonoBehaviour:
     - RedGem
     - 490
     - KitchenA_A_Product
-  - rowData:
-    - 110094
-    - 2
-    - 18
-    - 93
-    - St_110094
-    - Produce Canned Cucumbers
-    - Product
-    - ProductA_B
-    - 20
-    - Star
-    - 1
-    - Diamond
-    - 2
-    - RedGem
-    - 490
-    - KitchenA_B_Product
-  - rowData:
-    - 110095
-    - 2
-    - 18
-    - 94
-    - St_110095
-    - Increase Canning Machine B Price
-    - LevelUpOption1
-    - KitchenA_B
-    - 50
-    - Star
-    - 1
-    - Diamond
-    - 2
-    - RedGem
-    - 490
-    - KitchenA_B_Upgrade
-  - rowData:
-    - 110096
-    - 2
-    - 19
-    - 95
-    - St_110096
-    - Sell Canned Cucumbers
-    - Selling
-    - ProductA_B
-    - 20
-    - Star
-    - 1
-    - Diamond
-    - 2
-    - Diamond
-    - 8
-    - ProductA_B_Sell

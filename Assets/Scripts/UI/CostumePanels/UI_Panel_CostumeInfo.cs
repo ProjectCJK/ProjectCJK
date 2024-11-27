@@ -47,7 +47,11 @@ namespace UI.CostumePanels
 
             // 버튼 이벤트 등록
             enhancementButton.onClick.AddListener(OnClickEnhancementButton);
-            equipButton.onClick.AddListener(OnClickEquipmentButton);
+            equipButton.onClick.AddListener(() =>
+            {
+                QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Equip, "Quest", 1);
+                OnClickEquipmentButton();
+            });
         }
 
         public void UpdateUI(CostumeItemData costumeItemData)
@@ -104,7 +108,7 @@ namespace UI.CostumePanels
             uiPanelCostumeUpgrade.Activate(_costumeItemData);
         }
 
-        public void OnClickEquipmentButton()
+        private void OnClickEquipmentButton()
         {
             // 기존 장착 장비 해제
             if (VolatileDataManager.Instance.EquippedCostumes.TryGetValue(_costumeItemData.CostumeType, out var equippedCostume))

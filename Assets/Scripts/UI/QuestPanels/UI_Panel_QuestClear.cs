@@ -10,17 +10,18 @@ namespace UI.QuestPanels
 {
     public class UI_Panel_QuestClear : MonoBehaviour
     {
+        [SerializeField] private List<Color> _colors;
         [SerializeField] private List<Sprite> _backgroundSprites;
         [SerializeField] private List<Sprite> _iconSprites;
         
         [SerializeField] private Image _iconImage;
+        [SerializeField] private Image _iconBackgroundImage;
         [SerializeField] private Image _backgroundImage;
         [SerializeField] private TextMeshProUGUI _rewardTypeText;
         [SerializeField] private TextMeshProUGUI _rewardCountText;
         
         [SerializeField] private Button _button;
         
-        private Animator _animator;
         private ECurrencyType _listDataListRewardType;
         private int _listDataListRewardCount;
 
@@ -28,7 +29,6 @@ namespace UI.QuestPanels
         
         public void RegisterReference()
         {
-            _animator = GetComponent<Animator>();
             _button.onClick.AddListener(OnClickPanel);
         }
 
@@ -43,23 +43,25 @@ namespace UI.QuestPanels
             {
                 case ECurrencyType.Diamond:
                     _iconImage.sprite = _iconSprites[0];
+                    _iconBackgroundImage.color = _colors[0];
                     _backgroundImage.sprite = _backgroundSprites[0];
                     _rewardCountText.text = $"<sprite={2}> {listDataListRewardCount}";
                     break;
                 case ECurrencyType.RedGem:
                     _iconImage.sprite = _iconSprites[1];
+                    _iconBackgroundImage.color = _colors[1];
                     _backgroundImage.sprite = _backgroundSprites[1];
                     _rewardCountText.text = $"<sprite={4}> {listDataListRewardCount}";
                     break;
                 case ECurrencyType.Gold:
                     _iconImage.sprite = _iconSprites[2];
+                    _iconBackgroundImage.color = _colors[2];
                     _backgroundImage.sprite = _backgroundSprites[2];
                     _rewardCountText.text = $"<sprite={0}> {listDataListRewardCount}";
                     break;
             }
 
             gameObject.SetActive(true);
-            _animator.SetBool(Open, true);
         }
 
         private void OnClickPanel()
