@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
@@ -64,6 +65,9 @@ namespace Units.Stages.Units.HuntingZones
 
         private ITradeZone _unlockZonePlayer;
         private IItemFactory itemFactory;
+        
+        private event Action<IItem> OnDroppedItem;
+        private event Action HandleOnPlayerEncounter;
 
         public UnlockZoneModule UnlockZoneModule { get; private set; }
         public HashSet<IMonster> CurrentSpawnedMonsters { get; } = new();
@@ -71,6 +75,8 @@ namespace Units.Stages.Units.HuntingZones
         public EActiveStatus ActiveStatus => UnlockZoneModule.ActiveStatus;
         public int RequiredGoldForUnlock => UnlockZoneModule.RequiredGoldForUnlock;
         public int CurrentGoldForUnlock { get; set; }
+        
+        private bool _isSpawningMonsters; // 몬스터 생성 중인지 여부
 
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController,
             Action<IItem> action)
@@ -100,21 +106,46 @@ namespace Units.Stages.Units.HuntingZones
         public void Initialize()
         {
             UnlockZoneModule.UpdateViewModel();
-        }
-
-        public void SpawnMonsters()
-        {
-            if (CurrentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
+            
+            while (CurrentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
             {
                 IMonster monster = _creatureController.GetMonster(GetRandomSpawnPoint(),
                     huntingZoneCustomSetting._materialType, ReturnMonster);
 
-                if (monster != null) CurrentSpawnedMonsters.Add(monster);
+                if (monster != null)
+                {
+                    CurrentSpawnedMonsters.Add(monster);
+                }
             }
         }
 
-        private event Action<IItem> OnDroppedItem;
-        private event Action HandleOnPlayerEncounter;
+        public void SpawnMonsters()
+        {
+            if (_isSpawningMonsters) return; // 생성 중이면 중복 호출 방지
+
+            StartCoroutine(SpawnMonstersWithDelay());
+        }
+
+        private IEnumerator SpawnMonstersWithDelay()
+        {
+            _isSpawningMonsters = true;
+
+            while (CurrentSpawnedMonsters.Count < huntingZoneCustomSetting._monsterSpawnCount)
+            {
+                IMonster monster = _creatureController.GetMonster(GetRandomSpawnPoint(),
+                    huntingZoneCustomSetting._materialType, ReturnMonster);
+
+                if (monster != null)
+                {
+                    CurrentSpawnedMonsters.Add(monster);
+                }
+
+                // 한 번 생성 후 3초 대기
+                yield return new WaitForSeconds(3f);
+            }
+
+            _isSpawningMonsters = false;
+        }
 
         private void ReturnMonster(IMonster monster)
         {
