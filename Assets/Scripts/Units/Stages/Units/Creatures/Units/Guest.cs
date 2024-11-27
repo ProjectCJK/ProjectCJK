@@ -28,6 +28,7 @@ namespace Units.Stages.Units.Creatures.Units
         public void SetDestinations(List<Tuple<string, Transform>> destinations);
         public void SetTargetPurchaseQuantity(int targetPurchaseQuantity);
         public void CheckNextDestination();
+        public void Unregister();
     }
 
     public class Guest : NPC, IGuest
@@ -181,6 +182,11 @@ namespace Units.Stages.Units.Creatures.Units
             if (_destinationIndex == _destinations.Count - 1) _returnTrigger = true;
 
             _guestMovementModule.SetDestination(_destinations[_destinationIndex]);
+        }
+
+        public void Unregister()
+        {
+            HandleOnTriggerTradeZone(_currentTradeZone, false);
         }
 
         private event Action OnReturnGuest;

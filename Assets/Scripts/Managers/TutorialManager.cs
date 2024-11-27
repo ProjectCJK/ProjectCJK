@@ -131,11 +131,9 @@ namespace Managers
                 yield return null;
             }
             
-            _tutorialPopUpPanel.gameObject.SetActive(true);
+            _tutorialPopUpPanel.gameObject.SetActive(false);
             _branchCanvasGame.gameObject.SetActive(true);
             _branchCanvasJoystick.gameObject.SetActive(true);
-
-            ActivePopUpTutorialPanel(0);
         }
         
         private IEnumerator FollowCameraToTargets(Vector3 start, Vector3 end)
@@ -152,12 +150,15 @@ namespace Managers
 
         public void ActivePopUpTutorialPanel(int index)
         {
-            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index) && GameManager.Instance.ES3Saver.PopUpTutorialClear[index]) return;
-
+            if (GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(index)) return;
+            
             GameManager.Instance.ES3Saver.PopUpTutorialClear.TryAdd(index, true);
             OnActivateUIByCurrentTutorialIndex?.Invoke(index);
             
-            _tutorialPopUpPanel.ActivatePanel(index);
+            if (index is 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11)
+            {
+                _tutorialPopUpPanel.ActivatePanel(index);
+            }
         }
 
         private void HandleOnClickTutorialPanelExitButton()

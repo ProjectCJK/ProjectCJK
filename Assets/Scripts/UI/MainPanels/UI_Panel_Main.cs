@@ -60,6 +60,11 @@ namespace UI.MainPanels
         
         public void OnActivateUIByCurrentTutorialIndex(int index)
         {
+            foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
+            {
+                item.gameObject.SetActive(false);
+            }
+            
             for (var i = 0; i < UI_Item_QuestGuide.Count; i++)
             {
                 if (UI_Item_QuestGuide[i].index == index)

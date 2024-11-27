@@ -12,24 +12,22 @@ namespace UI.TutorialPanel
         [SerializeField] private TextMeshProUGUI _balloonText;
         [SerializeField] private Button closeButton;
         
-        private List<string> textLists = new();
+        private Dictionary<int, string> textLists = new();
         
         public Action<int> OnClickExitButton;
 
         public void RegisterReference()
         {
-            textLists = new List<string>
-            {
-                "캔닝머신을 건설하기",
-                "스탠드 건설하기",
-                "사냥터 해금하기",
-                "토마토 사냥하기",
-                "토마토 통조림 제작하기",
-                "토마토 통조림 진열하기",
-                "토마토 통조림 판매하기",
-                "캔닝머신 가격 올리기",
-                "직원 고용하기",
-            };
+            textLists.TryAdd(2, "It looks like there might be monsters over there. Let's go check it out.");
+            textLists.TryAdd(3, "There was a monster after all! Let's hunt the monster with this torch!");
+            textLists.TryAdd(4, "Now let's put the tomatoes in the canning machine to make canned tomatoes.");
+            textLists.TryAdd(5, "Let's put the canned tomatoes on the food stand so that the survivors can buy them.");
+            textLists.TryAdd(6,"Okay. Now let's go ring up the items.");
+            textLists.TryAdd(7, "Let's upgrade the canning machine with the money we earned.");
+            textLists.TryAdd(8, "We'll probably need some extra hands. Let's hire a cashier.");
+            textLists.TryAdd(9, "Now that we can take a breather, let's get some better equipment!");
+            textLists.TryAdd(10, "Build a lodge to hire a deliveryman who will carry your products to the food stand.");
+            textLists.TryAdd(11, "Build a warehouse to hire a hunter who will hunt monsters and stock up materials.");
             
             // if (GameManager.Instance.ES3Saver.PopUpTutorialClear.Count == 0)
             // {
