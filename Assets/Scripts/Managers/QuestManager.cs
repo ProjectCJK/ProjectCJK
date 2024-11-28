@@ -744,6 +744,7 @@ namespace Managers
             else if (questType2 == EQuestType2.Money) questIcon = DataManager.Instance.SpriteDatas[0];
             else if (questType2 == EQuestType2.Zone_Open) questIcon = DataManager.Instance.SpriteDatas[67];
             else if (questType2 == EQuestType2.HuntingZone_C) questIcon = DataManager.Instance.SpriteDatas[14];
+            else if (questType2 == EQuestType2.Quest) questIcon = DataManager.Instance.SpriteDatas[57];
 
             return questIcon;
         }
