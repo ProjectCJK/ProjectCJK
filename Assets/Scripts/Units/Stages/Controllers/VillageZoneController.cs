@@ -163,9 +163,9 @@ namespace Units.Stages.Controllers
                 .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.StandA}_{material}"))
                 .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.StandA}_{material}"].Values.Sum());
 
-            if (currentStandProductCount >= 10)
+            if (currentStandProductCount >= 30)
             {
-                UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.gameObject.SetActive(true);
+                UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate();
             }
         }
         
