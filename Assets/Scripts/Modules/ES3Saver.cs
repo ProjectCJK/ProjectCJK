@@ -12,6 +12,7 @@ namespace Modules
         /// TutorialSettings
         /// </summary>
         public bool InitialTutorialClear;
+        public bool InitialCostumeGacha;
         public Dictionary<int, bool> PopUpTutorialClear = new();
 
         /// <summary>

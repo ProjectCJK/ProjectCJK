@@ -62,7 +62,7 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
         public void SendItem(ICreatureItemReceiver itemReceiver, EMaterialType materialType)
         {
-            if (!IsReadyToSend()) return;
+            if (!IsReadyToSend(false)) return;
 
             var outputItemKey = $"{EItemType.Material}_{materialType}";
 

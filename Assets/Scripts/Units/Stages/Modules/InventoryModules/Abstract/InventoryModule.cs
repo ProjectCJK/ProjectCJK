@@ -30,6 +30,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
     public abstract class InventoryModule : IInventoryModule
     {
         private const float SendItemInterval = 0.1f;
+        private const float SendMoneyInterval = 0.015f;
 
         public abstract Dictionary<string, int> Inventory { get; set; }
 
@@ -52,7 +53,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
         public void Update()
         {
-            TrySendItem();
+            SendItem();
         }
 
         public void ReceiveItemThroughTransfer(string inputItemKey, int count, Vector3 currentSenderPosition)
@@ -90,10 +91,7 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
 
         protected abstract void SendItem();
 
-        protected virtual void OnItemReceived(string inputItemKey, IItem item)
-        {
-            
-        }
+        protected abstract void OnItemReceived(string inputItemKey, IItem item);
 
         /// <summary>
         ///     아이템을 제거하는 메서드
@@ -117,9 +115,16 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
             OnInventoryCountChanged?.Invoke();
         }
 
-        protected bool IsReadyToSend()
+        protected bool IsReadyToSend(bool isTargetTypeMoney)
         {
-            return Time.time >= _lastSendTime + SendItemInterval;
+            if (isTargetTypeMoney)
+            {
+                return Time.time >= _lastSendTime + SendMoneyInterval;
+            }
+            else
+            {
+                return Time.time >= _lastSendTime + SendItemInterval;   
+            }
         }
 
         protected void SetLastSendTime()
@@ -127,18 +132,10 @@ namespace Units.Stages.Modules.InventoryModules.Abstract
             _lastSendTime = Time.time;
         }
 
-        private void TrySendItem()
-        {
-            if (IsReadyToSend())
-            {
-                SendItem();
-                SetLastSendTime();
-            }
-        }
-
         protected void PushSpawnedItem(Transform receiveTransform, IItem item, bool isVisible)
         {
             item.Transform.gameObject.SetActive(isVisible);
+            item.Transform.rotation = Quaternion.identity;
             item.Transform.SetParent(receiveTransform);
             spawnedItemStack.Push(item);
         }

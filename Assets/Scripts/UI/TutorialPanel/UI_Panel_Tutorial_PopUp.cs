@@ -12,7 +12,7 @@ namespace UI.TutorialPanel
         [SerializeField] private TextMeshProUGUI _balloonText;
         [SerializeField] private Button closeButton;
         
-        private Dictionary<int, string> textLists = new();
+        private readonly Dictionary<int, string> textLists = new();
         
         public Action<int> OnClickExitButton;
 
@@ -26,8 +26,8 @@ namespace UI.TutorialPanel
             textLists.TryAdd(7, "Let's upgrade the canning machine with the money we earned.");
             textLists.TryAdd(8, "We'll probably need some extra hands. Let's hire a cashier.");
             textLists.TryAdd(9, "Now that we can take a breather, let's get some better equipment!");
-            textLists.TryAdd(10, "Build a lodge to hire a deliveryman who will carry your products to the food stand.");
-            textLists.TryAdd(11, "Build a warehouse to hire a hunter who will hunt monsters and stock up materials.");
+            textLists.TryAdd(48, "Build a lodge to hire a deliveryman who will carry your products to the food stand.");
+            textLists.TryAdd(54, "Build a warehouse to hire a hunter who will hunt monsters and stock up materials.");
             
             // if (GameManager.Instance.ES3Saver.PopUpTutorialClear.Count == 0)
             // {

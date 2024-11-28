@@ -264,20 +264,38 @@ namespace Managers
         {
             var randomItems = new List<CostumeItemData>();
 
-            for (var i = 0; i < maxCommonGet; i++)
+            if (GameManager.Instance.ES3Saver.InitialCostumeGacha == false)
             {
-                var normalItem = GetNormalItem();
-                _currentCostumeItemData.Add(normalItem);
-                randomItems.Add(normalItem);
+                randomItems.Add(_cachedCommonCostumes[0].Clone());
+                randomItems.Add(_cachedCommonCostumes[0].Clone());
+                randomItems.Add(_cachedCommonCostumes[2].Clone());
+                randomItems.Add(_cachedCommonCostumes[4].Clone());
+                randomItems.Add(_cachedCommonCostumes[6].Clone());
+                
+                _currentCostumeItemData.Add(_cachedCommonCostumes[0].Clone());
+                _currentCostumeItemData.Add(_cachedCommonCostumes[0].Clone());
+                _currentCostumeItemData.Add(_cachedCommonCostumes[2].Clone());
+                _currentCostumeItemData.Add(_cachedCommonCostumes[4].Clone());
+                _currentCostumeItemData.Add(_cachedCommonCostumes[6].Clone());
+            }
+            else
+            {
+                for (var i = 0; i < maxCommonGet; i++)
+                {
+                    var normalItem = GetNormalItem();
+                    _currentCostumeItemData.Add(normalItem);
+                    randomItems.Add(normalItem);
+                }
+
+                for (var i = 0; i < maxRareGet; i++)
+                {
+                    var randomIndex = Random.Range(1, 101);
+                    var rareOrNormalItem = randomIndex <= int.Parse(_costumeBoxData[2, 8]) ? GetRareItem() : GetNormalItem();
+                    _currentCostumeItemData.Add(rareOrNormalItem);
+                    randomItems.Add(rareOrNormalItem);
+                }
             }
 
-            for (var i = 0; i < maxRareGet; i++)
-            {
-                var randomIndex = Random.Range(1, 101);
-                var rareOrNormalItem = randomIndex <= int.Parse(_costumeBoxData[2, 8]) ? GetRareItem() : GetNormalItem();
-                _currentCostumeItemData.Add(rareOrNormalItem);
-                randomItems.Add(rareOrNormalItem);
-            }
 
             SaveCostumeData();
 

@@ -79,7 +79,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 50
+    - 200
     - KitchenA_A_Unlock
   - rowData:
     - 110002
@@ -96,7 +96,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 50
+    - 300
     - StandA_A_Unlock
   - rowData:
     - 110003
@@ -113,7 +113,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 400
     - HuntingZone_A_Unlock
   - rowData:
     - 110004
@@ -130,7 +130,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 500
     - HuntingZone_A_Hunt
   - rowData:
     - 110005
@@ -147,7 +147,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 150
+    - 600
     - KitchenA_A_Product
   - rowData:
     - 110006
@@ -164,7 +164,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 200
+    - 700
     - ProductA_A_Sell
   - rowData:
     - 110007
@@ -181,7 +181,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 300
+    - 800
     - Temp_ManagementDesk
   - rowData:
     - 110008
@@ -198,7 +198,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 350
+    - 900
     - KitchenA_A_Upgrade
   - rowData:
     - 110009
@@ -214,8 +214,8 @@ MonoBehaviour:
     - 1
     - Diamond
     - 2
-    - Gold
-    - 400
+    - RedGem
+    - 70
     - ManagementDesk_Upgrade
   - rowData:
     - 110010
@@ -886,7 +886,7 @@ MonoBehaviour:
     - 5
     - 48
     - St_110049
-    - Build Server's House
+    - Build Delivery Lodge
     - Build
     - DeliveryLodging
     - 1
@@ -1696,3 +1696,88 @@ MonoBehaviour:
     - RedGem
     - 490
     - KitchenA_A_Product
+  - rowData:
+    - 110097
+    - 2
+    - 18
+    - 96
+    - St_110097
+    - Produce Canned Cucumbers
+    - Product
+    - ProductA_B
+    - 20
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - RedGem
+    - 490
+    - KitchenA_B_Product
+  - rowData:
+    - 110098
+    - 2
+    - 18
+    - 97
+    - St_110098
+    - Increase Canning Machine B Price
+    - LevelUpOption1
+    - KitchenA_B
+    - 50
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - RedGem
+    - 490
+    - KitchenA_B_Upgrade
+  - rowData:
+    - 110099
+    - 2
+    - 19
+    - 98
+    - St_110099
+    - Sell Canned Cucumbers
+    - Selling
+    - ProductA_B
+    - 20
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Diamond
+    - 8
+    - ProductA_B_Sell
+  - rowData:
+    - 110100
+    - 2
+    - 19
+    - 99
+    - St_110100
+    - Sell Tomato Stew
+    - Selling
+    - ProductB_A
+    - 10
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Diamond
+    - 8
+    - ProductB_A_Sell
+  - rowData:
+    - 110101
+    - 2
+    - 19
+    - 100
+    - St_110101
+    - Collect Gold
+    - Get
+    - Money
+    - 144000
+    - Star
+    - 1
+    - Diamond
+    - 2
+    - Diamond
+    - 8
+    - ManagementDesk_GetMoney

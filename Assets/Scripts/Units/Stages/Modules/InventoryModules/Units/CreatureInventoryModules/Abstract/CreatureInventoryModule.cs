@@ -50,6 +50,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
 
             if (string.Equals(zone.InputItemKey, $"{ECurrencyType.Money}"))
             {
+                if (!IsReadyToSend(true)) return;
+                
                 if (CurrencyManager.Instance.Gold > 0)
                 {
                     var targetMoney = zone.CanReceiveMoney();
@@ -67,29 +69,36 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, targetMoney, SenderTransform.position);
 
                         CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, targetMoney);
+                        
+                        SetLastSendTime();
                     }
                 }
             }
             else if (string.Equals(zone.BuildingKey, $"{EBuildingType.WareHouse}"))
             {
+                if (!IsReadyToSend(false)) return;
+                
                 if (Inventory.Count > 0)
                     if (zone.CanReceiveItem())
                         foreach (KeyValuePair<string, int> item in Inventory)
                         {
                             zone.ReceiveItemThroughTransfer(item.Key, 1, SenderTransform.position);
                             RemoveItem(item.Key);
-
+                            SetLastSendTime();
                             break;
                         }
             }
             else
             {
+                if (!IsReadyToSend(false)) return;
+                
                 if (Inventory.TryGetValue(zone.InputItemKey, out var itemCount) && itemCount > 0)
                     if (zone.CanReceiveItem())
                     {
                         zone.ReceiveItemThroughTransfer(zone.InputItemKey, 1, SenderTransform.position);
                         if (spawnedItemStack.Count > 0) ItemFactory.ReturnItem(PopSpawnedItem());
                         RemoveItem(zone.InputItemKey);
+                        SetLastSendTime();
                     }
             }
         }
