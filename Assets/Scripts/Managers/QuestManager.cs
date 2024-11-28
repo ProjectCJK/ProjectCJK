@@ -643,9 +643,12 @@ namespace Managers
         {
             var currentStageIndex = GameManager.Instance.ES3Saver.CurrentStageLevel;
             var currentListIndex = GameManager.Instance.ES3Saver.CurrentListQuestIndex;
-            var listData = _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas[currentListIndex];
-            
-            _uiPanelReward.Activate(listData.ListRewardType, listData.ListRewardCount);
+
+            if (currentListIndex < _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas.Count)
+            {
+                var listData = _parsedStageQuestDatas[currentStageIndex].ParsedListQuestDatas[currentListIndex];
+                _uiPanelReward.Activate(listData.ListRewardType, listData.ListRewardCount);
+            }
         }
 
         public void CheckNextQuestData()

@@ -153,11 +153,40 @@ namespace Units.Stages.Controllers
                 SpawnGuests();
                 PopUpGuestRush();
                 PopUpSuperHunter();
+                SpawnPopUpRewardGuestRush();
             }
             
             SpawnMonster();
   
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
+        }
+
+        private void SpawnPopUpRewardGuestRush()
+        {
+            if (VolatileDataManager.Instance.CustomerTrigger)
+            {
+                VolatileDataManager.Instance.CustomerTrigger = false;
+                StartCoroutine(SpawnGuestsWithDelay(30, 0.5f)); // 30명의 손님을 0.5초 간격으로 생성
+                customerRushButtonActivatorTimer = customerRushButtonActivatorMaxTime;
+            }
+        }
+
+        private IEnumerator SpawnGuestsWithDelay(int guestCount, float delay)
+        {
+            for (var i = 0; i < guestCount; i++)
+            {
+                if (VolatileDataManager.Instance.CurrentActiveMaterials.Count > 0)
+                {
+                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
+                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
+                    guest.SetTargetPurchaseQuantity(1);
+                    guest.SetDestinations(GetRandomDestinationForGuest());
+
+                    currentSpawnedGuests.Add(guest);
+                }
+
+                yield return new WaitForSeconds(delay); // 0.5초 대기
+            }
         }
 
         private void PopUpGuestRush()
@@ -174,6 +203,10 @@ namespace Units.Stages.Controllers
                 {
                     UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate();
                 }
+            }
+            else
+            {
+                customerRushButtonActivatorTimer -= Time.deltaTime;
             }
         }
         

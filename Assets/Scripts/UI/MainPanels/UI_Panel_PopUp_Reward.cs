@@ -28,7 +28,6 @@ namespace UI.MainPanels
         [SerializeField] private Button diaButton;
         [SerializeField] private Button diaButton_NotEnough;
         [SerializeField] private TextMeshProUGUI diaButtonText;
-        
         public void Activate(EPopUpPanelType popUpPanelType, int diaCount, Action onClickAdButton, Action onClickDiaButton)
         {
             adButton.onClick.RemoveAllListeners();
@@ -36,8 +35,12 @@ namespace UI.MainPanels
             
             adButton.onClick.AddListener(() =>
             {
-                onClickAdButton?.Invoke();
-                gameObject.SetActive(false);
+                AdsManager.Instance.ShowRewardedAd($"{popUpPanelType} Reward", (_, _) =>
+                {
+                    onClickAdButton?.Invoke();
+                    gameObject.SetActive(false);
+                });
+      
             });
             
             diaButton.onClick.AddListener(() =>

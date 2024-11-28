@@ -76,7 +76,7 @@ namespace Managers
                 // 광고 보기 버튼: 2배 보상 지급
                 () =>
                 {
-                    AdsManager.Instance.ShowRewardedAd(LevelUpPanelAD, (reward, info) =>
+                    AdsManager.Instance.ShowRewardedAd(LevelUpPanelAD, (_, _) =>
                     {
                         foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
                         {

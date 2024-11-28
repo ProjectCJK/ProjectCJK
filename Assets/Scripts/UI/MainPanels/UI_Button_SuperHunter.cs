@@ -14,6 +14,7 @@ namespace UI.MainPanels
         private int minutes;
         private int remainingSeconds;
 
+        [SerializeField] private Image existedImage;
         [SerializeField] private TextMeshProUGUI existedTimeText;
 
         public void RegisterReference()
@@ -29,11 +30,13 @@ namespace UI.MainPanels
         private void Update()
         {
             existedTime -= Time.deltaTime;
+            existedImage.fillAmount = existedTime / existedTimeMaximum;
 
             // 시간이 0보다 작아지면 0으로 설정
             if (existedTime < 0)
             {
                 existedTime = 0;
+                gameObject.SetActive(false);
             }
 
             ConvertFloatToTime(existedTime);
