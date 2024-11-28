@@ -39,7 +39,7 @@ namespace UI.MainPanels
         public UI_Panel_LevelUp UI_Panel_LevelUp;
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
         public UI_Panel_MainButtons UI_Panel_MainButtons;
-        
+        public UI_Panel_PopUp_Reward UI_Panel_PopUp_Reward;
         public List<UI_Item_QuestGuide> UI_Item_QuestGuide;
 
         public void RegisterReference()
@@ -56,10 +56,12 @@ namespace UI.MainPanels
                     button.gameObject.SetActive(true);
                 }
             
-                UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(false);
+                UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(false);
                 UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(false);
                 UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(false);
             }
+
+            UI_Panel_MainButtons.RegisterReference();
         }
         
         public void OnActivateUIByCurrentTutorialIndex(int index)
@@ -104,10 +106,10 @@ namespace UI.MainPanels
                 case 8:
                     break;
                 case 9:
-                    UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
                     break;
                 case 10:
-                    UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
                     UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
 
                     UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
@@ -117,7 +119,7 @@ namespace UI.MainPanels
 
                     break;
                 case 15:
-                    UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
                     UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
                     UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(true);
 

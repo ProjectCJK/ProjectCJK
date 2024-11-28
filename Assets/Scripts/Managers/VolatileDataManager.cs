@@ -27,8 +27,13 @@ namespace Managers
         public readonly Dictionary<ECostumeOptionType, float> CostumeEquipmentOption = new();
         public readonly Dictionary<ECostumeType, CostumeItemData> EquippedCostumes = new();
 
+        public bool CustomerTrigger { get; set; }
+        public bool SuperHunterTrigger { get; set; }
+
         public void RegisterReference()
         {
+            CustomerTrigger = false;
+            SuperHunterTrigger = false;
         }
 
         public int GetItemPrice(EItemType? item1, EMaterialType? item2)

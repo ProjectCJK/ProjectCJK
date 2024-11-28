@@ -58,6 +58,11 @@ namespace Units.Stages.Controllers
         private IHuntingZoneController _huntingZoneController;
         private StageCustomSettings _stageCustomSettings;
 
+        private const float customerRushButtonActivatorMaxTime = 50f;
+        // private const float superHunterButtonActivatorMaxTime;
+        private float customerRushButtonActivatorTimer = 0f;
+        private float superHunterButtonActivatorTimer = 0f;
+
         private Dictionary<HuntingZone, EActiveStatus> currentHuntingZones = new();
         private float _guestMaxCount => _stageCustomSettings.MaxGuestCount;
 
@@ -157,15 +162,18 @@ namespace Units.Stages.Controllers
 
         private void PopUpGuestRush()
         {
-            var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
-
-            var currentStandProductCount = materialTypes
-                .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.StandA}_{material}"))
-                .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.StandA}_{material}"].Values.Sum());
-
-            if (currentStandProductCount >= 30)
+            if (customerRushButtonActivatorTimer <= 0)
             {
-                UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate();
+                var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
+
+                var currentStandProductCount = materialTypes
+                    .Where(material => GameManager.Instance.ES3Saver.BuildingOutputItems.ContainsKey($"{EBuildingType.StandA}_{material}"))
+                    .Sum(material => GameManager.Instance.ES3Saver.BuildingOutputItems[$"{EBuildingType.StandA}_{material}"].Values.Sum());
+
+                if (currentStandProductCount >= 30)
+                {
+                    UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate();
+                }
             }
         }
         

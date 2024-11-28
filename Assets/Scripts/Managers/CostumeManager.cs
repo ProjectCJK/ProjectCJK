@@ -143,11 +143,11 @@ namespace Managers
             UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.RegisterReference(_backgroundImageCache, _frontGroundImageCache);
             UIManager.Instance.UI_Panel_Main.UI_Panel_Costume.RegisterReference(_frontGroundImageCache, _currentCostumeItemData);
 
-            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CostumeGachaPanel.onClick.AddListener(() =>
+            UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CostumeGacha.OnClickButton += () =>
             {
                 QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Open, "Quest", 1);
                 ActivateCostumeGacha();
-            });
+            };
             
             UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CostumePanel.onClick.AddListener(ActivateCostumePanel);
         }
@@ -251,13 +251,10 @@ namespace Managers
 
         private void ActivateCostumeGacha()
         {
-            if (GameManager.Instance.ES3Saver.Diamond >= 10)
-            {
-                List<CostumeItemData> gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
+            List<CostumeItemData> gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
 
-                SortCostumeItems();
-                UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.Activate(gachaItems);
-            }
+            SortCostumeItems();
+            UIManager.Instance.UI_Panel_Main.UI_Panel_Costume_Gacha.Activate(gachaItems);
         }
 
         private List<CostumeItemData> GetRandomItem(int maxCommonGet, int maxRareGet)
