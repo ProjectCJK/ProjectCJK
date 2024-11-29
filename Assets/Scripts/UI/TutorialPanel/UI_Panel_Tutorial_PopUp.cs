@@ -75,13 +75,29 @@ namespace UI.TutorialPanel
                 {
                     if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenA}_{EMaterialType.A}"] is Kitchen kitchen)
                     {
-                        if (kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.activeSelf) kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                        kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
                     }
                 }
                 
                 if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.KitchenA}_{EMaterialType.B}"))
                 {
                     if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenA}_{EMaterialType.B}"] is Kitchen kitchen)
+                    {
+                        kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                    }
+                }
+                
+                if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.KitchenA}_{EMaterialType.C}"))
+                {
+                    if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenA}_{EMaterialType.C}"] is Kitchen kitchen)
+                    {
+                        kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                    }
+                }
+                
+                if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.KitchenB}_{EMaterialType.A}"))
+                {
+                    if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenB}_{EMaterialType.A}"] is Kitchen kitchen)
                     {
                         kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
                     }
