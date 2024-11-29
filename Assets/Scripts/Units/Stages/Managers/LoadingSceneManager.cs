@@ -37,6 +37,12 @@ namespace Units.Stages.Managers
             targetSceneName = $"{sceneName}";
             SceneManager.LoadScene(loadingSceneName);
 
+            if (!GameManager.Instance.ES3Saver.first_loading)
+            {
+                GameManager.Instance.ES3Saver.first_loading = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_loading");
+            }
+            
             StartManagedCoroutine(InitializeLoadingScene());
         }
 

@@ -69,7 +69,7 @@ namespace Units.Stages.Units.Buildings.Units
 
     public class Kitchen : UnlockableBuildingZone, IKitchen
     {
-        [SerializeField] private KitchenDefaultSetting _kitchenDefaultSetting;
+        public KitchenDefaultSetting _kitchenDefaultSetting;
         [SerializeField] private KitchenCustomSetting _kitchenCustomSetting;
         private ItemFactory _itemFactory;
 
@@ -173,6 +173,11 @@ namespace Units.Stages.Units.Buildings.Units
 
         public override void Initialize()
         {
+            if (GameManager.Instance.ES3Saver.UpgradeZoneTrigger == false)
+            {
+                _kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(false);
+            }
+            
             HandleOnUpdateStackedItem(_kitchenProductInventoryModule.CurrentInventorySize);
             UpdateViewModel();
             UnlockZoneModule.UpdateViewModel();

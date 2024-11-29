@@ -55,6 +55,12 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
 
         protected override void OnItemReceived(string inputItemKey, IItem item)
         {
+            if (!GameManager.Instance.ES3Saver.first_food_production)
+            {
+                GameManager.Instance.ES3Saver.first_food_production = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_food_production");
+            }
+            
             AddItem(inputItemKey, item.Count);
             ItemFactory.ReturnItem(item);
             OnUpdateStackedItem?.Invoke(Inventory[inputItemKey]);

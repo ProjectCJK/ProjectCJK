@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using TMPro;
+using Units.Stages.Managers;
+using Units.Stages.Units.Buildings.Enums;
+using Units.Stages.Units.Buildings.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,6 +44,58 @@ namespace UI.TutorialPanel
 
         public void ActivatePanel(int index)
         {
+            if (!GameManager.Instance.ES3Saver.first_tutorial_popup_tap)
+            {
+                GameManager.Instance.ES3Saver.first_tutorial_popup_tap = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_tutorial_popup_tap");
+            }
+            
+            if (index == 4)
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_product_tap");
+            }
+            else if (index == 6)
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_sell_tap");
+            }
+            else if (index == 9)
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_costume_tap");
+            }
+            else if (index == 48)
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_warehouse_hunter_tap");
+            }
+
+            if (index >= 7)
+            {
+                GameManager.Instance.ES3Saver.UpgradeZoneTrigger = true;
+                
+                if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.KitchenA}_{EMaterialType.A}"))
+                {
+                    if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenA}_{EMaterialType.A}"] is Kitchen kitchen)
+                    {
+                        if (kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.activeSelf) kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                    }
+                }
+                
+                if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.KitchenA}_{EMaterialType.B}"))
+                {
+                    if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.KitchenA}_{EMaterialType.B}"] is Kitchen kitchen)
+                    {
+                        kitchen._kitchenDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                    }
+                }
+                
+                if (MainSceneManager.Instance.StageController.BuildingController.Buildings.ContainsKey($"{EBuildingType.ManagementDesk}"))
+                {
+                    if (MainSceneManager.Instance.StageController.BuildingController.Buildings[$"{EBuildingType.ManagementDesk}"] is ManagementDesk managementDesk)
+                    {
+                        managementDesk._managementDeskDefaultSetting.UpgradeZone_Player.gameObject.SetActive(true);
+                    }
+                }
+            }
+                
             _balloonText.text = textLists[index];
             gameObject.SetActive(true);
             

@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using UnityEngine;
 
 namespace Units.Stages.Units.Buildings.Modules.UpgradeZones
@@ -16,7 +17,9 @@ namespace Units.Stages.Units.Buildings.Modules.UpgradeZones
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.layer == LayerMask.NameToLayer(unitLayer) && other.gameObject.CompareTag(playerTag))
+            {
                 OnPlayerConnected?.Invoke(true);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)

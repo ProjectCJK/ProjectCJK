@@ -60,7 +60,7 @@ namespace Units.Stages.Units.Buildings.Units
 
     public class Stand : UnlockableBuildingZone, IStand
     {
-        [SerializeField] private StandDefaultSetting _standDefaultSetting;
+        public StandDefaultSetting _standDefaultSetting;
         [SerializeField] private StandCustomSetting _standCustomSetting;
         private ItemFactory _itemFactory;
 

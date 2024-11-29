@@ -52,6 +52,25 @@ namespace Managers
             {
                 ES3Saver = new ES3Saver
                 {
+                    UpgradeZoneTrigger = false,
+                    first_open = false,
+                    first_loading = false,
+                    first_ingame = false,
+                    first_camera_complete = false,
+                    first_tutorial_tap = false,
+                    second_tutorial_tap = false,
+                    third_tutorial_tap = false,
+                    first_tutorial_popup_tap = false,
+                    first_huntingzone_enter = false,
+                    first_monster_kill = false,
+                    first_food_setting = false,
+                    first_food_production = false,
+                    first_food_serve = false,
+                    first_food_sales = false,
+                    first_costume_gatcha = false,
+                    first_costume_equip = false,
+                    first_costume_upgrade = false,
+                    SuperHunterInitialTrigger = false,
                     InitialTutorialClear = false,
                     InitialCostumeGacha = false,
                     CurrentPlayerLevel = 1,
@@ -65,6 +84,12 @@ namespace Managers
                 ES3.Save($"{EES3Key.ES3Saver}", ES3Saver, ES3.settings);
             }
 
+            if (!ES3Saver.first_open)
+            {
+                ES3Saver.first_open = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_open");
+            }
+            
             InGameTrigger = false;
         }
 

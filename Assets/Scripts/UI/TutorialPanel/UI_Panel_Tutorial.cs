@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +46,22 @@ namespace UI.TutorialPanel
         private void UpdateText()
         {
             _text.text = _scripts[_currentScriptIndex];
+
+            if (!GameManager.Instance.ES3Saver.first_tutorial_tap && _currentScriptIndex == 0)
+            {
+                GameManager.Instance.ES3Saver.first_tutorial_tap = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_camera_complete");
+            }
+            else if (!GameManager.Instance.ES3Saver.second_tutorial_tap && _currentScriptIndex == 1)
+            {
+                GameManager.Instance.ES3Saver.second_tutorial_tap = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("second_tutorial_tap");
+            }
+            else if (!GameManager.Instance.ES3Saver.third_tutorial_tap && _currentScriptIndex == 2)
+            {
+                GameManager.Instance.ES3Saver.third_tutorial_tap = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("third_tutorial_tap");
+            }
 
             _currentScriptIndex++;
             

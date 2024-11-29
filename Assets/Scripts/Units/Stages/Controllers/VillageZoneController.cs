@@ -59,7 +59,7 @@ namespace Units.Stages.Controllers
         private StageCustomSettings _stageCustomSettings;
 
         private const float customerRushButtonActivatorMaxTime = 50f;
-        // private const float superHunterButtonActivatorMaxTime;
+        // private const float superHunterButtonActivatorMaxTime = ;
         private float customerRushButtonActivatorTimer = 0f;
         private float superHunterButtonActivatorTimer = 0f;
 

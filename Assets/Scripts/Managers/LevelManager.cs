@@ -117,6 +117,7 @@ namespace Managers
                 CurrentLevel++;
                 GameManager.Instance.ES3Saver.CurrentPlayerLevel = CurrentLevel;
                 
+                Firebase.Analytics.FirebaseAnalytics.LogEvent($"current_player_level {CurrentLevel}");
                 CurrentExp -= MaxExp;
 
                 _ui_Panel_LevelUp.Activate(_levelUpRewards);

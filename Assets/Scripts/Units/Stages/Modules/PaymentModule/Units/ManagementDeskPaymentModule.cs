@@ -228,6 +228,12 @@ namespace Units.Stages.Modules.PaymentModule.Units
                 _inventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldAmount);
                 totalItemPrice -= goldAmount;
             }
+            
+            if (!GameManager.Instance.ES3Saver.first_food_sales)
+            {
+                GameManager.Instance.ES3Saver.first_food_sales = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_food_sales");
+            }
 
             guest.CheckNextDestination(); // 손님 다음 행동 처리
         }

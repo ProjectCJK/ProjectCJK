@@ -76,6 +76,8 @@ namespace UI.QuestPanels
 
         public void OnClearButtonClick()
         {
+            Firebase.Analytics.FirebaseAnalytics.LogEvent($"quest_{_questIndex}_{GameManager.Instance.ES3Saver.CurrentStageLevel}_claimed");
+            
             _buttonClearActive.gameObject.SetActive(false);
             _buttonNotClear.gameObject.SetActive(false);
             _buttonClearInactive.gameObject.SetActive(true);

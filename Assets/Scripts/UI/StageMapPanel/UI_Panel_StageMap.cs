@@ -21,7 +21,15 @@ namespace UI.StageMapPanel
             for (var index = 0; index < _uiItemStageMaps.Count; index++)
             {
                 UI_Item_StageMap uiItemStageMap = _uiItemStageMaps[index];
-                uiItemStageMap.RegisterReference(() => changeStage(index, _stageDatas[index].UnlockCost));
+                uiItemStageMap.RegisterReference(() =>
+                {
+                    if (index == 1)
+                    {
+                        Firebase.Analytics.FirebaseAnalytics.LogEvent($"next_stage");
+                    }
+                    
+                    changeStage(index, _stageDatas[index].UnlockCost);
+                });
             }
         }
         

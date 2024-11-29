@@ -69,7 +69,15 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
                         break;
                 }
             else
-                AddItem(inputItemKey, item.Count);
+            {
+                if (!GameManager.Instance.ES3Saver.first_food_setting)
+                {
+                    GameManager.Instance.ES3Saver.first_food_setting = true;
+                    Firebase.Analytics.FirebaseAnalytics.LogEvent("first_food_setting");
+                }
+                
+                AddItem(inputItemKey, item.Count);   
+            }
 
             ItemFactory.ReturnItem(item);
         }

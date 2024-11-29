@@ -83,6 +83,11 @@ namespace Units.Stages.Controllers
         public void RegisterReference(Joystick joystick)
         {
             GameManager.Instance.ES3Saver.CurrentStageLevel = _stageCustomSettings.StageLevel;
+
+            if (GameManager.Instance.ES3Saver.UpgradeZoneTrigger == false && _stageCustomSettings.StageLevel == 2)
+            {
+                GameManager.Instance.ES3Saver.UpgradeZoneTrigger = true;
+            }
             
             InitializeManager();
 
@@ -113,6 +118,19 @@ namespace Units.Stages.Controllers
             
             ObjectTrackerManager.Instance.Initialize();
             QuestManager.Instance.Initialize();
+
+            if (!GameManager.Instance.ES3Saver.first_CurrentStage && GameManager.Instance.ES3Saver.CurrentStageLevel == 1)
+            {
+                GameManager.Instance.ES3Saver.first_CurrentStage = true;
+                
+                Firebase.Analytics.FirebaseAnalytics.LogEvent($"current_stage {GameManager.Instance.ES3Saver.CurrentStageLevel}");
+            }
+            else if (!GameManager.Instance.ES3Saver.second_CurrentStage && GameManager.Instance.ES3Saver.CurrentStageLevel == 2)
+            {
+                GameManager.Instance.ES3Saver.second_CurrentStage = true;
+                
+                Firebase.Analytics.FirebaseAnalytics.LogEvent($"current_stage {GameManager.Instance.ES3Saver.CurrentStageLevel}");
+            }
         }
 
         private void InitializeManager()
@@ -260,6 +278,12 @@ namespace Units.Stages.Controllers
                     if (parsedKey is { Item1: EBuildingType.StandA, Item2: not null })
                     {
                         VolatileDataManager.Instance.CurrentActiveMaterials.Add(parsedKey.Item2.Value);
+                    }
+
+                    if (GameManager.Instance.ES3Saver.SuperHunterInitialTrigger == false)
+                    {
+                        GameManager.Instance.ES3Saver.SuperHunterInitialTrigger = true;
+                        VolatileDataManager.Instance.SuperHunterTrigger = true;
                     }
                 }
             }

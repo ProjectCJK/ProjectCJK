@@ -49,6 +49,12 @@ namespace UI.CostumePanels
             enhancementButton.onClick.AddListener(OnClickEnhancementButton);
             equipButton.onClick.AddListener(() =>
             {
+                if (!GameManager.Instance.ES3Saver.first_costume_equip)
+                {
+                    GameManager.Instance.ES3Saver.first_costume_equip = true;
+                    Firebase.Analytics.FirebaseAnalytics.LogEvent("first_costume_equip");
+                }
+                
                 QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Equip, "Quest", 1);
                 OnClickEquipmentButton();
             });

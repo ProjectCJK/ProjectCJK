@@ -172,7 +172,10 @@ namespace UI.BuildingEnhancementPanel
                 }
             }
 
-            _button_Slot2_UpgradeButton.onClick.AddListener(() => data.OnClickUpgradeButtonForBuildingOption1?.Invoke());
+            _button_Slot2_UpgradeButton.onClick.AddListener(() =>
+            {
+                data.OnClickUpgradeButtonForBuildingOption1?.Invoke();
+            });
             _button_Slot3_UpgradeButton.onClick.AddListener(() => data.OnClickUpgradeButtonForBuildingOption2?.Invoke());
 
             if (!gameObject.activeInHierarchy) gameObject.SetActive(true);

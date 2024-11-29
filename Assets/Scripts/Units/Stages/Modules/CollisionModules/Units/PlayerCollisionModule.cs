@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using Units.Stages.Modules.CollisionModules.Abstract;
 using Units.Stages.Modules.StatsModules.Units.Creatures.Units;
 using Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract;
@@ -95,7 +96,16 @@ namespace Units.Stages.Modules.CollisionModules.Units
                     break;
                 case ECollisionType.HuntingZone:
                     var currentHuntingZone = other.transform.GetComponentInParent<IHuntingZone>();
-                    if (currentHuntingZone != null) OnTriggerHuntingZone?.Invoke(true);
+                    if (currentHuntingZone != null)
+                    {
+                        if (!GameManager.Instance.ES3Saver.first_huntingzone_enter)
+                        {
+                            GameManager.Instance.ES3Saver.first_huntingzone_enter = true;
+                            Firebase.Analytics.FirebaseAnalytics.LogEvent("first_huntingzone_enter");
+                        }
+                        
+                        OnTriggerHuntingZone?.Invoke(true);
+                    }
                     break;
             }
         }

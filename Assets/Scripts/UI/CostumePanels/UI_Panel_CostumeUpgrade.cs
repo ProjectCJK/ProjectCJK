@@ -61,6 +61,12 @@ namespace UI.CostumePanels
 
             upgradeButton_EnoughRedGem.onClick.AddListener(() =>
             {
+                if (!GameManager.Instance.ES3Saver.first_costume_upgrade)
+                {
+                    GameManager.Instance.ES3Saver.first_costume_upgrade = true;
+                    Firebase.Analytics.FirebaseAnalytics.LogEvent("first_costume_upgrade");
+                }
+                
                 QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Upgrade, "Quest", 1);
                 OnClickUpgradeButton();
             });

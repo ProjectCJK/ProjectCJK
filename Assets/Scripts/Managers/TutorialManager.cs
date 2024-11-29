@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Modules.DesignPatterns.Singletons;
+using UI.MainPanels;
+using UI.QuestPanels;
 using UI.TutorialPanel;
 using Units.Stages.Controllers;
 using UnityEngine;
@@ -30,6 +33,10 @@ namespace Managers
 
         private float _zPosition;
         private bool isScriptEnded;
+
+        private UI_Panel_MainButtons UI_Panel_MainButtons;
+        private UI_Panel_Quest UI_Panel_Quest;
+        private List<UI_Item_QuestGuide> UI_Item_QuestGuide;
         
         public void RegisterReference(CameraController cameraController)
         {
@@ -51,9 +58,7 @@ namespace Managers
                 new(9, 25, _zPosition)
             };
             
-            UIManager.Instance.InstantiateTutorialPanel();
-
-            OnActivateUIByCurrentTutorialIndex += UIManager.Instance.UI_Panel_Main.OnActivateUIByCurrentTutorialIndex;
+            OnActivateUIByCurrentTutorialIndex += HandleOnActivateUIByCurrentTutorialIndex;
 
             foreach (KeyValuePair<int, bool> popUpTutorialClear in GameManager.Instance.ES3Saver.PopUpTutorialClear)
             {
@@ -66,7 +71,11 @@ namespace Managers
             _branchCanvasJoystick = UIManager.Instance.BranchCanvasJoystick;
             
             _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
-            _tutorialPopUpPanel = UIManager.Instance.UIPanelTutorialPopUp;
+            _tutorialPopUpPanel = UIManager.Instance.UI_Panel_Tutorial_PopUp;
+
+            UI_Panel_MainButtons = UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons;
+            UI_Panel_Quest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
+            UI_Item_QuestGuide = UIManager.Instance.UI_Panel_Main.UI_Item_QuestGuide;
             
             _tutorialPanel.RegisterReference();
             _tutorialPanel.OnClickExitButton += HandleOnClickTutorialPanelExitButton;
@@ -86,6 +95,12 @@ namespace Managers
             
             isScriptEnded = false;
 
+            if (!GameManager.Instance.ES3Saver.first_camera_complete)
+            {
+                GameManager.Instance.ES3Saver.first_camera_complete = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_camera_complete");
+            }
+            
             // 컷씬 카메라 연출
             yield return PlayCameraCutscenes();
             
@@ -125,6 +140,12 @@ namespace Managers
             while (!cameraTracking)
             {
                 yield return null;
+            }
+            
+            if (!GameManager.Instance.ES3Saver.first_tutorial_popup_tap)
+            {
+                GameManager.Instance.ES3Saver.first_tutorial_popup_tap = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_tutorial_popup_tap");
             }
             
             _tutorialPopUpPanel.gameObject.SetActive(false);
@@ -187,6 +208,84 @@ namespace Managers
         private void TransferTutorialCanvas(bool value)
         {
             _branchCanvasTutorial.gameObject.SetActive(value);
+        }
+
+        private void HandleOnActivateUIByCurrentTutorialIndex(int index)
+        {
+            if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
+            {
+                foreach (GameObject item in UI_Item_QuestGuide.SelectMany(items => items.items))
+                {
+                    item.gameObject.SetActive(false);
+                }
+                
+                for (var i = 0; i < UI_Item_QuestGuide.Count; i++)
+                {
+                    if (UI_Item_QuestGuide[i].index == index)
+                    {
+                        foreach (GameObject item in UI_Item_QuestGuide[i].items)
+                        {
+                            item.gameObject.SetActive(true);
+                        }
+                    }
+                }
+            }
+
+            switch (index)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
+                    break;
+                case 10:
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
+
+                    UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[1].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[2].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[3].gameObject.SetActive(true);
+
+                    break;
+                case 15:
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(true);
+
+                    UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[1].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[2].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[3].gameObject.SetActive(true);
+
+                    break;
+                default:
+                    UI_Panel_MainButtons.UI_Button_CostumeGacha.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_CostumePanel.gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_StageMap.gameObject.SetActive(true);
+
+                    UI_Panel_MainButtons.UI_Button_LockButton[0].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[1].gameObject.SetActive(false);
+                    UI_Panel_MainButtons.UI_Button_LockButton[2].gameObject.SetActive(true);
+                    UI_Panel_MainButtons.UI_Button_LockButton[3].gameObject.SetActive(true);
+                    break;
+            }
         }
     }
 }

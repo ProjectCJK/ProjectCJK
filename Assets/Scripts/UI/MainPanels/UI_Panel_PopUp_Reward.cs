@@ -28,6 +28,8 @@ namespace UI.MainPanels
         [SerializeField] private Button diaButton;
         [SerializeField] private Button diaButton_NotEnough;
         [SerializeField] private TextMeshProUGUI diaButtonText;
+        [SerializeField] private TextMeshProUGUI diaButtonText_NotEnough;
+        
         public void Activate(EPopUpPanelType popUpPanelType, int diaCount, Action onClickAdButton, Action onClickDiaButton)
         {
             adButton.onClick.RemoveAllListeners();
@@ -35,12 +37,20 @@ namespace UI.MainPanels
             
             adButton.onClick.AddListener(() =>
             {
+                if (popUpPanelType == EPopUpPanelType.CostumeGacha)
+                {
+                    if (!GameManager.Instance.ES3Saver.first_costume_gatcha)
+                    {
+                        GameManager.Instance.ES3Saver.first_costume_gatcha = true;
+                        Firebase.Analytics.FirebaseAnalytics.LogEvent("first_costume_gatcha");
+                    }
+                }
+                
                 AdsManager.Instance.ShowRewardedAd($"{popUpPanelType} Reward", (_, _) =>
                 {
                     onClickAdButton?.Invoke();
                     gameObject.SetActive(false);
                 });
-      
             });
             
             diaButton.onClick.AddListener(() =>
@@ -62,7 +72,7 @@ namespace UI.MainPanels
                     
                     adButton.gameObject.SetActive(false);
                     
-                    var buttonTrigger = GameManager.Instance.ES3Saver.Gold >= diaCount;
+                    var buttonTrigger = GameManager.Instance.ES3Saver.Diamond >= diaCount;
                     diaButton.gameObject.SetActive(buttonTrigger);
                     diaButton_NotEnough.gameObject.SetActive(!buttonTrigger);
                     
@@ -99,6 +109,7 @@ namespace UI.MainPanels
             
             AdButtonText.text = "<sprite=82> AD";
             diaButtonText.text = $"<sprite=2> {diaCount}";
+            diaButtonText_NotEnough.text = $"<sprite=2> {diaCount}";
             
             gameObject.SetActive(true);
         }

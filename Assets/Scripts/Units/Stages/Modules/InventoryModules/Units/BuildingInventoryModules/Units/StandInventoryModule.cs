@@ -77,6 +77,12 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.U
             }
             else
             {
+                if (!GameManager.Instance.ES3Saver.first_food_serve)
+                {
+                    GameManager.Instance.ES3Saver.first_food_serve = true;
+                    Firebase.Analytics.FirebaseAnalytics.LogEvent("first_food_serve");
+                }
+                
                 QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Display, _buildingKey, item.Count);
                 AddItem(inputItemKey, item.Count);
                 ItemFactory.ReturnItem(item);

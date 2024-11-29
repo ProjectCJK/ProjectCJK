@@ -8,7 +8,33 @@ namespace Modules
     [Serializable]
     public class ES3Saver
     {
-         
+        public bool UpgradeZoneTrigger;
+        
+        public bool first_CurrentStage;
+        public bool second_CurrentStage;
+        
+        public bool first_open;
+        public bool first_loading;
+        public bool first_ingame;
+        public bool first_camera_complete;
+        public bool first_tutorial_tap;
+        public bool second_tutorial_tap;
+        public bool third_tutorial_tap;
+        public bool first_tutorial_popup_tap;
+        public bool first_huntingzone_enter;
+        public bool first_monster_kill;
+        public bool first_food_setting;
+        public bool first_food_production;
+        public bool first_food_serve;
+        public bool first_food_sales;
+        public bool first_costume_gatcha;
+        public bool first_costume_equip;
+        public bool first_costume_upgrade;
+        
+        /// <summary>
+        /// PopUpReward
+        /// </summary>
+        public bool SuperHunterInitialTrigger;
         
         /// <summary>
         /// TutorialSettings

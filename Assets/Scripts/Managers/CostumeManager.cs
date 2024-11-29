@@ -7,6 +7,7 @@ using UI;
 using UI.CostumeGachaPanels;
 using UI.CostumePanels;
 using Units.Stages.Units.Creatures.Units;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -251,6 +252,7 @@ namespace Managers
 
         private void ActivateCostumeGacha()
         {
+            CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Diamond, 10);
             List<CostumeItemData> gachaItems = GetRandomItem(int.Parse(_costumeBoxData[2, 9]), int.Parse(_costumeBoxData[2, 10]));
 
             SortCostumeItems();
@@ -274,6 +276,8 @@ namespace Managers
                 _currentCostumeItemData.Add(_cachedCommonCostumes[2].Clone());
                 _currentCostumeItemData.Add(_cachedCommonCostumes[4].Clone());
                 _currentCostumeItemData.Add(_cachedCommonCostumes[6].Clone());
+
+                GameManager.Instance.ES3Saver.InitialCostumeGacha = true;
             }
             else
             {

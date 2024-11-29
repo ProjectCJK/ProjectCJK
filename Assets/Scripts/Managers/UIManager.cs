@@ -26,7 +26,7 @@ namespace Managers
 
         public UI_Panel_Main UI_Panel_Main { get; private set; }
         public UI_Panel_Tutorial UI_Panel_Tutorial { get; private set; }
-        public UI_Panel_Tutorial_PopUp UIPanelTutorialPopUp { get; private set; }
+        public UI_Panel_Tutorial_PopUp UI_Panel_Tutorial_PopUp { get; private set; }
         public Joystick Joystick { get; private set; }
         
         /// <summary>
@@ -65,15 +65,12 @@ namespace Managers
             
             Joystick = Instantiate(_joystick, BranchCanvasJoystick.transform);
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
-   
-            Instantiate(_gameSpeedControlModule, BranchCanvasGame.transform);
-        }
-
-        public void InstantiateTutorialPanel()
-        {
+            
             BranchCanvasTutorial = Instantiate(_branchCanvasTutorial);
             UI_Panel_Tutorial = Instantiate(_ui_Panel_Tutorial, BranchCanvasTutorial.transform);
-            UIPanelTutorialPopUp = Instantiate(_uiPanelTutorialPopUp, BranchCanvasTutorial.transform);
+            UI_Panel_Tutorial_PopUp = Instantiate(_uiPanelTutorialPopUp, BranchCanvasTutorial.transform);
+   
+            // Instantiate(_gameSpeedControlModule, BranchCanvasGame.transform);
         }
     }
 }

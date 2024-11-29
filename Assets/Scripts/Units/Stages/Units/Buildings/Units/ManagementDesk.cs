@@ -54,7 +54,7 @@ namespace Units.Stages.Units.Buildings.Units
 
     public class ManagementDesk : BuildingZone, IManagementDesk
     {
-        [SerializeField] private ManagementDeskDefaultSetting _managementDeskDefaultSetting;
+        public ManagementDeskDefaultSetting _managementDeskDefaultSetting;
         [SerializeField] private ManagementDeskCustomSetting _managementDeskCustomSetting;
         [SerializeField] private List<PaymentView> _paymentView;
         private ItemFactory _itemFactory;
@@ -110,6 +110,11 @@ namespace Units.Stages.Units.Buildings.Units
 
         public override void Initialize()
         {
+            if (GameManager.Instance.ES3Saver.UpgradeZoneTrigger == false)
+            {
+                _managementDeskDefaultSetting.UpgradeZone_Player.gameObject.SetActive(false);
+            }
+            
             HandleOnUpdateStackedItem(_managementDeskInventoryModule.CurrentInventorySize);
         }
         

@@ -123,6 +123,19 @@ namespace Units.Stages.Units.HuntingZones
         {
             if (_isSpawningMonsters) return; // 생성 중이면 중복 호출 방지
 
+            // 현재 생성된 몬스터가 없으면 즉시 한 마리 생성
+            if (CurrentSpawnedMonsters.Count == 0)
+            {
+                IMonster immediateMonster = _creatureController.GetMonster(GetRandomSpawnPoint(),
+                    huntingZoneCustomSetting._materialType, ReturnMonster);
+
+                if (immediateMonster != null)
+                {
+                    CurrentSpawnedMonsters.Add(immediateMonster);
+                }
+            }
+
+            // 나머지 몬스터는 딜레이를 두고 생성
             StartCoroutine(SpawnMonstersWithDelay());
         }
 
@@ -149,6 +162,12 @@ namespace Units.Stages.Units.HuntingZones
 
         private void ReturnMonster(IMonster monster)
         {
+            if (!GameManager.Instance.ES3Saver.first_monster_kill)
+            {
+                GameManager.Instance.ES3Saver.first_monster_kill = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_monster_kill");
+            }
+            
             CurrentSpawnedMonsters.Remove(monster);
             SetEffects(monster.Transform.position);
             DropItems(monster.Transform.position);

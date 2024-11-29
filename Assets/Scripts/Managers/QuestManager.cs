@@ -153,6 +153,7 @@ namespace Managers
         
         private UI_Panel_Quest _uiPanelQuest;
         private UI_Panel_QuestClear _uiPanelReward;
+        private List<UI_Item_QuestGuide> UI_Item_QuestGuide;
         
         private StageController _stageController;
 
@@ -164,6 +165,7 @@ namespace Managers
             
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _uiPanelReward = UIManager.Instance.UI_Panel_Main.UI_Panel_QuestClear;
+            UI_Item_QuestGuide = UIManager.Instance.UI_Panel_Main.UI_Item_QuestGuide;
             _gameData = DataManager.Instance.QuestData.GetData();
             
             _uiPanelQuest.RegisterReference();
@@ -587,12 +589,15 @@ namespace Managers
                     
                     foreach (var quest in targetQuests)
                     {
+                        if (quest.CurrentGoal == quest.MaxGoal) return;
+                        
                         quest.CurrentGoal += value;
 
                         if (quest.CurrentGoal >= quest.MaxGoal)
                         {
+                            Firebase.Analytics.FirebaseAnalytics.LogEvent($"quest_{quest.QuestIndex}_{GameManager.Instance.ES3Saver.CurrentStageLevel}_completed");
                             quest.CurrentGoal = quest.MaxGoal;
-                            UIManager.Instance.UI_Panel_Main.OnInactivateUIByCurrentTutorialIndex(quest.QuestIndex);
+                            InactivateUIByCurrentTutorialIndex(quest.QuestIndex);
                         }
 
                         // 저장된 퀘스트 진행 상태 업데이트
@@ -635,6 +640,7 @@ namespace Managers
             
             if (allQuestsCleared)
             {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent($"list_{currentListIndex}_{GameManager.Instance.ES3Saver.CurrentStageLevel}_completed");
                 _uiPanelQuest.MainQuest.EnableRewardButton();
             }
         }
@@ -755,6 +761,28 @@ namespace Managers
         private Sprite SetRewardIcon(ECurrencyType rewardType)
         {
             return DataManager.Instance.GetCurrencyIcon(rewardType);
+        }
+        
+        private void InactivateUIByCurrentTutorialIndex(int index)
+        {
+            // foreach (GameObject item in UI_Item_QuestGuide.Where(guide => index == guide.index).SelectMany(guide => guide.items))
+            // {
+            //     item.gameObject.SetActive(false);
+            // }
+
+            if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
+            {
+                foreach (UI_Item_QuestGuide itemQuestGuide in UI_Item_QuestGuide)
+                {
+                    if (itemQuestGuide.index == index)
+                    {
+                        foreach (GameObject obj in itemQuestGuide.items)
+                        {
+                            obj.SetActive(false);
+                        }
+                    }
+                }
+            }
         }
     }
 }

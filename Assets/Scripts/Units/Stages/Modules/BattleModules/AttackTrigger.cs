@@ -18,29 +18,21 @@ namespace Units.Stages.Modules.BattleModules
     public class AttackTrigger : MonoBehaviour, IAttackTrigger
     {
         public Animator Animator;
-        private Coroutine _attackCoroutine;
-        private bool _attackFlag;
 
         private IBattleProperty _battleProperty;
-
         private BoxCollider2D _boxCollider2D;
         private LayerMask _targetLayerMask;
         private List<EBattleTag> _targetTags;
+        private bool _attackFlag;
+        private Coroutine _attackCoroutine;
 
         private int _damage => _battleProperty.Damage;
         private float _attackDelay => _battleProperty.AttackDelay;
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (((1 << other.gameObject.layer) & _targetLayerMask) != 0) // LayerMask로 충돌 대상 검출
-                // 대상 태그와 일치하는 경우에만 처리
-                if (_targetTags.Exists(obj => other.gameObject.CompareTag(obj.ToString())))
-                    if (other.gameObject.TryGetComponent(out ITakeDamage target))
-                        if (target.TakeDamage(_damage))
-                            OnHitSuccessful?.Invoke();
-        }
-
         public event Action OnHitSuccessful;
+        public event Action OnInvokeAnimationEvent;
+        
+        private readonly Collider2D[] _targetsBuffer = new Collider2D[50];
 
         public void RegisterReference(IBattleProperty battleProperty, LayerMask targetLayerMask,
             List<EBattleTag> targetTags, Action handleOnInvokeAnimationEvent)
@@ -57,45 +49,72 @@ namespace Units.Stages.Modules.BattleModules
 
         public void Initialize(bool value)
         {
-            // 활성화 상태가 변경되었을 때만 처리
             if (_attackFlag != value)
             {
                 _attackFlag = value;
 
-                // 코루틴이 진행 중이면 중지
                 if (_attackCoroutine != null)
                 {
                     CoroutineManager.Instance.StopCoroutine(_attackCoroutine);
                     _attackCoroutine = null;
                 }
 
-                // 활성화 플래그가 true일 때 코루틴 시작
                 if (_attackFlag)
-                    _attackCoroutine = CoroutineManager.Instance.StartCoroutine(ActivateCollider());
+                    _attackCoroutine = CoroutineManager.Instance.StartCoroutine(AttackRoutine());
                 else
-                    _boxCollider2D.enabled = false; // 비활성화
+                    _boxCollider2D.enabled = false;
             }
         }
 
-        public event Action OnInvokeAnimationEvent;
-
-        private IEnumerator ActivateCollider()
+        private IEnumerator AttackRoutine()
         {
             while (_attackFlag)
             {
-                // 콜라이더를 활성화
-                _boxCollider2D.enabled = true;
-                yield return new WaitForSeconds(0.1f); // 0.1초 동안 활성화 유지
+                // 범위 내 모든 적을 탐지하고 공격
+                AttackAllTargetsInRange();
 
-                // 콜라이더를 비활성화
-                _boxCollider2D.enabled = false;
-                yield return new WaitForSeconds(_attackDelay); // 공격 딜레이 동안 대기
+                // 딜레이 동안 대기
+                yield return new WaitForSeconds(_attackDelay);
+            }
+        }
+
+        private void AttackAllTargetsInRange()
+        {
+            var targetCount = Physics2D.OverlapBoxNonAlloc(
+                transform.position, 
+                _boxCollider2D.size, 
+                0, 
+                _targetsBuffer, 
+                _targetLayerMask
+            );
+
+            for (var i = 0; i < targetCount; i++)
+            {
+                Collider2D target = _targetsBuffer[i];
+
+                if (_targetTags.Exists(tag => target.CompareTag(tag.ToString())))
+                {
+                    if (target.TryGetComponent(out ITakeDamage damageable) && damageable.TakeDamage(_damage))
+                    {
+                        OnHitSuccessful?.Invoke();
+                    }
+                }
             }
         }
 
         public void OnAnimationEvent()
         {
             OnInvokeAnimationEvent?.Invoke();
+        }
+
+        private void OnDrawGizmos()
+        {
+            // 디버그용으로 공격 범위 시각화
+            if (_boxCollider2D != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(transform.position, _boxCollider2D.size);
+            }
         }
     }
 }

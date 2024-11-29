@@ -96,6 +96,12 @@ namespace Units.Stages.Managers
             LevelManager.Instance.Initialize();
             CurrencyManager.Instance.Initialize();
             StageController.Initialize();
+
+            if (!GameManager.Instance.ES3Saver.first_ingame)
+            {
+                GameManager.Instance.ES3Saver.first_ingame = true;
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("first_ingame");
+            }
             
             if (GameManager.Instance.ES3Saver.InitialTutorialClear == false)
             {

@@ -44,6 +44,7 @@ namespace UI.QuestPanels
             Button_Reward.onClick.RemoveAllListeners();
             Button_Reward.onClick.AddListener(() => 
             {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent($"list_{GameManager.Instance.ES3Saver.CurrentListQuestIndex}_{GameManager.Instance.ES3Saver.CurrentStageLevel}_completed");
                 QuestManager.Instance.GetNextQuest();
                 gameObject.SetActive(false);
             });
