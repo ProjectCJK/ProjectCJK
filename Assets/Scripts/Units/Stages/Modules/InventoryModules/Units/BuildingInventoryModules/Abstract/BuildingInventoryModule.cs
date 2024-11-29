@@ -90,7 +90,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.BuildingInventoryModules.A
                 {
                     if (!IsReadyToSend(true)) return;
                     
-                    var goldAmount = Mathf.Min(Inventory[$"{ECurrencyType.Money}"], DataManager.GoldSendingMaximum);
+                    var maximumSendingGoldCount = GameManager.Instance.ES3Saver.CurrentStageLevel == 1 ? DataManager.GoldSendingMaximumStage1 : DataManager.GoldSendingMaximumStage2;
+                    var goldAmount = Mathf.Min(Inventory[$"{ECurrencyType.Money}"], maximumSendingGoldCount);
                     currentItemReceiver.ReceiveItemThroughTransfer(OutputItemKey, goldAmount, SenderTransform.position);
                     Inventory[$"{ECurrencyType.Money}"] -= goldAmount;
                     OnUpdateStackedItem?.Invoke(Inventory[$"{ECurrencyType.Money}"]);

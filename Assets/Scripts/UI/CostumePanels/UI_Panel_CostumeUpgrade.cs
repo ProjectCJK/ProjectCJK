@@ -5,6 +5,7 @@ using System.Linq;
 using Managers;
 using Modules.DesignPatterns.ObjectPools;
 using TMPro;
+using Units.Stages.Units.Items.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,7 @@ namespace UI.CostumePanels
         private int _tempCostumeMaxExp;
         private int _finalExp; // 애니메이션 도중 목표 경험치
         private float _cachedSliderValue;
+        private int _requiredGems;
 
         private const float duration = 0.5f;
 
@@ -61,6 +63,8 @@ namespace UI.CostumePanels
 
             upgradeButton_EnoughRedGem.onClick.AddListener(() =>
             {
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.RedGem, _requiredGems);
+                
                 if (!GameManager.Instance.ES3Saver.first_costume_upgrade)
                 {
                     GameManager.Instance.ES3Saver.first_costume_upgrade = true;
@@ -131,12 +135,13 @@ namespace UI.CostumePanels
 
         private void AddMaterialForUpgrade(CostumeItemData materialItem, bool isAdding)
         {
-            int materialValue = materialItem.MaterialValues[materialItem.CurrentLevel - 1];
+            var materialValue = materialItem.MaterialValues[materialItem.CurrentLevel - 1];
             _finalExp += isAdding ? materialValue : -materialValue;
 
             // 선택한 아이템들의 합산 값 업데이트
             _totalMaterialValue += isAdding ? materialValue : -materialValue;
-
+            _requiredGems = Mathf.CeilToInt(_totalMaterialValue * 0.5f);
+            
             UpdateUpgradeButtonState();
 
             if (_sliderAnimationCoroutine != null)
@@ -164,8 +169,8 @@ namespace UI.CostumePanels
             }
             else
             {
-                float requiredGems = _totalMaterialValue * 0.5f;
-                string costText = $"<sprite=4> {Mathf.CeilToInt(requiredGems)}";
+                float requiredGems = Mathf.CeilToInt(_totalMaterialValue * 0.5f);
+                var costText = $"<sprite=4> {requiredGems}";
 
                 if (CurrencyManager.Instance.RedGem >= requiredGems)
                 {

@@ -154,7 +154,7 @@ namespace Units.Stages.Units.HuntingZones
                 }
 
                 // 한 번 생성 후 3초 대기
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(1.5f);
             }
 
             _isSpawningMonsters = false;

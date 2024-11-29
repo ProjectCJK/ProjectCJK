@@ -221,10 +221,11 @@ namespace Units.Stages.Modules.PaymentModule.Units
             var totalItemPrice = (int) (VolatileDataManager.Instance.GetItemPrice(itemType, materialType) * purchasedItem.Item2 * (extraIncome /  100));
             
             QuestManager.Instance.OnUpdateCurrentQuestProgress?.Invoke(EQuestType1.Selling, purchasedItem.Item1, purchasedItem.Item2);
+            var maximumSendingGoldCount = GameManager.Instance.ES3Saver.CurrentStageLevel == 1 ? DataManager.GoldSendingMaximumStage1 : DataManager.GoldSendingMaximumStage2;
             
             while (totalItemPrice > 0)
             {
-                var goldAmount = Mathf.Min(totalItemPrice, DataManager.GoldSendingMaximum);
+                var goldAmount = Mathf.Min(totalItemPrice, maximumSendingGoldCount);
                 _inventoryModule.ReceiveItemNoThroughTransfer(_inputKey, goldAmount);
                 totalItemPrice -= goldAmount;
             }

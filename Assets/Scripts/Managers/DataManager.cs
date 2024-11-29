@@ -30,7 +30,8 @@ namespace Managers
         public GameObject ObjectTrackerPrefab;
         
         [Space(20)] [Header("### Item Data ###")]
-        public const int GoldSendingMaximum = 10;
+        public const int GoldSendingMaximumStage1 = 10;
+        public const int GoldSendingMaximumStage2 = 200;
 
         [Header("### Unit Data ###")]
         public PlayerDataSO PlayerDataSo;

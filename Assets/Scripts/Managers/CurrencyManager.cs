@@ -5,6 +5,7 @@ using UI;
 using UI.CurrencyPanel;
 using Units.Stages.UI;
 using Units.Stages.Units.Items.Enums;
+using UnityEngine;
 
 namespace Managers
 {
@@ -14,7 +15,7 @@ namespace Managers
         private CurrencyModel _currencyModel;
         private CurrencyViewModel _currencyViewModel;
 
-        public int _redGem;
+        private int _redGem;
         public int RedGem
         {
             get => _redGem;
@@ -25,7 +26,7 @@ namespace Managers
             }
         }
         
-        public int _gold;
+        private int _gold;
         public int Gold
         {
             get => _gold;
@@ -36,7 +37,7 @@ namespace Managers
             }
         }
 
-        public int _diamond;
+        private int _diamond;
         public int Diamond
         {
             get => _diamond;
@@ -64,73 +65,34 @@ namespace Managers
 
             UpdateViewModel();
         }
-
-        public void AddCurrency(ECurrencyType currencyType, int value)
+        
+        private void UpdateCurrency(ECurrencyType currencyType, int value)
         {
             switch (currencyType)
             {
                 case ECurrencyType.Diamond:
-                    AddDiamond(value);
+                    Diamond = Mathf.Max(0, Diamond + value);
                     GameManager.Instance.ES3Saver.Diamond = Diamond;
                     break;
                 case ECurrencyType.RedGem:
-                    AddRedGem(value);
+                    RedGem = Mathf.Max(0, RedGem + value);
                     GameManager.Instance.ES3Saver.RedGem = RedGem;
                     break;
                 case ECurrencyType.Gold:
-                    AddGold(value);
+                    Gold = Mathf.Max(0, Gold + value);
                     GameManager.Instance.ES3Saver.Gold = Gold;
                     break;
             }
         }
 
+        public void AddCurrency(ECurrencyType currencyType, int value)
+        {
+            UpdateCurrency(currencyType, value);
+        }
+
         public void RemoveCurrency(ECurrencyType currencyType, int value)
         {
-            switch (currencyType)
-            {
-                case ECurrencyType.Diamond:
-                    RemoveDiamond(value);
-                    ES3.Save($"{EES3Key.Diamond}", Diamond, ES3.settings);
-                    break;
-                case ECurrencyType.RedGem:
-                    RemoveRedGem(value);
-                    ES3.Save($"{EES3Key.RedGem}", RedGem, ES3.settings);
-                    break;
-                case ECurrencyType.Gold:
-                    RemoveGold(value);
-                    ES3.Save($"{EES3Key.Gold}", Gold, ES3.settings);
-                    break;
-            }
-        }
-
-        private void AddGold(int value)
-        {
-            Gold += value;
-        }
-
-        private void RemoveGold(int value)
-        {
-            Gold -= value;
-        }
-        
-        private void AddRedGem(int value)
-        {
-            RedGem += value;
-        }
-        
-        private void RemoveRedGem(int value)
-        {
-            RedGem -= value;
-        }
-        
-        private void AddDiamond(int value)
-        {
-            Diamond += value;
-        }
-                
-        private void RemoveDiamond(int value)
-        {
-            Diamond -= value;
+            UpdateCurrency(currencyType, -value);
         }
 
         private void UpdateViewModel()

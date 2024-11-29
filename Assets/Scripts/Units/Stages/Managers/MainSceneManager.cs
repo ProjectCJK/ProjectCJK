@@ -136,9 +136,9 @@ namespace Units.Stages.Managers
             
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                CurrencyManager.Instance._gold = 0;
-                CurrencyManager.Instance._diamond = 0;
-                CurrencyManager.Instance._redGem = 0;
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, 10000);
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Diamond, 10000);
+                CurrencyManager.Instance.RemoveCurrency(ECurrencyType.RedGem, 10000);
             }
 
             // if (Input.GetKeyDown(KeyCode.U))

@@ -58,7 +58,8 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.A
 
                     if (targetMoney > 0 && CurrencyManager.Instance.Gold > 0)
                     {
-                        if (targetMoney > DataManager.GoldSendingMaximum) targetMoney = DataManager.GoldSendingMaximum;
+                        var maximumSendingGoldCount = GameManager.Instance.ES3Saver.CurrentStageLevel == 1 ? DataManager.GoldSendingMaximumStage1 : DataManager.GoldSendingMaximumStage2;
+                        if (targetMoney > maximumSendingGoldCount) targetMoney = maximumSendingGoldCount;
 
                         targetMoney = targetMoney >= CurrencyManager.Instance.Gold
                             ? CurrencyManager.Instance.Gold
