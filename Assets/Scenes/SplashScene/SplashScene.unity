@@ -214,16 +214,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pushNotification:
-  - time: 5
-    description: Don't you want me like I want you, baby?
-  - time: 10
-    description: Don't you need me like I need you now?
-  - time: 15
-    description: Sleep tomorrow, but tonight go crazy
-  - time: 20
-    description: All you gotta do is just meet me at the
-  - time: 25
-    description: "\uC544\uD30C\uD2B8 \uC544\uD30C\uD2B8"
+  - time: 360
+    description: Survivors are starving! They need your cooking now!
+  - time: 720
+    description: "Don\u2019t let hunger turn survivors into zombies. Feed them now!"
+  - time: 1080
+    description: Zombies are near! Feed the survivors now!
+  - time: 1440
+    description: No food, no survival. Save them now!
+  - time: 1800
+    description: "Hunger weakens them. Zombies won\u2019t wait!"
 --- !u!4 &179446703
 Transform:
   m_ObjectHideFlags: 0
@@ -472,7 +472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360073133580291359, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1310.9087
+      value: 1310.9088
       objectReference: {fileID: 0}
     - target: {fileID: 360073133580291359, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -488,11 +488,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2363226576610562823, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 415
+      value: 415.00006
       objectReference: {fileID: 0}
     - target: {fileID: 2363226576610562823, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2990
+      value: -2990.0002
       objectReference: {fileID: 0}
     - target: {fileID: 2730557758831628009, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchorMax.y
@@ -648,11 +648,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7430379918171969370, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 875
+      value: 875.00006
       objectReference: {fileID: 0}
     - target: {fileID: 7430379918171969370, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2990
+      value: -2990.0002
       objectReference: {fileID: 0}
     - target: {fileID: 7663194476512803214, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchorMax.y
@@ -664,11 +664,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7663194476512803214, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 645
+      value: 645.00006
       objectReference: {fileID: 0}
     - target: {fileID: 7663194476512803214, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2990
+      value: -2990.0002
       objectReference: {fileID: 0}
     - target: {fileID: 7679207463620937330, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_Name
@@ -692,7 +692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9214311914423279639, guid: 25dae32c61a2942f196a5606a8a7b142, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2990
+      value: -2990.0002
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -30,6 +30,7 @@ namespace Units.Stages.Units.Creatures.Units
         public bool HaveAnyItem();
         public Tuple<string, Transform> GetDestination();
         public void SetMovementSpeed(float currentDeliveryLodgingOption1Value);
+        public void InactivateWeapon();
     }
 
     public class Hunter : NPC, IHunter
@@ -40,7 +41,7 @@ namespace Units.Stages.Units.Creatures.Units
         private CreatureStateMachine _creatureStateMachine;
 
         private Tuple<string, Transform> _destination;
-        private IHunterBattleModule _hunterBattleModule;
+        private HunterBattleModule _hunterBattleModule;
         private IHunterCollisionModule _hunterCollisionModule;
 
         private IHunterInventoryModule _hunterInventoryModule;
@@ -157,6 +158,11 @@ namespace Units.Stages.Units.Creatures.Units
         public void SetMovementSpeed(float currentDeliveryLodgingOption1Value)
         {
             _hunterStatsModule.MovementSpeed = currentDeliveryLodgingOption1Value;
+        }
+
+        public void InactivateWeapon()
+        {
+            _hunterBattleModule.ActivateWeapon(false);
         }
 
         private void SetActive(bool value)

@@ -2,6 +2,7 @@ using System;
 using Interfaces;
 using Modules.DesignPatterns.ObjectPools;
 using ScriptableObjects.Scripts.Creatures.Units;
+using TMPro;
 using Units.Stages.Modules.CollisionModules.Units;
 using Units.Stages.Modules.FactoryModules.Units;
 using Units.Stages.Modules.FSMModules.Units.Creature;
@@ -38,6 +39,8 @@ namespace Units.Stages.Units.Creatures.Units
 
     public class DeliveryMan : NPC, IDeliveryMan
     {
+        [SerializeField] private TextMeshProUGUI _textMeshProUGUI;
+        
         private CreatureSpriteModule _creatureSpriteModule;
 
         private CreatureStateMachine _creatureStateMachine;
@@ -61,6 +64,8 @@ namespace Units.Stages.Units.Creatures.Units
 
         private void Update()
         {
+            _textMeshProUGUI.text = $"{CommandState}";
+            
             _deliveryManMovementModule.Update();
             _deliveryManInventoryModule.Update();
         }

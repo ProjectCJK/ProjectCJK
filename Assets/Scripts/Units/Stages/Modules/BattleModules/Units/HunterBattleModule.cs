@@ -83,7 +83,7 @@ namespace Units.Stages.Modules.BattleModules.Units
             _weapon.transform.localScale = weaponScale;
         }
 
-        private void ActivateWeapon(bool value)
+        public void ActivateWeapon(bool value)
         {
             _weapon.ActivateWeapon(value);
         }

@@ -56,13 +56,17 @@ namespace Units.Stages.Modules.MovementModules.Units
         public void Initialize(Vector3 startPosition)
         {
             ActivateNavMeshAgent(false);
-            
             _navMeshAgent.speed = _movementSpeed;
 
-            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            // 초기 위치를 NavMesh 위로 조정
+            if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 _guestTransform.position = hit.position;
-                Debug.Log($"Guest initialized at: {hit.position}, StartPosition: {startPosition}, Difference: {Vector3.Distance(hit.position, startPosition)}");
+                Debug.Log($"Guest initialized at: {hit.position}");
+            }
+            else
+            {
+                Debug.LogWarning($"Failed to initialize guest at position: {startPosition}");
             }
         }
 
@@ -70,40 +74,32 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             _destination = destination.Item2.position;
             _onArrived = destination.Item3;
-            
+
+            // 경로 계산 및 설정 시도
             if (TryCalculateAndSetPath(_destination))
             {
                 ActivateNavMeshAgent(true);
+            }
+            else
+            {
+                Debug.LogWarning($"Failed to calculate path to destination: {_destination}");
             }
         }
 
         public void Update()
         {
-            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance && !_navMeshAgent.pathPending)
             {
                 ActivateNavMeshAgent(false);
                 _onArrived?.Invoke();
                 _onArrived = null;
             }
-            
-            // 이동 상태가 변하지 않았으면 로직을 건너뛰기
-            if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude < 0.01f)
-            {
-                HandleStateUpdate(); // 정지 상태 업데이트
-                return;
-            }
 
-            switch (_navMeshAgent.velocity.x)
-            {
-                case > 0 when !_isFacingRight:
-                    FlipSprite(true);
-                    break;
-                case < 0 when _isFacingRight:
-                    FlipSprite(false);
-                    break;
-            }
-
+            // 이동 상태 업데이트
             HandleStateUpdate();
+
+            // 스프라이트 방향 업데이트
+            UpdateSpriteDirection();
         }
 
         public void FixedUpdate()
@@ -112,7 +108,10 @@ namespace Units.Stages.Modules.MovementModules.Units
             {
                 if (!_navMeshAgent.hasPath || _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
                 {
-                    TryCalculateAndSetPath(_destination);
+                    if (!TryCalculateAndSetPath(_destination))
+                    {
+                        Debug.LogWarning($"FixedUpdate: Failed to recalculate path to {_destination}");
+                    }
                 }
             }
         }
@@ -120,6 +119,18 @@ namespace Units.Stages.Modules.MovementModules.Units
         public void ActivateNavMeshAgent(bool value)
         {
             _navMeshAgent.isStopped = !value;
+        }
+
+        private void UpdateSpriteDirection()
+        {
+            if (_navMeshAgent.velocity.x > 0 && !_isFacingRight)
+            {
+                FlipSprite(true);
+            }
+            else if (_navMeshAgent.velocity.x < 0 && _isFacingRight)
+            {
+                FlipSprite(false);
+            }
         }
 
         private void FlipSprite(bool faceRight)
@@ -147,20 +158,44 @@ namespace Units.Stages.Modules.MovementModules.Units
                 ? _creatureStateMachine.CreatureRunState
                 : _creatureStateMachine.CreatureIdleState);
         }
-        
+
         private bool TryCalculateAndSetPath(Vector3 position)
         {
-            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            // NavMesh 샘플링
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 var path = new NavMeshPath();
-                if (NavMesh.CalculatePath(_guestTransform.position, hit.position, NavMesh.AllAreas, path))
+                if (NavMesh.CalculatePath(_guestTransform.position, hit.position, NavMesh.AllAreas, path) &&
+                    path.status == NavMeshPathStatus.PathComplete)
                 {
                     _navMeshAgent.SetPath(path);
                     return true;
                 }
+                else
+                {
+                    Debug.LogWarning($"Path calculation failed or incomplete to: {hit.position}");
+                }
             }
-            return false;
+            else
+            {
+                Debug.LogWarning($"Failed to sample position near: {position}");
+            }
+
+            // 대체 동작: 가까운 NavMesh 지점 설정
+            return HandlePathFailure(position);
         }
 
+        private bool HandlePathFailure(Vector3 originalPosition)
+        {
+            if (NavMesh.SamplePosition(originalPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas)) // 5m 반경으로 확장
+            {
+                Debug.Log($"Adjusted destination to nearest NavMesh point: {hit.position}");
+                _navMeshAgent.SetDestination(hit.position);
+                return true;
+            }
+
+            Debug.LogError($"Unable to recover path near: {originalPosition}");
+            return false;
+        }
     }
 }

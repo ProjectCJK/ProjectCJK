@@ -79,7 +79,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 200
+    - 50
     - KitchenA_A_Unlock
   - rowData:
     - 110002
@@ -96,7 +96,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 300
+    - 100
     - StandA_A_Unlock
   - rowData:
     - 110003
@@ -113,7 +113,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 350
+    - 50
     - HuntingZone_A_Unlock
   - rowData:
     - 110004
@@ -130,7 +130,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 50
     - HuntingZone_A_Hunt
   - rowData:
     - 110005
@@ -147,7 +147,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 50
     - KitchenA_A_Product
   - rowData:
     - 110006
@@ -164,7 +164,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 50
     - ProductA_A_Sell
   - rowData:
     - 110007
@@ -181,7 +181,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 300
     - Temp_ManagementDesk
   - rowData:
     - 110008
@@ -198,7 +198,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 100
+    - 500
     - KitchenA_A_Upgrade
   - rowData:
     - 110009
@@ -283,7 +283,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 1200
+    - 100
     - KitchenA_B_Unlock
   - rowData:
     - 110014
@@ -300,7 +300,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 1200
+    - 100
     - StandA_B_Unlock
   - rowData:
     - 110015
@@ -368,7 +368,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 2000
+    - 100
     - KitchenA_B_Product
   - rowData:
     - 110019
@@ -385,7 +385,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 2000
+    - 100
     - ProductA_B_Sell
   - rowData:
     - 110020
@@ -402,7 +402,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 2000
+    - 100
     - ManagementDesk_Upgrade
   - rowData:
     - 110021
@@ -419,7 +419,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 3000
+    - 100
     - HuntingZone_B_Hunt
   - rowData:
     - 110022
@@ -436,7 +436,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 3000
+    - 100
     - ProductA_A_Sell
   - rowData:
     - 110023
@@ -453,7 +453,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 3000
+    - 100
     - KitchenA_B_Upgrade
   - rowData:
     - 110024
@@ -461,17 +461,17 @@ MonoBehaviour:
     - 14
     - 23
     - St_110024
-    - Increase Canning Machine B Price
-    - LevelUpOption1
-    - KitchenA_A
-    - 10
+    - Sell Canned Tomatoes
+    - Selling
+    - ProductA_A
+    - 15
     - Star
     - 1
     - Diamond
     - 2
     - Gold
     - 4000
-    - KitchenA_A_Upgrade
+    - ProductA_A_Sell
   - rowData:
     - 110025
     - 1
@@ -495,17 +495,17 @@ MonoBehaviour:
     - 14
     - 25
     - St_110026
-    - Sell Canned Tomatoes
-    - Selling
-    - ProductA_A
-    - 15
+    - Increase Canning Machine A Price
+    - LevelUpOption1
+    - KitchenA_A
+    - 10
     - Star
     - 1
     - Diamond
     - 2
     - Gold
     - 4000
-    - ProductA_A_Sell
+    - KitchenA_A_Upgrade
   - rowData:
     - 110027
     - 1
@@ -895,7 +895,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 9000
+    - 12000
     - DeliveryLodging_Unlock
   - rowData:
     - 110050
@@ -912,7 +912,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 9000
+    - 12000
     - KitchenA_A_Upgrade
   - rowData:
     - 110051
@@ -929,7 +929,7 @@ MonoBehaviour:
     - Diamond
     - 2
     - Gold
-    - 9000
+    - 12000
     - KitchenA_B_Upgrade
   - rowData:
     - 110052

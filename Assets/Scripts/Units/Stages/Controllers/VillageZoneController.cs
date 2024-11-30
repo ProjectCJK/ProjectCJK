@@ -17,6 +17,7 @@ using Units.Stages.Units.Creatures.Units;
 using Units.Stages.Units.HuntingZones;
 using Units.Stages.Units.Items.Enums;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = System.Random;
 
 namespace Units.Stages.Controllers
@@ -269,15 +270,38 @@ namespace Units.Stages.Controllers
                         deliveryMan.CommandState = CommandState.MoveTo; // 상태를 이동 중으로 변경
                     }
             }
-
+            
+            // // 목표 건물 유효성 검사
+            // foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
+            // {
+            //     if (deliveryMan.CommandState == CommandState.MoveTo)
+            //     {
+            //         Tuple<string, Transform> destination = deliveryMan.GetDestination();
+            //         var targetBuilding = _buildingController.Buildings[destination.Item1];
+            //         
+            //         if (targetBuilding is Kitchen { IsAnyItemOnInventory: false })
+            //         {
+            //             // 기본 목적지는 특정 키에 해당하는 주방으로 설정
+            //             var defaultDestinationKey = $"{EBuildingType.KitchenA}_{EMaterialType.A}";
+            //             var defaultDestination = new Tuple<string, Transform>(
+            //                 defaultDestinationKey,
+            //                 _buildingController.Buildings[defaultDestinationKey].gameObject.transform);
+            //
+            //             // 기본 목적지 설정 및 상태를 대기로 변경
+            //             deliveryMan.SetDestinations(defaultDestination);
+            //             deliveryMan.CommandState = CommandState.Standby;
+            //         }
+            //     }
+            // }
+            
             // 배달원들의 상태를 확인하고 인벤토리가 가득 찼을 경우
             foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
+            {
                 if (deliveryMan.IsInventoryFull() && deliveryMan.CommandState == CommandState.MoveTo)
                 {
                     // 현재 목적지 정보를 가져와 파싱
                     Tuple<string, Transform> destination = deliveryMan.GetDestination();
-                    (EBuildingType?, EMaterialType?) parsedKey =
-                        ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
+                    (EBuildingType?, EMaterialType?) parsedKey = ParserModule.ParseStringToEnum<EBuildingType, EMaterialType>(destination.Item1);
 
                     // 가공된 상품을 판매할 Stand 건물의 키와 위치를 생성
                     if (parsedKey.Item1 != null)
@@ -300,6 +324,7 @@ namespace Units.Stages.Controllers
                 {
                     deliveryMan.CommandState = CommandState.NoOrder;
                 }
+            }
         }
 
         private void SetHunterDestination()
@@ -316,6 +341,7 @@ namespace Units.Stages.Controllers
                 // 2-1. 헌터 인벤토리가 가득 찬 경우 복귀
                 if (hunter.IsInventoryFull() && hunter.CommandState != CommandState.Deliver)
                 {
+                    hunter.InactivateWeapon();
                     hunter.SetDestinations(new Tuple<string, Transform>($"{EBuildingType.WareHouse}",
                         _buildingController.Buildings[$"{EBuildingType.WareHouse}"].transform)); // 복귀 위치 설정
                     hunter.CommandState = CommandState.Deliver;
@@ -414,18 +440,30 @@ namespace Units.Stages.Controllers
 
                 if (_guestSpawnElapsedTime >= _guestSpawnCheckTime)
                 {
-                    var randomPosition = new Random().Next(_villageSpawnData.GuestSpawner.Count);
-                    IGuest guest = _creatureController.GetGuest(_villageSpawnData.GuestSpawner[randomPosition].position, ReturnGuest);
-                    guest.SetTargetPurchaseQuantity(1);
-                    guest.SetDestinations(GetRandomDestinationForGuest());
+                    var randomPosition = UnityEngine.Random.Range(0, _villageSpawnData.GuestSpawner.Count);
+                    Vector3 spawnPosition = _villageSpawnData.GuestSpawner[randomPosition].position;
 
-                    currentSpawnedGuests.Add(guest);
+                    if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+                    {
+                        IGuest guest = _creatureController.GetGuest(hit.position, ReturnGuest);
+                        guest.SetTargetPurchaseQuantity(1);
+                        guest.SetDestinations(GetRandomDestinationForGuest());
+
+                        currentSpawnedGuests.Add(guest);
+
+                        Debug.Log($"Guest spawned at: {hit.position}");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to spawn guest: Invalid NavMesh position at {spawnPosition}");
+                    }
 
                     _guestSpawnElapsedTime = 0f;
                     _guestSpawnCheckTime = 0f;
                 }
             }
         }
+
 
         private void ReturnGuest(IGuest guest)
         {

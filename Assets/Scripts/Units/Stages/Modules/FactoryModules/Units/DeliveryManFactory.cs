@@ -15,7 +15,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
     public class DeliveryManFactory : NPCFactory, IDeliveryManFactory
     {
-        private const int DefaultPoolSize = 1;
+        private const int DefaultPoolSize = 5;
         private const int MaxPoolSize = 5;
 
         private readonly IItemFactory _itemFactory;

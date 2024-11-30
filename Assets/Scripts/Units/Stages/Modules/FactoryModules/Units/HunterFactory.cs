@@ -17,7 +17,7 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
     public class HunterFactory : NPCFactory, IHunterFactory
     {
-        private const int DefaultPoolSize = 1;
+        private const int DefaultPoolSize = 5;
         private const int MaxPoolSize = 5;
 
         private readonly IItemFactory _itemFactory;

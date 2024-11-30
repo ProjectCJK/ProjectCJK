@@ -97,6 +97,7 @@ namespace Modules
         {
             Gold = 600;
             
+            CreatureItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingOutputItems = new Dictionary<string, Dictionary<string, int>>();
             CurrentBuildingLevel = new Dictionary<string, int>();

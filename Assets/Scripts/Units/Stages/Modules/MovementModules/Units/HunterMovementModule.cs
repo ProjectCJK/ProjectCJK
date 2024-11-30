@@ -25,7 +25,8 @@ namespace Units.Stages.Modules.MovementModules.Units
 
     public class HunterMovementModule : MovementModuleWithNavMeshAgent, IHunterMovementModule
     {
-        private const float MonsterFollowDistance = 2f; // 몬스터를 따라갈 때 유지할 거리
+        private const float MinFollowDistance = 1f; // 최소 거리
+        private const float MaxFollowDistance = 3f; // 최대 거리
         private readonly CreatureStateMachine _creatureStateMachine;
 
         private readonly IHunterStatsModule _hunterStatModule;
@@ -34,7 +35,6 @@ namespace Units.Stages.Modules.MovementModules.Units
         private readonly Transform _spriteTransform;
 
         private Tuple<string, Transform> _destinationTransform;
-        private bool _isFacingRight;
         private bool _isMoving;
         private bool _isSlowed;
         private Coroutine _slowCoroutine;
@@ -51,12 +51,12 @@ namespace Units.Stages.Modules.MovementModules.Units
             _creatureStateMachine = creatureStateMachine;
             _navMeshAgent = guest.GetComponent<NavMeshAgent>();
 
-            // NavMeshAgent 설정 추가
+            // NavMeshAgent 설정
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
             _navMeshAgent.autoTraverseOffMeshLink = false; // 자동 오프메시 링크 이동 비활성화
             _navMeshAgent.autoBraking = false; // 목적지 도착 시 자동 정지 비활성화
-            _navMeshAgent.stoppingDistance = 0.5f; // 정지 거리를 작게 설정
+            _navMeshAgent.stoppingDistance = MinFollowDistance;
             _navMeshAgent.acceleration = 120f;
         }
 
@@ -77,48 +77,78 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             _destinationTransform = destination;
 
-            if (_navMeshAgent.isOnNavMesh)
+            if (_navMeshAgent.isOnNavMesh && _destinationTransform.Item2 != null)
             {
                 _navMeshAgent.ResetPath();
 
-                // 몬스터 대상일 경우 일정 거리 유지 설정
-                if (_destinationTransform.Item1 == $"{ECreatureType.Monster}" && _destinationTransform.Item2 != null)
+                // NavMeshPath 생성 및 계산
+                NavMeshPath path = new NavMeshPath();
+                bool pathCalculated = NavMesh.CalculatePath(_hunterTransform.position, _destinationTransform.Item2.position, NavMesh.AllAreas, path);
+
+                if (pathCalculated && path.status == NavMeshPathStatus.PathComplete)
                 {
-                    Vector3 directionToTarget =
-                        (_destinationTransform.Item2.position - _hunterTransform.position).normalized;
-                    Vector3 adjustedPosition =
-                        _destinationTransform.Item2.position - directionToTarget * MonsterFollowDistance;
-                    _navMeshAgent.SetDestination(adjustedPosition);
+                    // 경로 상의 거리 계산
+                    float navMeshDistance = CalculatePathDistance(path);
+
+                    if (navMeshDistance > MaxFollowDistance)
+                    {
+                        // 최대 거리 초과 시 경로를 따라 이동
+                        _navMeshAgent.SetPath(path);
+                        ActivateNavMeshAgent(true);
+                    }
+                    else if (navMeshDistance < MinFollowDistance)
+                    {
+                        // 최소 거리 미만이면 멈춤
+                        ActivateNavMeshAgent(false);
+                    }
+                    else
+                    {
+                        // 유효한 거리 범위 내에서 대기
+                        ActivateNavMeshAgent(false);
+                    }
                 }
                 else
                 {
-                    _navMeshAgent.SetDestination(_destinationTransform.Item2.position);
-                }
+                    // 경로 계산 실패 시 대체 행동
+                    Debug.LogWarning($"Path to {_destinationTransform.Item2.position} is invalid. Recalculating...");
 
-                ActivateNavMeshAgent(true);
+                    if (NavMesh.SamplePosition(_destinationTransform.Item2.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+                    {
+                        _navMeshAgent.SetDestination(hit.position);
+                        ActivateNavMeshAgent(true);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to find a valid NavMesh position near {_destinationTransform.Item2.position}");
+                        ActivateNavMeshAgent(false);
+                    }
+                }
             }
         }
 
         public void Update()
         {
-            if (_destinationTransform != null &&
-                Vector3.Distance(_hunterTransform.position, _destinationTransform.Item2.position) > 0.5f)
+            if (_destinationTransform != null && _destinationTransform.Item2 != null)
             {
-                Vector3 direction3D = (_destinationTransform.Item2.position - _hunterTransform.position).normalized;
-                Direction = new Vector2(direction3D.x, direction3D.y);
-                SetDestination(_destinationTransform);
+                NavMeshPath path = new NavMeshPath();
+                bool pathCalculated = NavMesh.CalculatePath(_hunterTransform.position, _destinationTransform.Item2.position, NavMesh.AllAreas, path);
+
+                if (pathCalculated && path.status == NavMeshPathStatus.PathComplete)
+                {
+                    float navMeshDistance = CalculatePathDistance(path);
+
+                    if (navMeshDistance > MinFollowDistance)
+                    {
+                        // 추적 방향 업데이트
+                        Vector3 direction3D = (_destinationTransform.Item2.position - _hunterTransform.position).normalized;
+                        Direction = new Vector2(direction3D.x, direction3D.y);
+
+                        SetDestination(_destinationTransform);
+                    }
+                }
             }
 
-            switch (_navMeshAgent.velocity.x)
-            {
-                case > 0 when !_isFacingRight:
-                    FlipSprite(true);
-                    break;
-                case < 0 when _isFacingRight:
-                    FlipSprite(false);
-                    break;
-            }
-
+            FlipSpriteBasedOnDirection();
             HandleStateUpdate();
         }
 
@@ -128,10 +158,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             {
                 var path = new NavMeshPath();
 
-                Vector3 targetPosition = _destinationTransform.Item1 == $"{ECreatureType.Monster}" &&
-                                         _destinationTransform.Item2 != null
-                    ? _destinationTransform.Item2.position - (Vector3)Direction * MonsterFollowDistance
-                    : _destinationTransform.Item2.position;
+                Vector3 targetPosition = _destinationTransform.Item2.position;
 
                 if (NavMesh.CalculatePath(_hunterTransform.position, targetPosition, NavMesh.AllAreas, path))
                     _navMeshAgent.SetPath(path);
@@ -150,12 +177,16 @@ namespace Units.Stages.Modules.MovementModules.Units
             _slowCoroutine = CoroutineManager.Instance.StartCoroutine(SlowDownTemporarily());
         }
 
-        private void FlipSprite(bool faceRight)
+        private void FlipSpriteBasedOnDirection()
         {
-            _isFacingRight = faceRight;
-            Vector3 scale = _spriteTransform.localScale;
-            scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-            _spriteTransform.localScale = scale;
+            // Direction.x를 기준으로 스프라이트 플립
+            if ((Direction.x > 0 && _spriteTransform.localScale.x < 0) ||
+                (Direction.x < 0 && _spriteTransform.localScale.x > 0))
+            {
+                Vector3 scale = _spriteTransform.localScale;
+                scale.x = -scale.x;
+                _spriteTransform.localScale = scale;
+            }
         }
 
         private void HandleStateUpdate()
@@ -181,6 +212,21 @@ namespace Units.Stages.Modules.MovementModules.Units
             _isSlowed = true;
             yield return new WaitForSeconds(0.5f);
             _isSlowed = false;
+        }
+        
+        /// <summary>
+        /// NavMesh 경로를 기준으로 거리를 계산합니다.
+        /// </summary>
+        private float CalculatePathDistance(NavMeshPath path)
+        {
+            float totalDistance = 0f;
+
+            for (int i = 1; i < path.corners.Length; i++)
+            {
+                totalDistance += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+
+            return totalDistance;
         }
     }
 }

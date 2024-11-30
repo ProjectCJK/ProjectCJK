@@ -18,8 +18,8 @@ namespace Units.Stages.Modules.FactoryModules.Units
 
     public class GuestFactory : NPCFactory, IGuestFactory
     {
-        private const int DefaultPoolSize = 20;
-        private const int MaxPoolSize = 20;
+        private const int DefaultPoolSize = 60;
+        private const int MaxPoolSize = 100;
 
         private readonly IItemFactory _itemFactory;
 
