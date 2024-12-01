@@ -167,7 +167,7 @@ namespace Units.Stages.Controllers
             if (VolatileDataManager.Instance.CustomerTrigger)
             {
                 VolatileDataManager.Instance.CustomerTrigger = false;
-                StartCoroutine(SpawnGuestsWithDelay(30, 0.5f)); // 30명의 손님을 0.5초 간격으로 생성
+                StartCoroutine(SpawnGuestsWithDelay(30, 0.1f)); // 30명의 손님을 0.5초 간격으로 생성
                 customerRushButtonActivatorTimer = customerRushButtonActivatorMaxTime;
             }
         }
@@ -192,7 +192,7 @@ namespace Units.Stages.Controllers
 
         private void PopUpGuestRush()
         {
-            if (customerRushButtonActivatorTimer <= 0)
+            if (customerRushButtonActivatorTimer <= 0 && VolatileDataManager.Instance.CustomerTrigger == false)
             {
                 var materialTypes = new[] { EMaterialType.A, EMaterialType.B, EMaterialType.C, EMaterialType.D };
 
@@ -202,7 +202,10 @@ namespace Units.Stages.Controllers
 
                 if (currentStandProductCount >= 30)
                 {
-                    UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate();
+                    UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons.UI_Button_CustomerWave.Activate(() =>
+                    {
+                        customerRushButtonActivatorTimer = customerRushButtonActivatorMaxTime;
+                    });
                 }
             }
             else
@@ -265,35 +268,12 @@ namespace Units.Stages.Controllers
                     if (deliveryMan.CommandState is CommandState.NoOrder or CommandState.Standby)
                     {
                         // 배달 대상 큐에서 첫 번째 항목을 가져와 배달원에게 설정
-                        Tuple<string, Transform> target = _deliveryTargetQueue.Peek();
+                        Tuple<string, Transform> target = _deliveryTargetQueue.Dequeue();
                         deliveryMan.SetDestinations(target);
                         deliveryMan.CommandState = CommandState.MoveTo; // 상태를 이동 중으로 변경
                     }
             }
-            
-            // // 목표 건물 유효성 검사
-            // foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
-            // {
-            //     if (deliveryMan.CommandState == CommandState.MoveTo)
-            //     {
-            //         Tuple<string, Transform> destination = deliveryMan.GetDestination();
-            //         var targetBuilding = _buildingController.Buildings[destination.Item1];
-            //         
-            //         if (targetBuilding is Kitchen { IsAnyItemOnInventory: false })
-            //         {
-            //             // 기본 목적지는 특정 키에 해당하는 주방으로 설정
-            //             var defaultDestinationKey = $"{EBuildingType.KitchenA}_{EMaterialType.A}";
-            //             var defaultDestination = new Tuple<string, Transform>(
-            //                 defaultDestinationKey,
-            //                 _buildingController.Buildings[defaultDestinationKey].gameObject.transform);
-            //
-            //             // 기본 목적지 설정 및 상태를 대기로 변경
-            //             deliveryMan.SetDestinations(defaultDestination);
-            //             deliveryMan.CommandState = CommandState.Standby;
-            //         }
-            //     }
-            // }
-            
+
             // 배달원들의 상태를 확인하고 인벤토리가 가득 찼을 경우
             foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
             {
@@ -325,6 +305,29 @@ namespace Units.Stages.Controllers
                     deliveryMan.CommandState = CommandState.NoOrder;
                 }
             }
+            
+            // // 목표 건물 유효성 검사
+            // foreach (IDeliveryMan deliveryMan in currentSpawnedDeliveryMans)
+            // {
+            //     if (deliveryMan.CommandState is CommandState.MoveTo or CommandState.NoOrder && !deliveryMan.HaveAnyItem())
+            //     {
+            //         Tuple<string, Transform> destination = deliveryMan.GetDestination();
+            //         var targetBuilding = _buildingController.Buildings[destination.Item1];
+            //         
+            //         if (targetBuilding is Kitchen { IsAnyItemOnInventory: false })
+            //         {
+            //             // 기본 목적지는 특정 키에 해당하는 주방으로 설정
+            //             var defaultDestinationKey = $"{EBuildingType.KitchenA}_{EMaterialType.A}";
+            //             var defaultDestination = new Tuple<string, Transform>(
+            //                 defaultDestinationKey,
+            //                 _buildingController.Buildings[defaultDestinationKey].gameObject.transform);
+            //
+            //             // 기본 목적지 설정 및 상태를 대기로 변경
+            //             deliveryMan.SetDestinations(defaultDestination);
+            //             deliveryMan.CommandState = CommandState.Standby;
+            //         }
+            //     }
+            // }
         }
 
         private void SetHunterDestination()

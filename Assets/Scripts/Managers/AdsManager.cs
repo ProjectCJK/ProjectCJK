@@ -34,8 +34,8 @@ namespace Managers
             //MaxSdk.SetSdkKey(MaxSdkKey);
             MaxSdk.InitializeSdk();
 
-            adsShownToday = ES3.Load<Dictionary<string, int>>(ADS_SHOWN_TODAY_SAVE, new Dictionary<string, int>());
-            lastAdShownDate = ES3.Load<DateTime>(LAST_AD_SHOW_DATE_SAVE, DateTime.Today);
+            adsShownToday = ES3.Load(ADS_SHOWN_TODAY_SAVE, new Dictionary<string, int>());
+            lastAdShownDate = ES3.Load(LAST_AD_SHOW_DATE_SAVE, DateTime.Today);
             UpdateAdTracking();
         }
         #region AppLovinMax Mathrd

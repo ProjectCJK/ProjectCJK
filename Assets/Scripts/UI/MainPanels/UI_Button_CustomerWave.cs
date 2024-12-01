@@ -8,6 +8,7 @@ namespace UI.MainPanels
 {
     public class UI_Button_CustomerWave : MonoBehaviour
     {
+        private Action onTimer;
         private const float existedTimeMaximum = 10f;
         private float existedTime;
         
@@ -19,7 +20,12 @@ namespace UI.MainPanels
 
         public void RegisterReference()
         {
-            GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_PopUp_Reward.Activate(EPopUpPanelType.CustomerRush, 0, () => { VolatileDataManager.Instance.CustomerTrigger = true;}, null));
+            GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.UI_Panel_Main.UI_Panel_PopUp_Reward.Activate(EPopUpPanelType.CustomerRush, 0,
+                () =>
+                {
+                    VolatileDataManager.Instance.CustomerTrigger = true;
+                    Inactivate();
+                }, null));
         }
 
         private void OnEnable()
@@ -37,6 +43,9 @@ namespace UI.MainPanels
             {
                 existedTime = 0;
                 gameObject.SetActive(false);
+                
+                onTimer?.Invoke();
+                onTimer = null;
             }
 
             ConvertFloatToTime(existedTime);
@@ -45,9 +54,15 @@ namespace UI.MainPanels
             existedTimeText.text = $"{minutes:D2}:{remainingSeconds:D2}";
         }
 
-        public void Activate()
+        public void Activate(Action action)
         {
+            onTimer = action;
             gameObject.SetActive(true);
+        }
+
+        private void Inactivate()
+        {
+            gameObject.SetActive(false);
         }
         
         private void ConvertFloatToTime(float seconds)
