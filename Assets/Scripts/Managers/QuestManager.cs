@@ -174,7 +174,6 @@ namespace Managers
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             
             UIManager.Instance.Joystick.OnClickPanel += () => _uiPanelQuest.MainQuest.gameObject.SetActive(false);
-            Debug.Log("QuestManager: RegisterReference completed.");
         }
         
         public void Initialize()
@@ -668,7 +667,6 @@ namespace Managers
                 GameManager.Instance.ES3Saver.CurrentListQuestIndex++;
                 
                 _uiPanelQuest.MainQuest.gameObject.SetActive(false);
-                Debug.Log("모든 스테이지 퀘스트가 완료되었습니다.");
             }
             else
             {

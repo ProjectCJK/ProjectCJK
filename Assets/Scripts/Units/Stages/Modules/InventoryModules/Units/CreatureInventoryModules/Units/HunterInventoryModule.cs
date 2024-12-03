@@ -64,19 +64,27 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         private void RegisterZone(INPCTradeZone zone)
         {
             if (zone.CheckInputAccessorNPC(_npcType) && interactionTradeZones.Add(zone))
-                Debug.Log($"{_npcType} => {zone.BuildingKey} 도킹 완료 @~@");
+            {
+                
+            }
 
             if (zone.CheckOutputAccessorNPC(_npcType) && zone.RegisterItemReceiver(this, true))
-                Debug.Log($"{zone.BuildingKey} => {_npcType} 도킹 완료 @~@");
+            {
+                
+            }
         }
 
         private void UnregisterZone(INPCTradeZone zone)
         {
             if (zone.CheckInputAccessorNPC(_npcType) && interactionTradeZones.Remove(zone))
-                Debug.Log($"{_npcType} => {zone.BuildingKey} 도킹 해제 완료 @~@");
+            {
+                
+            }
 
             if (zone.CheckOutputAccessorNPC(_npcType) && zone.RegisterItemReceiver(this, false))
-                Debug.Log($"{zone.BuildingKey} => {_npcType} 도킹 해제 완료 @~@");
+            {
+                
+            }
         }
     }
 }

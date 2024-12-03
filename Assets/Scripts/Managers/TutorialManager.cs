@@ -20,8 +20,9 @@ namespace Managers
         private Canvas _branchCanvasGuide;
         private Canvas _branchCanvasJoystick;
         
-        private UI_Panel_Tutorial _tutorialPanel;
+        private UI_Panel_Tutorial_Initial _tutorialInitialPanel;
         private UI_Panel_Tutorial_PopUp _tutorialPopUpPanel;
+        private UI_Panel_Tutorial_Joystick _tutorialJoystickPanel;
         
         private Vector3 _zombieZonePosition;
         private Vector3 _huntingZonePosition;
@@ -37,7 +38,7 @@ namespace Managers
         private UI_Panel_MainButtons UI_Panel_MainButtons;
         private UI_Panel_Quest UI_Panel_Quest;
         private List<UI_Item_QuestGuide> UI_Item_QuestGuide;
-        
+
         public void RegisterReference(CameraController cameraController)
         {
             GameManager.Instance.ES3Saver.PopUpTutorialClear = new Dictionary<int, bool>();
@@ -70,15 +71,16 @@ namespace Managers
             _branchCanvasGuide = UIManager.Instance.BranchCanvasGuide;
             _branchCanvasJoystick = UIManager.Instance.BranchCanvasJoystick;
             
-            _tutorialPanel = UIManager.Instance.UI_Panel_Tutorial;
+            _tutorialInitialPanel = UIManager.Instance.UIPanelTutorialInitial;
             _tutorialPopUpPanel = UIManager.Instance.UI_Panel_Tutorial_PopUp;
+            _tutorialJoystickPanel = UIManager.Instance.UI_Panel_Tutorial_Joystick;
 
             UI_Panel_MainButtons = UIManager.Instance.UI_Panel_Main.UI_Panel_MainButtons;
             UI_Panel_Quest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             UI_Item_QuestGuide = UIManager.Instance.UI_Panel_Main.UI_Item_QuestGuide;
             
-            _tutorialPanel.RegisterReference();
-            _tutorialPanel.OnClickExitButton += HandleOnClickTutorialPanelExitButton;
+            _tutorialInitialPanel.RegisterReference();
+            _tutorialInitialPanel.OnClickExitButton += HandleOnClickTutorialInitialPanelExitButton;
             
             _tutorialPopUpPanel.RegisterReference();
             _tutorialPopUpPanel.OnClickExitButton += HandleOnClickPopUpTutorialExitButton;
@@ -91,7 +93,7 @@ namespace Managers
             TransferGuideCanvas(false);
             TransferTutorialCanvas(true);
             
-            _tutorialPanel.Initialize();
+            _tutorialInitialPanel.Initialize();
             
             isScriptEnded = false;
 
@@ -114,19 +116,20 @@ namespace Managers
         private IEnumerator PlayCameraCutscenes()
         {
             yield return FollowCameraToTargets(_firstTargets[0], _firstTargets[1]);
+            
             yield return FollowCameraToTargets(_secondTargets[0], _secondTargets[1]);
         }
         
         private IEnumerator PlayInitialCutscenes()
         {
-            _tutorialPanel.gameObject.SetActive(true);
+            _tutorialInitialPanel.gameObject.SetActive(true);
 
             while (!isScriptEnded)
             {
                 yield return null;
             }
             
-            _tutorialPanel.gameObject.SetActive(false);
+            _tutorialInitialPanel.gameObject.SetActive(false);
         }
 
         private IEnumerator PlayFirstPopUpTutorial()
@@ -149,6 +152,7 @@ namespace Managers
             }
             
             _tutorialPopUpPanel.gameObject.SetActive(false);
+            _tutorialJoystickPanel.gameObject.SetActive(true);
             _branchCanvasGame.gameObject.SetActive(true);
             _branchCanvasJoystick.gameObject.SetActive(true);
         }
@@ -179,7 +183,7 @@ namespace Managers
             }
         }
 
-        private void HandleOnClickTutorialPanelExitButton()
+        private void HandleOnClickTutorialInitialPanelExitButton()
         {
             GameManager.Instance.ES3Saver.InitialTutorialClear = true;
             isScriptEnded = true;

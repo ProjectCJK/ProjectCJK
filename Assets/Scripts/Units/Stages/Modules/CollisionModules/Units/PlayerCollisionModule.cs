@@ -176,13 +176,7 @@ namespace Units.Stages.Modules.CollisionModules.Units
 
             if (_tradeZone != null)
             {
-                Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZone}");
                 OnTriggerTradeZone?.Invoke(_tradeZone, true);
-            }
-            else
-            {
-                Debug.LogWarning(
-                    "[CompleteWaitForTrigger] InteractionTrade component is null or _interactionTrade is null.");
             }
         }
 
@@ -207,7 +201,6 @@ namespace Units.Stages.Modules.CollisionModules.Units
 
             if (tradeZoneZone != null)
             {
-                Debug.Log($"[NotifyTradeZoneExit] Exiting trade zone: {tradeZoneZone}");
                 OnTriggerTradeZone?.Invoke(tradeZoneZone, false);
             }
         }

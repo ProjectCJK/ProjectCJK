@@ -78,10 +78,6 @@ namespace Units.Stages.Modules.FactoryModules.Units
                 }
             }
 
-#if UNITY_EDITOR
-            if (itemSprite == null) Debug.LogError($"{itemType} is not a valid item type");
-#endif
-
             item.Initialize(itemType, count, itemSprite, initializePosition, atRoot);
 
             return item;

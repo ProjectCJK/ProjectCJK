@@ -50,8 +50,6 @@ namespace Units.Stages.Modules.CollisionModules.Units
                             {
                                 _tradeZoneZone = currentTradeZone;
                                 OnTriggerTradeZone?.Invoke(currentTradeZone, true);
-
-                                Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZoneZone}");
                             }
 
                     break;
@@ -77,8 +75,6 @@ namespace Units.Stages.Modules.CollisionModules.Units
                             {
                                 _tradeZoneZone = null;
                                 OnTriggerTradeZone?.Invoke(currentTradeZone, false);
-
-                                Debug.Log($"[CompleteWaitForTrigger] Entering trade zone: {_tradeZoneZone}");
                             }
 
                     break;

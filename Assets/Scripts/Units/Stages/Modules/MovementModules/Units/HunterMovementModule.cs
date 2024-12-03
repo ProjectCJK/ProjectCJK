@@ -109,9 +109,6 @@ namespace Units.Stages.Modules.MovementModules.Units
                 }
                 else
                 {
-                    // 경로 계산 실패 시 대체 행동
-                    Debug.LogWarning($"Path to {_destinationTransform.Item2.position} is invalid. Recalculating...");
-
                     if (NavMesh.SamplePosition(_destinationTransform.Item2.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
                     {
                         _navMeshAgent.SetDestination(hit.position);
@@ -119,7 +116,6 @@ namespace Units.Stages.Modules.MovementModules.Units
                     }
                     else
                     {
-                        Debug.LogError($"Failed to find a valid NavMesh position near {_destinationTransform.Item2.position}");
                         ActivateNavMeshAgent(false);
                     }
                 }

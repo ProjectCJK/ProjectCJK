@@ -62,11 +62,6 @@ namespace Units.Stages.Modules.MovementModules.Units
             if (NavMesh.SamplePosition(startPosition, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 _guestTransform.position = hit.position;
-                Debug.Log($"Guest initialized at: {hit.position}");
-            }
-            else
-            {
-                Debug.LogWarning($"Failed to initialize guest at position: {startPosition}");
             }
         }
 
@@ -79,10 +74,6 @@ namespace Units.Stages.Modules.MovementModules.Units
             if (TryCalculateAndSetPath(_destination))
             {
                 ActivateNavMeshAgent(true);
-            }
-            else
-            {
-                Debug.LogWarning($"Failed to calculate path to destination: {_destination}");
             }
         }
 
@@ -108,10 +99,7 @@ namespace Units.Stages.Modules.MovementModules.Units
             {
                 if (!_navMeshAgent.hasPath || _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
                 {
-                    if (!TryCalculateAndSetPath(_destination))
-                    {
-                        Debug.LogWarning($"FixedUpdate: Failed to recalculate path to {_destination}");
-                    }
+                    TryCalculateAndSetPath(_destination);
                 }
             }
         }
@@ -123,13 +111,14 @@ namespace Units.Stages.Modules.MovementModules.Units
 
         private void UpdateSpriteDirection()
         {
-            if (_navMeshAgent.velocity.x > 0 && !_isFacingRight)
+            switch (_navMeshAgent.velocity.x)
             {
-                FlipSprite(true);
-            }
-            else if (_navMeshAgent.velocity.x < 0 && _isFacingRight)
-            {
-                FlipSprite(false);
+                case > 0 when !_isFacingRight:
+                    FlipSprite(true);
+                    break;
+                case < 0 when _isFacingRight:
+                    FlipSprite(false);
+                    break;
             }
         }
 
@@ -171,14 +160,6 @@ namespace Units.Stages.Modules.MovementModules.Units
                     _navMeshAgent.SetPath(path);
                     return true;
                 }
-                else
-                {
-                    Debug.LogWarning($"Path calculation failed or incomplete to: {hit.position}");
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"Failed to sample position near: {position}");
             }
 
             // 대체 동작: 가까운 NavMesh 지점 설정
@@ -189,12 +170,9 @@ namespace Units.Stages.Modules.MovementModules.Units
         {
             if (NavMesh.SamplePosition(originalPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas)) // 5m 반경으로 확장
             {
-                Debug.Log($"Adjusted destination to nearest NavMesh point: {hit.position}");
                 _navMeshAgent.SetDestination(hit.position);
                 return true;
             }
-
-            Debug.LogError($"Unable to recover path near: {originalPosition}");
             return false;
         }
     }

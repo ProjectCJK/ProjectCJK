@@ -268,7 +268,7 @@ public class GoogleSheetLoaderEditor : EditorWindow
 
         if (gameData == null)
         {
-            gameData = ScriptableObject.CreateInstance<GameData>();
+            gameData = CreateInstance<GameData>();
             AssetDatabase.CreateAsset(gameData, assetPath);
             Debug.Log($"{tableData.gameDataName} 이름으로 새로운 GameData가 생성되었습니다.");
         }

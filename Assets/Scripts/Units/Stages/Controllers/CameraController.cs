@@ -46,14 +46,26 @@ namespace Units.Stages.Controllers
             {
                 if (_playerTransform == null) return;
 
-                var targetPosition = new Vector3(_playerTransform.position.x, _playerTransform.position.y, transform.position.z);
-                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, defaultSmoothTime);
-        
-                // 줌인 상태라면 크기를 부드럽게 원래대로 되돌리기
+                // 줌이 원래 크기로 돌아갈 때의 로직
                 if (Math.Abs(_camera.orthographicSize - _originalCameraSize) > 0.01f)
                 {
-                    var recoverySpeed = specificZoomInZoomSpeed * Time.deltaTime; // 줌 풀 때 속도
+                    // 줌 해제 속도: 빠르게 시작해서 점차 느리게
+                    var distanceToOriginalSize = Math.Abs(_camera.orthographicSize - _originalCameraSize);
+                    var recoverySpeed = Mathf.Max(distanceToOriginalSize * 2f, 0.5f) * Time.deltaTime; // 빠르게 시작해서 느려지도록
                     _camera.orthographicSize = Mathf.MoveTowards(_camera.orthographicSize, _originalCameraSize, recoverySpeed);
+
+                    // 줌이 절반 정도 풀렸을 때 카메라를 플레이어로 이동
+                    if (Math.Abs(_camera.orthographicSize - (_originalCameraSize + _camera.orthographicSize) / 2f) < 0.1f)
+                    {
+                        var targetPosition = new Vector3(_playerTransform.position.x, _playerTransform.position.y, transform.position.z);
+                        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, defaultSmoothTime);
+                    }
+                }
+                else
+                {
+                    // 줌이 다 풀렸을 때 카메라가 플레이어를 따라다니도록 기본 동작
+                    var targetPosition = new Vector3(_playerTransform.position.x, _playerTransform.position.y, transform.position.z);
+                    transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, defaultSmoothTime);
                 }
             }
         }

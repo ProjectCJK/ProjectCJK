@@ -38,6 +38,7 @@ namespace Managers
             lastAdShownDate = ES3.Load(LAST_AD_SHOW_DATE_SAVE, DateTime.Today);
             UpdateAdTracking();
         }
+        
         #region AppLovinMax Mathrd
         public void InitializeRewardedAds()
         {

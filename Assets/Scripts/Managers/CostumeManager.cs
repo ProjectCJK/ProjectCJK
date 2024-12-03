@@ -349,7 +349,6 @@ namespace Managers
                     CurrentExp = costume.CurrentExp,
                     IsEquipped = costume.IsEquipped
                 }).ToList();
-            Debug.Log("Costume data saved.");
         }
 
         private void LoadCostumeData()

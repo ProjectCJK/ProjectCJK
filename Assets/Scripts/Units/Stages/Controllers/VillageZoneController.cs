@@ -453,12 +453,6 @@ namespace Units.Stages.Controllers
                         guest.SetDestinations(GetRandomDestinationForGuest());
 
                         currentSpawnedGuests.Add(guest);
-
-                        Debug.Log($"Guest spawned at: {hit.position}");
-                    }
-                    else
-                    {
-                        Debug.LogError($"Failed to spawn guest: Invalid NavMesh position at {spawnPosition}");
                     }
 
                     _guestSpawnElapsedTime = 0f;
@@ -484,7 +478,6 @@ namespace Units.Stages.Controllers
             // 활성화된 Stand가 없으면 기본값으로 반환
             if (activeStands.Count == 0)
             {
-                Debug.LogWarning("No active stands available. Returning default destinations.");
                 return new List<Tuple<string, Transform>>
                 {
                     new(string.Empty, _villageSpawnData.GuestSpawner[0]) // Default fallback destination

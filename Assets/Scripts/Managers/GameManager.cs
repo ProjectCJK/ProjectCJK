@@ -127,7 +127,9 @@ namespace Managers
         {
             ES3.Save($"{EES3Key.ES3Saver}", ES3Saver, ES3.settings);
             ES3.StoreCachedFile();
+#if UNITY_EDITOR
             Debug.Log("Data saved.");
+#endif
         }
 
 #if UNITY_EDITOR

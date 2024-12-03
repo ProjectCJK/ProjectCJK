@@ -15,18 +15,20 @@ namespace Managers
         [SerializeField] private Canvas _branchCanvasGame;
         [SerializeField] private Canvas _branchCanvasTutorial;
         [SerializeField] private Canvas _branchCanvasGuide;
+        
         [Space(20), SerializeField] private Joystick _joystick;
-
+        
         [Space(20), SerializeField] private UI_Panel_Main _ui_Panel_Main;
-
-        [SerializeField] private UI_Panel_Tutorial _ui_Panel_Tutorial;
+        [SerializeField] private UI_Panel_Tutorial_Initial uiPanelTutorialInitial;
         [SerializeField] private UI_Panel_Tutorial_PopUp _uiPanelTutorialPopUp;
+        [SerializeField] private UI_Panel_Tutorial_Joystick _uiPanelTutorialJoystick;
         
         [Space(20), SerializeField] private GameSpeedControlModule _gameSpeedControlModule;
-
+        
         public UI_Panel_Main UI_Panel_Main { get; private set; }
-        public UI_Panel_Tutorial UI_Panel_Tutorial { get; private set; }
+        public UI_Panel_Tutorial_Initial UIPanelTutorialInitial { get; private set; }
         public UI_Panel_Tutorial_PopUp UI_Panel_Tutorial_PopUp { get; private set; }
+        public UI_Panel_Tutorial_Joystick UI_Panel_Tutorial_Joystick { get; private set; }
         public Joystick Joystick { get; private set; }
         
         /// <summary>
@@ -67,8 +69,9 @@ namespace Managers
             UI_Panel_Main = Instantiate(_ui_Panel_Main, BranchCanvasGame.transform);
             
             BranchCanvasTutorial = Instantiate(_branchCanvasTutorial);
-            UI_Panel_Tutorial = Instantiate(_ui_Panel_Tutorial, BranchCanvasTutorial.transform);
+            UIPanelTutorialInitial = Instantiate(uiPanelTutorialInitial, BranchCanvasTutorial.transform);
             UI_Panel_Tutorial_PopUp = Instantiate(_uiPanelTutorialPopUp, BranchCanvasTutorial.transform);
+            UI_Panel_Tutorial_Joystick = Instantiate(_uiPanelTutorialJoystick, BranchCanvasTutorial.transform);
    
             // Instantiate(_gameSpeedControlModule, BranchCanvasGame.transform);
         }

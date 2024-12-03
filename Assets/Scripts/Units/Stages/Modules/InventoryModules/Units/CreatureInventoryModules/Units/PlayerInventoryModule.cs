@@ -122,19 +122,27 @@ namespace Units.Stages.Modules.InventoryModules.Units.CreatureInventoryModules.U
         private void RegisterZone(IPlayerTradeZone zone)
         {
             if (zone.CheckInputAccessorPlayer() && interactionTradeZones.Add(zone))
-                Debug.Log($"{CreatureType} => {zone.BuildingKey} 도킹 완료 @~@");
+            {
+                
+            }
 
             if (zone.CheckOutputAccessorPlayer() && zone.RegisterItemReceiver(this, true))
-                Debug.Log($"{zone.BuildingKey} => {CreatureType} 도킹 완료 @~@");
+            {
+                
+            }
         }
 
         private void UnregisterZone(IPlayerTradeZone zone)
         {
             if (zone.CheckInputAccessorPlayer() && interactionTradeZones.Remove(zone))
-                Debug.Log($"{CreatureType} => {zone.BuildingKey} 도킹 해제 완료 @~@");
+            {
+                
+            }
 
             if (zone.CheckOutputAccessorPlayer() && zone.RegisterItemReceiver(this, false))
-                Debug.Log($"{zone.BuildingKey} => {CreatureType} 도킹 해제 완료 @~@");
+            {
+                
+            }
         }
         
         private void UpdateInventoryViewModel()
