@@ -152,16 +152,16 @@ MonoBehaviour:
     - ManagementDesk
     - ManagementDesk
     - 38
-    - 'Cashier Speed:'
-    - Cashier
+    - 'CashierSpeed:'
+    - CashierCount
     - ' Cashier Speed'
     - 40
-    - Cashier
+    - Hire Cashier
     - 41
     - 3
     - 39
-    - MangerSpeed
-    - ManagerCount
+    - CashierSpeed
+    - CashierCount
     - 0
     - 0
     - 56
@@ -172,10 +172,10 @@ MonoBehaviour:
     - DeliveryLodge
     - 42
     - 'Server Speed:'
-    - Server
+    - ServerCount
     - Server Speed
     - 44
-    - Server
+    - Hire Server
     - 45
     - 54
     - 43
@@ -191,14 +191,14 @@ MonoBehaviour:
     - Warehouse
     - 46
     - 'Hunter ATK:'
-    - Hunter
+    - HunterCount
     - Hunter ATK
     - 48
-    - Hunter
+    - Hire Hunter
     - 49
     - 34
     - 47
-    - HunterAtt
+    - HunterATK
     - HunterCount
     - 0
     - 0

@@ -35,6 +35,7 @@ namespace UI.QuestPanels
         [SerializeField] private Slider Slider_MainQuestProgress;
         [SerializeField] private Button Button_Reward;
         [SerializeField] private GameObject Effect_Reward;
+        [SerializeField] private List<Image> Image_RewardBackground;
         [SerializeField] private Image Image_RewardImage;
         [SerializeField] private TextMeshProUGUI Text_RewardCountText;
         [SerializeField] private List<UI_Panel_QuestInfoItem> uiPanelQuestInfoItems;
@@ -61,6 +62,8 @@ namespace UI.QuestPanels
             Slider_MainQuestProgress.value = progressRatio;
             
             Button_Reward.interactable = questClearCount == questTotalCount;
+            Image_RewardBackground[0].gameObject.SetActive(questClearCount != questTotalCount);
+            Image_RewardBackground[1].gameObject.SetActive(questClearCount == questTotalCount);
             Effect_Reward.gameObject.SetActive(questClearCount == questTotalCount);
         }
 
@@ -83,6 +86,8 @@ namespace UI.QuestPanels
         public void EnableRewardButton()
         {
             Button_Reward.interactable = true;
+            Image_RewardBackground[0].gameObject.SetActive(false);
+            Image_RewardBackground[1].gameObject.SetActive(true);
             Effect_Reward.gameObject.SetActive(true);
         }
     }

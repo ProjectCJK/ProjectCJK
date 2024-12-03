@@ -47,7 +47,6 @@ namespace UI.BuildingEnhancementPanel
     public class UI_Panel_BuildingEnhancement : MonoBehaviour
     {
         [Header("=== 강화 패널 타이틀 ===")]
-        [SerializeField] private Button _background;
         [SerializeField] private TextMeshProUGUI _text_Title;
 
         [Header("=== 슬롯 1 ===")]
@@ -84,6 +83,7 @@ namespace UI.BuildingEnhancementPanel
         [SerializeField] private Button _button_Slot3_NotEnoughLevelButton;
         [SerializeField] private TextMeshProUGUI _text_Slot3_NotEnoughLevelButton_RequiredValue;
         [SerializeField] private Button _button_Slot3_MaxLevelButton;
+        [SerializeField] private GameObject _QuestGuide;
 
         public void Activate(UIBuildingEnhancementData data)
         {
@@ -179,6 +179,17 @@ namespace UI.BuildingEnhancementPanel
             _button_Slot3_UpgradeButton.onClick.AddListener(() => data.OnClickUpgradeButtonForBuildingOption2?.Invoke());
 
             if (!gameObject.activeInHierarchy) gameObject.SetActive(true);
+
+            if (string.Equals(data.PanelTitle, "ManagementDesk") && GameManager.Instance.ES3Saver.PopUpTutorialClear.ContainsKey(8))
+            {
+                if (GameManager.Instance.ES3Saver.QuestClearStatuses[1].ContainsKey(8))
+                {
+                    if (GameManager.Instance.ES3Saver.QuestClearStatuses[1][8] == false)
+                    {
+                        _QuestGuide.gameObject.SetActive(true);
+                    }
+                }
+            }
         }
 
         public void Inactivate()
