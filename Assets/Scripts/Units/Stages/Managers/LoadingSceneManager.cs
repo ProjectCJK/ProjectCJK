@@ -72,12 +72,12 @@ namespace Units.Stages.Managers
             {
                 asyncLoad.allowSceneActivation = false;
 
-                float displayedProgress = 0f;
+                var displayedProgress = 0f;
 
                 // 리소스 로드 (0 ~ 0.5)
                 while (asyncLoad.progress < 0.9f)
                 {
-                    float targetProgress = asyncLoad.progress / 0.9f * 0.5f;
+                    var targetProgress = asyncLoad.progress / 0.9f * 0.5f;
                     displayedProgress = Mathf.Lerp(displayedProgress, targetProgress, Time.deltaTime * 2f);
                     progressBar.value = displayedProgress;
                     yield return null;
