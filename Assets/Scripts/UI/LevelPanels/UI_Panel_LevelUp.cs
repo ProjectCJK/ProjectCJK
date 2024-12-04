@@ -22,12 +22,19 @@ namespace UI.LevelPanels
 
         public void RegisterReference(Action action, Action onClickAdRewarded)
         {
-            adButton.onClick.AddListener(() => onClickAdRewarded?.Invoke());
-            
             skipButton.onClick.AddListener(() =>
             {
-                // AdsManager.Instance.G
                 action?.Invoke();
+                gameObject.SetActive(false);
+            });
+            
+            adButton.onClick.AddListener(() =>
+            {
+                AdsManager.Instance.ShowRewardedAd($"LevelUp Reward", (_, _) =>
+                {
+                    onClickAdRewarded?.Invoke();
+                });
+                
                 gameObject.SetActive(false);
             });
         }

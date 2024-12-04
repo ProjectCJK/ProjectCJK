@@ -32,8 +32,7 @@ namespace Units.Stages.Modules.BattleModules
 
         public void RegisterReference(IBattleProperty battleProperty)
         {
-            _attackTrigger.RegisterReference(battleProperty, _targetLayerMask, _targetTags,
-                HandleOnInvokeAnimationEvent);
+            _attackTrigger.RegisterReference(battleProperty, _targetLayerMask, _targetTags, HandleOnInvokeAnimationEvent);
         }
 
         public void ActivateWeapon(bool value)

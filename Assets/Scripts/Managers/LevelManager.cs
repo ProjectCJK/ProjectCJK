@@ -26,7 +26,6 @@ namespace Managers
         private string[,] _levelData;
 
         private List<Tuple<ECurrencyType, int>> _levelUpRewards = new();
-        private const string LevelUpPanelAD = "AD_LevelUpPanel";
         
         public int CurrentLevel
         {
@@ -76,16 +75,12 @@ namespace Managers
                 // 광고 보기 버튼: 2배 보상 지급
                 () =>
                 {
-                    AdsManager.Instance.ShowRewardedAd(LevelUpPanelAD, (_, _) =>
+                    foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
                     {
-                        foreach (Tuple<ECurrencyType, int> levelUpReward in _levelUpRewards)
-                        {
-                            CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2 * 2);
-                        }
+                        CurrencyManager.Instance.AddCurrency(levelUpReward.Item1, levelUpReward.Item2 * 2);
+                    }
 
-                        Debug.Log("광고 시청 완료! 2배 보상이 지급되었습니다.");
-                        _ui_Panel_LevelUp.gameObject.SetActive(false); // 광고 이후 패널 닫기
-                    });
+                    Debug.Log("광고 시청 완료! 2배 보상이 지급되었습니다.");
                 });
 
             _levelData = DataManager.Instance.LevelData.GetData();

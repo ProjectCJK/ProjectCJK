@@ -24,6 +24,22 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.69411767
       objectReference: {fileID: 0}
+    - target: {fileID: 2064592563612170107, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2064592563612170107, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2064592563612170107, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2064592563612170107, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2196554791494155027, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40,18 +56,34 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -521500183
       objectReference: {fileID: 0}
+    - target: {fileID: 4778783339126418685, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778783339126418685, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778783339126418685, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778783339126418685, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5700329859978035509, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: UVModule.sprites.Array.data[0].sprite
       value: 
-      objectReference: {fileID: -1010599844, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+      objectReference: {fileID: 1540613131, guid: 1cb89babca451b040906f4e9c1e468b9, type: 3}
     - target: {fileID: 5700329859978035509, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: UVModule.sprites.Array.data[1].sprite
       value: 
-      objectReference: {fileID: -1457968780, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+      objectReference: {fileID: 1068525257, guid: 1cb89babca451b040906f4e9c1e468b9, type: 3}
     - target: {fileID: 5700329859978035509, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: UVModule.sprites.Array.data[2].sprite
       value: 
-      objectReference: {fileID: 1684004965, guid: 83f2e86adf96e0d4dbfc167a4f2854d1, type: 3}
+      objectReference: {fileID: -1954803965, guid: 1cb89babca451b040906f4e9c1e468b9, type: 3}
     - target: {fileID: 6680102009678484214, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_Name
       value: VFX_Death_Tomato Variant
@@ -60,9 +92,25 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8087595607471545169, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087595607471545169, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087595607471545169, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087595607471545169, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8789454415842706293, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8789454415842706293, guid: 78a1e250ccc39c649a629fe011c2ebc2, type: 3}
       propertyPath: m_LocalPosition.x

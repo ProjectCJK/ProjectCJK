@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
+using Modules;
 using ScriptableObjects.Scripts.Zones;
 using Units.Stages.Controllers;
 using Units.Stages.Enums;
@@ -34,7 +35,7 @@ namespace Units.Stages.Units.HuntingZones
     public struct HuntingZoneDefaultSetting
     {
         [Header("### HuntingZoneDefaultSetting ###")] [SerializeField] [Header("MonsterSpawnPoint")]
-        public TilemapCollider2D monsterSpawnPoint;
+        public BoxCollider2D monsterSpawnPoint;
 
         [Space(10)] [Header("UnlockZone_Player")]
         public Transform UnlockZone_Player;
@@ -77,6 +78,7 @@ namespace Units.Stages.Units.HuntingZones
         public int CurrentGoldForUnlock { get; set; }
         
         private bool _isSpawningMonsters; // 몬스터 생성 중인지 여부
+        private CameraController _cameraController;
 
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController,
             Action<IItem> action)
@@ -84,6 +86,8 @@ namespace Units.Stages.Units.HuntingZones
             _huntingZoneDataSo = DataManager.Instance.HuntingZoneDataSo;
             _creatureController = creatureController;
             itemFactory = itemController;
+
+            if (Camera.main != null) _cameraController = Camera.main.GetComponent<CameraController>();
 
             _itemKey = ParserModule.ParseEnumToString(EItemType.Material, huntingZoneCustomSetting._materialType);
 
@@ -170,9 +174,16 @@ namespace Units.Stages.Units.HuntingZones
             
             CurrentSpawnedMonsters.Remove(monster);
             SetEffects(monster.Transform.position);
+            SetCameraEffects(monster.Transform.position);
+            VibrationController.TriggerVibration();
             DropItems(monster.Transform.position);
         }
 
+        private void SetCameraEffects(Vector3 monsterPosition)
+        {
+            _cameraController.ShakeCameraEffect();
+        }
+        
         private void DropItems(Vector3 senderPosition)
         {
             Vector3 receiverPosition = GetRandomItemDropPoint(senderPosition);

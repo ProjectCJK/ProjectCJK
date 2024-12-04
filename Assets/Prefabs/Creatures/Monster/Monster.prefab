@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2752631027562532300}
   - component: {fileID: 4894083195025776635}
   - component: {fileID: 2687874324375698989}
-  - component: {fileID: 5943943901408825593}
   m_Layer: 10
   m_Name: Monster
   m_TagString: Monster
@@ -126,7 +125,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receiveTransform: {fileID: 0}
   spriteTransform: {fileID: 3563942163651839786}
-  _materialType: 0
 --- !u!210 &2687874324375698989
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -139,22 +137,6 @@ SortingGroup:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!208 &5943943901408825593
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013795665935407657}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.25, y: 0.25, z: 0.25}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.25, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &4402496726181238405
 GameObject:
   m_ObjectHideFlags: 0

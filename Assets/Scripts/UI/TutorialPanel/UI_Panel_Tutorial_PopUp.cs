@@ -30,8 +30,8 @@ namespace UI.TutorialPanel
             textLists.TryAdd(7, "Let's upgrade the canning machine with the money we earned.");
             textLists.TryAdd(8, "We'll probably need some extra hands. Let's hire a cashier.");
             textLists.TryAdd(9, "Now that we can take a breather, let's get some better equipment!");
-            textLists.TryAdd(48, "Build a lodge to hire a deliveryman who will carry your products to the food stand.");
-            textLists.TryAdd(54, "Build a warehouse to hire a hunter who will hunt monsters and stock up materials.");
+            textLists.TryAdd(50, "Build a lodge to hire a deliveryman who will carry your products to the food stand.");
+            textLists.TryAdd(56, "Build a warehouse to hire a hunter who will hunt monsters and stock up materials.");
             
             // if (GameManager.Instance.ES3Saver.PopUpTutorialClear.Count == 0)
             // {
@@ -62,7 +62,11 @@ namespace UI.TutorialPanel
             {
                 Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_costume_tap");
             }
-            else if (index == 48)
+            else if (index == 50)
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_delivery_deliveryMan_tap");
+            }
+            else if (index == 56)
             {
                 Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_popup_warehouse_hunter_tap");
             }

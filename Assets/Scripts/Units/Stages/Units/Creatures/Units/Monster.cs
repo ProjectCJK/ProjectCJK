@@ -25,7 +25,6 @@ namespace Units.Stages.Units.Creatures.Units
     {
         private CreatureStateMachine _creatureStateMachine;
         private IDamageFlashModule _damageFlashModule;
-        public EMaterialType _materialType;
         private IMonsterHealthModule _monsterHealthModule;
         private IMonsterMovementModule _monsterMovementModule;
 
@@ -58,16 +57,13 @@ namespace Units.Stages.Units.Creatures.Units
             _creatureStateMachine = new CreatureStateMachine(this);
             _monsterStatsModule = new MonsterStatsModule(monsterDataSo);
             _monsterHealthModule = new MonsterHealthModule(_monsterStatsModule);
-            _monsterMovementModule =
-                new MonsterMovementModule(this, _monsterStatsModule, _creatureStateMachine, spriteTransform);
+            _monsterMovementModule = new MonsterMovementModule(this, _monsterStatsModule, _creatureStateMachine, spriteTransform);
 
             _damageFlashModule.RegisterReference();
         }
 
         public void Initialize(EMaterialType type, Vector3 randomSpawnPoint, MonsterSprite monsterSprites, Action action)
         {
-            // TODO : 이후 애니메이션 클립이 완성되면 Sprite만 교체할 것
-            // _spriteRenderer.sprite = monsterSprite;
             _monsterSpriteModule.SetSprites(monsterSprites);
 
             transform.position = randomSpawnPoint;
@@ -76,6 +72,7 @@ namespace Units.Stages.Units.Creatures.Units
             _creatureStateMachine.ChangeState(_creatureStateMachine.CreatureIdleState);
 
             _monsterMovementModule.Initialize();
+            _monsterHealthModule.Initialize(type);
         }
 
         public void Create()
@@ -85,8 +82,6 @@ namespace Units.Stages.Units.Creatures.Units
 
         public void GetFromPool()
         {
-            _monsterHealthModule.Initialize();
-
             SetActive(true);
         }
 

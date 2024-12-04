@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HuntingZoneDefaultSetting:
-    monsterSpawnPoint: {fileID: 5050583744432952674}
+    monsterSpawnPoint: {fileID: 0}
     UnlockZone_Player: {fileID: 3066498014994942445}
   huntingZoneCustomSetting:
     _materialType: 0
@@ -29337,11 +29337,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51d014d8321ba433c9e750dc57d903bf, type: 3}
---- !u!19719996 &5050583744432952674 stripped
-TilemapCollider2D:
-  m_CorrespondingSourceObject: {fileID: 3170657378379703100, guid: 51d014d8321ba433c9e750dc57d903bf, type: 3}
-  m_PrefabInstance: {fileID: 7644639632944199262}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6116275043645059090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4536928578160166476, guid: 51d014d8321ba433c9e750dc57d903bf, type: 3}
