@@ -95,7 +95,7 @@ namespace Modules
         
         public void ResetStageData()
         {
-            Gold = 600;
+            Gold = 300;
             
             CreatureItems = new Dictionary<string, Dictionary<string, int>>();
             BuildingInputItems = new Dictionary<string, Dictionary<string, int>>();

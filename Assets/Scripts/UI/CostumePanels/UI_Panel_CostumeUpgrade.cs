@@ -75,7 +75,7 @@ namespace UI.CostumePanels
                 OnClickUpgradeButton();
             });
 
-            ObjectPoolManager.Instance.CreatePool(PoolKey, 5, 99999, true, () => InstantiateCostumeUpgradeItem(_costumeUpgradeItemPrefab), _itemPrefabInstancePosition);
+            ObjectPoolManager.Instance.CreatePool(PoolKey, 50, 99999, true, () => InstantiateCostumeUpgradeItem(_costumeUpgradeItemPrefab), _itemPrefabInstancePosition);
         }
 
         public void RegisterUpdateActions(Action<CostumeItemData> updateCostumeInfo, Action updateCostumeInventory,

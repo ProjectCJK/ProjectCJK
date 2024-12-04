@@ -54,8 +54,8 @@ namespace Managers
         private void ChangeStage(int index, int cost)
         {
             GameManager.Instance.ES3Saver.CurrentStageLevel = index;
-            GameManager.Instance.ES3Saver.ResetStageData();
             CurrencyManager.Instance.RemoveCurrency(ECurrencyType.Gold, cost);
+            GameManager.Instance.ES3Saver.ResetStageData();
             LoadingSceneManager.Instance.LoadSceneWithLoadingScreen(ESceneName.MainScene);
         }
     }

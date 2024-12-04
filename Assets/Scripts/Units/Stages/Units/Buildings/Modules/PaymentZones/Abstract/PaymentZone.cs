@@ -11,8 +11,7 @@ namespace Units.Stages.Units.Buildings.Modules.PaymentZones.Abstract
         public string BuildingKey { get; }
         public bool RegisterPaymentTarget(ICreature creature, bool register);
     }
-
-    [RequireComponent(typeof(TilemapCollider2D))]
+    
     public class PaymentZone : MonoBehaviour, IPaymentZone
     {
         private IManagementDeskPaymentModule _managementDeskPaymentModule;

@@ -18,7 +18,6 @@ namespace Units.Stages.Units.Buildings.Modules.TradeZones.Abstract
         public int CanReceiveMoney();
     }
 
-    [RequireComponent(typeof(TilemapCollider2D))]
     public class TradeZone : MonoBehaviour, ITradeZone
     {
         private IUnlockZoneProperty _building;
