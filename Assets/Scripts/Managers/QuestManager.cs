@@ -153,10 +153,11 @@ namespace Managers
         
         private UI_Panel_Quest _uiPanelQuest;
         private UI_Panel_QuestClear _uiPanelReward;
-        private List<UI_Item_QuestGuide> UI_Item_QuestGuide;
+        private UI_Panel_QuestClearThumbnail_PopUp _uiPanelQuestClearThumbnailPopUp;
+        private List<UI_Item_QuestGuide> _uiItemQuestGuides;
         
         private StageController _stageController;
-
+        private List<UIQuestInfoItem> _questInfoItems;
         private readonly Dictionary<int, ParsedStageQuestData> _parsedStageQuestDatas = new();
 
         public void RegisterReference(StageController stageController)
@@ -165,11 +166,14 @@ namespace Managers
             
             _uiPanelQuest = UIManager.Instance.UI_Panel_Main.UI_Panel_Quest;
             _uiPanelReward = UIManager.Instance.UI_Panel_Main.UI_Panel_QuestClear;
-            UI_Item_QuestGuide = UIManager.Instance.UI_Panel_Main.UI_Item_QuestGuide;
+            _uiItemQuestGuides = UIManager.Instance.UI_Panel_Main.UI_Item_QuestGuide;
+            _uiPanelQuestClearThumbnailPopUp = UIManager.Instance.UI_Panel_Main.UI_Panel_QuestClearThumbnail_PopUp;
+            
             _gameData = DataManager.Instance.QuestData.GetData();
             
             _uiPanelQuest.RegisterReference();
             _uiPanelReward.RegisterReference();
+            _uiPanelQuestClearThumbnailPopUp.RegisterReference();
             
             OnUpdateCurrentQuestProgress += HandleOnUpdateCurrentQuestProgress;
             
@@ -413,7 +417,7 @@ namespace Managers
             var rewardSprite = DataManager.Instance.GetCurrencyIcon(currentListQuestData.ListRewardType);
             var rewardCount = currentListQuestData.ListRewardCount;
             
-            List<UIQuestInfoItem> questInfoItems = currentQuestData
+            _questInfoItems = currentQuestData
                 .Select(data => new UIQuestInfoItem
                 {
                     QuestIndex = data.QuestIndex,
@@ -439,7 +443,7 @@ namespace Managers
                 ProgressRatio = progressRatio,
                 RewardSprite = rewardSprite,
                 RewardCount = rewardCount,
-                UiQuestInfoItems = questInfoItems
+                UiQuestInfoItems = _questInfoItems
             };
 
             _uiPanelQuest.UpdateQuestPanel(listQuestInfoItem);
@@ -597,6 +601,14 @@ namespace Managers
                             Firebase.Analytics.FirebaseAnalytics.LogEvent($"quest_{quest.QuestIndex}_{GameManager.Instance.ES3Saver.CurrentStageLevel}_completed");
                             quest.CurrentGoal = quest.MaxGoal;
                             InactivateUIByCurrentTutorialIndex(quest.QuestIndex);
+
+                            foreach (var questInfoItem in _questInfoItems)
+                            {
+                                if (questInfoItem.QuestIndex == quest.QuestIndex)
+                                {
+                                    _uiPanelQuestClearThumbnailPopUp.GetQuestClearThumbnailPopUp(questInfoItem);   
+                                }
+                            }
                         }
 
                         // 저장된 퀘스트 진행 상태 업데이트
@@ -770,7 +782,7 @@ namespace Managers
 
             if (GameManager.Instance.ES3Saver.CurrentStageLevel != 2)
             {
-                foreach (UI_Item_QuestGuide itemQuestGuide in UI_Item_QuestGuide)
+                foreach (UI_Item_QuestGuide itemQuestGuide in _uiItemQuestGuides)
                 {
                     if (itemQuestGuide.index == index)
                     {

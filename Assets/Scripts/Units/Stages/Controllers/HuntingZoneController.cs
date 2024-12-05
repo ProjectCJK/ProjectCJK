@@ -19,6 +19,7 @@ namespace Units.Stages.Controllers
     {
         public void HandleOnRegisterPlayer(IPlayer player, bool register);
         public void SpawnMonsters();
+        public void ControlDroppedItem();
         public void SendDroppedItem(HashSet<IHunter> currentSpawnedHunters);
     }
     
@@ -29,6 +30,18 @@ namespace Units.Stages.Controllers
         public List<ObjectTrackingTargetModule> HuntingZoneSpawners;
     }
 
+    public class DropItem
+    {
+        public float Timer;
+        public IItem Item;
+
+        public DropItem(float timer, IItem item)
+        {
+            Timer = timer;
+            Item = item;
+        }
+    }
+    
     public class HuntingZoneController : MonoBehaviour, IHuntingZoneController
     {
         [SerializeField] private HuntingZoneSpawnData _huntingZoneSpawnData;
@@ -43,8 +56,9 @@ namespace Units.Stages.Controllers
 
         private float _playerItemPickupRange;
         private IItemFactory itemFactory;
-        
-        private readonly List<IItem> _droppedItems = new();
+
+        private const float maintainedTime = 60f;
+        private readonly List<DropItem> _droppedItems = new();
 
         public void RegisterReference(ICreatureController creatureController, IItemFactory itemController, IPlayer player)
         {
@@ -71,6 +85,22 @@ namespace Units.Stages.Controllers
             foreach (var obj in HuntingZones) obj.Value.SpawnMonsters();
         }
 
+        public void ControlDroppedItem()
+        {
+            // 리스트를 역순으로 순회하여 안전하게 요소를 제거
+            for (var i = _droppedItems.Count - 1; i >= 0; i--)
+            {
+                DropItem dropItem = _droppedItems[i];
+                dropItem.Timer += Time.deltaTime;
+
+                if (dropItem.Timer >= maintainedTime)
+                {
+                    itemFactory.ReturnItem(dropItem.Item); // 아이템 반환
+                    _droppedItems.RemoveAt(i); // 리스트에서 제거
+                }
+            }
+        }
+
         public void SendDroppedItem(HashSet<IHunter> currentSpawnedHunters)
         {
             if (_droppedItems.Count <= 0) return;
@@ -78,7 +108,7 @@ namespace Units.Stages.Controllers
             // 아이템을 가장 가까운 플레이어나 헌터에게 전달
             for (var i = _droppedItems.Count - 1; i >= 0; i--)
             {
-                IItem item = _droppedItems[i];
+                IItem item = _droppedItems[i].Item;
                 Vector3 currentItemPosition = item.Transform.position;
 
                 // 플레이어와 헌터들을 모두 대상으로 순회하여 가장 가까운 대상을 찾음
@@ -128,7 +158,7 @@ namespace Units.Stages.Controllers
             instance.transform.localPosition = Vector3.zero;
             
             var huntingZone = instance.GetComponent<HuntingZone>();
-            huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(item));
+            huntingZone.RegisterReference(_creatureController, itemFactory, item => _droppedItems.Add(new DropItem(0, item)));
             HuntingZones.TryAdd(huntingZone.HuntingZoneKey, huntingZone);
             
             VolatileDataManager.Instance.HuntingZoneActiveStatuses.TryAdd(huntingZone, huntingZone.ActiveStatus);

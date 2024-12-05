@@ -40,6 +40,8 @@ namespace UI.MainPanels
         public UI_Panel_BuildingEnhancement UI_Panel_BuildingEnhancement;
         public UI_Panel_MainButtons UI_Panel_MainButtons;
         public UI_Panel_PopUp_Reward UI_Panel_PopUp_Reward;
+        public UI_Panel_QuestClearThumbnail_PopUp UI_Panel_QuestClearThumbnail_PopUp;
+        
         public List<UI_Item_QuestGuide> UI_Item_QuestGuide;
 
         public void RegisterReference()

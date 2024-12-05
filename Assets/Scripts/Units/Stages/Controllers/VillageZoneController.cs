@@ -160,6 +160,7 @@ namespace Units.Stages.Controllers
             SpawnMonster();
   
             _huntingZoneController.SendDroppedItem(currentSpawnedHunters);
+            _huntingZoneController.ControlDroppedItem();
         }
 
         private void SpawnPopUpRewardGuestRush()
@@ -167,7 +168,7 @@ namespace Units.Stages.Controllers
             if (VolatileDataManager.Instance.CustomerTrigger)
             {
                 VolatileDataManager.Instance.CustomerTrigger = false;
-                StartCoroutine(SpawnGuestsWithDelay(30, 0.1f)); // 30명의 손님을 0.5초 간격으로 생성
+                StartCoroutine(SpawnGuestsWithDelay(20, 0.1f)); // 30명의 손님을 0.5초 간격으로 생성
                 customerRushButtonActivatorTimer = customerRushButtonActivatorMaxTime;
             }
         }
